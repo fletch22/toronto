@@ -1,5 +1,3 @@
-import expect from 'expect.js';
-import jquery from 'jquery';
 import $ from 'jquery';
 
 describe('First Test', () => {
@@ -8,7 +6,7 @@ describe('First Test', () => {
 
 		console.log($);
 
-		expect(true).to.eql(true);
+		expect(true).toBe(true);
 	});
 
 });

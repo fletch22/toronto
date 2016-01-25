@@ -16,6 +16,9 @@ var reactDOM      = require('react-dom');
 var mocha         = require('gulp-mocha');
 var babel         = require('gulp-babel');
 var jquery        = require('jquery');
+var jasmine       = require('gulp-jasmine');
+var reporters     = require('jasmine-reporters');
+require('babel-core/register');
 
 // ////////////////////////////////////////////////
 // Javascript Browserify, Watchify, Babel, React
@@ -128,6 +131,30 @@ gulp.task('mocha', function () {
     return bundle;
 });
 
+gulp.task('jasmine', function () {
+    var customOpts = {
+      entries: ['test/first_test.js'],
+      debug: true
+    };
+    var opts = assign({}, watchify.args, customOpts);
+    var bundler = watchify(browserify(opts)); 
+
+    bundler.transform(babelify, {presets: ["es2015", "react"], compact: false});
+
+    bundler.bundle()
+        .on('error', handleError)
+        .pipe(source('app.js'))
+        .pipe(buffer())
+        .pipe(gulp.dest('dist'))
+        .pipe(jasmine({verbose: true, 
+          includeStackTrace: true,
+          reporter: new reporters.TerminalReporter()
+        }))
+        .on('error', handleError);
+
+    return bundle;
+});
+
 function handleError(err) {
   console.log(err.toString());
   this.emit('end');
@@ -137,6 +164,7 @@ function handleError(err) {
 // Composite Test
 // ////////////////////////////////////////////////
 gulp.task('mochaw', ['mocha', 'watch-mocha']);
+gulp.task('jasminew', ['jasmine', 'watch-jasmine']);
 
 // ////////////////////////////////////////////////
 // Watch Tasks
@@ -146,8 +174,8 @@ gulp.task('watch', function() {
   gulp.watch('src/scss/**/*.scss', ['styles']);
 });
 
-gulp.task('watch-mocha', function() {
-    gulp.watch(['test/**/*.js'], ['mocha']);
+gulp.task('watch-jasmine', function() {
+    gulp.watch(['test/**/*.js'], ['jasmine']);
 });
 
 
