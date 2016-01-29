@@ -1,10 +1,10 @@
-import $ from 'jquery';
+import React from 'react';
 
 describe('First Test', () => {
 
 	it('works', () => {
 
-		console.log($);
+		console.log('bat');
 
 		expect(true).toBe(true);
 	});
