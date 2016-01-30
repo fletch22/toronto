@@ -1,7 +1,7 @@
 import React from 'react'
 
-import 'stylesheets/modules/header'
-import 'stylesheets/utilities/clearfix'
+import 'css/modules/header'
+import 'css/utilities/clearfix'
 
 const Header = React.createClass({
   render () {

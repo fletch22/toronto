@@ -1,8 +1,8 @@
 import React from 'react'
-import Header from 'javascripts/header'
-import Footer from 'javascripts/footer'
+import Header from 'js/header'
+import Footer from 'js/footer'
 
-import 'stylesheets/modules/container'
+import 'css/modules/container'
 
 const Container = React.createClass({
   render () {

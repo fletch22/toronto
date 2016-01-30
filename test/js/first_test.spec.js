@@ -4,7 +4,7 @@ describe('First Test', () => {
 
 	it('works', () => {
 
-		console.log('bat');
+		console.log('batty');
 
 		expect(true).toBe(true);
 	});

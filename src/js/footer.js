@@ -1,6 +1,6 @@
 import React from 'react'
 
-import 'stylesheets/modules/footer'
+import 'css/modules/footer'
 
 const Footer = React.createClass({
   render () {

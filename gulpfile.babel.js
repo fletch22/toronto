@@ -29,9 +29,16 @@ gulp.task('clean', function() {
 
 });
 
-gulp.task('dev-webpack', function () {
+// __dirname + '/src/**/*.*'
+
+gulp.task('js', function () {
     
     var files = [__dirname + '/test/js/**/*.js', __dirname + '/src/**/*.*'];
+
+    return basicWorkflow(files);
+});
+
+function basicWorkflow(files) {
 
     return gulp.src(files)
         .on('error', handleError)
@@ -39,24 +46,23 @@ gulp.task('dev-webpack', function () {
         .pipe(named())
         .pipe(webpack(webpackConfig))
         .pipe(gulp.dest('build'));
-});
+        // .pipe(function(file) {
+        //   return './build/' + file.base;
+        // });
+}
 
-gulp.task('dev', ['clean', 'dev-webpack']);
+gulp.task('dev', ['js']);
 
 gulp.task('karma', function(done) {
 
   var Server = require('karma').Server;
 
-  /**
-   * Run test once and exit
-   */
   return new Server({
       configFile: __dirname + '/karma.conf.js',
       singleRun: false
     }, done).start();
  
 });
-
 
 function handleError(err) {
   console.log(err.toString());
