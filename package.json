@@ -4,12 +4,14 @@
   "description": "Build system for node and react",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "Nothing"
+    "test": "Nothing",
+    "devrun": "webpack-dev-server --config webpack.hot.config.js --content-base build"
   },
   "author": "Chris Flesche",
   "license": "PRIVATE",
   "devDependencies": {
     "autoprefixer": "^6.3.1",
+    "babel": "^6.3.26",
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.1",
     "babel-preset-es2015": "^6.3.13",
@@ -18,11 +20,13 @@
     "css-loader": "^0.23.1",
     "del": "^2.2.0",
     "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-jasmine": "^2.2.1",
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
+    "html-loader": "^0.4.0",
     "jsx-loader": "^0.13.2",
     "karma": "^0.13.19",
     "karma-chrome-launcher": "^0.2.2",
@@ -31,6 +35,7 @@
     "node-sass": "^3.4.2",
     "path": "^0.12.7",
     "phantomjs": "^2.1.3",
+    "phantomjs-prebuilt": "^2.1.3",
     "postcss-loader": "^0.8.0",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
@@ -38,6 +43,8 @@
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.4.0",
     "webpack": "^1.12.12",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-merge": "^0.7.3",
     "webpack-stream": "^3.1.0"
   },
   "dependencies": {

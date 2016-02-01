@@ -3,12 +3,16 @@
 const gulp          = require('gulp');
 const gutil         = require('gulp-util');
 const webpack       = require('webpack-stream');
+const webpackOld      = require('webpack');
 const named         = require("vinyl-named");
-const webpackConfig   = require("./webpack.config.js")
+const webpackConfig   = require("./webpack.config.js");
+const webpackConfigHotDeploy  = require("./webpack.hot.config.js");
 const plumber = require('gulp-plumber');
 const del = require('del');
 const Server = require('karma').Server;
 const path = require('path');
+const WebpackDevServer = require("webpack-dev-server");
+
 
 // ////////////////////////////////////////////////
 // Test 
@@ -45,11 +49,39 @@ function basicWorkflow(files) {
         .pipe(plumber())
         .pipe(named())
         .pipe(webpack(webpackConfig))
-        .pipe(gulp.dest('build'));
-        // .pipe(function(file) {
-        //   return './build/' + file.base;
-        // });
+        .pipe(gulp.dest(function(file) {
+          return file.base;
+        }));
+        ;
 }
+
+gulp.task("devrun", function(callback) {
+    // Start a webpack-dev-server
+    var compiler = webpackOld(webpackConfigHotDeploy);
+    
+    new WebpackDevServer(compiler, {
+      // server and middleware options
+
+      // We need to tell Webpack to serve our bundled application
+      // from the build path. When proxying:
+      // http://localhost:3000/build -> http://localhost:8080/build
+      // publicPath: '/build/',
+      contentBase: path.join(__dirname, 'build'),
+      historyApiFallback: true,
+      hot: true,
+      inline: true,
+      progress: true,
+
+    }).listen(8080, "localhost", function(err) {
+        // if(err) throw new gutil.PluginError("webpack-dev-server", err);
+        // // Server listening
+        // gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/index.html");
+
+        // keep the server alive or continue?
+        // callback();
+    });
+
+});
 
 gulp.task('dev', ['js']);
 

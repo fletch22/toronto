@@ -9,6 +9,7 @@ const Container = React.createClass({
     return (
       <div className='container'>
         <Header />
+        Peach
         <Footer />
       </div>
     )
