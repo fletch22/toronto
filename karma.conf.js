@@ -82,7 +82,7 @@ module.exports = function(config) {
         extensions: ['', '.js', '.scss'],
         modulesDirectories: ['app', 'node_modules']
       },
-      entry: './app/specs/test_index.js',
+      entry: ['./app/specs/test_index.js', './app/css/modules.header.scss'],
       devtool: 'inline-source-map',
       module: {
         loaders: [

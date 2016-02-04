@@ -43,11 +43,16 @@ const common = {
           presets: ['react', 'es2015']
         }
       },
+      // {
+      //   test: /\.scss$/,
+      //   loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!')),
+      //   include: PATHS.app
+      // }
       {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!')),
-        include: PATHS.app
-      }
+          test: /\.scss$/,
+          loader: 'style-loader!css-loader!postcss-loader!sass-loader?includePaths[]=' + path.resolve(__dirname, './app'),
+          include: PATHS.app
+      },
     ]
   }
 };
