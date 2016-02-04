@@ -1,10 +1,5 @@
-// import React from 'react';
-
-
-
-
-var foo = "";
-import Header from '../../app/js/header';
+import React from 'react';
+import Header from '../../js/header';
 
 describe('First Test', () => {
 

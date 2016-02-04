@@ -5,7 +5,7 @@ const path = require('path');
 const sassLoaders = [
   'css-loader',
   'postcss-loader',
-  'sass-loader?includePaths[]=' + path.resolve(__dirname, './src')
+  'sass-loader?includePaths[]=' + path.resolve(__dirname, './app')
 ];
 
 module.exports = {
@@ -22,13 +22,13 @@ module.exports = {
           	}
         },
       	{
-	  		test: /\.scss$/,
-	    	loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!'))
-		}
+  	  		test: /\.scss$/,
+  	    	loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!'))
+  		  }
     ]
   },
   output: {
-    filename: '[name].js',
+    filename: 'bundle.js',
     path: path.join(__dirname, './build'),
     publicPath: '/build'
   },

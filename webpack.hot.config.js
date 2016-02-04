@@ -92,4 +92,4 @@ const common = {
 //   module.exports = merge(common, {});
 // }
 
-console.log('Lifecycle event: ' + TARGET);
+// console.log('Lifecycle event: ' + TARGET);

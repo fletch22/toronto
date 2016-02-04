@@ -4,7 +4,7 @@
   "description": "Build system for node and react",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "Nothing",
+    "test": "karma start",
     "devrun": "webpack-dev-server --config webpack.hot.config.js --content-base build"
   },
   "author": "Chris Flesche",
@@ -29,9 +29,11 @@
     "html-loader": "^0.4.0",
     "jsx-loader": "^0.13.2",
     "karma": "^0.13.19",
+    "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^0.2.2",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^1.0.0",
+    "karma-webpack": "^1.7.0",
     "node-sass": "^3.4.2",
     "path": "^0.12.7",
     "phantomjs": "^2.1.3",
