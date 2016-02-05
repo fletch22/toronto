@@ -66,7 +66,7 @@ module.exports = function(config) {
  
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_DEBUG,
+    logLevel: config.LOG_INFO,
  
  
     // enable / disable watching file and executing tests whenever any file changes
@@ -82,10 +82,11 @@ module.exports = function(config) {
         extensions: ['', '.js', '.scss'],
         modulesDirectories: ['app', 'node_modules']
       },
-      entry: ['./app/specs/test_index.js', './app/css/modules.header.scss'],
+      entry: ['app/specs/test_index.js', './app/css/modules/header.scss', 'bootstrap-loader'],
       devtool: 'inline-source-map',
       module: {
         loaders: [
+          { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
           {
             test: /\.js$/,
             exclude: /node_modules/,
@@ -98,6 +99,10 @@ module.exports = function(config) {
             test: /\.scss$/,
             loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!')),
             include: PATHS.app
+          },
+          {
+            test: /bootstrap-sass\/assets\/javascripts\//, 
+            loader: 'imports?jQuery=jquery' 
           }
         ],
       },
