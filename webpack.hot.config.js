@@ -21,7 +21,7 @@ const sassLoaders = [
 const common = {
   // Entry accepts a path or an object of entries.
   // The build chapter contains an example of the latter.
-  entry: PATHS.app,
+  entry: [PATHS.app, 'bootstrap-loader'],
   output: {
     path: PATHS.build,
     filename: 'bundle.js'
@@ -35,6 +35,7 @@ const common = {
       //   // Include accepts either a path or an array of paths.
       //   include: PATHS.app
       // },
+      { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
       {
         test: /\.js$/,
         exclude: /\.json$|(bower_components)/,
@@ -53,6 +54,10 @@ const common = {
           loader: 'style-loader!css-loader!postcss-loader!sass-loader?includePaths[]=' + path.resolve(__dirname, './app'),
           include: PATHS.app
       },
+      { 
+        test: /bootstrap-sass\/assets\/javascripts\//, 
+        loader: 'imports?jQuery=jquery' 
+      }
     ]
   }
 };
