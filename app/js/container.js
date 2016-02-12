@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from 'js/header'
 import Footer from 'js/footer'
+import Toolbar from 'js/toolbar'
 
 import 'css/modules/container'
 
@@ -9,7 +10,7 @@ const Container = React.createClass({
     return (
       <div className='container'>
         <Header />
-        Peach
+        <Toolbar />
         <Footer />
       </div>
     )
