@@ -16,8 +16,6 @@ const sassLoaders = [
   'sass-loader?includePaths[]=' + path.resolve(__dirname, './app')
 ];
 
-// const TARGET = process.env.npm_lifecycle_event;
-
 const common = {
   // Entry accepts a path or an object of entries.
   // The build chapter contains an example of the latter.
@@ -28,13 +26,6 @@ const common = {
   },
   module: {
     loaders: [
-      // {
-      //   // Test expects a RegExp! Note the slashes!
-      //   test: /\.css$/,
-      //   loaders: ['style', 'css'],
-      //   // Include accepts either a path or an array of paths.
-      //   include: PATHS.app
-      // },
       { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
       {
         test: /\.js$/,
@@ -62,8 +53,6 @@ const common = {
   }
 };
 
-// Default configuration
-// if(TARGET === 'start' || !TARGET) {
   module.exports = merge(common, {
     devtool: 'eval-source-map',
     devServer: {
@@ -79,7 +68,7 @@ const common = {
 
       // Parse host and port from env so this is easy to customize.
       host: process.env.HOST,
-      port: process.env.PORT
+      port: 8888 //process.env.PORT
     },
     plugins: [
       new ExtractTextPlugin('[name].css'),
@@ -96,10 +85,3 @@ const common = {
     }
   }
 );
-// }
-
-// if(TARGET === 'build') {
-//   module.exports = merge(common, {});
-// }
-
-// console.log('Lifecycle event: ' + TARGET);
