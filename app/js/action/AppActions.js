@@ -2,7 +2,8 @@ var alt = require('../lib/alt');
 
 class AppActions {
   addApp(app) {
-    return app;
+	console.log("In appActions");
+	return app;
   }
 }
 

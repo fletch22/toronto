@@ -1,0 +1,24 @@
+@import 'css/config/colors';
+
+.toolbar-container {
+  background: $gray;
+  padding: 8px;
+}
+
+.toolbar-button {
+  color: $darkText;
+}
+
+.toolbar-label {
+  color: $darkText;
+  line-height: 25px;
+  margin-top: 4px;
+  padding-top: 4px;
+
+}
+
+.toolbar-label-value {
+  @extend .toolbar-label;
+  font-weight: bolder;
+}
+

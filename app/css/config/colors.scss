@@ -1,3 +1,6 @@
 $green: green;
 $red: red;
+$gray: gray;
+$lightGray: adjust-hue($gray, -20deg);
 $lightRed: adjust-hue($red, -20deg);
+$darkText: #000;

@@ -1,13 +1,10 @@
 {
-    "env": {
-        "browser": true,
-        "node": true,
-        "es6": true
-    },
-    "ecmaFeatures": {
-        "modules": true,
-        "jsx": true
-    },
-    "rules": {
-    }
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "rules": {
+    "no-multiple-empty-lines": [2, {"max": 2, "maxEOF": 2}],
+    "max-len": [2, 165, 2],
+    "no-console": [0],
+    "comma-dangle": [2, "never"]
+  }
 }
