@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 
-import 'css/modules/footer'
+import 'css/modules/footer';
 
-const Footer = React.createClass({
-  render () {
+class Footer extends React.Component {
+  render() {
     return (
-      <div className='footer'>
+      <div className="footer">
         Footer
       </div>
-    )
+    );
   }
-})
+}
 
-export default Footer
+export default Footer;

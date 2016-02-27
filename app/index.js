@@ -1,25 +1,21 @@
-import jQuery from 'jquery'
-import 'css/base'
+import jQuery from 'jquery';
+import 'css/base';
 
-import React from 'react'
-import ReactDOM from 'react-dom'
-import Container from 'js/container'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import App from 'js/redux/component/App'
-import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import orbApp from './js/redux/reducers'
+import App from 'js/component/App';
+import { Provider } from 'react-redux';
 
-import 'css/modules/container'
-import 'css/modules/toolbar'
+import 'css/modules/container';
+import 'css/modules/toolbar';
+import allStore from 'js/stores/allStore';
 
 global.jQuery = jQuery;
 
-let store = createStore(orbApp)
-
 ReactDOM.render(
 
-	<Provider store={store}>
-    	<App />
-  	</Provider>,
-  	document.querySelector('#main'));
+	<Provider store={allStore}>
+		<App />
+	</Provider>,
+	document.querySelector('#main'));

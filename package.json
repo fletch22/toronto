@@ -6,8 +6,8 @@
   "scripts": {
     "test": "karma start",
     "start": "webpack-dev-server --config webpack.hot.config.js --content-base build",
-    "lint": "eslint --ext .js,.jsx assets/**"  
-    },
+    "lint": "eslint --ext .js,.jsx assets/**"
+  },
   "author": "Chris Flesche",
   "license": "PRIVATE",
   "devDependencies": {
@@ -29,6 +29,9 @@
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "html-loader": "^0.4.0",
+    "jasmine": "^2.4.1",
+    "jasmine-core": "^2.4.1",
+    "jest-cli": "^0.8.2",
     "jsx-loader": "^0.13.2",
     "karma": "^0.13.19",
     "karma-babel-preprocessor": "^6.0.1",
@@ -46,8 +49,8 @@
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.4.0",
     "webpack": "^1.12.12",
-    "webpack-dev-server": "^1.14.1",
     "webpack-dev-middleware": "^1.2.0",
+    "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.2.0",
     "webpack-merge": "^0.7.3",
     "webpack-stream": "^3.1.0"

@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addApp } from '../actions';
 
-let AppContainer = ({ onClickX, numberApps, apps }) => {
+let AppContainer = ({ onClick, numberApps, apps }) => {
   console.log('In AppContainer.');
   return (
     <div>
       <div className="container-fluid toolbar-container">
           <div className="row-fluid">
               <div className="col-lg-1">
-                  <button className="toolbar-button" onClick={onClickX}>
+                  <button className="toolbar-button" onClick={onClick}>
                    + Add
                   </button>
               </div>
@@ -18,7 +18,9 @@ let AppContainer = ({ onClickX, numberApps, apps }) => {
       </div>
       <div className="container-fluid app-container">
         {
-          apps.map(() => 'app')
+          apps.map((app) =>
+            <div className="container-app col-lg-2" key={app}>{app}</div>
+          )
         }
       </div>
     </div>
@@ -26,29 +28,25 @@ let AppContainer = ({ onClickX, numberApps, apps }) => {
 };
 
 AppContainer.propTypes = {
-  onClickX: React.PropTypes.func.isRequired,
+  onClick: React.PropTypes.func.isRequired,
   numberApps: React.PropTypes.number.isRequired,
   apps: React.PropTypes.array.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => {
-  console.log(JSON.stringify(state));
-  console.log('mapStateToProps.');
-  const apps = Object.assign({}, state).apps;
-
-  console.log('Number of apps found: ' + apps.length);
+const mapStateToProps = (state) => {
+  const appsCopy = Object.assign({}, state).apps;
 
   return {
     numberApps: state.apps.length,
-    apps: apps
+    apps: appsCopy
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   console.log('from mapDispatchToProps');
   return {
-    onClickX: () => {
-      dispatch(addApp({'foo': 'bar'}));
+    onClick: () => {
+      dispatch(addApp({ foo: 'bar' }));
     }
   };
 };

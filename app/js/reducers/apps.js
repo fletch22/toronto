@@ -1,5 +1,4 @@
 const apps = (state = { apps: [] }, action) => {
-
   console.log(JSON.stringify(state));
 
   switch (action.type) {
@@ -8,7 +7,7 @@ const apps = (state = { apps: [] }, action) => {
 
       console.log(stateNew.apps.length);
 
-      stateNew.apps.push('test' + (stateNew.apps.length));
+      stateNew.apps.push(`App #${stateNew.apps.length}`);
 
       return stateNew;
     }
