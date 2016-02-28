@@ -19,7 +19,7 @@ let AppContainer = ({ onClick, numberApps, apps }) => {
       <div className="container-fluid app-container">
         {
           apps.map((app) =>
-            <div className="container-app col-lg-2" key={app}>{app}</div>
+            <div className="container-app col-lg-2" key={app.id}>{app.label}</div>
           )
         }
       </div>
@@ -34,11 +34,11 @@ AppContainer.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const appsCopy = Object.assign({}, state).apps;
+  const appsChildren = Object.assign({}, state).children;
 
   return {
-    numberApps: state.apps.length,
-    apps: appsCopy
+    numberApps: appsChildren.length,
+    apps: appsChildren
   };
 };
 

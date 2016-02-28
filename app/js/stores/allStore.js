@@ -1,10 +1,11 @@
 import { createStore } from 'redux';
 import apps from '../reducers';
-import sampleData from '../sampleData/appContainer';
-
+import AppModel from '../sampleData/AppModel';
+import ModelToStateTransformer from './modelToStateTransformer';
 
 // Transform native raw data response into react store data.
+const state = ModelToStateTransformer.transform(AppModel);
 
-const allStore = createStore(apps, sampleData);
+const allStore = createStore(apps, state);
 
 export default allStore;

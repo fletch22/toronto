@@ -13,7 +13,7 @@ module.exports = function TorontoKarmaConfig(config) {
     basePath: '',
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['mocha', 'chai'], //['jasmine'],
     // list of files / patterns to load in the browser
     files: [
       { pattern: 'test-context.js', watched: false }
@@ -24,7 +24,8 @@ module.exports = function TorontoKarmaConfig(config) {
     plugins: [
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
-      'karma-jasmine',
+      'karma-mocha',
+      'karma-chai',
       'karma-webpack'
     ],
     // preprocess matching files before serving them to the browser
@@ -48,7 +49,7 @@ module.exports = function TorontoKarmaConfig(config) {
     autoWatch: true,
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'], // , 'Chrome'],
+    browsers: ['PhantomJS', 'Chrome'],
     webpack: {
       watch: true,
       resolve: {
