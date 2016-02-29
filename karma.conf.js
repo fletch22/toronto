@@ -16,7 +16,7 @@ module.exports = function TorontoKarmaConfig(config) {
     frameworks: ['mocha', 'chai'], //['jasmine'],
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'test-context.js', watched: false }
+      { pattern: 'app/js/__tests__/test-context.js', watched: false }
     ],
     // list of files to exclude
     exclude: [
@@ -31,7 +31,7 @@ module.exports = function TorontoKarmaConfig(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test-context.js': ['webpack'],
+      'app/js/__tests__/test-context.js': ['webpack'],
       'app/css/modules/header.scss': ['webpack']
     },
     // test results reporter to use
@@ -49,7 +49,7 @@ module.exports = function TorontoKarmaConfig(config) {
     autoWatch: true,
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS', 'Chrome'],
+    browsers: ['PhantomJS'], //, 'Chrome'],
     webpack: {
       watch: true,
       resolve: {
