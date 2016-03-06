@@ -6,16 +6,16 @@ const RestService = function restService() {
 
   self.getOrbServerRootUrl = () => {
     const orbServer = AppProperties.orbServer;
-    return `${orbServer.scheme}://${orbServer.host}:${orbServer.port}/${orbServer.appContext}`;
+    return `${orbServer.scheme}://${orbServer.host}:${orbServer.port}/${orbServer.appContext}/api`;
   };
 
   self.getAppContainer = () => jQuery.ajax({
-    url: `${self.getOrbServerRootUrl()}/appContainer`,
+    url: `${self.getOrbServerRootUrl()}/`,
     type: 'get' // Send it through get method
   });
 
   self.addAppToContainer = (parentId, label) => jQuery.ajax({
-    url: `${self.getOrbServerRootUrl()}/addAppToContainer`,
+    url: `${self.getOrbServerRootUrl()}/component/`,
     type: 'post', // Send it through get method,
     headers: {
       Accept: 'application/json',

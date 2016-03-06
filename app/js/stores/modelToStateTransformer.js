@@ -4,7 +4,6 @@ function Transformer() {
   const self = this;
 
   self.transform = function transform(model) {
-
     const apps = [];
     model.children.list.forEach((child) => {
       const application = {
@@ -16,6 +15,7 @@ function Transformer() {
     });
 
     return {
+      id: model.id,
       children: apps
     };
   };

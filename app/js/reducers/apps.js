@@ -1,13 +1,20 @@
+import { ACTIONS } from '../actions/index.js';
+
 const apps = (state = { apps: [] }, action) => {
-  console.log(JSON.stringify(state));
-
+  const stateNew = Object.assign({}, state);
   switch (action.type) {
-    case 'ADD_APP': {
-      const stateNew = Object.assign({}, state);
+    case ACTIONS.types.ADD_APP: {
+      const app = {
+        id: stateNew.children.length,
+        label: stateNew.appLabel
+      };
 
-      console.log(stateNew.apps.length);
+      stateNew.children.push(app);
 
-      stateNew.apps.push(`App #${stateNew.apps.length}`);
+      return stateNew;
+    }
+    case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
+      stateNew.appLabel = action.appLabel;
 
       return stateNew;
     }

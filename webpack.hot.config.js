@@ -35,7 +35,7 @@ const common = {
       { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
       {
         test: /\.js$/,
-        exclude: /\.json$|(bower_components)/,
+        exclude: /\.json$|(node_modules|bower_components)/,
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015']

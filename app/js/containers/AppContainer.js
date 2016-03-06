@@ -1,25 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addApp } from '../actions';
+import { addApp, appLabelOnChange } from '../actions';
 
-let AppContainer = ({ onClick, numberApps, apps }) => {
-  console.log('In AppContainer.');
+
+let AppContainer = ({ appLabel, onClick, onChange, numberApps, children }) => {
   return (
     <div>
       <div className="container-fluid toolbar-container">
           <div className="row-fluid">
-              <div className="col-lg-1">
-                  <button className="toolbar-button" onClick={onClick}>
-                   + Add
-                  </button>
-              </div>
-              <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{numberApps}</span></span></div>
+            <div className="col-lg-1">
+              <input type="text" value={appLabel} onChange={onChange} />
+            </div>
+            <div className="col-lg-1">
+                <button className="toolbar-button" onClick={onClick}>
+                 +
+                </button>
+            </div>
+            <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{numberApps}</span></span></div>
           </div>
       </div>
       <div className="container-fluid app-container">
         {
-          apps.map((app) =>
-            <div className="container-app col-lg-2" key={app.id}>{app.label}</div>
+          children.map((child) =>
+            <div className="container-app col-lg-2" key={child.id}>{child.label}</div>
           )
         }
       </div>
@@ -28,9 +31,11 @@ let AppContainer = ({ onClick, numberApps, apps }) => {
 };
 
 AppContainer.propTypes = {
+  appLabel: React.PropTypes.string.isRequired,
   onClick: React.PropTypes.func.isRequired,
+  onChange: React.PropTypes.func.isRequired,
   numberApps: React.PropTypes.number.isRequired,
-  apps: React.PropTypes.array.isRequired
+  children: React.PropTypes.array.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -38,15 +43,18 @@ const mapStateToProps = (state) => {
 
   return {
     numberApps: appsChildren.length,
-    apps: appsChildren
+    children: appsChildren,
+    appLabel: (state.appLabel) ? state.appLabel : ''
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  console.log('from mapDispatchToProps');
   return {
     onClick: () => {
-      dispatch(addApp({ foo: 'bar' }));
+      dispatch(addApp());
+    },
+    onChange: (event) => {
+      dispatch(appLabelOnChange(event.target.value));
     }
   };
 };
