@@ -1,6 +1,5 @@
 import RestService from '../../service/restService';
 import { expect } from 'chai';
-import { assert } from 'chai';
 
 describe('Rest service', () => {
 
@@ -11,13 +10,12 @@ describe('Rest service', () => {
     const promise = RestService.getAppContainer();
 
     const success = (data) => {
-      console.log(`Success: ${JSON.stringify(data)}`);
       done();
     };
 
-    const error = (errorObj, obj1, obj2) => {
-      console.log(obj2);
-      console.log(`Error: StatusCode: ${errorObj.status}: Status Text: ${errorObj.statusText}`);
+    const error = (errorObj) => {
+      const message = `Error: StatusCode: ${errorObj.status}: Status Text: ${errorObj.statusText}`;
+      assert.fail(message, 'Call to get appContainer succeeded.');
       done();
     };
 
@@ -30,25 +28,23 @@ describe('Rest service', () => {
 
     promise.then((data) => {
 
-      console.log(JSON.stringify(data.id));
-
-      let promise = RestService.addAppToContainer(data.id, 'test');
+      const json = { typeLabel: 'App', label: 'New App ' + new Date().getTime(), parent: data.id };
+      const promiseInner = RestService.addComponent(json);
 
       const success = (data) => {
-        console.log(`Success: ${JSON.stringify(data)}`);
+        console.log(data);
         done();
       };
 
-      const error = (errorObj, obj1, obj2) => {
-        console.log(obj2);
+      const error = (errorObj) => {
+        console.log(errorObj);
         console.log(`Error: StatusCode: ${errorObj.status}: Status Text: ${errorObj.statusText}`);
+        assert.fail(true, false);
         done();
       };
 
-      promise.then(success, error);
+      promiseInner.then(success, error);
     });
-
-
   });
 
   it('should compose the url without exception.', () => {
@@ -56,5 +52,22 @@ describe('Rest service', () => {
     const url = RestService.getOrbServerRootUrl();
     expect(url).to.not.equal(null);
 
+  });
+
+  it('should get the component from an id.', (done) => {
+
+    const promise = RestService.getComponent(1044);
+
+    const success = (data) => {
+      done();
+    };
+
+    const error = (errorObj) => {
+      console.log(`Error: StatusCode: ${errorObj.status}: Status Text: ${errorObj.statusText}`);
+      assert.fail(true, false);
+      done();
+    };
+
+    promise.then(success, error);
   });
 });

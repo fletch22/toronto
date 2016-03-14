@@ -5,10 +5,9 @@ export const ACTIONS = {
   }
 };
 
-export const addApp = (app) => {
+export const addApp = () => {
   return {
-    type: ACTIONS.types.ADD_APP,
-    app
+    type: ACTIONS.types.ADD_APP
   };
 };
 

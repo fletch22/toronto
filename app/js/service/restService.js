@@ -14,17 +14,19 @@ const RestService = function restService() {
     type: 'get' // Send it through get method
   });
 
-  self.addAppToContainer = (parentId, label) => jQuery.ajax({
-    url: `${self.getOrbServerRootUrl()}/component/`,
-    type: 'post', // Send it through get method,
+  self.getComponent = (id) => jQuery.ajax({
+    url: `${self.getOrbServerRootUrl()}/components/${id}`,
+    type: 'get'
+  });
+
+  self.addComponent = (object) => jQuery.ajax({
+    url: `${self.getOrbServerRootUrl()}/components`,
+    type: 'POST',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    data: JSON.stringify({
-      parentId,
-      label
-    })
+    data: JSON.stringify(object)
   });
 };
 

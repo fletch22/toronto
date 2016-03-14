@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addApp, appLabelOnChange } from '../actions';
 
-
 let AppContainer = ({ appLabel, onClick, onChange, numberApps, children }) => {
   return (
     <div>
@@ -39,12 +38,12 @@ AppContainer.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const appsChildren = Object.assign({}, state).children;
+  const appsChildren = Object.assign({}, state).model.appContainer.children;
 
   return {
     numberApps: appsChildren.length,
     children: appsChildren,
-    appLabel: (state.appLabel) ? state.appLabel : ''
+    appLabel: (state.dom.view.appContainer.section.addNew.appLabel) ? state.dom.view.appContainer.section.addNew.appLabel : ''
   };
 };
 

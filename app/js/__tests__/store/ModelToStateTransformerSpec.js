@@ -6,8 +6,8 @@ describe('Phase State', () => {
 
   describe('appContainer sample data', () => {
 
-    it('should have a zero length app array.', () => {
-      expect(AppModel.apps.length).to.equal(0);
+    it('should have a zero length children.', () => {
+      expect(AppModel.children.list.length).to.equal(1);
     });
 
   });
@@ -26,8 +26,8 @@ describe('Phase State', () => {
       const storeState = ModelToStateTransformer.transform(AppModel);
 
       expect(ModelToStateTransformer).to.not.equal(null);
-      expect(storeState.children.length).to.equal(1);
-      expect(storeState.children[0].label).to.equal('HelloWorldApp');
+      expect(storeState.model.appContainer.children.length).to.equal(1);
+      expect(storeState.model.appContainer.children[0].label).to.equal('HelloWorldApp');
 
     });
 

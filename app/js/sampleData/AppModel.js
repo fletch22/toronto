@@ -1,6 +1,5 @@
 /*eslint-disable */
 const AppContainer = {
-  apps: [],
   "orbOriginal": {
     "userDefinedProperties": {
       "parent": "0",
@@ -18,7 +17,7 @@ const AppContainer = {
       {
         "orbOriginal": {
           "userDefinedProperties": {
-            "parent": "0",
+            "parent": "1037",
             "label": "HelloWorldApp",
             "children": ""
           },
@@ -26,7 +25,7 @@ const AppContainer = {
           "orbTypeInternalId": 1005
         },
         "id": 1038,
-        "parentId": 0,
+        "parentId": 1037,
         "children": {
           "haveChildrenBeenResolved": true,
           "list": []
@@ -42,7 +41,7 @@ const AppContainer = {
   "typeLabel": "AppContainer",
   "canHaveChildren": true,
   "new": false
-}
+};
 /*eslint-enable */
 
 export default AppContainer;

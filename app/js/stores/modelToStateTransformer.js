@@ -10,13 +10,28 @@ function Transformer() {
         label: child.label,
         id: child.id,
         parentId: child.parentId
-      }
+      };
       apps.push(application);
     });
 
     return {
-      id: model.id,
-      children: apps
+      dom: {
+        view: {
+          appContainer: {
+            section: {
+              addNew: {
+                appLabel: ''
+              }
+            }
+          }
+        }
+      },
+      model: {
+        appContainer: {
+          id: model.id,
+          children: apps
+        }
+      }
     };
   };
 

@@ -1,11 +1,24 @@
 import { createStore } from 'redux';
 import apps from '../reducers';
-import AppModel from '../sampleData/AppModel';
+
 import ModelToStateTransformer from './modelToStateTransformer';
 import DevTools from '../containers/DevTools';
+import RestService from '../service/restService';
+import jQuery from 'jquery';
+
 // Transform native raw data response into react store data.
-const state = ModelToStateTransformer.transform(AppModel);
+// import AppModel from '../sampleData/AppModel';
+// allStore = createStore(apps, state, DevTools.instrument());
+// let state = ModelToStateTransformer.transform(AppModel);
 
-const allStore = createStore(apps, state, DevTools.instrument());
+const promise = RestService.getAppContainer();
+const AllStore = jQuery.Deferred();
 
-export default allStore;
+promise.then((data) => {
+  const state = ModelToStateTransformer.transform(data);
+  const store = createStore(apps, state, DevTools.instrument());
+  AllStore.resolve(store);
+});
+
+export default AllStore;
+

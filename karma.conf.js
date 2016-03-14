@@ -1,5 +1,5 @@
-const webpackConfig = require('./webpack.config.js');
-webpackConfig.entry = {};
+//const webpackConfig = require('./webpack.config.js');
+const webpackConfig = require('./webpack.hot.config.js');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 
@@ -8,12 +8,49 @@ const PATHS = {
   build: path.join(__dirname, 'build')
 };
 
+const webpackConfigCustom = {
+  watch: true,
+  resolve: {
+    extensions: ['', '.js', '.scss'],
+    modulesDirectories: ['app', 'node_modules']
+  },
+  entry: ['./app/css/modules/header.scss', 'bootstrap-loader'],
+  devtool: 'inline-source-map',
+  module: {
+    loaders: [
+      { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['react', 'es2015']
+        }
+      },
+      {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        loader: `style-loader!css-loader!postcss-loader!sass-loader?includePaths[]=${path.resolve(__dirname, './app')}`,
+        include: PATHS.app
+      },
+      {
+        test: /bootstrap-sass\/assets\/javascripts\//,
+        exclude: /node_modules/,
+        loader: 'imports?jQuery=jquery'
+      }
+    ]
+  },
+  plugins: [
+    new ExtractTextPlugin('[name].css')
+  ]
+};
+
 module.exports = function TorontoKarmaConfig(config) {
   config.set({
     basePath: '',
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai'], //['jasmine'],
+    frameworks: ['mocha', 'chai'],
     // list of files / patterns to load in the browser
     files: [
       { pattern: 'app/js/__tests__/test-context.js', watched: false }
@@ -49,43 +86,8 @@ module.exports = function TorontoKarmaConfig(config) {
     autoWatch: true,
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'], //, 'Chrome'],
-    webpack: {
-      watch: true,
-      resolve: {
-        extensions: ['', '.js', '.scss'],
-        modulesDirectories: ['app', 'node_modules']
-      },
-      entry: ['./app/css/modules/header.scss', 'bootstrap-loader'],
-      devtool: 'inline-source-map',
-      module: {
-        loaders: [
-          { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-            query: {
-              presets: ['react', 'es2015']
-            }
-          },
-          {
-            test: /\.scss$/,
-            exclude: /node_modules/,
-            loader: `style-loader!css-loader!postcss-loader!sass-loader?includePaths[]=${path.resolve(__dirname, './app')}`,
-            include: PATHS.app
-          },
-          {
-            test: /bootstrap-sass\/assets\/javascripts\//,
-            exclude: /node_modules/,
-            loader: 'imports?jQuery=jquery'
-          }
-        ]
-      },
-      plugins: [
-        new ExtractTextPlugin('[name].css')
-      ]
-    },
+    browsers: ['Chrome'], //, 'PhantomJS', ],
+    webpack: webpackConfig,
     webpackMiddleware: {
       noInfo: true
     },
@@ -94,3 +96,4 @@ module.exports = function TorontoKarmaConfig(config) {
     singleRun: false
   });
 };
+

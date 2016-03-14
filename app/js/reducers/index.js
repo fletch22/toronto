@@ -1,8 +1,8 @@
 // import { combineReducers } from 'redux';
-import apps from './apps';
+import appContainer from './appContainer';
 
 // const orbApp = combineReducers({
-//   apps
+//   appContainer
 // })
 
-export default apps;
+export default appContainer;
