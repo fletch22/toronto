@@ -1,19 +1,27 @@
 import { expect } from 'chai';
-import StatePersisterWorker from '../../worker/statePersisterWorker';
+import Worker from 'worker!../../worker/statePersisterWorker.js';
+import Message, { MessageTypes } from '../../worker/message';
 
-describe('Rest service', () => {
+describe('Worker service', () => {
+  const worker = new Worker();
+
+  worker.onmessage = function (event) {
+    console.log(`This was an event reflection from the worker thread: ${JSON.stringify(event.data)}`);
+  };
 
   it('should execute fetch correctly.', (done) => {
 
-    //const worker = new Worker('D:/workspaces/toronto/app/build/doWork.js');
-    //
-    //worker.addEventListener('message', (e) => {
-    //  console.log('Worker said: ', e.data);
-    //}, false);
-    //
-    //worker.postMessage('Hello World'); // Send data to our worker.
-    //expect(true).to.not.equal(false);
+    worker.postMessage(new Message('Test 1', MessageTypes.PersistMessage));
+    worker.postMessage(new Message('Test 2', MessageTypes.PersistMessage));
+    worker.postMessage(new Message('Test 3', MessageTypes.PersistMessage));
+    worker.postMessage(new Message('Test 4', MessageTypes.PersistMessage));
+    worker.postMessage(new Message('Test 5', MessageTypes.PersistMessage));
+    worker.postMessage(new Message('Test 6', MessageTypes.PersistMessage));
+    worker.postMessage(new Message('Test 7', MessageTypes.PersistMessage));
+    worker.postMessage(new Message('Test 8', MessageTypes.PersistMessage));
 
-    done();
+    setTimeout(() => {
+      done();
+    }, 2000);
   });
 });

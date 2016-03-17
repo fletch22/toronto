@@ -12,7 +12,6 @@ const common = {
   // Entry accepts a path or an object of entries.
   entry: {
     bundle: ['./app/index.js', 'bootstrap-loader']
-    //,statePersisterWorker: ['./app/js/worker/statePersisterWorker.js']
   },
   output: {
     filename: '[name].js'
@@ -37,11 +36,6 @@ const common = {
         test: /bootstrap-sass\/assets\/javascripts\//,
         loader: 'imports?jQuery=jquery'
       }
-      //,{
-      //  test: /statePersisterWorker\.js$/,
-      //  loader: 'worker-loader',
-      //  include: PATHS.worker
-      //}
     ]
   }
 };
@@ -75,12 +69,4 @@ module.exports = merge(common, {
     extensions: ['', '.js', '.scss'],
     modulesDirectories: ['app', 'node_modules']
   }
-  //,worker: {
-  //  entry: {
-  //    statePersisterWorker: ['./app/js/worker/statePersisterWorker.js']
-  //  },
-  //  output: {
-  //    filename: 'statePersisterWorker.js'
-  //  }
-  //}
 });

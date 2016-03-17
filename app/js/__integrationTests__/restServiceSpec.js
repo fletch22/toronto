@@ -1,4 +1,4 @@
-import RestService from '../../service/restService';
+import RestService from '../service/restService';
 import { expect } from 'chai';
 
 describe('Rest service', () => {
@@ -56,7 +56,7 @@ describe('Rest service', () => {
 
   it('should get the component from an id.', (done) => {
 
-    const promise = RestService.getComponent(1044);
+    const promise = RestService.getComponent(1041);
 
     const success = (data) => {
       done();

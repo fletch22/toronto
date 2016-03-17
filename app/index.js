@@ -13,22 +13,13 @@ import allStore from 'js/stores/allStore';
 
 global.jQuery = jQuery;
 
-allStore.then( (allStore) => {
-
+allStore.then((store) => {
   ReactDOM.render(
-
-    <Provider store={allStore}>
+    <Provider store={store}>
       <App />
     </Provider>,
     document.querySelector('#main'));
 });
-
-const Worker = require('worker!./js/worker/statePersisterWorker.js');
-const worker = new Worker;
-worker.postMessage('b');
-worker.onmessage = function (event) {
-  console.log(`This was an event reflection from the worker thread: ${event.data}`);
-};
 
 
 

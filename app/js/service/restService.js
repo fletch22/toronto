@@ -23,7 +23,17 @@ const RestService = function restService() {
     url: `${self.getOrbServerRootUrl()}/components`,
     type: 'POST',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    data: JSON.stringify(object)
+  });
+
+  self.ping = (object) => jQuery.ajax({
+    url: `${self.getOrbServerRootUrl()}/ping`,
+    type: 'GET',
+    headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     data: JSON.stringify(object)
