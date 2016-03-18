@@ -5,23 +5,32 @@ import Message, { MessageTypes } from '../../worker/message';
 describe('Worker service', () => {
   const worker = new Worker();
 
-  worker.onmessage = function (event) {
-    console.log(`This was an event reflection from the worker thread: ${JSON.stringify(event.data)}`);
-  };
+  it('should execute save ideal messages correctly.', (done) => {
 
-  it('should execute fetch correctly.', (done) => {
+    const len = 1000;
+    const str = new Array(len + 1).join('x');
 
-    worker.postMessage(new Message('Test 1', MessageTypes.PersistMessage));
-    worker.postMessage(new Message('Test 2', MessageTypes.PersistMessage));
-    worker.postMessage(new Message('Test 3', MessageTypes.PersistMessage));
-    worker.postMessage(new Message('Test 4', MessageTypes.PersistMessage));
-    worker.postMessage(new Message('Test 5', MessageTypes.PersistMessage));
-    worker.postMessage(new Message('Test 6', MessageTypes.PersistMessage));
-    worker.postMessage(new Message('Test 7', MessageTypes.PersistMessage));
-    worker.postMessage(new Message('Test 8', MessageTypes.PersistMessage));
-
-    setTimeout(() => {
+    worker.onmessage = function (event) {
+      if (event.data
+        && event.data.body) {
+        const message = event.data.body.substr(0, 10);
+        console.log(`This was an event reflection from the worker thread: ${message}`);
+      }
       done();
-    }, 2000);
-  });
+    };
+
+    worker.postMessage(new Message(`Test 1: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new Message(`Test 2: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new Message(`Test 3: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new Message(`Test 4: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new Message(`Test 5: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new Message(`Test 6: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new Message(`Test 7: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new Message(`Test 8: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new Message(`Test 9: ${str}`, MessageTypes.PersistMessage));
+
+    //setTimeout(() => {
+    //    done();
+    //  }, 1990);
+    });
 });

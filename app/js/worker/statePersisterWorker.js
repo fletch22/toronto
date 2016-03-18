@@ -6,21 +6,34 @@ const Queue = function () {
 
   const queue = [];
 
+  function emitEventIfQueueEmpty() {
+    if (queue.length === 0) {
+      postMessage('Done.');
+    }
+  }
+
   function processQueue() {
     if (queue.isPaused) {
       setTimeout(processQueue, 1);
       return;
     }
 
-    let processing = [];
-    processing.push(queue.shift());
+    console.log(queue.length);
+    let sendArray = null;
+    if (queue.length === 0) {
+      emitEventIfQueueEmpty();
+      return;
+    } else {
+      sendArray = queue.splice(0, queue.length);
+    }
 
     queue.isPaused = true;
-    DomlessAjax.load('http://localhost:8080/vancouver/api/ping', JSON.stringify({ data: processing[0] }), (xhr) => {
+    DomlessAjax.load('http://localhost:8080/vancouver/api/ping', JSON.stringify({ states: sendArray }), (xhr) => {
       const result = xhr.responseText;
       console.log(result);
-      postMessage("done.");
       queue.isPaused = false;
+
+      emitEventIfQueueEmpty();
     });
   }
 
@@ -51,7 +64,5 @@ addEventListener('message', (event) => {
       throw error;
     }
   }
-
-  postMessage(message);
 }, false);
 
