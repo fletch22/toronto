@@ -56,7 +56,7 @@ describe('Rest service', () => {
 
   it('should get the component from an id.', (done) => {
 
-    const promise = RestService.getComponent(1041);
+    const promise = RestService.getComponent(1039);
 
     const success = (data) => {
       done();

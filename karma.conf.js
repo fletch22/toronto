@@ -50,10 +50,11 @@ module.exports = function TorontoKarmaConfig(config) {
     basePath: '',
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'sinon'],
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'app/js/__tests__/test-context.js', watched: false }
+      { pattern: 'app/js/__tests__/test-context.js', watched: false },
+      'node_modules/whatwg-fetch/fetch.js'
     ],
     // list of files to exclude
     exclude: [
@@ -63,6 +64,7 @@ module.exports = function TorontoKarmaConfig(config) {
       'karma-phantomjs-launcher',
       'karma-mocha',
       'karma-chai',
+      'karma-sinon',
       'karma-webpack'
     ],
     // preprocess matching files before serving them to the browser

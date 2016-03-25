@@ -1,68 +1,45 @@
 import { MessageTypes } from './message';
-import DomlessAjax from '../service/domlessAjax';
+import Queue from './queue';
 
-const Queue = function () {
-  const self = this;
+let hasRegisteredEventListener = false;
 
-  const queue = [];
+const StatePersisterWorker = function spw() {
+  const statePersisterWorker = this;
+  const queue = new Queue();
 
-  function emitEventIfQueueEmpty() {
-    if (queue.length === 0) {
-      postMessage('Done.');
+  function registerEventListener() {
+    if (hasRegisteredEventListener === false) {
+      addEventListener('message', (event) => {
+        console.log(`Worker received this data: ${event.data}`);
+
+        const message = event.data;
+        switch (message.type) {
+          case MessageTypes.PersistMessage: {
+            queue.push(message.body);
+            break;
+          }
+          case MessageTypes.PauseQueue: {
+            queue.isPaused = true;
+            break;
+          }
+          default: {
+            const error = { error: 'Could not determine type of worker message.' };
+            throw error;
+          }
+        }
+      }, false);
     }
+    hasRegisteredEventListener = true;
   }
 
-  function processQueue() {
-    if (queue.isPaused) {
-      setTimeout(processQueue, 1);
-      return;
-    }
-
-    console.log(queue.length);
-    let sendArray = null;
-    if (queue.length === 0) {
-      emitEventIfQueueEmpty();
-      return;
-    } else {
-      sendArray = queue.splice(0, queue.length);
-    }
-
-    queue.isPaused = true;
-    DomlessAjax.load('http://localhost:8080/vancouver/api/ping', JSON.stringify({ states: sendArray }), (xhr) => {
-      const result = xhr.responseText;
-      console.log(result);
-      queue.isPaused = false;
-
-      emitEventIfQueueEmpty();
-    });
-  }
-
-  self.isPaused = false;
-  self.push = function push(data) {
+  statePersisterWorker.push = (data) => {
     queue.push(data);
-    processQueue();
   };
+
+  registerEventListener();
 };
 
-const queue = new Queue();
+/* eslint no-new: 0 */
+new StatePersisterWorker();
 
-addEventListener('message', (event) => {
-  console.log(`Worker received this data: ${event.data}`);
-
-  const message = event.data;
-  switch (message.type) {
-    case MessageTypes.PersistMessage: {
-      queue.push(message.body);
-      break;
-    }
-    case MessageTypes.PauseQueue: {
-      queue.isPaused = true;
-      break;
-    }
-    default: {
-      const error = { error: 'Could not determine type of worker message.' };
-      throw error;
-    }
-  }
-}, false);
-
+export default StatePersisterWorker;

@@ -1,44 +1,46 @@
 import jQuery from 'jquery';
-import AppProperties from '../../../appProperties';
+import Service from './service';
 
-const RestService = function restService() {
-  const self = this;
+class RestService extends Service {
 
-  self.getOrbServerRootUrl = () => {
-    const orbServer = AppProperties.orbServer;
-    return `${orbServer.scheme}://${orbServer.host}:${orbServer.port}/${orbServer.appContext}/api`;
-  };
+  getAppContainer() {
+    return jQuery.ajax({
+      url: `${this.getOrbServerRootUrl()}/`,
+      type: 'get' // Send it through get method
+    });
+  }
 
-  self.getAppContainer = () => jQuery.ajax({
-    url: `${self.getOrbServerRootUrl()}/`,
-    type: 'get' // Send it through get method
-  });
+  getComponent(id) {
+    return jQuery.ajax({
+      url: `${this.getOrbServerRootUrl()}/components/${id}`,
+      type: 'get'
+    });
+  }
 
-  self.getComponent = (id) => jQuery.ajax({
-    url: `${self.getOrbServerRootUrl()}/components/${id}`,
-    type: 'get'
-  });
+  addComponent(object) {
+    return jQuery.ajax({
+      url: `${this.getOrbServerRootUrl()}/components`,
+      type: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(object)
+    });
+  }
 
-  self.addComponent = (object) => jQuery.ajax({
-    url: `${self.getOrbServerRootUrl()}/components`,
-    type: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    data: JSON.stringify(object)
-  });
-
-  self.ping = (object) => jQuery.ajax({
-    url: `${self.getOrbServerRootUrl()}/ping`,
-    type: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    data: JSON.stringify(object)
-  });
-};
+  ping(object) {
+    return jQuery.ajax({
+      url: `${this.getOrbServerRootUrl()}/ping`,
+      type: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(object)
+    });
+  }
+}
 
 export default new RestService();
 

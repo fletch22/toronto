@@ -3,7 +3,7 @@ const DomlessAjax = function domlessAjax() {
   const self = this;
 
   // Simple XHR request in pure JavaScript
-  self.load = function (url, json, callback) {
+  self.load = function (url, json, callback, error) {
     let xhr = null;
 
     if (typeof XMLHttpRequest !== 'undefined') {
@@ -44,8 +44,6 @@ const DomlessAjax = function domlessAjax() {
     xhr.open('POST', url, true);
 
     xhr.setRequestHeader('Content-type', 'application/json');
-    //xhr.setRequestHeader('Content-length', json.length);
-    //xhr.setRequestHeader('Connection', 'close');
     xhr.onreadystatechange = ensureReadiness;
     xhr.send(json);
   };
