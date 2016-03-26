@@ -1,25 +1,12 @@
 import { expect } from 'chai';
 import Worker from 'worker!../../worker/statePersisterWorker.js';
-import StatePersisterWorker from '../../worker/statePersisterWorker.js';
 import Message, { MessageTypes } from '../../worker/message';
 import Queue from '../../worker/queue';
 import fetchMock from 'fetch-mock';
+import stateSyncService from '../../service/stateSyncService';
 
 describe('Worker service', () => {
   const worker = new Worker();
-
-  before(() => {
-    // NOTE: Fixed in sinon 2.0. Until then, this is necessary.
-    /* eslint no-undef: 0 */
-    // server = sinon.fakeServer.create();
-
-    // sinon.stub(window, 'fetch');
-  });
-
-  after(() => {
-    // server.restore();
-    // window.fetch.restore();
-  });
 
   function getString(length) {
     return new Array(length + 1).join('x');
@@ -71,27 +58,33 @@ describe('Worker service', () => {
       });
     });
 
-    it('The queue should process a 401 error correctly.', (done) => {
+    it('should call rollback and fetch when 401', (done) => {
 
       const queue = new Queue();
 
-      fetchMock.mock('^http', { status: 401 });
+      const saveStateStub = sinon.stub(stateSyncService, 'saveState').returns(Promise.reject());
 
-      const str = getString(1000);
-      const message = new Message(`Test 1: ${str}`, MessageTypes.PersistMessage);
+      const stateHistory = [1, 2, 3, 4, 5, 6];
+      const rollbackAndFetchStateHistoryStub = sinon.stub(stateSyncService, 'rollbackAndFetchStateHistory').returns(stateHistory);
+      const emitEventRollbackStateStub = sinon.stub(queue, 'emitEventRollbackState');
+
+      const message = new Message(`Test 1: ${getString(1000)}`, MessageTypes.PersistMessage);
       const promise = queue.push(message.body);
 
       promise.then(() => {
         // Should not be called.
       })
-      .catch((error) => {
+      .catch(() => {
         fetchMock.restore();
+        expect(rollbackAndFetchStateHistoryStub.called).to.be.equal(true);
+        expect(saveStateStub.called).to.be.equal(true);
+        expect(emitEventRollbackStateStub.called).to.be.equal(true);
+
+        expect(emitEventRollbackStateStub.getCall(0).args.length).to.be.equal(1);
+        expect(emitEventRollbackStateStub.getCall(0).args[0].length).to.be.equal(stateHistory.length);
         done();
       });
     });
-
   });
-
-
 });
 

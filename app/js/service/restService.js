@@ -1,44 +1,17 @@
-import jQuery from 'jquery';
 import Service from './service';
 
 class RestService extends Service {
 
   getAppContainer() {
-    return jQuery.ajax({
-      url: `${this.getOrbServerRootUrl()}/`,
-      type: 'get' // Send it through get method
-    });
+    return this.fetch(`${this.url}/`, 'get');
   }
 
   getComponent(id) {
-    return jQuery.ajax({
-      url: `${this.getOrbServerRootUrl()}/components/${id}`,
-      type: 'get'
-    });
+    return this.fetch(`${this.url}/components/${id}`, 'get');
   }
 
   addComponent(object) {
-    return jQuery.ajax({
-      url: `${this.getOrbServerRootUrl()}/components`,
-      type: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      data: JSON.stringify(object)
-    });
-  }
-
-  ping(object) {
-    return jQuery.ajax({
-      url: `${this.getOrbServerRootUrl()}/ping`,
-      type: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      data: JSON.stringify(object)
-    });
+    return this.fetch(`${this.url}/components`, 'POST', object);
   }
 }
 

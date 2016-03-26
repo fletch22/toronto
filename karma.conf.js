@@ -1,4 +1,3 @@
-//const webpackConfig = require('./webpack.config.js');
 const webpackConfig = require('./webpack.hot.config.js');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');

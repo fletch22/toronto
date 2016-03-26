@@ -4,5 +4,9 @@
   },
   "rules": {
     "padded-blocks": [0]
+  },
+  "globals": {
+    "sinon": true,
+    "assert": true
   }
 }

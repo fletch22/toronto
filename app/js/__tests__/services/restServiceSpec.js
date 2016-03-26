@@ -1,4 +1,4 @@
-import RestService from '../service/restService';
+import RestService from '../../service/restService';
 import { expect } from 'chai';
 
 describe('Rest service', () => {
@@ -19,7 +19,8 @@ describe('Rest service', () => {
       done();
     };
 
-    promise.then(success, error);
+    //promise.then(success, error);
+    promise.then(success).catch(error);
   });
 
   it('should execute addApp correctly.', (done) => {
@@ -43,7 +44,8 @@ describe('Rest service', () => {
         done();
       };
 
-      promiseInner.then(success, error);
+      //promiseInner.then(success, error);
+      promise.then(success).catch(error);
     });
   });
 
@@ -68,6 +70,7 @@ describe('Rest service', () => {
       done();
     };
 
-    promise.then(success, error);
+    //promise.then(success, error);
+    promise.then(success).catch(error);
   });
 });
