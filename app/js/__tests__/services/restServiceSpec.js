@@ -19,7 +19,6 @@ describe('Rest service', () => {
       done();
     };
 
-    //promise.then(success, error);
     promise.then(success).catch(error);
   });
 
@@ -29,8 +28,9 @@ describe('Rest service', () => {
 
     promise.then((data) => {
 
+      console.log(data);
+
       const json = { typeLabel: 'App', label: 'New App ' + new Date().getTime(), parent: data.id };
-      const promiseInner = RestService.addComponent(json);
 
       const success = (data) => {
         console.log(data);
@@ -44,7 +44,6 @@ describe('Rest service', () => {
         done();
       };
 
-      //promiseInner.then(success, error);
       promise.then(success).catch(error);
     });
   });
@@ -61,6 +60,7 @@ describe('Rest service', () => {
     const promise = RestService.getComponent(1039);
 
     const success = (data) => {
+      console.log(data);
       done();
     };
 
@@ -70,7 +70,6 @@ describe('Rest service', () => {
       done();
     };
 
-    //promise.then(success, error);
     promise.then(success).catch(error);
   });
 });

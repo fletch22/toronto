@@ -23,7 +23,7 @@ const StatePersisterWorker = function spw() {
             break;
           }
           default: {
-            const error = { error: 'Could not determine type of worker message.' };
+            const error = new Error(`Could not determine type of worker message from type '${message.type}'`);
             throw error;
           }
         }

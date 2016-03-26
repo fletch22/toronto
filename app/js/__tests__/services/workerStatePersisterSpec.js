@@ -36,23 +36,24 @@ describe('Worker service', () => {
 
   });
 
-  describe('The queue', () => {
+  describe('and queue', () => {
 
-    it('The queue should process a success message correctly.', (done) => {
+    it('should process a success message correctly.', (done) => {
 
       const queue = new Queue();
 
-      fetchMock.mock('^http', 200);
+      fetchMock.mock('^http', { status: 200, body: '[]' });
 
       const str = getString(1000);
       const message = new Message(`Test 1: ${str}`, MessageTypes.PersistMessage);
       const promise = queue.push(message.body);
 
-      promise.then(() => {
+      promise.then((data) => {
         fetchMock.restore();
         done();
       })
       .catch((error) => {
+        fetchMock.restore();
         console.log(error);
         console.log(error.stack);
       });
@@ -72,6 +73,7 @@ describe('Worker service', () => {
       const promise = queue.push(message.body);
 
       promise.then(() => {
+        fetchMock.restore();
         // Should not be called.
       })
       .catch(() => {

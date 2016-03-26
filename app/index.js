@@ -21,5 +21,11 @@ allStore.then((store) => {
     document.querySelector('#main'));
 });
 
+const Worker = require('worker!./js/worker/statePersisterWorker.js');
+const worker = new Worker();
+worker.onmessage = function (event) {
+  console.log(`This was an event reflection from the worker thread: ${event.data}`);
+};
+
 
 

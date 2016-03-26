@@ -6,11 +6,6 @@ import DevTools from '../containers/DevTools';
 import RestService from '../service/restService';
 import jQuery from 'jquery';
 
-// Transform native raw data response into react store data.
-// import AppModel from '../sampleData/AppModel';
-// allStore = createStore(apps, state, DevTools.instrument());
-// let state = ModelToStateTransformer.transform(AppModel);
-
 const promise = RestService.getAppContainer();
 const AllStore = jQuery.Deferred();
 

@@ -5,6 +5,7 @@ function Transformer() {
 
   self.transform = function transform(model) {
     const apps = [];
+
     model.children.list.forEach((child) => {
       const application = {
         label: child.label,
