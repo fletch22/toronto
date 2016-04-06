@@ -1,7 +1,8 @@
 export const ACTIONS = {
   types: {
     ADD_APP: 'ADD_APP',
-    APP_LABEL_INPUT_CHANGE: 'APP_LABEL_INPUT_CHANGE'
+    APP_LABEL_INPUT_CHANGE: 'APP_LABEL_INPUT_CHANGE',
+    ROLLBACK_ONE_STATE: 'ROLLBACK_ONE_STATE'
   }
 };
 
@@ -17,4 +18,11 @@ export const appLabelOnChange = (appLabel) => {
     appLabel
   };
 };
+
+export const backOneState = () => {
+  return {
+    type: ACTIONS.types.ROLLBACK_ONE_STATE
+  };
+};
+
 

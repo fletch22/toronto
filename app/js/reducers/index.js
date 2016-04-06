@@ -1,8 +1,8 @@
-// import { combineReducers } from 'redux';
-import appContainer from './appContainer';
+import appContainerToolbar from './appContainerToolbar';
+import { combineReducers } from 'redux';
 
-// const orbApp = combineReducers({
-//   appContainer
-// })
+ //const orbApp = combineReducers({
+ //  appContainerToolbar
+ //});
 
-export default appContainer;
+export default appContainerToolbar;
