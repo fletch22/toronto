@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addApp, appLabelOnChange, backOneState } from '../../actions';
-import ButtonReset from '../../time-travel/ButtonReset';
+import { addApp, appLabelOnChange } from '../../actions';
+// import ButtonReset from '../../time-travel/ButtonReset';
+import TimeTravel from '../TimeTravel';
 
 class AppContainerToolbar extends React.Component {
 
@@ -13,15 +14,15 @@ class AppContainerToolbar extends React.Component {
             <input type="text" value={this.props.appLabel} onChange={this.props.onChange} />
           </div>
           <div className="col-lg-1">
+          </div>
+          <div className="col-lg-1">
             <button className="toolbar-button" onClick={this.props.onClick}>
               +
             </button>
           </div>
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
           <div className="col-lg-2">
-            <button onClick={this.props.backOneClickHandler} className="time-travel">
-              &#8249;
-            </button>
+            <TimeTravel />
           </div>
         </div>
       </div>
@@ -33,7 +34,6 @@ AppContainerToolbar.propTypes = {
   appLabel: React.PropTypes.string.isRequired,
   onClick: React.PropTypes.func.isRequired,
   onChange: React.PropTypes.func.isRequired,
-  backOneClickHandler: React.PropTypes.func.isRequired,
   numberApps: React.PropTypes.number.isRequired
 };
 
@@ -53,9 +53,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     onChange: (event) => {
       dispatch(appLabelOnChange(event.target.value));
-    },
-    backOneClickHandler: (event) => {
-      dispatch(backOneState());
     }
   };
 };

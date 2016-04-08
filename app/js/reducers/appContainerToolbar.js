@@ -1,4 +1,5 @@
 import { ACTIONS } from '../actions/index.js';
+import workerClient from '../worker/statePersisterWorkerClient';
 
 const appContainerToolbar = (state = { apps: [] }, action) => {
   const stateNew = Object.assign({}, state);
@@ -15,18 +16,16 @@ const appContainerToolbar = (state = { apps: [] }, action) => {
 
       appContainerModel.children.push(app);
 
+      workerClient.persistState(stateNew);
+
       return stateNew;
     }
     case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
       appContainerDom.section.addNew.appLabel = action.appLabel;
 
+      workerClient.persistState(stateNew);
+
       return stateNew;
-    }
-    case ACTIONS.types.ROLLBACK_ONE_STATE: {
-
-      console.log("Rest call here to roll back one state.");
-
-      return state;
     }
     default: {
       return state;

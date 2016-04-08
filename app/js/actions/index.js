@@ -19,10 +19,3 @@ export const appLabelOnChange = (appLabel) => {
   };
 };
 
-export const backOneState = () => {
-  return {
-    type: ACTIONS.types.ROLLBACK_ONE_STATE
-  };
-};
-
-

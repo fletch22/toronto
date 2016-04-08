@@ -12,6 +12,7 @@ class Service {
   }
 
   fetch(url, method, object) {
+
     const promise = new Promise((resolve, reject) => {
       const options = {
         method
@@ -39,14 +40,21 @@ class Service {
         return response.json();
       }
 
-      fetch(url, options)
-        .then(checkStatus)
-        .then(parseJSON)
-        .then((data) => {
-          resolve(data);
-        }).catch((response) => {
-          reject(response);
-        });
+      let tmpProm = fetch(url, options)
+        .then(checkStatus);
+
+      // Parse JSON response
+      tmpProm = tmpProm.then(parseJSON);
+
+      // Send the object on its way
+      tmpProm = tmpProm.then((data) => {
+        resolve(data);
+      })
+
+      // Handle any error
+      tmpProm.catch((response) => {
+        reject(response);
+      });
     });
     return promise;
   }

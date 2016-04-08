@@ -10,8 +10,6 @@ const StatePersisterWorker = function spw() {
   function registerEventListener() {
     if (hasRegisteredEventListener === false) {
       addEventListener('message', (event) => {
-        console.log(`Worker received this data: ${event.data}`);
-
         const message = event.data;
         switch (message.type) {
           case MessageTypes.PersistMessage: {

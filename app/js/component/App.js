@@ -6,7 +6,6 @@ import DevTools from '../containers/DevTools';
 const App = () => (
   <div className="container-fluid">
     <AppContainer numberApps="0" />
-    <DevTools />
   </div>
 );
 
