@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addApp, appLabelOnChange } from '../../actions';
-// import ButtonReset from '../../time-travel/ButtonReset';
-import TimeTravel from '../TimeTravel';
+import TimeTravel from '../../time-travel/TimeTravel';
 
 class AppContainerToolbar extends React.Component {
 
@@ -21,7 +20,7 @@ class AppContainerToolbar extends React.Component {
             </button>
           </div>
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
-          <div className="col-lg-2">
+          <div className="span3">
             <TimeTravel />
           </div>
         </div>

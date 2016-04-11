@@ -28,7 +28,6 @@ describe('Phase State', () => {
       expect(ModelToStateTransformer).to.not.equal(null);
       expect(storeState.model.appContainer.children.length).to.equal(1);
       expect(storeState.model.appContainer.children[0].label).to.equal('HelloWorldApp');
-
     });
 
   });

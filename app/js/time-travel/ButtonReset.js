@@ -29,6 +29,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 ButtonReset = connect(
+  null
   mapDispatchToProps
 )(ButtonReset);
 

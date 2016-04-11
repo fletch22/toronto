@@ -1,7 +1,9 @@
 import { ACTIONS } from '../actions/index.js';
 import workerClient from '../worker/statePersisterWorkerClient';
+import defaultState from '../domain/defaultState';
 
-const appContainerToolbar = (state = { apps: [] }, action) => {
+const appContainerToolbar = (state = defaultState, action) => {
+
   const stateNew = Object.assign({}, state);
   const appContainerModel = stateNew.model.appContainer;
   const appContainerDom = stateNew.dom.view.appContainer;
@@ -26,6 +28,9 @@ const appContainerToolbar = (state = { apps: [] }, action) => {
       workerClient.persistState(stateNew);
 
       return stateNew;
+    }
+    case ACTIONS.types.SET_STATE: {
+      return action.state;
     }
     default: {
       return state;

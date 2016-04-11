@@ -28,12 +28,9 @@ describe('Rest service', () => {
 
     promise.then((data) => {
 
-      console.log(data);
-
       const json = { typeLabel: 'App', label: 'New App ' + new Date().getTime(), parent: data.id };
 
       const success = (data) => {
-        console.log(data);
         done();
       };
 

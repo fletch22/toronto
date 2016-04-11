@@ -5,11 +5,12 @@
   "main": "gulpfile.js",
   "scripts": {
     "test": "karma start",
+    "intTest": "set EXECUTE_INTEGRATION_TESTS=true && karma start",
     "start": "webpack-dev-server --config webpack.hot.config.js --content-base build",
     "lint": "eslint --ext .js,.jsx assets/**"
   },
   "author": "Chris Flesche",
-  "license": "PRIVATE",
+  "license": "UNLICENSED",
   "devDependencies": {
     "autoprefixer": "^6.3.1",
     "babel": "^6.3.26",

@@ -44,7 +44,7 @@ const webpackConfigCustom = {
   ]
 };
 
-module.exports = function TorontoKarmaConfig(config) {
+const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
   config.set({
     basePath: '',
     // frameworks to use
@@ -52,7 +52,6 @@ module.exports = function TorontoKarmaConfig(config) {
     frameworks: ['mocha', 'chai', 'sinon'],
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'app/js/__tests__/test-context.js', watched: false },
       'node_modules/whatwg-fetch/fetch.js'
     ],
     // list of files to exclude
@@ -69,7 +68,6 @@ module.exports = function TorontoKarmaConfig(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'app/js/__tests__/test-context.js': ['webpack'],
       'app/css/modules/header.scss': ['webpack']
     },
     // test results reporter to use
@@ -96,5 +94,18 @@ module.exports = function TorontoKarmaConfig(config) {
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
   });
+
+  if (process.env.EXECUTE_INTEGRATION_TESTS) {
+    console.log('Running INTEGRATION tests only ...');
+    config.files.push({ pattern: 'app/js/__integrationTests__/test-context.js', watched: false });
+    config.preprocessors['app/js/__integrationTests__/test-context.js'] = ['webpack'];
+  } else {
+    console.log('Running UNIT tests only ...');
+    config.files.push({ pattern: 'app/js/__tests__/test-context.js', watched: false });
+    config.preprocessors['app/js/__tests__/test-context.js'] = ['webpack'];
+  }
 };
+
+
+module.exports = TorontoKarmaConfig;
 

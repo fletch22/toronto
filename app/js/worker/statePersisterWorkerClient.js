@@ -4,7 +4,6 @@ import Message, { MessageTypes } from './message';
 class StatePersisterWorkerClient {
 
   constructor() {
-    console.log('Is this persisted?');
     this.worker = new Worker();
 
     this.worker.onmessage = function (event) {
