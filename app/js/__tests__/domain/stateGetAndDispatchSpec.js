@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import RestService from '../../service/restService';
 import stateSyncService from '../../service/stateSyncService';
 import stateGetAndDispatch from '../../domain/stateGetAndDispatch';
+import stateRetriever from '../../domain/stateRetriever';
 
 describe('Current state retriever', () => {
 
@@ -21,7 +22,6 @@ describe('Current state retriever', () => {
   it('should derive the state from the model when there is no earlier state.', (done) => {
 
     stateGetAndDispatch.index = 2;
-    const getAppContainer = sandbox.stub(RestService, 'getAppContainer').returns(Promise.reject());
     const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState').returns(Promise.resolve({ state: null, isEarliestState: true }));
 
     const dispatch = sandbox.mock();
@@ -31,7 +31,6 @@ describe('Current state retriever', () => {
     promiseTest.then(() => {
       expect(stateGetAndDispatch.index).to.equal(2);
       expect(getHistoricalState.called).to.equal(true);
-      expect(getAppContainer.called).to.equal(true);
       done();
     });
 
@@ -40,7 +39,7 @@ describe('Current state retriever', () => {
     });
   });
 
-  it('should derive the state from the model when there is no earlier state.', (done) => {
+  it('should get the state from the log but not try to derive the state.', (done) => {
 
     const getAppContainer = sandbox.stub(RestService, 'getAppContainer').returns(Promise.reject());
     const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState').returns(Promise.resolve({ state: {}, isEarliestState: false }));
@@ -59,5 +58,58 @@ describe('Current state retriever', () => {
     promiseTest.catch((error) => {
       console.log(error);
     });
+  });
+
+  it('should reset state to currently selected state when invoked', (done) => {
+
+    stateGetAndDispatch.index = 2;
+    const deriveState = sandbox.stub(stateRetriever, 'deriveState').returns(Promise.resolve({}));
+    const dispatch = sandbox.mock();
+
+    const data = {
+      state: '{}',
+      isEarliestState: false,
+      transactionId: 123
+    };
+
+    const promiseTest = stateGetAndDispatch.success(data, dispatch, 2);
+
+    promiseTest.then(() => {
+      expect(deriveState.called).to.equal(false);
+      expect(stateGetAndDispatch.transactionId).to.equal(data.transactionId);
+      done();
+    });
+
+    promiseTest.catch((error) => {
+      console.log(`Error: ${error.stackTrace}`);
+    });
+
+  });
+
+  it('should call derived state when there is not state returned from the log and there are no more states.', (done) => {
+
+    stateGetAndDispatch.index = 2;
+    const deriveState = sandbox.stub(stateRetriever, 'deriveState').returns(Promise.resolve({}));
+
+    const dispatch = sandbox.mock();
+
+    const data = {
+      state: null,
+      isEarliestState: true,
+      transactionId: 123
+    };
+
+    const promiseTest = stateGetAndDispatch.success(data, dispatch, 2);
+
+    promiseTest.then(() => {
+      expect(deriveState.called).to.equal(true);
+      expect(stateGetAndDispatch.transactionId).to.equal(stateGetAndDispatch.TransactionSignifier.TRANSACTION_ID_BEFORE_FIRST_TRANSACTION);
+      done();
+    });
+
+    promiseTest.catch((error) => {
+      console.log(`Error: ${error.stackTrace}`);
+    });
+
   });
 });

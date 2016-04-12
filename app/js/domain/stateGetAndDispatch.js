@@ -5,28 +5,44 @@ import stateRetriever from '../domain/stateRetriever';
 class StateGetAndDispatch {
 
   constructor() {
+    this.TransactionSignifier = {
+      TRANSACTION_ID_UNSET: -1,
+      TRANSACTION_ID_BEFORE_FIRST_TRANSACTION: -2
+    }
     this.index = 0;
+    this.transactionId = this.TransactionSignifier.TRANSACTION_ID_UNSET;
   }
 
   success(data, dispatch, indexRetrieved) {
+    const promise = new Promise((resolve, reject) => {
 
-    const state = JSON.parse(data.state);
-    console.log(indexRetrieved + '- ' + data.isEarliestState);
+      const state = JSON.parse(data.state);
 
-    if (state === null) {
-      if (data.isEarliestState) {
-        const promise = new Promise((resolve, reject) => {
-          stateRetriever.deriveState(resolve, reject);
-        });
-        promise.then((state) => {
-          dispatch(setState(state));
-          this.index = indexRetrieved;
-        });
+      if (state === null) {
+        if (data.isEarliestState) {
+          const promiseInner = stateRetriever.deriveState();
+
+          promiseInner.then((state) => {
+            this.index = indexRetrieved;
+            this.transactionId = this.TransactionSignifier.TRANSACTION_ID_BEFORE_FIRST_TRANSACTION;
+            dispatch(setState(state));
+            resolve();
+          });
+
+          promiseInner.catch((error) => {
+            reject(error);
+          });
+        } else {
+          throw new Error('There was an error condition that should not be possible in stateGetAndDispatch');
+        }
+      } else {
+        this.index = indexRetrieved;
+        this.transactionId = data.transactionId;
+        dispatch(setState(state));
+        resolve();
       }
-    } else {
-      dispatch(setState(state));
-      this.index = indexRetrieved;
-    }
+    });
+    return promise;
   }
 
   error(error) {

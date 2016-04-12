@@ -20,7 +20,7 @@ describe('Current state retriever', () => {
   it('should call getAppContainer when no state exists because no earlier state exists.', (done) => {
 
     const getAppContainer = sandbox.stub(RestService, 'getAppContainer').returns(Promise.reject());
-    const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState').returns(Promise.resolve({ state: null, isEarliestState: false }));
+    const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState').returns(Promise.resolve({ state: null, isEarliestState: false, transactionId: -1 }));
 
     const promise = stateRetriever.getCurrent();
 
@@ -40,7 +40,7 @@ describe('Current state retriever', () => {
   it('should not call getAppContainer when state exists', (done) => {
 
     const getAppContainer = sandbox.stub(RestService, 'getAppContainer').returns(Promise.reject());
-    const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState').returns(Promise.resolve({ state: '{}' }));
+    const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState').returns(Promise.resolve({ state: '{}', isEarliestState: false, transactionId: 123 }));
 
     const promise = stateRetriever.getCurrent();
 

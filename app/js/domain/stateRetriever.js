@@ -15,6 +15,13 @@ class StateRetriever {
       });
   }
 
+  deriveStateNew() {
+    return RestService.getAppContainer()
+      .then((responseData) => {
+        return ModelToStateTransformer.transform(responseData);
+      });
+  }
+
   getCurrent() {
     const outerPromise = new Promise((resolve, reject) => {
       const promise = stateSyncService.getHistoricalState(0);
