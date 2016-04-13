@@ -70,7 +70,12 @@ const Queue = function q() {
   queue.isPaused = false;
   queue.push = function push(data) {
     queueArray.push(data);
-    return processQueue();
+
+    if (!queue.isPaused) {
+      return processQueue();
+    } else {
+      return Promise.resolve();
+    }
   };
 };
 

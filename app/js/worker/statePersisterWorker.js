@@ -20,6 +20,10 @@ const StatePersisterWorker = function spw() {
             queue.isPaused = true;
             break;
           }
+          case MessageTypes.UnpauseQueue: {
+            queue.isPaused = false;
+            break;
+          }
           default: {
             const error = new Error(`Could not determine type of worker message from type '${message.type}'`);
             throw error;

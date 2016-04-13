@@ -1,7 +1,8 @@
 const MessageTypes = {
   PersistMessage: 1,
   PauseQueue: 2,
-  IsPaused: 3
+  IsPaused: 3,
+  UnpauseQueue: 4
 };
 
 exports.MessageTypes = MessageTypes;

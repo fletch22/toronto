@@ -20,12 +20,13 @@ class StateGetAndDispatch {
 
       if (state === null) {
         if (data.isEarliestState) {
+          this.index = data.indexOfMaxElement + 1;
           const promiseInner = stateRetriever.deriveState();
 
-          promiseInner.then((state) => {
-            this.index = indexRetrieved;
+          promiseInner.then((stateInner) => {
+
             this.transactionId = this.TransactionSignifier.TRANSACTION_ID_BEFORE_FIRST_TRANSACTION;
-            dispatch(setState(state));
+            dispatch(setState(stateInner));
             resolve();
           });
 

@@ -20,6 +20,14 @@ class StatePersisterWorkerClient {
     console.log(`persisting ${json}`);
     this.worker.postMessage(new Message(json, MessageTypes.PersistMessage));
   }
+
+  pausePersister() {
+    this.worker.postMessage(new Message('', MessageTypes.PauseQueue));
+  }
+
+  unpausePersister() {
+    this.worker.postMessage(new Message('', MessageTypes.UnpauseQueue));
+  }
 }
 
 export default new StatePersisterWorkerClient();

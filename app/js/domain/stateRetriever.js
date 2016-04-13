@@ -4,18 +4,7 @@ import stateSyncService from '../service/stateSyncService';
 
 class StateRetriever {
 
-  deriveState(resolve, reject) {
-    RestService.getAppContainer()
-      .then((responseData) => {
-        const state = ModelToStateTransformer.transform(responseData);
-        resolve(state);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  }
-
-  deriveStateNew() {
+  deriveState() {
     return RestService.getAppContainer()
       .then((responseData) => {
         return ModelToStateTransformer.transform(responseData);
@@ -36,7 +25,15 @@ class StateRetriever {
 
         if (state === null) {
           console.log('No state found.');
-          this.deriveState(resolve, reject);
+          const promiseInner = this.deriveState();
+
+          promiseInner.then((stateInner) => {
+            resolve(stateInner);
+          });
+
+          promiseInner.catch((error) => {
+            reject(error);
+          });
         } else {
           resolve(state);
         }
