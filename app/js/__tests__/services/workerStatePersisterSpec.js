@@ -10,6 +10,10 @@ describe('Worker service', () => {
     return new Array(length + 1).join('x');
   }
 
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
   describe('and queue', () => {
 
     it('should process a success message correctly.', (done) => {
@@ -22,12 +26,10 @@ describe('Worker service', () => {
       const message = new Message(`Test 1: ${str}`, MessageTypes.PersistMessage);
       const promise = queue.push(message.body);
 
-      promise.then((data) => {
-        fetchMock.restore();
+      promise.then(() => {
         done();
       })
       .catch((error) => {
-        fetchMock.restore();
         console.log(error);
         console.log(error.stack);
       });
@@ -49,11 +51,9 @@ describe('Worker service', () => {
       const promise = queue.push(message.body);
 
       promise.then(() => {
-        fetchMock.restore();
         // Should not be called.
       })
       .catch(() => {
-        fetchMock.restore();
         expect(rollbackAndFetchStateHistoryStub.called).to.be.equal(true);
         expect(saveStateStub.called).to.be.equal(true);
         expect(emitEventRollbackStateStub.called).to.be.equal(true);

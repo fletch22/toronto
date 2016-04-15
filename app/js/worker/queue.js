@@ -2,7 +2,7 @@ import stateSyncService from '../service/stateSyncService';
 
 const Queue = function q() {
   const queue = this;
-  const queueArray = [];
+  let queueArray = [];
 
   function postMessageSafe(message) {
     try {
@@ -71,11 +71,17 @@ const Queue = function q() {
   queue.push = function push(data) {
     queueArray.push(data);
 
+    console.log("Is paused %s", queue.isPaused);
+
     if (!queue.isPaused) {
       return processQueue();
     } else {
       return Promise.resolve();
     }
+  };
+
+  queue.flush = function() {
+    queueArray = [];
   };
 };
 

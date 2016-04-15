@@ -21,6 +21,10 @@ class StatePersisterWorkerClient {
     this.worker.postMessage(new Message(json, MessageTypes.PersistMessage));
   }
 
+  pauseAndFlush() {
+    this.worker.postMessage(new Message('', MessageTypes.PauseAndFlush));
+  }
+
   pausePersister() {
     this.worker.postMessage(new Message('', MessageTypes.PauseQueue));
   }

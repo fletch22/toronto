@@ -1,16 +1,12 @@
 import stateSyncService from '../service/stateSyncService';
 import { setState } from '../actions';
 import stateRetriever from '../domain/stateRetriever';
+import timeTravelTransaction from '../domain/timeTravelTransaction';
 
 class StateGetAndDispatch {
 
   constructor() {
-    this.TransactionSignifier = {
-      TRANSACTION_ID_UNSET: -1,
-      TRANSACTION_ID_BEFORE_FIRST_TRANSACTION: -2
-    }
     this.index = 0;
-    this.transactionId = this.TransactionSignifier.TRANSACTION_ID_UNSET;
   }
 
   success(data, dispatch, indexRetrieved) {
@@ -20,12 +16,13 @@ class StateGetAndDispatch {
 
       if (state === null) {
         if (data.isEarliestState) {
+
           this.index = data.indexOfMaxElement + 1;
+
           const promiseInner = stateRetriever.deriveState();
 
           promiseInner.then((stateInner) => {
-
-            this.transactionId = this.TransactionSignifier.TRANSACTION_ID_BEFORE_FIRST_TRANSACTION;
+            timeTravelTransaction.setTransactionToRewindToBeforeEarliestState();
             dispatch(setState(stateInner));
             resolve();
           });
@@ -38,7 +35,7 @@ class StateGetAndDispatch {
         }
       } else {
         this.index = indexRetrieved;
-        this.transactionId = data.transactionId;
+        timeTravelTransaction.transactionId = data.transactionId;
         dispatch(setState(state));
         resolve();
       }

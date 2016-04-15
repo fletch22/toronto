@@ -24,7 +24,6 @@ class StateRetriever {
         console.log(JSON.stringify(state));
 
         if (state === null) {
-          console.log('No state found.');
           const promiseInner = this.deriveState();
 
           promiseInner.then((stateInner) => {

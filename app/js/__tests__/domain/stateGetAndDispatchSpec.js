@@ -3,6 +3,7 @@ import RestService from '../../service/restService';
 import stateSyncService from '../../service/stateSyncService';
 import stateGetAndDispatch from '../../domain/stateGetAndDispatch';
 import stateRetriever from '../../domain/stateRetriever';
+import timeTravelTransaction from '../../domain/timeTravelTransaction';
 
 describe('Current state retriever', () => {
 
@@ -78,14 +79,13 @@ describe('Current state retriever', () => {
 
     promiseTest.then(() => {
       expect(deriveState.called).to.equal(false);
-      expect(stateGetAndDispatch.transactionId).to.equal(data.transactionId);
+      expect(timeTravelTransaction.transactionId).to.equal(data.transactionId);
       done();
     });
 
     promiseTest.catch((error) => {
       console.log(`Error: ${error.stackTrace}`);
     });
-
   });
 
   it('should call derived state when there is not state returned from the log and there are no more states.', (done) => {
@@ -107,13 +107,13 @@ describe('Current state retriever', () => {
     promiseTest.then(() => {
       expect(deriveState.called).to.equal(true);
       expect(stateGetAndDispatch.index).to.equal(data.indexOfMaxElement + 1);
-      expect(stateGetAndDispatch.transactionId).to.equal(stateGetAndDispatch.TransactionSignifier.TRANSACTION_ID_BEFORE_FIRST_TRANSACTION);
+      expect(timeTravelTransaction.transactionId).to.equal(timeTravelTransaction.TransactionSignifier.TRANSACTION_ID_BEFORE_FIRST_TRANSACTION);
       done();
     });
 
     promiseTest.catch((error) => {
       console.log(`Error: ${error.stackTrace}`);
+      done();
     });
-
   });
 });
