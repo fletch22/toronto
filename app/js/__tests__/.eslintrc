@@ -3,7 +3,8 @@
     "mocha": true
   },
   "rules": {
-    "padded-blocks": [0]
+    "padded-blocks": [0],
+    "no-unused-expressions": [1]
   },
   "globals": {
     "sinon": true,

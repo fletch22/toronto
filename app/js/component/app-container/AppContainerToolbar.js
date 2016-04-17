@@ -1,9 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addApp, appLabelOnChange } from '../../actions';
+import { addApp, appLabelOnChange, showModalOverlay } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
+import StandardModal from '../modals/StandardModal';
 
 class AppContainerToolbar extends React.Component {
+
+  constructor() {
+    super();
+    this.onClickModalHandler = this.onClickModalHandler.bind(this);
+  }
+
+  onClickModalHandler(event) {
+    console.log(event);
+  }
 
   render() {
     return (
@@ -20,8 +30,11 @@ class AppContainerToolbar extends React.Component {
             </button>
           </div>
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
-          <div className="span3">
+          <div className="col-lg-1">
             <TimeTravel />
+          </div>
+          <div className="col-lg-1">
+            <button className="showModal" onClick={this.props.onShowOverlay}>Show Overlay</button>
           </div>
         </div>
       </div>
@@ -33,7 +46,8 @@ AppContainerToolbar.propTypes = {
   appLabel: React.PropTypes.string.isRequired,
   onClick: React.PropTypes.func.isRequired,
   onChange: React.PropTypes.func.isRequired,
-  numberApps: React.PropTypes.number.isRequired
+  numberApps: React.PropTypes.number.isRequired,
+  onShowOverlay: React.PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -41,7 +55,7 @@ const mapStateToProps = (state) => {
 
   return {
     numberApps: appsChildren.length,
-    appLabel: (state.dom.view.appContainer.section.addNew.appLabel) ? state.dom.view.appContainer.section.addNew.appLabel : ''
+    appLabel: (state.dom.view.appContainer.section.addNew.appLabel) ? state.dom.view.appContainer.section.addNew.appLabel : '',
   };
 };
 
@@ -52,6 +66,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onChange: (event) => {
       dispatch(appLabelOnChange(event.target.value));
+    },
+    onShowOverlay: (event) => {
+      dispatch(showModalOverlay(true, "sampleHeaderText"));
     }
   };
 };

@@ -2,7 +2,8 @@ export const ACTIONS = {
   types: {
     ADD_APP: 'ADD_APP',
     APP_LABEL_INPUT_CHANGE: 'APP_LABEL_INPUT_CHANGE',
-    SET_STATE: 'SET_STATE'
+    SET_STATE: 'SET_STATE',
+    SHOW_OVERLAY: 'SHOW_OVERLAY'
   }
 };
 
@@ -25,4 +26,25 @@ export const setState = (state) => {
     state
   };
 };
+
+export const showModalOverlay = (isShowModalOverlay, headerText) => {
+  return {
+    type: ACTIONS.types.SHOW_OVERLAY,
+    payload: {
+      isShowModalOverlay,
+      headerText
+    }
+  };
+};
+
+export const showModalOverlayNew = (isShowModalOverlay, headerText) => {
+  return {
+    type: ACTIONS.types.SHOW_OVERLAY,
+    payload: {
+      isShowModalOverlay,
+      headerText
+    }
+  };
+};
+
 

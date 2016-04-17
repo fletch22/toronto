@@ -1,5 +1,4 @@
 import { ACTIONS } from '../actions/index.js';
-import defaultState from '../domain/defaultState';
 import stateFixer from '../domain/stateFixer';
 
 const appContainerToolbar = (state = defaultState, action) => {
@@ -29,6 +28,10 @@ const appContainerToolbar = (state = defaultState, action) => {
     }
     case ACTIONS.types.SET_STATE: {
       return action.state;
+    }
+    case ACTIONS.types.SHOW_OVERLAY: {
+      stateNew.dom.showModalOverlay = action.payload.isShowModalOverlay;
+      return stateNew;
     }
     default: {
       return state;

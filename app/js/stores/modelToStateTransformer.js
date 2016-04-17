@@ -1,4 +1,4 @@
-
+import defaultState from './../state/defaultState';
 
 function Transformer() {
   const self = this;
@@ -15,25 +15,12 @@ function Transformer() {
       apps.push(application);
     });
 
-    return {
-      dom: {
-        view: {
-          appContainer: {
-            section: {
-              addNew: {
-                appLabel: ''
-              }
-            }
-          }
-        }
-      },
-      model: {
-        appContainer: {
-          id: model.id,
-          children: apps
-        }
-      }
-    };
+    const state = Object.assign({}, defaultState);
+
+    state.model.appContainer.id = model.id;
+    state.model.appContainer.children = apps;
+
+    return state;
   };
 
   self.isValid = function isValid(model) {

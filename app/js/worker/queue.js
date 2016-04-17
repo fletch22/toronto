@@ -71,8 +71,6 @@ const Queue = function q() {
   queue.push = function push(data) {
     queueArray.push(data);
 
-    console.log("Is paused %s", queue.isPaused);
-
     if (!queue.isPaused) {
       return processQueue();
     } else {
