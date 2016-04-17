@@ -24,12 +24,10 @@ describe('Current state retriever', () => {
 
     const promise = stateRetriever.getCurrent();
 
-    promise.then((data) => {
-      console.log(data);
+    promise.then(() => {
     });
 
-    promise.catch((error) => {
-      console.log(error);
+    promise.catch(() => {
       expect(getHistoricalState.called).to.equal(true);
       expect(getAppContainer.called).to.equal(true);
       done();

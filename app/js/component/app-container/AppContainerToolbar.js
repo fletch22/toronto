@@ -1,19 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addApp, appLabelOnChange, showModalOverlay } from '../../actions';
+import { addApp, appLabelOnChange, showStandardModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import StandardModal from '../modals/StandardModal';
 
 class AppContainerToolbar extends React.Component {
-
-  constructor() {
-    super();
-    this.onClickModalHandler = this.onClickModalHandler.bind(this);
-  }
-
-  onClickModalHandler(event) {
-    console.log(event);
-  }
 
   render() {
     return (
@@ -67,8 +58,8 @@ const mapDispatchToProps = (dispatch) => {
     onChange: (event) => {
       dispatch(appLabelOnChange(event.target.value));
     },
-    onShowOverlay: (event) => {
-      dispatch(showModalOverlay(true, "sampleHeaderText"));
+    onShowOverlay: () => {
+      dispatch(showStandardModal(true, 'sampleHeaderText'));
     }
   };
 };

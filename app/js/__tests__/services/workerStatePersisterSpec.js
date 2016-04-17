@@ -30,8 +30,7 @@ describe('Worker service', () => {
         done();
       })
       .catch((error) => {
-        console.log(error);
-        console.log(error.stack);
+        console.log(`Error: ${error.stack}`);
       });
     });
 

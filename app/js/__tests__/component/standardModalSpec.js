@@ -42,13 +42,13 @@ describe('Standard Modal Setup', () => {
       expect(matchingElements.length).to.equal(1);
       const closeButton = matchingElements[0];
 
-      let state = result.store.getState();
-      expect(state.dom.showModalOverlay).to.equal(true);
+      let standardModal = result.store.getState().dom.standardModal;
+      expect(standardModal.length).to.equal(1);
 
       TestUtils.Simulate.click(closeButton);
 
-      state = result.store.getState();
-      expect(state.dom.showModalOverlay).to.equal(false);
+      standardModal = result.store.getState().dom.standardModal;
+      expect(standardModal.length).to.equal(0);
 
       done();
     }).catch((error) => {
@@ -61,7 +61,7 @@ describe('Standard Modal Setup', () => {
     });
   });
 
-  it('should show modal with the correct details', (done) => {
+  it('should show modal with the correct detailss', (done) => {
 
     const promise = testRenderedApp.setup(sandbox);
 
@@ -82,13 +82,13 @@ describe('Standard Modal Setup', () => {
       expect(matchingElements.length).to.equal(1);
       const closeButton = matchingElements[0];
 
-      let state = result.store.getState();
-      expect(state.dom.showModalOverlay).to.equal(true);
+      let standardModal = result.store.getState().dom.standardModal;
+      expect(standardModal.length).to.equal(1);
 
       TestUtils.Simulate.click(closeButton);
 
-      state = result.store.getState();
-      expect(state.dom.showModalOverlay).to.equal(false);
+      standardModal = result.store.getState().dom.standardModal;
+      expect(standardModal.length).to.equal(0);
 
       done();
     }).catch((error) => {

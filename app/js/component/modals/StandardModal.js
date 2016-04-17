@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
-import { showModalOverlay } from '../../actions/index';
+import { showStandardModal, hideStandardModal } from '../../actions/index';
 
 class StandardModal extends React.Component {
 
@@ -36,16 +36,25 @@ StandardModal.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  let showModal = false;
+  let headerText = '';
+
+  if (state.dom.standardModal.length > 0) {
+    const standardModalInfo = state.dom.standardModal[0];
+    showModal = standardModalInfo.showModal;
+    headerText = standardModalInfo.headerText ? standardModalInfo.headerText : '';
+  }
+
   return {
-    showModal: (state.dom.showModalOverlay) ? state.dom.showModalOverlay : false,
-    headerText: 'test'
+    showModal,
+    headerText
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onCloseModal: () => {
-      dispatch(showModalOverlay(false));
+      dispatch(hideStandardModal(false));
     }
   };
 };

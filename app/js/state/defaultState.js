@@ -1,7 +1,6 @@
 
 const defaultState = {
   dom: {
-    showModalOverlay: false,
     standardModal: [],
     view: {
       appContainer: {

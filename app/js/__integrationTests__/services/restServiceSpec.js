@@ -1,5 +1,5 @@
 import RestService from '../../service/restService';
-import { expect } from 'chai';
+import { expect, assert } from 'chai';
 
 describe('Rest service', () => {
 
@@ -57,7 +57,6 @@ describe('Rest service', () => {
     const promise = RestService.getComponent(1039);
 
     const success = (data) => {
-      console.log(data);
       done();
     };
 

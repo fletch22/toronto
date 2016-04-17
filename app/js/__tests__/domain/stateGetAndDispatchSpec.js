@@ -37,7 +37,7 @@ describe('Current state retriever', () => {
     });
 
     promiseTest.catch((error) => {
-      console.log(error);
+      console.log(`Error: ${error}`);
     });
   });
 
@@ -59,7 +59,7 @@ describe('Current state retriever', () => {
     });
 
     promiseTest.catch((error) => {
-      console.log(error);
+      console.log(`Error: ${error}`);
     });
   });
 

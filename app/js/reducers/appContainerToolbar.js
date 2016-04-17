@@ -29,8 +29,14 @@ const appContainerToolbar = (state = defaultState, action) => {
     case ACTIONS.types.SET_STATE: {
       return action.state;
     }
-    case ACTIONS.types.SHOW_OVERLAY: {
-      stateNew.dom.showModalOverlay = action.payload.isShowModalOverlay;
+    case ACTIONS.types.SHOW_STANDARD_MODAL: {
+      stateNew.dom.standardModal.push(action.payload);
+
+      return stateNew;
+    }
+    case ACTIONS.types.HIDE_STANDARD_MODAL: {
+      stateNew.dom.standardModal.shift();
+
       return stateNew;
     }
     default: {
