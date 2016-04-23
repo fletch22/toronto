@@ -16,16 +16,16 @@ describe('Phase State', () => {
 
     it('should validate the data correctly', () => {
 
-      const isValid = ModelToStateTransformer.isValid(AppModel);
+      const isValid = new ModelToStateTransformer().isValid(AppModel);
       expect(isValid).to.equal(true);
 
     });
 
     it('should transform correctly', () => {
 
-      const storeState = ModelToStateTransformer.transform(AppModel);
+      const storeState = new ModelToStateTransformer().transform(AppModel);
 
-      expect(ModelToStateTransformer).to.not.equal(null);
+      expect(new ModelToStateTransformer()).to.not.equal(null);
       expect(storeState.model.appContainer.children.length).to.equal(1);
       expect(storeState.model.appContainer.children[0].label).to.equal('HelloWorldApp');
     });

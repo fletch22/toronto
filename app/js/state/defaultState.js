@@ -1,23 +1,27 @@
+class DefaultState {
 
-const defaultState = {
-  dom: {
-    standardModal: [],
-    view: {
-      appContainer: {
-        section: {
-          addNew: {
-            appLabel: ''
+  getInstance() {
+    return {
+      dom: {
+        standardModal: [],
+        view: {
+          appContainer: {
+            section: {
+              addNew: {
+                appLabel: ''
+              }
+            }
           }
         }
+      },
+      model: {
+        appContainer: {
+          id: -1,
+          children: []
+        }
       }
-    }
-  },
-  model: {
-    appContainer: {
-      id: -1,
-      children: []
-    }
+    };
   }
-};
+}
 
-export default defaultState;
+export default new DefaultState();

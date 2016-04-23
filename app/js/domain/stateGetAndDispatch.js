@@ -16,7 +16,6 @@ class StateGetAndDispatch {
 
       if (state === null) {
         if (data.isEarliestState) {
-
           this.index = data.indexOfMaxElement + 1;
 
           const promiseInner = stateRetriever.deriveState();

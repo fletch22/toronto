@@ -14,7 +14,7 @@ import AllStore from '../stores/allStore';
 class TestRenderedApp {
 
   setup(sandbox) {
-    const state = Object.assign({}, defaultState);
+    const state = Object.assign({}, defaultState.getInstance());
     state.model.appContainer.id = 123;
     //state.model.appContainer.children = [{ label: 'HelloWorldApp', id: 1040, parentId: 1039 }, { parentId: 1039, id: 1, label: 'asdf' }];
 

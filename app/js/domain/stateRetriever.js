@@ -7,7 +7,7 @@ class StateRetriever {
   deriveState() {
     return RestService.getAppContainer()
       .then((responseData) => {
-        return ModelToStateTransformer.transform(responseData);
+        return new ModelToStateTransformer().transform(responseData);
       });
   }
 
@@ -21,7 +21,6 @@ class StateRetriever {
 
       promise.then((data) => {
         const state = JSON.parse(data.state);
-        console.log(JSON.stringify(state));
 
         if (state === null) {
           const promiseInner = this.deriveState();

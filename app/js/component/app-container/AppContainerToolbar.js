@@ -46,7 +46,7 @@ const mapStateToProps = (state) => {
 
   return {
     numberApps: appsChildren.length,
-    appLabel: (state.dom.view.appContainer.section.addNew.appLabel) ? state.dom.view.appContainer.section.addNew.appLabel : '',
+    appLabel: (state.dom.view.appContainer.section.addNew.appLabel) ? state.dom.view.appContainer.section.addNew.appLabel : ''
   };
 };
 

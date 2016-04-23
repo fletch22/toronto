@@ -1,5 +1,6 @@
 import Worker from 'worker!./statePersisterWorker.js';
 import Message, { MessageTypes } from './message';
+import deepDiff from 'deep-diff';
 
 class StatePersisterWorkerClient {
 
@@ -15,10 +16,16 @@ class StatePersisterWorkerClient {
     };
   }
 
-  persistState(state) {
-    const json = JSON.stringify(state);
-    console.log(`persisting ${json}`);
-    this.worker.postMessage(new Message(json, MessageTypes.PersistMessage));
+  persistState(stateOld, stateNew) {
+
+    const difference = deepDiff(stateOld, stateNew);
+
+    const payload = {
+      state: JSON.stringify(stateNew),
+      diffBetweenOldAndNew: JSON.stringify(difference)
+    };
+
+    this.worker.postMessage(new Message(payload, MessageTypes.PersistMessage));
   }
 
   pauseAndFlush() {

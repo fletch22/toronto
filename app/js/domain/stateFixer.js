@@ -4,13 +4,13 @@ import stateSyncService from '../service/stateSyncService';
 
 class StateFixer {
 
-  fix(state) {
+  fix(stateOld, stateNew) {
     // Need checker to see if we need to rollback
     if (timeTravelTransaction.isTimeTravelNecessary()) {
 
       console.log('pausing queue');
       workerClient.pauseAndFlush();
-      workerClient.persistState(state);
+      workerClient.persistState(stateOld, stateNew);
 
       // Add flush here to clean out persister queue.
       const promise = stateSyncService.rollbackToTransaction(1234);
@@ -25,8 +25,7 @@ class StateFixer {
         workerClient.unpausePersister();
       });
     } else {
-      console.log('Peristing state when no tt necessary.');
-      workerClient.persistState(state);
+      workerClient.persistState(stateOld, stateNew);
     }
   }
 }

@@ -1,9 +1,8 @@
 import defaultState from './../state/defaultState';
 
-function Transformer() {
-  const self = this;
+class ModelToStateTransformer {
 
-  self.transform = function transform(model) {
+  transform(model) {
     const apps = [];
 
     model.children.list.forEach((child) => {
@@ -15,15 +14,15 @@ function Transformer() {
       apps.push(application);
     });
 
-    const state = Object.assign({}, defaultState);
+    const state = Object.assign({}, defaultState.getInstance());
 
     state.model.appContainer.id = model.id;
     state.model.appContainer.children = apps;
 
     return state;
-  };
+  }
 
-  self.isValid = function isValid(model) {
+  isValid(model) {
     let result = false;
     if (model.parentId === 0 // NOTE: Little bit leaky abstraction here.
     && model.children.haveChildrenBeenResolved) {
@@ -31,7 +30,7 @@ function Transformer() {
     }
 
     return result;
-  };
+  }
 }
 
-export default new Transformer();
+export default ModelToStateTransformer;

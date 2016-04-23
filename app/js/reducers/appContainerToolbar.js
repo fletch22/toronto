@@ -1,7 +1,8 @@
 import { ACTIONS } from '../actions/index.js';
 import stateFixer from '../domain/stateFixer';
+import defaultState from '../state/defaultState';
 
-const appContainerToolbar = (state = defaultState, action) => {
+const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
   const stateNew = Object.assign({}, state);
   const appContainerModel = stateNew.model.appContainer;
@@ -17,13 +18,13 @@ const appContainerToolbar = (state = defaultState, action) => {
 
       appContainerModel.children.push(app);
 
-      stateFixer.fix(stateNew);
+      stateFixer.fix(state, stateNew);
       return stateNew;
     }
     case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
       appContainerDom.section.addNew.appLabel = action.appLabel;
 
-      stateFixer.fix(stateNew);
+      stateFixer.fix(state, stateNew);
       return stateNew;
     }
     case ACTIONS.types.SET_STATE: {
