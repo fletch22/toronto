@@ -35,15 +35,40 @@ describe('Two objects when compared with deep diff', () => {
   });
 
   it('should have executed deep diff check with speed.', () => {
-    const lhs = sampleObject.getInstance();
-    const rhs = sampleObject.getInstance();
+    const lhs = sampleObject.getInstance()[0];
+    const rhs = Object.assign({}, sampleObject.getInstance()[0]);
 
     delete rhs.name;
+    delete rhs.spa.virtue.honesty;
+    rhs.children = [];
+    rhs.tags.push('banana');
+    rhs.spa.virtue.faithfulness = 'maybe';
+    rhs.brickleberry = {
+      id: 525,
+      weather: 'sunshine',
+      temp: 70,
+      arm: {
+        id: 534,
+        hand: {
+          id: 435,
+          finger: [
+            {
+              id: 63,
+              scissors: 'fiskers'
+            }
+          ]
+        }
+      }
+    };
+    rhs.friends[1].id = 4;
 
     const maxCount = 100;
     const start = new Date().getMilliseconds();
-    for (var i = 0; i < maxCount; i++) {
-      let differences = deepDiff(lhs, rhs);
+    for (let i = 0; i < maxCount; i++) {
+      const differences = deepDiff(lhs, rhs);
+      console.log(JSON.stringify(rhs));
+      console.log(JSON.stringify(differences));
+      break;
     }
     const end = new Date().getMilliseconds();
 

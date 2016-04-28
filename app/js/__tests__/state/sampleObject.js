@@ -3,7 +3,7 @@ class SampleObject {
   getInstance() {
     return [
       {
-        _id: '571aa717e0d3bc6d3c78e3ea',
+        id: '571aa717e0d3bc6d3c78e3ea',
         index: 0,
         guid: '73c0904d-e88a-44f9-b871-39491de284da',
         isActive: true,
@@ -11,9 +11,24 @@ class SampleObject {
         picture: 'http://placehold.it/32x32',
         age: 22,
         eyeColor: 'blue',
+        children: [
+          { id: 56679, foo: 'bar' }
+        ],
         name: {
+          id: 1234,
           first: 'Hayden',
           last: 'Yates'
+        },
+        spa: {
+          id: 525,
+          virtue: {
+            id: 777,
+            honesty: {
+              id: 7476,
+              truth: 'yes'
+            },
+            faithfulness: 'yeah'
+          }
         },
         company: 'QUONATA',
         email: 'hayden.yates@quonata.me',
@@ -50,7 +65,7 @@ class SampleObject {
         favoriteFruit: 'apple'
       },
       {
-        _id: '571aa71782f47fb20acd9674',
+        id: '571aa71782f47fb20acd9674',
         index: 1,
         guid: '44875c92-7b3c-4ddc-ae6a-9b343ca57168',
         isActive: false,
