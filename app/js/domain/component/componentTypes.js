@@ -1,5 +1,6 @@
 const ComponentTypes = {
-  AppContainer: 'AppContainer'
+  AppContainer: 'AppContainer',
+  App: 'App'
 };
 
 export default ComponentTypes;

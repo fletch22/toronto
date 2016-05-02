@@ -3,7 +3,8 @@ class SampleObject {
   getInstance() {
     return [
       {
-        id: '571aa717e0d3bc6d3c78e3ea',
+        id: 43543,
+        type: 'mofo',
         index: 0,
         guid: '73c0904d-e88a-44f9-b871-39491de284da',
         isActive: true,
@@ -12,18 +13,40 @@ class SampleObject {
         age: 22,
         eyeColor: 'blue',
         children: [
-          { id: 56679, foo: 'bar' }
+          { id: 56679, type: 'aKindOfChild', foo: 'bar' }
         ],
         name: {
           id: 1234,
+          type: 'somethingNamed',
           first: 'Hayden',
           last: 'Yates'
         },
+        jewelry: [
+          {
+            hand: {
+              id: 867765,
+              type: 'manipulator',
+              ring: {
+                id: 6677,
+                type: 'jewelry',
+                setting: {
+                  id: 52525,
+                  type: 'appearance',
+                  prodType: 'princess',
+                  material: 'platinum'
+                }
+              }
+            }
+          }
+        ],
         spa: {
           id: 525,
+          type: 'recreation',
           virtue: {
             id: 777,
+            type: 'beliefOfBeneficialConductAndOrBehaviour',
             honesty: {
+              type: 'transparencyVirtue',
               id: 7476,
               truth: 'yes'
             },
@@ -34,7 +57,8 @@ class SampleObject {
         email: 'hayden.yates@quonata.me',
         phone: '+1 (850) 577-3564',
         address: '448 Ellery Street, Kanauga, Maryland, 6098',
-        about: 'Reprehenderit dolor veniam eu Lorem nisi ullamco tempor excepteur. Sint ea nostrud occaecat est aute. Ullamco sit pariatur eiusmod consectetur nulla enim irure velit laboris deserunt ut ut minim eu. Ipsum nulla minim sit aute irure consectetur mollit officia deserunt ullamco.',
+        about: 'Reprehenderit dolor veniam eu Lorem nisi ullamco tempor excepteur. Sint ea nostrud occaecat est aute. Ullamco sit pariatur eiusmod consectetur ' +
+        'nulla enim irure velit laboris deserunt ut ut minim eu. Ipsum nulla minim sit aute irure consectetur mollit officia deserunt ullamco.',
         registered: 'Friday, July 25, 2014 12:45 PM',
         latitude: '44.662608',
         longitude: '-37.689721',
@@ -58,6 +82,7 @@ class SampleObject {
           3,
           {
             id: 1,
+            type: 'closeFriend',
             name: 'Earnestine Reese'
           }
         ],
@@ -81,7 +106,8 @@ class SampleObject {
         email: 'witt.gonzales@fitcore.com',
         phone: '+1 (846) 440-3884',
         address: '634 Heyward Street, Chelsea, Alaska, 5061',
-        about: 'Consectetur ad sint do incididunt cupidatat nostrud do. Officia dolor qui Lorem eiusmod Lorem laborum laboris est elit dolore. Mollit veniam deserunt adipisicing quis id cupidatat elit.',
+        about: 'Reprehenderit dolor veniam eu Lorem nisi ullamco tempor excepteur. Sint ea nostrud occaecat est aute. Ullamco sit pariatur eiusmod consectetur ' +
+        'nulla enim irure velit laboris deserunt ut ut minim eu. Ipsum nulla minim sit aute irure consectetur mollit officia deserunt ullamco.',
         registered: 'Friday, January 2, 2015 3:51 AM',
         latitude: '-26.62918',
         longitude: '150.895835',
@@ -128,7 +154,8 @@ class SampleObject {
         email: 'tameka.figueroa@digial.org',
         phone: '+1 (894) 472-3975',
         address: '325 Cypress Avenue, Crawfordsville, Rhode Island, 5959',
-        about: 'Culpa laborum sit cillum ad mollit officia officia excepteur. Ullamco incididunt ea laborum consectetur amet cupidatat qui incididunt aliquip in ipsum. Adipisicing deserunt mollit aute duis esse dolore tempor ex id magna aute consequat anim. Dolore eu ipsum deserunt duis irure sint reprehenderit adipisicing sint pariatur Lorem officia qui. Ad officia aliqua magna do ipsum mollit deserunt tempor exercitation nisi mollit magna.',
+        about: 'Reprehenderit dolor veniam eu Lorem nisi ullamco tempor excepteur. Sint ea nostrud occaecat est aute. Ullamco sit pariatur eiusmod consectetur ' +
+        'nulla enim irure velit laboris deserunt ut ut minim eu. Ipsum nulla minim sit aute irure consectetur mollit officia deserunt ullamco.',
         registered: 'Sunday, September 13, 2015 11:16 AM',
         latitude: '56.74204',
         longitude: '-82.427113',
@@ -175,7 +202,8 @@ class SampleObject {
         email: 'benita.howell@sealoud.tv',
         phone: '+1 (875) 555-3261',
         address: '639 Boynton Place, Wescosville, Utah, 9870',
-        about: 'Duis excepteur velit commodo ea et dolore sint tempor dolore sint culpa. Exercitation irure amet ea culpa sunt dolor dolore. Quis duis consectetur ad anim occaecat. Culpa labore Lorem duis incididunt ut.',
+        about: 'Reprehenderit dolor veniam eu Lorem nisi ullamco tempor excepteur. Sint ea nostrud occaecat est aute. Ullamco sit pariatur eiusmod consectetur ' +
+        'nulla enim irure velit laboris deserunt ut ut minim eu. Ipsum nulla minim sit aute irure consectetur mollit officia deserunt ullamco.',
         registered: 'Saturday, August 23, 2014 2:48 PM',
         latitude: '-3.275085',
         longitude: '43.574091',
@@ -222,7 +250,8 @@ class SampleObject {
         email: 'todd.christian@gazak.io',
         phone: '+1 (968) 551-3278',
         address: '431 Harrison Avenue, Westmoreland, Louisiana, 5793',
-        about: 'Cupidatat consequat excepteur magna dolore Lorem sit excepteur amet aute non laboris. Proident irure ex excepteur velit reprehenderit qui. Minim labore commodo pariatur nisi tempor velit proident ex mollit aliquip reprehenderit aliqua velit sunt. Ea ex exercitation amet ex non nisi mollit excepteur sint tempor elit fugiat.',
+        about: 'Reprehenderit dolor veniam eu Lorem nisi ullamco tempor excepteur. Sint ea nostrud occaecat est aute. Ullamco sit pariatur eiusmod consectetur ' +
+        'nulla enim irure velit laboris deserunt ut ut minim eu. Ipsum nulla minim sit aute irure consectetur mollit officia deserunt ullamco.',
         registered: 'Friday, March 27, 2015 2:56 PM',
         latitude: '-69.903151',
         longitude: '113.48716',

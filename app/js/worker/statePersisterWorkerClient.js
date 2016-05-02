@@ -1,10 +1,12 @@
 import Worker from 'worker!./statePersisterWorker.js';
 import Message, { MessageTypes } from './message';
 import deepDiff from 'deep-diff';
+import StatePackager from '../service/statePackager';
 
 class StatePersisterWorkerClient {
 
   constructor() {
+    this.statePackager = new StatePackager();
     this.worker = new Worker();
 
     this.worker.onmessage = function (event) {
@@ -16,16 +18,10 @@ class StatePersisterWorkerClient {
     };
   }
 
-  persistState(stateOld, stateNew) {
+  persistState(jsonStateOld, jsonStateNew) {
+    const package2 = this.statePackager.package(jsonStateOld, jsonStateNew);
 
-    const difference = deepDiff(stateOld, stateNew);
-
-    const payload = {
-      state: JSON.stringify(stateNew),
-      diffBetweenOldAndNew: JSON.stringify(difference)
-    };
-
-    this.worker.postMessage(new Message(payload, MessageTypes.PersistMessage));
+    this.worker.postMessage(new Message(package2, MessageTypes.PersistMessage));
   }
 
   pauseAndFlush() {

@@ -1,4 +1,5 @@
 import AppProperties from '../../../appProperties';
+import jQuery from 'jquery';
 
 class Service {
 
@@ -9,6 +10,22 @@ class Service {
   getOrbServerRootUrl() {
     const orbServer = AppProperties.orbServer;
     return `${orbServer.scheme}://${orbServer.host}:${orbServer.port}/${orbServer.appContext}/api`;
+  }
+
+  fetchSynchronous(url, method, object) {
+    try {
+      return jQuery.ajax({
+        type: method,
+        url: url,
+        async: false,
+        contentType: 'application/json',
+        data: JSON.stringify(object),
+        dataType: 'json'
+      }).responseText;
+    } catch (error) {
+      console.log('Encountered error while attempting to asynchronously fetch something.');
+      throw error;
+    }
   }
 
   fetch(url, method, object) {
@@ -49,7 +66,7 @@ class Service {
       // Send the object on its way
       tmpProm = tmpProm.then((data) => {
         resolve(data);
-      })
+      });
 
       // Handle any error
       tmpProm.catch((response) => {

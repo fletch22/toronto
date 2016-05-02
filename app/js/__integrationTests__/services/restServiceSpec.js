@@ -1,5 +1,6 @@
 import RestService from '../../service/restService';
 import { expect, assert } from 'chai';
+import jQuery from 'jquery'
 
 describe('Rest service', () => {
 
@@ -67,5 +68,18 @@ describe('Rest service', () => {
     };
 
     promise.then(success).catch(error);
+  });
+
+  it('should make a synchronous request.', () => {
+    const remote_url = 'http://localhost:8080/vancouver/api/statePackage/';
+    const responseText = jQuery.ajax({
+      type: 'GET',
+      url: remote_url,
+      async: false
+    }).responseText;
+
+    console.log(responseText);
+
+
   });
 });

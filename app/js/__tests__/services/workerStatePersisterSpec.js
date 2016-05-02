@@ -40,7 +40,7 @@ describe('Worker service', () => {
 
       fetchMock.mock('^http', { status: 200, body: '[]' });
 
-      const saveStateStub = sinon.stub(stateSyncService, 'saveState').returns(Promise.reject());
+      const saveStateStub = sinon.stub(stateSyncService, 'saveStateArray').returns(Promise.reject());
 
       const stateHistory = [1, 2, 3, 4, 5, 6];
       const rollbackAndFetchStateHistoryStub = sinon.stub(stateSyncService, 'rollbackAndFetchStateHistory').returns(stateHistory);

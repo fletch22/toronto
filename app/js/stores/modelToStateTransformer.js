@@ -1,23 +1,13 @@
 import defaultState from './../state/defaultState';
+import ModelTransformer from './modelTransformer';
 
 class ModelToStateTransformer {
 
-  transform(model) {
-    const apps = [];
+  transform(appContainerModel) {
 
-    model.children.list.forEach((child) => {
-      const application = {
-        label: child.label,
-        id: child.id,
-        parentId: child.parentId
-      };
-      apps.push(application);
-    });
-
+    const modelTransformer = new ModelTransformer();
     const state = Object.assign({}, defaultState.getInstance());
-
-    state.model.appContainer.id = model.id;
-    state.model.appContainer.children = apps;
+    state.model = modelTransformer.transform(appContainerModel);
 
     return state;
   }

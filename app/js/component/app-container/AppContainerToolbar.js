@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addApp, appLabelOnChange, showStandardModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
-import StandardModal from '../modals/StandardModal';
 
 class AppContainerToolbar extends React.Component {
 

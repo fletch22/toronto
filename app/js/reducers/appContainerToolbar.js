@@ -1,9 +1,14 @@
 import { ACTIONS } from '../actions/index.js';
 import stateFixer from '../domain/stateFixer';
 import defaultState from '../state/defaultState';
+import stateSyncService from '../service/stateSyncService';
+import StatePackager from '../service/statePackager';
+import ModelTransformer from '../stores/modelTransformer';
 
 const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
+  const statePackager = new StatePackager();
+  const jsonStateOld = JSON.stringify(state);
   const stateNew = Object.assign({}, state);
   const appContainerModel = stateNew.model.appContainer;
   const appContainerDom = stateNew.dom.view.appContainer;
@@ -11,20 +16,25 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
   switch (action.type) {
     case ACTIONS.types.ADD_APP: {
       const app = {
-        parentId: appContainerModel.id,
-        id: appContainerModel.children.length,
-        label: appContainerDom.section.addNew.appLabel
+        label: appContainerDom.section.addNew.appLabel,
+        typeLabel: 'App'
       };
 
       appContainerModel.children.push(app);
 
-      stateFixer.fix(state, stateNew);
+      const statePackage = statePackager.package(jsonStateOld, JSON.stringify(stateNew));
+      const jsonAppContainer = stateSyncService.saveStateSynchronous(statePackage);
+
+      const modelTransformer = new ModelTransformer();
+      stateNew.model = modelTransformer.transform(JSON.parse(jsonAppContainer));
+
       return stateNew;
     }
     case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
+
       appContainerDom.section.addNew.appLabel = action.appLabel;
 
-      stateFixer.fix(state, stateNew);
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       return stateNew;
     }
     case ACTIONS.types.SET_STATE: {

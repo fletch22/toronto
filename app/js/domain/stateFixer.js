@@ -7,7 +7,6 @@ class StateFixer {
   fix(stateOld, stateNew) {
     // Need checker to see if we need to rollback
     if (timeTravelTransaction.isTimeTravelNecessary()) {
-
       console.log('pausing queue');
       workerClient.pauseAndFlush();
       workerClient.persistState(stateOld, stateNew);

@@ -49,7 +49,7 @@ const Queue = function q() {
       const statePackage = { states: sendArray };
 
       promise = new Promise((resolve, reject) => {
-        stateSyncService.saveState(statePackage)
+        stateSyncService.saveStateArray(statePackage)
           .then((response) => {
             queueArray.isPaused = false;
 

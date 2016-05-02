@@ -39,21 +39,25 @@ describe('Two objects when compared with deep diff', () => {
     const rhs = Object.assign({}, sampleObject.getInstance()[0]);
 
     delete rhs.name;
-    delete rhs.spa.virtue.honesty;
+    delete rhs.jewelry[0].hand.ring;
     rhs.children = [];
     rhs.tags.push('banana');
     rhs.spa.virtue.faithfulness = 'maybe';
     rhs.brickleberry = {
       id: 525,
+      type: 'berry',
       weather: 'sunshine',
       temp: 70,
       arm: {
         id: 534,
+        type: 'appendage',
         hand: {
           id: 435,
+          type: 'manipulator',
           finger: [
             {
               id: 63,
+              type: 'gripper',
               scissors: 'fiskers'
             }
           ]
