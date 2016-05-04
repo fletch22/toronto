@@ -21,6 +21,10 @@ class StateSyncService extends Service {
   getHistoricalState(index) {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/stateHistory/${index}`, 'get');
   }
+
+  getMostRecentHistoricalState() {
+    return this.fetch(`${this.getOrbServerRootUrl()}/component/mostRecentStateHistory`, 'get');
+  }
 }
 
 export default new StateSyncService();

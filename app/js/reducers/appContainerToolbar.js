@@ -4,31 +4,38 @@ import defaultState from '../state/defaultState';
 import stateSyncService from '../service/stateSyncService';
 import StatePackager from '../service/statePackager';
 import ModelTransformer from '../stores/modelTransformer';
+import uuid from 'node-uuid';
 
 const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
   const statePackager = new StatePackager();
   const jsonStateOld = JSON.stringify(state);
-  const stateNew = Object.assign({}, state);
+  let stateNew = Object.assign({}, state);
   const appContainerModel = stateNew.model.appContainer;
   const appContainerDom = stateNew.dom.view.appContainer;
 
   switch (action.type) {
     case ACTIONS.types.ADD_APP: {
       const app = {
+        parentId: appContainerModel.id,
+        id: uuid.v1(),
         label: appContainerDom.section.addNew.appLabel,
         typeLabel: 'App'
       };
 
       appContainerModel.children.push(app);
 
+      console.log(JSON.stringify(jsonStateOld));
+
       const statePackage = statePackager.package(jsonStateOld, JSON.stringify(stateNew));
-      const jsonAppContainer = stateSyncService.saveStateSynchronous(statePackage);
+      stateNew = stateSyncService.saveStateSynchronous(statePackage);
 
-      const modelTransformer = new ModelTransformer();
-      stateNew.model = modelTransformer.transform(JSON.parse(jsonAppContainer));
+      //const modelTransformer = new ModelTransformer();
+      //stateNew.model = modelTransformer.transform(JSON.parse(jsonAppContainer));
 
-      return stateNew;
+      console.log(stateNew);
+
+      return JSON.parse(stateNew);
     }
     case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
 

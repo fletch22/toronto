@@ -13,7 +13,7 @@ class StateRetriever {
 
   getCurrent() {
     const outerPromise = new Promise((resolve, reject) => {
-      const promise = stateSyncService.getHistoricalState(0);
+      const promise = stateSyncService.getMostRecentHistoricalState();
 
       promise.catch((error) => {
         console.log(error.stack);
