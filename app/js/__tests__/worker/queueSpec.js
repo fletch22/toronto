@@ -1,4 +1,5 @@
 import Queue from '../../worker/queue';
+import { QueueMessageTypes, QueueListener } from '../../worker/queue';
 import { expect } from 'chai';
 import stateSyncService from '../../service/stateSyncService';
 
@@ -95,6 +96,32 @@ describe('Queue', () => {
       expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
       expect(saveStateArray.callCount).to.equal(1);
       expect(fetch.callCount).to.equal(1);
+      queueArray = queue.getAccumulator();
+      expect(queue.getQueueArrayIsPaused()).to.equal(false);
+      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+      done();
+    });
+  });
+
+  it('should get an queue drained event emitted when processing.', (done) => {
+
+    const saveStateArray = sandbox.stub(stateSyncService, 'saveStateArray').returns(Promise.resolve());
+    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory');
+    expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+
+    const queue = new Queue();
+
+    let queueArray = queue.getAccumulator();
+    expect(typeof queueArray.isAccumulatorProcessorPaused).to.equal('undefined');
+
+    // Should process the first thing.
+    const promise = queue.push('asdfasfafdsnklmdafslkjfdasjlkdsfd');
+
+    promise.then(() => {
+      expect(0).to.equal(queueArray.length);
+      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+      expect(saveStateArray.callCount).to.equal(1);
       queueArray = queue.getAccumulator();
       expect(queue.getQueueArrayIsPaused()).to.equal(false);
       expect(rollbackAndFetchStateHistory.callCount).to.equal(0);

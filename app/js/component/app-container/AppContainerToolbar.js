@@ -51,7 +51,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClick: () => {
+    onClick: (event) => {
+      console.log(event);
       dispatch(addApp());
     },
     onChange: (event) => {

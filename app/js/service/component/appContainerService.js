@@ -28,6 +28,12 @@ class AppContainerService extends ComponentService {
 
     appContainerModel.children.push(app);
 
+    //const queueListener = new QueueListener();
+    //queueListener.register((event) => {
+    //  queueListener.unregister();
+    //});
+
+
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveStateSynchronous(statePackage);
   }

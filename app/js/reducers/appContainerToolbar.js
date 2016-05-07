@@ -17,22 +17,9 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
   switch (action.type) {
     case ACTIONS.types.ADD_APP: {
-      //const app = {
-      //  parentId: appContainerModel.id,
-      //  id: uuid.v1(),
-      //  label: appContainerDom.section.addNew.appLabel,
-      //  typeLabel: 'App'
-      //};
-      //
-      //appContainerModel.children.push(app);
-      //
-      //const statePackage = statePackager.package(jsonStateOld, JSON.stringify(stateNew));
-      //stateNew = stateSyncService.saveStateSynchronous(statePackage);
-
       return appContainerService.addApp(state, jsonStateOld, appContainerDom.section.addNew.appLabel);
     }
     case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
-
       appContainerDom.section.addNew.appLabel = action.appLabel;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));

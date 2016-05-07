@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import Message, { MessageTypes } from '../../worker/message';
+import WorkerMessage, { WorkerMessageTypes } from '../../worker/workerMessage';
 import Queue from '../../worker/queue';
 import fetchMock from 'fetch-mock';
 import stateSyncService from '../../service/stateSyncService';
@@ -30,7 +30,7 @@ describe('Worker service', () => {
       fetchMock.mock('^http', { status: 200, body: '[]' });
 
       const str = getString(1000);
-      const message = new Message(`Test 1: ${str}`, MessageTypes.PersistMessage);
+      const message = new WorkerMessage(`Test 1: ${str}`, WorkerMessageTypes.PersistMessage);
       const promise = queue.push(message.body);
 
       promise.then(() => {
@@ -51,9 +51,8 @@ describe('Worker service', () => {
 
       const stateHistory = [1, 2, 3, 4, 5, 6];
       const rollbackAndFetchStateHistoryStub = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory').returns(stateHistory);
-      const emitEventRollbackStateStub = sandbox.stub(queue, 'emitEventRollbackState');
 
-      const message = new Message(`Test 1: ${getString(1000)}`, MessageTypes.PersistMessage);
+      const message = new WorkerMessage(`Test 1: ${getString(1000)}`, WorkerMessageTypes.PersistMessage);
       const promise = queue.push(message.body);
 
       promise.then(() => {
@@ -62,10 +61,6 @@ describe('Worker service', () => {
       .catch(() => {
         expect(rollbackAndFetchStateHistoryStub.called).to.be.equal(true);
         expect(saveStateStub.called).to.be.equal(true);
-        expect(emitEventRollbackStateStub.called).to.be.equal(true);
-
-        expect(emitEventRollbackStateStub.getCall(0).args.length).to.be.equal(1);
-        expect(emitEventRollbackStateStub.getCall(0).args[0].length).to.be.equal(stateHistory.length);
         done();
       });
     });

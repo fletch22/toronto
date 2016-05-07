@@ -1,5 +1,5 @@
 import Worker from 'worker!../../worker/statePersisterWorker.js';
-import Message, { MessageTypes } from '../../worker/message';
+import WorkerMessage, { WorkerMessageTypes } from '../../worker/workerMessage';
 
 describe('Worker service', () => {
   const worker = new Worker();
@@ -20,15 +20,15 @@ describe('Worker service', () => {
     };
 
     const str = getString(1000);
-    worker.postMessage(new Message(`Test 1: ${str}`, MessageTypes.PersistMessage));
-    worker.postMessage(new Message(`Test 2: ${str}`, MessageTypes.PersistMessage));
-    worker.postMessage(new Message(`Test 3: ${str}`, MessageTypes.PersistMessage));
-    worker.postMessage(new Message(`Test 4: ${str}`, MessageTypes.PersistMessage));
-    worker.postMessage(new Message(`Test 5: ${str}`, MessageTypes.PersistMessage));
-    worker.postMessage(new Message(`Test 6: ${str}`, MessageTypes.PersistMessage));
-    worker.postMessage(new Message(`Test 7: ${str}`, MessageTypes.PersistMessage));
-    worker.postMessage(new Message(`Test 8: ${str}`, MessageTypes.PersistMessage));
-    worker.postMessage(new Message(`Test 9: ${str}`, MessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 1: ${str}`, WorkerMessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 2: ${str}`, WorkerMessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 3: ${str}`, WorkerMessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 4: ${str}`, WorkerMessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 5: ${str}`, WorkerMessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 6: ${str}`, WorkerMessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 7: ${str}`, WorkerMessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 8: ${str}`, WorkerMessageTypes.PersistMessage));
+    worker.postMessage(new WorkerMessage(`Test 9: ${str}`, WorkerMessageTypes.PersistMessage));
 
   });
 
