@@ -1,12 +1,9 @@
 class Component {
 
   wrapType(typeLabel, object) {
-    return {
-      typeLabel: typeLabel,
-      object: object
-    };
+    object.typeLabel = typeLabel;
+    return object;
   }
-
 };
 
 export default Component;

@@ -1,10 +1,14 @@
 import stateSyncService from '../service/stateSyncService';
 
-const Queue = function q() {
-  const queue = this;
-  let queueArray = [];
+class Queue {
 
-  function postMessageSafe(message) {
+  constructor() {
+    this.accumulator = [];
+    this.queueArrayIsPaused = false;
+    this.isAccumulatorProcessorPaused = false;
+  }
+
+  postMessageSafe(message) {
     try {
       // NOTE: This if-wrapper is necessary so our tests don't throw. When some tests are run
       // they are run in a window context as opposed to a worker context. When in the window context
@@ -17,44 +21,45 @@ const Queue = function q() {
     }
   }
 
-  queue.emitEventRollbackState = (stateArray) => {
-    postMessageSafe(stateArray);
-  };
-
-  // NOTE: 03-25-2016: Really only used by tests.
-  function emitEventQueueEmpty() {
-    postMessageSafe('Done.');
+  emitEventRollbackState(stateArray){
+    this.postMessageSafe(stateArray);
   }
 
-  function emitEventIfQueueEmpty() {
-    if (queueArray.length === 0) {
-      emitEventQueueEmpty();
+  // NOTE: 03-25-2016: Really only used by tests.
+  emitEventQueueEmpty() {
+    this.postMessageSafe('Done.');
+  }
+
+  emitEventIfQueueEmpty() {
+    if (this.accumulator.length === 0) {
+      this.emitEventQueueEmpty();
     }
   }
 
-  function processQueue() {
+  accumulatorItemProcessing() {
     let promise;
-    if (queueArray.isPaused) {
-      setTimeout(processQueue, 1);
+    if (this.queueArrayIsPaused) {
+      setTimeout(this.accumulatorItemProcessing, 1);
       return promise;
     }
 
     let sendArray = null;
-    if (queueArray.length === 0) {
-      emitEventIfQueueEmpty();
+    if (this.accumulator.length === 0) {
+      this.emitEventIfQueueEmpty();
     } else {
-      sendArray = queueArray.splice(0, queueArray.length);
+      sendArray = this.accumulator.splice(0, this.accumulator.length);
 
-      queueArray.isPaused = true;
+      this.queueArrayIsPaused = true;
       const statePackage = { states: sendArray };
 
+      const queue = this;
       promise = new Promise((resolve, reject) => {
         stateSyncService.saveStateArray(statePackage)
           .then((response) => {
-            queueArray.isPaused = false;
+            queue.queueArrayIsPaused = false;
 
             resolve(response);
-            emitEventIfQueueEmpty();
+            queue.emitEventIfQueueEmpty();
           })
           .catch((error) => {
             const previous100States = stateSyncService.rollbackAndFetchStateHistory(100);
@@ -63,24 +68,43 @@ const Queue = function q() {
           });
       });
     }
-
     return promise;
   }
 
-  queue.isPaused = false;
-  queue.push = function push(data) {
-    queueArray.push(data);
+  getQueueArrayIsPaused() {
+    return this.queueArrayIsPaused;
+  }
 
-    if (!queue.isPaused) {
-      return processQueue();
+  push(data) {
+    this.accumulator.push(data);
+
+    if (!this.isAccumulatorProcessorPaused) {
+      return this.accumulatorItemProcessing();
     } else {
       return Promise.resolve();
     }
-  };
+  }
 
-  queue.flush = function() {
-    queueArray = [];
-  };
-};
+  eliminateItemsWithoutProcessing() {
+    this.accumulator = [];
+  }
+
+  pauseAndProcessExisting() {
+    this.isAccumulatorProcessorPaused = true;
+    this.accumulatorItemProcessing();
+  }
+
+  getAccumulator() {
+    return this.accumulator;
+  }
+
+  getIsPaused() {
+    return this.isAccumulatorProcessorPaused;
+  }
+
+  setIsAccumulatorPaused(isPaused) {
+    this.isAccumulatorProcessorPaused = isPaused;
+  }
+}
 
 export default Queue;

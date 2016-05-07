@@ -10,7 +10,14 @@ describe('Worker service', () => {
     return new Array(length + 1).join('x');
   }
 
+  let sandbox = null;
+
+  beforeEach(() => {
+    sandbox = sinon.sandbox.create();
+  });
+
   afterEach(() => {
+    sandbox.restore();
     fetchMock.restore();
   });
 
@@ -40,11 +47,11 @@ describe('Worker service', () => {
 
       fetchMock.mock('^http', { status: 200, body: '[]' });
 
-      const saveStateStub = sinon.stub(stateSyncService, 'saveStateArray').returns(Promise.reject());
+      const saveStateStub = sandbox.stub(stateSyncService, 'saveStateArray').returns(Promise.reject());
 
       const stateHistory = [1, 2, 3, 4, 5, 6];
-      const rollbackAndFetchStateHistoryStub = sinon.stub(stateSyncService, 'rollbackAndFetchStateHistory').returns(stateHistory);
-      const emitEventRollbackStateStub = sinon.stub(queue, 'emitEventRollbackState');
+      const rollbackAndFetchStateHistoryStub = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory').returns(stateHistory);
+      const emitEventRollbackStateStub = sandbox.stub(queue, 'emitEventRollbackState');
 
       const message = new Message(`Test 1: ${getString(1000)}`, MessageTypes.PersistMessage);
       const promise = queue.push(message.body);

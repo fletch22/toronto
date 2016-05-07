@@ -3,7 +3,8 @@ const MessageTypes = {
   PauseQueue: 2,
   IsPaused: 3,
   UnpauseQueue: 4,
-  PauseAndFlush: 5
+  PauseAndClear: 5,
+  PauseAndDrain: 6
 };
 
 exports.MessageTypes = MessageTypes;

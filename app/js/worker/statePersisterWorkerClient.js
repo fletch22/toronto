@@ -25,7 +25,7 @@ class StatePersisterWorkerClient {
   }
 
   pauseAndFlush() {
-    this.worker.postMessage(new Message('', MessageTypes.PauseAndFlush));
+    this.worker.postMessage(new Message('', MessageTypes.PauseAndClear));
   }
 
   pausePersister() {

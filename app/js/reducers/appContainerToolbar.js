@@ -5,6 +5,7 @@ import stateSyncService from '../service/stateSyncService';
 import StatePackager from '../service/statePackager';
 import ModelTransformer from '../stores/modelTransformer';
 import uuid from 'node-uuid';
+import appContainerService from '../service/component/appContainerService';
 
 const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
@@ -16,26 +17,19 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
   switch (action.type) {
     case ACTIONS.types.ADD_APP: {
-      const app = {
-        parentId: appContainerModel.id,
-        id: uuid.v1(),
-        label: appContainerDom.section.addNew.appLabel,
-        typeLabel: 'App'
-      };
+      //const app = {
+      //  parentId: appContainerModel.id,
+      //  id: uuid.v1(),
+      //  label: appContainerDom.section.addNew.appLabel,
+      //  typeLabel: 'App'
+      //};
+      //
+      //appContainerModel.children.push(app);
+      //
+      //const statePackage = statePackager.package(jsonStateOld, JSON.stringify(stateNew));
+      //stateNew = stateSyncService.saveStateSynchronous(statePackage);
 
-      appContainerModel.children.push(app);
-
-      console.log(JSON.stringify(jsonStateOld));
-
-      const statePackage = statePackager.package(jsonStateOld, JSON.stringify(stateNew));
-      stateNew = stateSyncService.saveStateSynchronous(statePackage);
-
-      //const modelTransformer = new ModelTransformer();
-      //stateNew.model = modelTransformer.transform(JSON.parse(jsonAppContainer));
-
-      console.log(stateNew);
-
-      return JSON.parse(stateNew);
+      return appContainerService.addApp(state, jsonStateOld, appContainerDom.section.addNew.appLabel);
     }
     case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
 

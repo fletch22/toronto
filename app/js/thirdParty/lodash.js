@@ -8822,7 +8822,7 @@
         }
       }
 
-      function flush() {
+      function eliminateItemsWithoutProcessing() {
         if ((timeoutId && trailingCall) || (maxTimeoutId && trailing)) {
           result = func.apply(thisArg, args);
         }
@@ -8878,7 +8878,7 @@
         return result;
       }
       debounced.cancel = cancel;
-      debounced.flush = flush;
+      debounced.eliminateItemsWithoutProcessing = eliminateItemsWithoutProcessing;
       return debounced;
     }
 

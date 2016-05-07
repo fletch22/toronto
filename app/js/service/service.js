@@ -14,14 +14,14 @@ class Service {
 
   fetchSynchronous(url, method, object) {
     try {
-      return jQuery.ajax({
+      return JSON.parse(jQuery.ajax({
         type: method,
         url: url,
         async: false,
         contentType: 'application/json',
         data: JSON.stringify(object),
         dataType: 'json'
-      }).responseText;
+      }).responseText);
     } catch (error) {
       console.log('Encountered error while attempting to asynchronously fetch something.');
       throw error;

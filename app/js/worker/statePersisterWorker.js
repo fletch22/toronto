@@ -17,16 +17,21 @@ const StatePersisterWorker = function spw() {
             break;
           }
           case MessageTypes.PauseQueue: {
-            queue.isPaused = true;
+            queue.isAccumulatorProcessorPaused = true;
             break;
           }
           case MessageTypes.UnpauseQueue: {
-            queue.isPaused = false;
+            queue.isAccumulatorProcessorPaused = false;
             break;
           }
-          case MessageTypes.PauseAndFlush: {
-            queue.isPaused = true;
-            queue.flush();
+          case MessageTypes.PauseAndClear: {
+            queue.isAccumulatorProcessorPaused = true;
+            queue.eliminateItemsWithoutProcessing();
+            break;
+          }
+          case MessageTypes.PauseAndDrain: {
+            queue.isAccumulatorProcessorPaused = true;
+            queue.pauseAndProcessExisting();
             break;
           }
           default: {
