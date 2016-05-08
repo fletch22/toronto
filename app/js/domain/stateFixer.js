@@ -9,7 +9,7 @@ class StateFixer {
     if (timeTravelTransaction.isTimeTravelNecessary()) {
       console.log('pausing queue');
       workerClient.pauseAndFlush();
-      workerClient.persistState(stateOld, stateNew);
+      workerClient.persistStateNoResponse(stateOld, stateNew);
 
       // Add flush here to clean out persister queue.
       const promise = stateSyncService.rollbackToTransaction(1234);
@@ -24,7 +24,7 @@ class StateFixer {
         workerClient.unpausePersister();
       });
     } else {
-      workerClient.persistState(stateOld, stateNew);
+      workerClient.persistStateNoResponse(stateOld, stateNew);
     }
   }
 }

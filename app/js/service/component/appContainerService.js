@@ -1,6 +1,5 @@
 import ComponentService from './componentService';
 import AppContainerFactory from '../../domain/component/appContainerFactory';
-import uuid from 'node-uuid';
 import StatePackager from '../statePackager';
 import stateSyncService from '../stateSyncService';
 import appFactory from '../../domain/component/appFactory';
@@ -27,12 +26,6 @@ class AppContainerService extends ComponentService {
     const app = appFactory.createInstance(appContainerModel.id, label);
 
     appContainerModel.children.push(app);
-
-    //const queueListener = new QueueListener();
-    //queueListener.register((event) => {
-    //  queueListener.unregister();
-    //});
-
 
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveStateSynchronous(statePackage);

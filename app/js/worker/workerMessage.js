@@ -1,5 +1,8 @@
+import uuid from 'node-uuid';
+
 export const WorkerMessageTypes = {
-  PersistMessage: 'PersistMessage',
+  PersistMessageGuaranteedResponse: 'PersistMessageGuaranteedResponse',
+  PersistMessageNoGuaranteedResponse: 'PersistMessageNoGuaranteedResponse',
   PauseQueue: 'PauseQueue',
   IsPaused: 'IsPaused',
   UnpauseQueue: 'UnpauseQueue',
@@ -12,6 +15,7 @@ const WorkerMessage = function(messageBody, type) {
 
   self.body = messageBody;
   self.type = type;
+  self.id = uuid.v1();
 };
 
 export default WorkerMessage;

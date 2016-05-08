@@ -106,6 +106,13 @@ describe('Queue', () => {
 
   it('should get an queue drained event emitted when processing.', (done) => {
 
+    const queueListener = new QueueListener();
+    queueListener.register((event) => {
+      expect(event.data.queueMessageType).to.equal(QueueMessageTypes.QUEUE_DRAINED_AND_WAITING);
+      queueListener.unregister();
+      done();
+    });
+
     const saveStateArray = sandbox.stub(stateSyncService, 'saveStateArray').returns(Promise.resolve());
     const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory');
     expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
@@ -126,7 +133,6 @@ describe('Queue', () => {
       expect(queue.getQueueArrayIsPaused()).to.equal(false);
       expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
       expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
-      done();
     });
   });
 });

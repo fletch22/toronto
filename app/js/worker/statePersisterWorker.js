@@ -2,23 +2,13 @@ import WorkerMessage from './workerMessage';
 import { WorkerMessageTypes } from './workerMessage';
 import Queue from './queue';
 
-//export class StateWorkerMessageFactory {
-//  getInstance(stateWorkerMessageTypes, state, id) {
-//    return {
-//      id: id,
-//      workerMessageTypes: workerMessageTypes,
-//      state: state
-//    };
-//  }
-//}
-
 class PersistMessageService {
 
   constructor(queue) {
     this.queue = queue;
   }
 
-  postMessageSafe(message) {
+  postMessage(message) {
     try {
       // NOTE: This is necessary so our tests don't throw. When some tests are run
       // they are run in a window context as opposed to a worker context. When in the window context
@@ -32,12 +22,15 @@ class PersistMessageService {
   }
 
   persist(message) {
+    // Stop accumulator processing
+
+    //
+
     const promise = this.queue.push(message);
 
-    promise.then((data) => {
-
+    promise.then(() => {
+      console.log('Not implemented yet. Will be part of guaranteed response code.');
     });
-
   }
 }
 
@@ -56,8 +49,12 @@ const StatePersisterWorker = function spw() {
         console.log(event.data);
 
         switch (message.type) {
-          case WorkerMessageTypes.PersistMessage: {
-            persistMessageService.persist(queue, message.body);
+          case WorkerMessageTypes.PersistMessageNoGuaranteedResponse: {
+            queue.push(message.body);
+            break;
+          }
+          case WorkerMessageTypes.PersistMessageGuaranteedResponse: {
+            persistMessageService.persist(message.body, message.id);
             break;
           }
           case WorkerMessageTypes.PauseQueue: {

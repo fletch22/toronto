@@ -26,10 +26,17 @@ class StatePersisterWorkerClient {
     this.worker = new Worker();
   }
 
-  persistState(jsonStateOld, jsonStateNew) {
-    const statePackage = this.statePackager.package(jsonStateOld, jsonStateNew);
+  persistStateNoResponse(jsonStateOld, jsonStateNew) {
+    this.persistState(jsonStateOld, jsonStateNew, WorkerMessageTypes.PersistMessageNoGuaranteedResponse);
+  }
 
-    this.worker.postMessage(new WorkerMessage(statePackage, WorkerMessageTypes.PersistMessage));
+  persistStateExpectResponse(jsonStateOld, jsonStateNew) {
+    this.persistState(jsonStateOld, jsonStateNew, WorkerMessageTypes.PersistMessageGuaranteedResponse);
+  }
+
+  persistState(jsonStateOld, jsonStateNew, workerMessageType) {
+    const statePackage = this.statePackager.package(jsonStateOld, jsonStateNew);
+    this.worker.postMessage(new WorkerMessage(statePackage, workerMessageType));
   }
 
   pauseAndFlush() {

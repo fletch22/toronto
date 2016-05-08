@@ -30,7 +30,7 @@ describe('Worker service', () => {
       fetchMock.mock('^http', { status: 200, body: '[]' });
 
       const str = getString(1000);
-      const message = new WorkerMessage(`Test 1: ${str}`, WorkerMessageTypes.PersistMessage);
+      const message = new WorkerMessage(`Test 1: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse);
       const promise = queue.push(message.body);
 
       promise.then(() => {
@@ -52,7 +52,7 @@ describe('Worker service', () => {
       const stateHistory = [1, 2, 3, 4, 5, 6];
       const rollbackAndFetchStateHistoryStub = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory').returns(stateHistory);
 
-      const message = new WorkerMessage(`Test 1: ${getString(1000)}`, WorkerMessageTypes.PersistMessage);
+      const message = new WorkerMessage(`Test 1: ${getString(1000)}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse);
       const promise = queue.push(message.body);
 
       promise.then(() => {

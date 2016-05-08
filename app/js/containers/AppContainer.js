@@ -22,7 +22,7 @@ class AppContainer extends React.Component {
 
 AppContainer.propTypes = {
   children: React.PropTypes.arrayOf(React.PropTypes.shape({
-    id: React.PropTypes.number.isRequired,
+    id: React.PropTypes.any.isRequired,
     label: React.PropTypes.string.isRequired
   })).isRequired
 };

@@ -4,8 +4,8 @@ import { addApp, appLabelOnChange, showStandardModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 
 class AppContainerToolbar extends React.Component {
-
   render() {
+
     return (
       <div className="container-fluid toolbar-container">
         <div className="row-fluid">

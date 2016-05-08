@@ -1,7 +1,8 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import apps from '../reducers';
 import DevTools from '../containers/DevTools';
 import currentStateRetriever from '../domain/stateRetriever';
+import thunk from 'redux-thunk';
 
 class AllStore {
 
@@ -11,7 +12,7 @@ class AllStore {
       const promise = currentStateRetriever.getCurrent();
 
       promise.then((state) => {
-        const store = createStore(apps, state, DevTools.instrument());
+        const store = createStore(apps, state, DevTools.instrument(), applyMiddleware(thunk));
         resolve(store);
       });
 
