@@ -1,23 +1,32 @@
 import Worker from 'worker!../../worker/statePersisterWorker.js';
 import WorkerMessage, { WorkerMessageTypes } from '../../worker/workerMessage';
+import stateSyncService from '../../service/stateSyncService';
+import { expect } from 'chai';
 
 describe('Worker service', () => {
-  const worker = new Worker();
+  let worker;
+  let sandbox;
 
   function getString(length) {
     return new Array(length + 1).join('x');
   }
 
-  it('should execute save ideal messages correctly.', (done) => {
+  beforeEach(() => {
+    sandbox = sinon.sandbox.create();
+  });
 
-    worker.onmessage = function (event) {
-      if (event.data
-        && event.data.body) {
-        const message = event.data.body.substr(0, 10);
-        console.log(`This was an event reflection from the worker thread: ${message}`);
-      }
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('should execute save ideal messages correctly.', (done) => {
+    worker = new Worker();
+
+    worker.addEventListener('message', (event) => {
+      const message = JSON.parse(event.data);
+      console.log(JSON.stringify(message));
       done();
-    };
+    });
 
     const str = getString(1000);
     worker.postMessage(new WorkerMessage(`Test 1: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
@@ -29,7 +38,21 @@ describe('Worker service', () => {
     worker.postMessage(new WorkerMessage(`Test 7: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
     worker.postMessage(new WorkerMessage(`Test 8: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
     worker.postMessage(new WorkerMessage(`Test 9: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-
   });
 
+  it('should execute pause and drain.', (done) => {
+
+    worker = new Worker();
+
+    const str = getString(1000);
+    const message = new WorkerMessage(`Test 1: ${str}`, WorkerMessageTypes.BlockadeAndDrain);
+
+    worker.addEventListener('message', (event) => {
+      const message = JSON.parse(event.data);
+      done();
+    });
+
+    console.log('About to post message.');
+    worker.postMessage(message);
+  });
 });

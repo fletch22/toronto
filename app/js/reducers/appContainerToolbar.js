@@ -9,10 +9,8 @@ import appContainerService from '../service/component/appContainerService';
 
 const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
-  const statePackager = new StatePackager();
   const jsonStateOld = JSON.stringify(state);
   let stateNew = Object.assign({}, state);
-  const appContainerModel = stateNew.model.appContainer;
   const appContainerDom = stateNew.dom.view.appContainer;
 
   switch (action.type) {

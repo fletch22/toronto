@@ -6,10 +6,6 @@ class RestService extends Service {
     return this.fetch(`${this.url}/appContainer/`, 'get');
   }
 
-  getComponent(id) {
-    return this.fetch(`${this.url}/component/${id}`, 'get');
-  }
-
   addComponent(object) {
     return this.fetch(`${this.url}/component`, 'POST', object);
   }

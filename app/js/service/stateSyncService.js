@@ -14,6 +14,10 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/statePallet`, 'put', stateArray);
   }
 
+  saveState(statePackage) {
+    return this.fetch(`${this.getOrbServerRootUrl()}/component/statePackage`, 'put', statePackage);
+  }
+
   saveStateSynchronous(statePackage) {
     return this.fetchSynchronous(`${this.getOrbServerRootUrl()}/component/statePackage`, 'put', statePackage);
   }

@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addApp, appLabelOnChange, showStandardModal } from '../../actions';
+import { setState, appLabelOnChange, showStandardModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
+import appContainerService from '../../service/component/appContainerService';
+import statePersisterWorkerClient from '../../worker/statePersisterWorkerClient';
 
 class AppContainerToolbar extends React.Component {
   render() {
@@ -32,6 +34,34 @@ class AppContainerToolbar extends React.Component {
   }
 }
 
+function addAppLocal() {
+  return (dispatch, getState) => {
+
+    let expectedId;
+
+    window.addEventListener('message', (event) => {
+      const eventMessage = JSON.parse(event.data);
+
+      if (eventMessage.id === expectedId) {
+        const state = getState();
+        const label = state.dom.view.appContainer.section.addNew.appLabel;
+        console.log(label);
+        const jsonStateOld = JSON.stringify(state);
+        return appContainerService.addAppAsync(state, jsonStateOld, label)
+          .then((response) => {
+            dispatch(setState(response));
+            statePersisterWorkerClient.unblockade();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+      }
+    });
+
+    expectedId = statePersisterWorkerClient.blockadeAndDrain();
+  };
+}
+
 AppContainerToolbar.propTypes = {
   appLabel: React.PropTypes.string.isRequired,
   onClick: React.PropTypes.func.isRequired,
@@ -52,8 +82,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onClick: (event) => {
-      console.log(event);
-      dispatch(addApp());
+      //dispatch(addApp());
+      //dispatch(addAppLocal(new Date().getMilliseconds()));
+      dispatch(addAppLocal());
     },
     onChange: (event) => {
       dispatch(appLabelOnChange(event.target.value));

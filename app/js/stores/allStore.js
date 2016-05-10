@@ -12,7 +12,7 @@ class AllStore {
       const promise = currentStateRetriever.getCurrent();
 
       promise.then((state) => {
-        const store = createStore(apps, state, DevTools.instrument(), applyMiddleware(thunk));
+        const store = applyMiddleware(thunk)(createStore)(apps, state, DevTools.instrument());
         resolve(store);
       });
 

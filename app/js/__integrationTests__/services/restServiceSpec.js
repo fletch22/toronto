@@ -47,39 +47,18 @@ describe('Rest service', () => {
   });
 
   it('should compose the url without exception.', () => {
-
     const url = RestService.getOrbServerRootUrl();
     expect(url).to.not.equal(null);
-
   });
 
-  it('should get the component from an id.', (done) => {
-
-    const promise = RestService.getComponent(1039);
-
-    const success = (data) => {
-      done();
-    };
-
-    const error = (errorObj) => {
-      console.log(`Error: StatusCode: ${errorObj.status}: Status Text: ${errorObj.statusText}`);
-      assert.fail(true, false);
-      done();
-    };
-
-    promise.then(success).catch(error);
-  });
-
-  it('should make a synchronous request.', () => {
-    const remote_url = 'http://localhost:8080/vancouver/api/statePackage/';
-    const responseText = jQuery.ajax({
-      type: 'GET',
-      url: remote_url,
-      async: false
-    }).responseText;
-
-    console.log(responseText);
-
-
-  });
+  //it('should make a synchronous request.', () => {
+  //  const remote_url = 'http://localhost:8080/vancouver/api/statePackage/';
+  //  const responseText = jQuery.ajax({
+  //    type: 'GET',
+  //    url: remote_url,
+  //    async: false
+  //  }).responseText;
+  //
+  //  console.log(responseText);
+  //});
 });

@@ -3,11 +3,14 @@ import uuid from 'node-uuid';
 export const WorkerMessageTypes = {
   PersistMessageGuaranteedResponse: 'PersistMessageGuaranteedResponse',
   PersistMessageNoGuaranteedResponse: 'PersistMessageNoGuaranteedResponse',
+  PersistMessageResponseSuccess: 'PersistMessageResponseSuccess',
+  PersistMessageResponseFailure: 'PersistMessageResponseFailure',
   PauseQueue: 'PauseQueue',
   IsPaused: 'IsPaused',
   UnpauseQueue: 'UnpauseQueue',
   PauseAndClear: 'PauseAndClear',
-  PauseAndDrain: 'PauseAndDrain'
+  BlockadeAndDrain: 'BlockadeAndDrain',
+  Unblockade: 'Unblockade'
 };
 
 const WorkerMessage = function(messageBody, type) {

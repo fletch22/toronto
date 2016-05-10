@@ -108,7 +108,8 @@ describe('Queue', () => {
 
     const queueListener = new QueueListener();
     queueListener.register((event) => {
-      expect(event.data.queueMessageType).to.equal(QueueMessageTypes.QUEUE_DRAINED_AND_WAITING);
+      const queueMessageType = JSON.parse(event.data).queueMessageType;
+      expect(queueMessageType).to.equal(QueueMessageTypes.QUEUE_EMPTY);
       queueListener.unregister();
       done();
     });

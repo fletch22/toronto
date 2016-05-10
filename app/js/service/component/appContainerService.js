@@ -30,6 +30,16 @@ class AppContainerService extends ComponentService {
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveStateSynchronous(statePackage);
   }
+
+  addAppAsync(stateNew, jsonStateOld, label) {
+    const appContainerModel = stateNew.model.appContainer;
+    const app = appFactory.createInstance(appContainerModel.id, label);
+
+    appContainerModel.children.push(app);
+
+    const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
+    return stateSyncService.saveState(statePackage);
+  }
 }
 
 export default new AppContainerService();

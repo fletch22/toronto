@@ -1,29 +1,21 @@
 import Worker from 'worker!./statePersisterWorker.js';
 import WorkerMessage, { WorkerMessageTypes } from './workerMessage';
-import deepDiff from 'deep-diff';
 import StatePackager from '../service/statePackager';
-
-export class StatePersistWorkerListener {
-
-  constructor() {
-    this.TYPE = 'message';
-    this.listener = null;
-  }
-
-  register(callback) {
-    this.listener = window.addEventListener(this.TYPE, callback, false);
-  }
-
-  unregister() {
-    window.removeEventListener(this.TYPE, this.listener, false);
-  }
-}
+import MessagePoster from '../domain/message/messagePoster';
 
 class StatePersisterWorkerClient {
 
   constructor() {
     this.statePackager = new StatePackager();
     this.worker = new Worker();
+    this.messagePoster = new MessagePoster();
+    this.wireUpRebroadcaster();
+  }
+
+  wireUpRebroadcaster() {
+    this.worker.addEventListener('message', (event) =>                             {
+      this.messagePoster.post(event.data);
+    });
   }
 
   persistStateNoResponse(jsonStateOld, jsonStateNew) {
@@ -31,6 +23,11 @@ class StatePersisterWorkerClient {
   }
 
   persistStateExpectResponse(jsonStateOld, jsonStateNew) {
+
+    this.worker.addEventListener('message', (event) => {
+      console.log(event);
+    });
+
     this.persistState(jsonStateOld, jsonStateNew, WorkerMessageTypes.PersistMessageGuaranteedResponse);
   }
 
@@ -49,6 +46,18 @@ class StatePersisterWorkerClient {
 
   unpausePersister() {
     this.worker.postMessage(new WorkerMessage('', WorkerMessageTypes.UnpauseQueue));
+  }
+
+  blockadeAndDrain() {
+    const message = new WorkerMessage('', WorkerMessageTypes.BlockadeAndDrain);
+    this.worker.postMessage(message);
+
+    return message.id;
+  }
+
+  unblockade() {
+    const message = new WorkerMessage('', WorkerMessageTypes.Unblockade);
+    this.worker.postMessage(message);
   }
 }
 

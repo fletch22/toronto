@@ -1,14 +1,17 @@
 import stateSyncService from '../service/stateSyncService';
 import MessagePoster from '../domain/message/messagePoster';
+import uuid from 'node-uuid';
 
 export const QueueMessageTypes = {
+  QUEUE_EMPTY: 'QUEUE_EMPTY',
   QUEUE_DRAINED_AND_WAITING: 'QUEUE_DRAINED_AND_WAITING',
   STATE_ROLLBACK: 'STATE_ROLLBACK'
 };
 
 class QueueMessage {
-  constructor(queueMessageType, data) {
+  constructor(queueMessageType, data, id) {
     return {
+      id: (id === 'undefined') ? uuid.v1() : id,
       queueMessageType: queueMessageType,
       data: data
     };
@@ -31,19 +34,19 @@ export class QueueListener {
   }
 }
 
-const TmpAccumulator = [];
-
 class Queue {
 
   constructor() {
     this.accumulator = [];
     this.deliveryProcessingIsPaused = false;
+    this.blockadeIncoming = false;
     this.isAccumulatorProcessorPaused = false;
     this.messagePoster = new MessagePoster();
+    this.sendArray = [];
   }
 
-  postMessage(message) {
-    this.messagePoster.post(message);
+  postMessage(messageObject) {
+    this.messagePoster.post(JSON.stringify(messageObject));
   }
 
   emitEventRollbackState(stateArray) {
@@ -51,8 +54,8 @@ class Queue {
   }
 
   // NOTE: 03-25-2016: Really only used by tests.
-  emitEventQueueEmpty() {
-    this.postMessage(new QueueMessage(QueueMessageTypes.QUEUE_DRAINED_AND_WAITING));
+  emitEventQueueEmpty(id) {
+    this.postMessage(new QueueMessage(QueueMessageTypes.QUEUE_EMPTY, null, id));
   }
 
   emitEventIfQueueEmpty() {
@@ -61,14 +64,53 @@ class Queue {
     }
   }
 
+  waitUntilQueueEmpty() {
+    const queue = this;
+    return new Promise((resolve) => {
+      function checkQueue() {
+        if (queue.accumulator.length === 0) {
+          resolve();
+        } else {
+          setTimeout(checkQueue, 10);
+        }
+      }
+      checkQueue();
+    });
+  }
+
+  areAllQueuesFlushedAndEmpty() {
+    return typeof this.accumulator !== 'undefined' && this.accumulator.length === 0 && this.sendArray.length === 0;
+  }
+
+  blockadeAndDrain(id) {
+    // Note: This is a work in progress. The system needs to block all incoming states
+    // and raise an error if one arrives during this blockade.
+    this.blockadeIncoming = true;
+    const queue = this;
+
+    function checkQueue() {
+      if (queue.areAllQueuesFlushedAndEmpty()) {
+        queue.emitEventQueueEmpty(id);
+      } else {
+        setTimeout(checkQueue, 10);
+      }
+    }
+
+    checkQueue();
+
+    this.accumulatorItemProcessing();
+  }
+
+  unblockade() {
+    this.blockadeIncoming = false;
+  }
+
   accumulatorItemProcessing() {
     let promise;
     if (this.deliveryProcessingIsPaused) {
       setTimeout(this.accumulatorItemProcessing, 1);
       return promise;
     }
-
-    let sendArray = null;
 
     // This guards against a weird behavior caused by splice; the array is momentarily 'undefined' during splicing.
     // If it undefined we wait a moment. After waiting the array goes back to not 'undefined'.
@@ -80,21 +122,23 @@ class Queue {
     if (this.accumulator.length === 0) {
       this.emitEventIfQueueEmpty();
     } else {
-      sendArray = this.accumulator.splice(0, this.accumulator.length);
+      this.sendArray = this.accumulator.splice(0, this.accumulator.length);
 
       this.deliveryProcessingIsPaused = true;
-      const statePackage = { states: sendArray };
+      const stateArrayPackage = { states: this.sendArray };
 
       const queue = this;
       promise = new Promise((resolve, reject) => {
-        stateSyncService.saveStateArray(statePackage)
+        stateSyncService.saveStateArray(stateArrayPackage)
           .then((response) => {
+            this.sendArray = [];
             queue.deliveryProcessingIsPaused = false;
-
             queue.emitEventIfQueueEmpty();
             resolve(response);
           })
           .catch((error) => {
+            this.sendArray = [];
+            queue.deliveryProcessingIsPaused = false;
             const previous100States = stateSyncService.rollbackAndFetchStateHistory(100);
             queue.emitEventRollbackState(previous100States);
             reject(error);
@@ -109,18 +153,14 @@ class Queue {
   }
 
   push(data) {
-    this.accumulator.push(data);
+    if (!this.blockadeIncoming) {
+      this.accumulator.push(data);
 
-    if (!this.isAccumulatorProcessorPaused) {
-      return this.accumulatorItemProcessing();
-    } else {
-      return Promise.resolve();
+      if (!this.isAccumulatorProcessorPaused) {
+        return this.accumulatorItemProcessing();
+      }
     }
-  }
-
-  pauseAndProcessExisting() {
-    this.isAccumulatorProcessorPaused = true;
-    this.accumulatorItemProcessing();
+    return Promise.resolve();
   }
 
   getAccumulator() {

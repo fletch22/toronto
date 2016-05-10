@@ -70,8 +70,6 @@ describe('Two objects when compared with deep diff', () => {
     const start = new Date().getMilliseconds();
     for (let i = 0; i < maxCount; i++) {
       const differences = deepDiff(lhs, rhs);
-      console.log(JSON.stringify(rhs));
-      console.log(JSON.stringify(differences));
       break;
     }
     const end = new Date().getMilliseconds();

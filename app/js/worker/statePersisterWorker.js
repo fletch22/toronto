@@ -1,45 +1,50 @@
 import WorkerMessage from './workerMessage';
 import { WorkerMessageTypes } from './workerMessage';
 import Queue from './queue';
+import stateSyncService from '../service/stateSyncService';
+import MessagePoster from '../domain/message/messagePoster';
+import { QueueListener } from '../worker/queue';
 
-class PersistMessageService {
-
-  constructor(queue) {
-    this.queue = queue;
-  }
-
-  postMessage(message) {
-    try {
-      // NOTE: This is necessary so our tests don't throw. When some tests are run
-      // they are run in a window context as opposed to a worker context. When in the window context
-      // then this code will use window.postMessage. PostMessage function expects a second parameter and will throw if it doesn't find one.
-      // If we are in the worker context the second (unneeded) parameter will be ignored.
-      const domain = (typeof window !== 'undefined') ? location.href : undefined;
-      postMessage(message, domain);
-    } catch (err) {
-      console.error(err, err.stack);
-    }
-  }
-
-  persist(message) {
-    // Stop accumulator processing
-
-    //
-
-    const promise = this.queue.push(message);
-
-    promise.then(() => {
-      console.log('Not implemented yet. Will be part of guaranteed response code.');
-    });
-  }
-}
+//class PersistMessageGuaranteedResponseService {
+//
+//  constructor(queue) {
+//    this.queue = queue;
+//    this.messagePoster = new MessagePoster();
+//  }
+//
+//  emitResponseCompleteMessage(id, response) {
+//    const message = new WorkerMessage({ id: id, response: response }, WorkerMessageTypes.PersistMessageResponseSuccess);
+//    this.messagePoster.post(JSON.stringify(message));
+//  }
+//
+//  emitResponseFailedMessage(id, response) {
+//    const message = new WorkerMessage({ id: id, response: response }, WorkerMessageTypes.PersistMessageResponseFailure);
+//    this.messagePoster.post(JSON.stringify(message));
+//  }
+//
+//  persist(message, id) {
+//    console.log('Got PersistMessageGuaranteedResponse');
+//    const promise = this.queue.waitUntilQueueEmpty();
+//    promise.then(() => {
+//      console.log("About to caLL SAVE state.");
+//      stateSyncService.saveState(message)
+//        .then((response) => {
+//          this.emitResponseCompleteMessage(id, JSON.parse(response));
+//        })
+//        .catch((error) => {
+//          console.log('About to emit failed response.');
+//          this.emitResponseFailedMessage(id, { error: error.message });
+//        });
+//    });
+//  }
+//}
 
 let hasRegisteredEventListener = false;
 
 const StatePersisterWorker = function spw() {
   const statePersisterWorker = this;
   const queue = new Queue();
-  const persistMessageService = new PersistMessageService(queue);
+  //const persistMessageGuaranteedResponseService = new PersistMessageGuaranteedResponseService(queue);
 
   function registerEventListener() {
     if (hasRegisteredEventListener === false) {
@@ -54,8 +59,9 @@ const StatePersisterWorker = function spw() {
             break;
           }
           case WorkerMessageTypes.PersistMessageGuaranteedResponse: {
-            persistMessageService.persist(message.body, message.id);
-            break;
+            throw new Error('not implemented');
+            // persistMessageGuaranteedResponseService.persist(message.body, message.id);
+            // break;
           }
           case WorkerMessageTypes.PauseQueue: {
             queue.isAccumulatorProcessorPaused = true;
@@ -65,14 +71,17 @@ const StatePersisterWorker = function spw() {
             queue.isAccumulatorProcessorPaused = false;
             break;
           }
+          case WorkerMessageTypes.BlockadeAndDrain: {
+            queue.blockadeAndDrain(message.id);
+            break;
+          }
           case WorkerMessageTypes.PauseAndClear: {
             queue.isAccumulatorProcessorPaused = true;
             queue.eliminateItemsWithoutProcessing();
             break;
           }
-          case WorkerMessageTypes.PauseAndDrain: {
-            queue.isAccumulatorProcessorPaused = true;
-            queue.pauseAndProcessExisting();
+          case WorkerMessageTypes.Unblockade: {
+            queue.unblockade();
             break;
           }
           default: {
