@@ -34,20 +34,43 @@ class AppContainerToolbar extends React.Component {
   }
 }
 
+class GenericListener {
+
+  constructor() {
+    this.TYPE = 'message';
+    this.callback = null;
+  }
+
+  register(callback) {
+    this.callback = callback;
+    window.addEventListener(this.TYPE, callback, false);
+  }
+
+  unregister() {
+    window.removeEventListener(this.TYPE, this.callback, false);
+  }
+}
+
 function addAppLocal() {
   return (dispatch, getState) => {
 
     let expectedId;
 
-    window.addEventListener('message', (event) => {
-      const eventMessage = JSON.parse(event.data);
+    const genericListener = new GenericListener();
 
+    const messageProcessor = (event) => {
+
+      if (typeof event.data !== 'string') {
+        return;
+      }
+
+      const eventMessage = JSON.parse(event.data);
       if (eventMessage.id === expectedId) {
+        genericListener.unregister();
         const state = getState();
         const label = state.dom.view.appContainer.section.addNew.appLabel;
-        console.log(label);
         const jsonStateOld = JSON.stringify(state);
-        return appContainerService.addAppAsync(state, jsonStateOld, label)
+        appContainerService.addAppAsync(state, jsonStateOld, label)
           .then((response) => {
             dispatch(setState(response));
             statePersisterWorkerClient.unblockade();
@@ -56,7 +79,9 @@ function addAppLocal() {
             console.log(error.message);
           });
       }
-    });
+    };
+
+    genericListener.register(messageProcessor);
 
     expectedId = statePersisterWorkerClient.blockadeAndDrain();
   };

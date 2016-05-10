@@ -50,15 +50,4 @@ describe('Rest service', () => {
     const url = RestService.getOrbServerRootUrl();
     expect(url).to.not.equal(null);
   });
-
-  //it('should make a synchronous request.', () => {
-  //  const remote_url = 'http://localhost:8080/vancouver/api/statePackage/';
-  //  const responseText = jQuery.ajax({
-  //    type: 'GET',
-  //    url: remote_url,
-  //    async: false
-  //  }).responseText;
-  //
-  //  console.log(responseText);
-  //});
 });

@@ -92,13 +92,13 @@ class Queue {
       if (queue.areAllQueuesFlushedAndEmpty()) {
         queue.emitEventQueueEmpty(id);
       } else {
-        setTimeout(checkQueue, 10);
+        setTimeout(checkQueue, 1);
       }
     }
 
-    checkQueue();
-
     this.accumulatorItemProcessing();
+
+    checkQueue();
   }
 
   unblockade() {
