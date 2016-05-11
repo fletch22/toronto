@@ -1,13 +1,13 @@
+
 import React from 'react';
 import { connect } from 'react-redux';
-import { setState, appLabelOnChange, showStandardModal } from '../../actions';
+import { appLabelOnChange, showStandardModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
-import statePersisterWorkerClient from '../../worker/statePersisterWorkerClient';
+import crudActionCreator from '../../actions/crudActionCreator';
 
 class AppContainerToolbar extends React.Component {
   render() {
-
     return (
       <div className="container-fluid toolbar-container">
         <div className="row-fluid">
@@ -34,57 +34,15 @@ class AppContainerToolbar extends React.Component {
   }
 }
 
-class GenericListener {
-
-  constructor() {
-    this.TYPE = 'message';
-    this.callback = null;
-  }
-
-  register(callback) {
-    this.callback = callback;
-    window.addEventListener(this.TYPE, callback, false);
-  }
-
-  unregister() {
-    window.removeEventListener(this.TYPE, this.callback, false);
-  }
-}
-
 function addAppLocal() {
-  return (dispatch, getState) => {
-
-    let expectedId;
-
-    const genericListener = new GenericListener();
-
-    const messageProcessor = (event) => {
-
-      if (typeof event.data !== 'string') {
-        return;
-      }
-
-      const eventMessage = JSON.parse(event.data);
-      if (eventMessage.id === expectedId) {
-        genericListener.unregister();
-        const state = getState();
-        const label = state.dom.view.appContainer.section.addNew.appLabel;
-        const jsonStateOld = JSON.stringify(state);
-        appContainerService.addAppAsync(state, jsonStateOld, label)
-          .then((response) => {
-            dispatch(setState(response));
-            statePersisterWorkerClient.unblockade();
-          })
-          .catch((error) => {
-            console.log(error.message);
-          });
-      }
-    };
-
-    genericListener.register(messageProcessor);
-
-    expectedId = statePersisterWorkerClient.blockadeAndDrain();
+  const addApp = (state) => {
+    const label = state.dom.view.appContainer.section.addNew.appLabel;
+    const jsonStateOld = JSON.stringify(state);
+    const stateNew = JSON.parse(jsonStateOld);
+    return appContainerService.addAppAsync(stateNew, jsonStateOld, label);
   };
+
+  crudActionCreator.invoke(addApp);
 }
 
 AppContainerToolbar.propTypes = {
@@ -106,9 +64,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClick: (event) => {
-      //dispatch(addApp());
-      //dispatch(addAppLocal(new Date().getMilliseconds()));
+    onClick: () => {
       dispatch(addAppLocal());
     },
     onChange: (event) => {

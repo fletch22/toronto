@@ -12,9 +12,6 @@ describe('statePersisterWorkerClient', () => {
     window.addEventListener('message', (event) => {
       console.log(event.data);
       const eventMessage = JSON.parse(event.data);
-
-      //expect(typeof eventMessage.id).to.not.equal('undefined');
-      //expect(expectedId).to.equal(eventMessage.id);
       done();
     });
 

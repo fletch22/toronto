@@ -1,38 +1,8 @@
 import stateSyncService from '../service/stateSyncService';
 import MessagePoster from '../domain/message/messagePoster';
 import uuid from 'node-uuid';
-
-export const QueueMessageTypes = {
-  QUEUE_EMPTY: 'QUEUE_EMPTY',
-  QUEUE_DRAINED_AND_WAITING: 'QUEUE_DRAINED_AND_WAITING',
-  STATE_ROLLBACK: 'STATE_ROLLBACK'
-};
-
-class QueueMessage {
-  constructor(queueMessageType, data, id) {
-    return {
-      id: (id === 'undefined') ? uuid.v1() : id,
-      queueMessageType: queueMessageType,
-      data: data
-    };
-  }
-}
-
-export class QueueListener {
-
-  constructor() {
-    this.TYPE = 'message';
-    this.listener = null;
-  }
-
-  register(callback) {
-    this.listener = window.addEventListener(this.TYPE, callback, false);
-  }
-
-  unregister() {
-    window.removeEventListener(this.TYPE, this.listener, false);
-  }
-}
+import { WorkerMessageTypes } from '../worker/workerMessage';
+import WorkerMessage from '../worker/workerMessage';
 
 class Queue {
 
@@ -50,12 +20,12 @@ class Queue {
   }
 
   emitEventRollbackState(stateArray) {
-    this.postMessage(new QueueMessage(QueueMessageTypes.STATE_ROLLBACK, stateArray));
+    this.postMessage(new WorkerMessage(stateArray, WorkerMessage.STATE_ROLLBACK));
   }
 
   // NOTE: 03-25-2016: Really only used by tests.
   emitEventQueueEmpty(id) {
-    this.postMessage(new QueueMessage(QueueMessageTypes.QUEUE_EMPTY, null, id));
+    this.postMessage(new WorkerMessage(null, WorkerMessageTypes.QUEUE_EMPTY, id));
   }
 
   emitEventIfQueueEmpty() {

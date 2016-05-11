@@ -1,7 +1,8 @@
 import Queue from '../../worker/queue';
-import { QueueMessageTypes, QueueListener } from '../../worker/queue';
+import GenericListener from '../../domain/message/genericListener';
 import { expect } from 'chai';
 import stateSyncService from '../../service/stateSyncService';
+import { WorkerMessageTypes } from '../../worker/workerMessage';
 
 describe('Queue', () => {
 
@@ -106,11 +107,11 @@ describe('Queue', () => {
 
   it('should get an queue drained event emitted when processing.', (done) => {
 
-    const queueListener = new QueueListener();
-    queueListener.register((event) => {
-      const queueMessageType = JSON.parse(event.data).queueMessageType;
-      expect(queueMessageType).to.equal(QueueMessageTypes.QUEUE_EMPTY);
-      queueListener.unregister();
+    const genericListener = new GenericListener();
+    genericListener.register((event) => {
+      const queueMessageType = JSON.parse(event.data).type;
+      expect(queueMessageType).to.equal(WorkerMessageTypes.QUEUE_EMPTY);
+      genericListener.unregister();
       done();
     });
 

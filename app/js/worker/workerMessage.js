@@ -10,15 +10,18 @@ export const WorkerMessageTypes = {
   UnpauseQueue: 'UnpauseQueue',
   PauseAndClear: 'PauseAndClear',
   BlockadeAndDrain: 'BlockadeAndDrain',
-  Unblockade: 'Unblockade'
+  Unblockade: 'Unblockade',
+  QUEUE_EMPTY: 'QUEUE_EMPTY',
+  QUEUE_DRAINED_AND_WAITING: 'QUEUE_DRAINED_AND_WAITING',
+  STATE_ROLLBACK: 'STATE_ROLLBACK'
 };
 
-const WorkerMessage = function(messageBody, type) {
-  const self = this;
-
-  self.body = messageBody;
-  self.type = type;
-  self.id = uuid.v1();
-};
+class WorkerMessage {
+  constructor(messageBody, type, id) {
+    this.body = messageBody;
+    this.type = type;
+    this.id = (id === 'undefined') ? uuid.v1() : id;
+  }
+}
 
 export default WorkerMessage;
