@@ -50,7 +50,7 @@ describe('Worker service', () => {
       const saveStateStub = sandbox.stub(stateSyncService, 'saveStateArray').returns(Promise.reject());
 
       const stateHistory = [1, 2, 3, 4, 5, 6];
-      const rollbackAndFetchStateHistoryStub = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory').returns(stateHistory);
+      const rollbackAndFetchStateHistoryStub = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState').returns(stateHistory);
 
       const message = new WorkerMessage(`Test 1: ${getString(1000)}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse);
       const promise = queue.push(message.body);

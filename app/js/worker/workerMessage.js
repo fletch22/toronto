@@ -11,9 +11,9 @@ export const WorkerMessageTypes = {
   PauseAndClear: 'PauseAndClear',
   BlockadeAndDrain: 'BlockadeAndDrain',
   Unblockade: 'Unblockade',
-  QUEUE_EMPTY: 'QUEUE_EMPTY',
-  QUEUE_DRAINED_AND_WAITING: 'QUEUE_DRAINED_AND_WAITING',
-  STATE_ROLLBACK: 'STATE_ROLLBACK'
+  QueueEmpty: 'QueueEmpty',
+  QueueDrainedAndWaiting: 'QueueDrainedAndWaiting',
+  StateRollback: 'StateRollback'
 };
 
 class WorkerMessage {

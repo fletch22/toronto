@@ -26,6 +26,8 @@ class RollbackBroadcastHandler {
     };
 
     genericListener.register(callback);
+
+    return genericListener;
   }
 }
 

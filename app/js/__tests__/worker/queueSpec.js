@@ -23,7 +23,7 @@ describe('Queue', () => {
     const promise = new Promise((resolve, reject) => {});
 
     const saveStateArray = sandbox.stub(stateSyncService, 'saveStateArray').returns(promise);
-    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory');
+    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
 
     const queue = new Queue();
 
@@ -56,7 +56,7 @@ describe('Queue', () => {
     });
 
     const saveStateArray = sandbox.stub(stateSyncService, 'saveStateArray').returns(promise);
-    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory');
+    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
 
     const queue = new Queue();
 
@@ -81,7 +81,7 @@ describe('Queue', () => {
 
     const saveStateArray = sandbox.spy(stateSyncService, 'saveStateArray');
     const fetch = sandbox.stub(stateSyncService, 'fetch').returns(Promise.resolve());
-    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory');
+    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
     expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
 
     const queue = new Queue();
@@ -110,13 +110,13 @@ describe('Queue', () => {
     const genericListener = new GenericListener();
     genericListener.register((event) => {
       const queueMessageType = JSON.parse(event.data).type;
-      expect(queueMessageType).to.equal(WorkerMessageTypes.QUEUE_EMPTY);
+      expect(queueMessageType).to.equal(WorkerMessageTypes.QueueEmpty);
       genericListener.unregister();
       done();
     });
 
     const saveStateArray = sandbox.stub(stateSyncService, 'saveStateArray').returns(Promise.resolve());
-    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'rollbackAndFetchStateHistory');
+    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
     expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
 
     const queue = new Queue();

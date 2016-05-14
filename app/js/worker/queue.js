@@ -1,6 +1,5 @@
 import stateSyncService from '../service/stateSyncService';
 import MessagePoster from '../domain/message/messagePoster';
-import uuid from 'node-uuid';
 import { WorkerMessageTypes } from '../worker/workerMessage';
 import WorkerMessage from '../worker/workerMessage';
 
@@ -20,12 +19,12 @@ class Queue {
   }
 
   emitEventRollbackState(stateArray) {
-    this.postMessage(new WorkerMessage(stateArray, WorkerMessage.STATE_ROLLBACK));
+    this.postMessage(new WorkerMessage(stateArray, WorkerMessage.StateRollback));
   }
 
   // NOTE: 03-25-2016: Really only used by tests.
   emitEventQueueEmpty(id) {
-    this.postMessage(new WorkerMessage(null, WorkerMessageTypes.QUEUE_EMPTY, id));
+    this.postMessage(new WorkerMessage(null, WorkerMessageTypes.QueueEmpty, id));
   }
 
   emitEventIfQueueEmpty() {
@@ -71,6 +70,16 @@ class Queue {
     checkQueue();
   }
 
+  blockadeAndObliterate() {
+    // Note: This is a work in progress. The system needs to block all incoming states
+    // and raise an error if one arrives during this blockade.
+    this.sendArray = [];
+    this.accumulator = [];
+    this.blockadeIncoming = true;
+    this.deliveryProcessingIsPaused = true;
+    this.isAccumulatorProcessorPaused = true;
+  }
+
   unblockade() {
     this.blockadeIncoming = false;
   }
@@ -107,10 +116,9 @@ class Queue {
             resolve(response);
           })
           .catch((error) => {
-            this.sendArray = [];
-            queue.deliveryProcessingIsPaused = false;
-            const previous100States = stateSyncService.rollbackAndFetchStateHistory(100);
-            queue.emitEventRollbackState(previous100States);
+            queue.blockadeAndObliterate();
+            const newCurrentState = stateSyncService.getMostRecentHistoricalState();
+            queue.emitEventRollbackState(newCurrentState);
             reject(error);
           });
       });

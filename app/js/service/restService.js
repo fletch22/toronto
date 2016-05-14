@@ -17,6 +17,10 @@ class RestService extends Service {
   deleteComponent(id) {
     throw 'Not yet implemented';
   }
+
+  getExceptionForTesting(value) {
+    return this.fetch(`${this.url}/component/getExceptionForTesting`, 'GET', value);
+  }
 }
 
 export default new RestService();

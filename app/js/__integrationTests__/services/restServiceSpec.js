@@ -50,4 +50,18 @@ describe('Rest service', () => {
     const url = RestService.getOrbServerRootUrl();
     expect(url).to.not.equal(null);
   });
+
+  it('should handle exception well.', (done) => {
+    const promise = RestService.getExceptionForTesting();
+
+    promise.then((response) => {
+      console.log(repsonse);
+      assert.fail('Should not see this message. The call should fail with an exception.');
+    });
+
+    promise.catch((error) => {
+      console.log(error.message);
+      done();
+    });
+  });
 });
