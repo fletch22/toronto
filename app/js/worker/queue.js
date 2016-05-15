@@ -19,7 +19,7 @@ class Queue {
   }
 
   emitEventRollbackState(stateArray) {
-    this.postMessage(new WorkerMessage(stateArray, WorkerMessage.StateRollback));
+    this.postMessage(new WorkerMessage(stateArray, WorkerMessageTypes.StateRollback));
   }
 
   // NOTE: 03-25-2016: Really only used by tests.
@@ -108,6 +108,9 @@ class Queue {
 
       const queue = this;
       promise = new Promise((resolve, reject) => {
+        // NOTE: This is temporary. Remove after testing.
+        queue.emitEventRollbackState([]);
+
         stateSyncService.saveStateArray(stateArrayPackage)
           .then((response) => {
             this.sendArray = [];
@@ -117,8 +120,11 @@ class Queue {
           })
           .catch((error) => {
             queue.blockadeAndObliterate();
-            const newCurrentState = stateSyncService.getMostRecentHistoricalState();
-            queue.emitEventRollbackState(newCurrentState);
+            stateSyncService.getMostRecentHistoricalState()
+              .then((result) => {
+                queue.emitEventRollbackState(result);
+              });
+
             reject(error);
           });
       });

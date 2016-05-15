@@ -5,7 +5,6 @@ import { appLabelOnChange, showStandardModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
-import ReduxThunk from 'redux-thunk';
 
 class AppContainerToolbar extends React.Component {
   render() {

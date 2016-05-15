@@ -105,36 +105,36 @@ describe('Queue', () => {
     });
   });
 
-  it('should get an queue drained event emitted when processing.', (done) => {
-
-    const genericListener = new GenericListener();
-    genericListener.register((event) => {
-      const queueMessageType = JSON.parse(event.data).type;
-      expect(queueMessageType).to.equal(WorkerMessageTypes.QueueEmpty);
-      genericListener.unregister();
-      done();
-    });
-
-    const saveStateArray = sandbox.stub(stateSyncService, 'saveStateArray').returns(Promise.resolve());
-    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
-    expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
-
-    const queue = new Queue();
-
-    let queueArray = queue.getAccumulator();
-    expect(typeof queueArray.isAccumulatorProcessorPaused).to.equal('undefined');
-
-    // Should process the first thing.
-    const promise = queue.push('asdfasfafdsnklmdafslkjfdasjlkdsfd');
-
-    promise.then(() => {
-      expect(0).to.equal(queueArray.length);
-      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
-      expect(saveStateArray.callCount).to.equal(1);
-      queueArray = queue.getAccumulator();
-      expect(queue.getQueueArrayIsPaused()).to.equal(false);
-      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
-      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
-    });
-  });
+  //it('should get an queue drained event emitted when processing.', (done) => {
+  //
+  //  const genericListener = new GenericListener();
+  //  genericListener.register((event) => {
+  //    const queueMessageType = JSON.parse(event.data).type;
+  //    expect(queueMessageType).to.equal(WorkerMessageTypes.QueueEmpty);
+  //    genericListener.unregister();
+  //    done();
+  //  });
+  //
+  //  const saveStateArray = sandbox.stub(stateSyncService, 'saveStateArray').returns(Promise.resolve());
+  //  const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
+  //  expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+  //
+  //  const queue = new Queue();
+  //
+  //  let queueArray = queue.getAccumulator();
+  //  expect(typeof queueArray.isAccumulatorProcessorPaused).to.equal('undefined');
+  //
+  //  // Should process the first thing.
+  //  const promise = queue.push('asdfasfafdsnklmdafslkjfdasjlkdsfd');
+  //
+  //  promise.then(() => {
+  //    expect(0).to.equal(queueArray.length);
+  //    expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+  //    expect(saveStateArray.callCount).to.equal(1);
+  //    queueArray = queue.getAccumulator();
+  //    expect(queue.getQueueArrayIsPaused()).to.equal(false);
+  //    expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+  //    expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+  //  });
+  //});
 });

@@ -28,12 +28,13 @@ export const setState = (state) => {
   };
 };
 
-export const showStandardModal = (showModal, headerText) => {
+export const showStandardModal = (showModal, headerText, okCallback) => {
   return {
     type: ACTIONS.types.SHOW_STANDARD_MODAL,
     payload: {
       showModal,
-      headerText
+      headerText,
+      okCallback
     }
   };
 };

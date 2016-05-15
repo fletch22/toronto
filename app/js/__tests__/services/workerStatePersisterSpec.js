@@ -49,8 +49,10 @@ describe('Worker service', () => {
 
       const saveStateStub = sandbox.stub(stateSyncService, 'saveStateArray').returns(Promise.reject());
 
-      const stateHistory = [1, 2, 3, 4, 5, 6];
-      const rollbackAndFetchStateHistoryStub = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState').returns(stateHistory);
+      const statePromise = new Promise((resolve) => {
+        resolve([]);
+      });
+      const getMostRecentHistoricalState = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState').returns(statePromise);
 
       const message = new WorkerMessage(`Test 1: ${getString(1000)}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse);
       const promise = queue.push(message.body);
@@ -59,7 +61,7 @@ describe('Worker service', () => {
         // Should not be called.
       })
       .catch(() => {
-        expect(rollbackAndFetchStateHistoryStub.called).to.be.equal(true);
+        expect(getMostRecentHistoricalState.called).to.be.equal(true);
         expect(saveStateStub.called).to.be.equal(true);
         done();
       });

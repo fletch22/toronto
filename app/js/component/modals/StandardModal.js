@@ -22,7 +22,7 @@ class StandardModal extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.props.onCloseModal}>Close</Button>
+          <Button onClick={this.props.onOk}>OK</Button>
         </Modal.Footer>
       </Modal>
     );
@@ -32,6 +32,7 @@ class StandardModal extends React.Component {
 StandardModal.propTypes = {
   showModal: React.PropTypes.bool.isRequired,
   onCloseModal: React.PropTypes.func.isRequired,
+  onOk: React.PropTypes.func,
   headerText: React.PropTypes.string.isRequired
 };
 
