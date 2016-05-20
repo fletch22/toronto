@@ -5,6 +5,7 @@ import { appLabelOnChange, showStandardModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
+import StateRollbackModal from '../../component/modals/StateRollbackModal';
 
 class AppContainerToolbar extends React.Component {
   render() {
@@ -29,6 +30,7 @@ class AppContainerToolbar extends React.Component {
             <button className="showModal" onClick={this.props.onShowOverlay}>Show Overlay</button>
           </div>
         </div>
+        <StateRollbackModal />
       </div>
     );
   }

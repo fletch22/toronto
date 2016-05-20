@@ -1,15 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
-import { showStandardModal, hideStandardModal } from '../../actions/index';
+import { hideStandardModal } from '../../actions/index';
 
 class StandardModal extends React.Component {
-
   render() {
-    const divStyle = {
-      display: 'none'
-    };
-
     return (
       <Modal show={this.props.showModal} onHide={this.props.onCloseModal}>
         <Modal.Header closeButton>
@@ -17,8 +12,7 @@ class StandardModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div>
-            <div className="standardModal" style={divStyle}></div>
-            Modal content here
+            {this.props.bodyText}
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -30,38 +24,23 @@ class StandardModal extends React.Component {
 }
 
 StandardModal.propTypes = {
-  showModal: React.PropTypes.bool.isRequired,
+  showModal: React.PropTypes.bool,
   onCloseModal: React.PropTypes.func.isRequired,
   onOk: React.PropTypes.func,
-  headerText: React.PropTypes.string.isRequired
-};
-
-const mapStateToProps = (state) => {
-  let showModal = false;
-  let headerText = '';
-
-  if (state.dom.standardModal.length > 0) {
-    const standardModalInfo = state.dom.standardModal[0];
-    showModal = standardModalInfo.showModal;
-    headerText = standardModalInfo.headerText ? standardModalInfo.headerText : '';
-  }
-
-  return {
-    showModal,
-    headerText
-  };
+  bodyText: React.PropTypes.string,
+  headerText: React.PropTypes.string
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onCloseModal: () => {
-      dispatch(hideStandardModal(false));
+      dispatch(hideStandardModal());
     }
   };
 };
 
 StandardModal = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(StandardModal);
 

@@ -5,11 +5,9 @@ import StandardModal from '../component/modals/StandardModal';
 import RollbackBroadcastHandler from '../domain/message/rollbackBroadastHandler';
 import { connect } from 'react-redux';
 
-
 class App extends React.Component {
 
   componentDidMount() {
-    console.log(this.context);
     const handler = new RollbackBroadcastHandler(this.context.store.dispatch);
     handler.initialize();
   }
@@ -18,7 +16,6 @@ class App extends React.Component {
     return (
       <div className="container-fluid">
         <AppContainer numberApps="0" />
-        <StandardModal />
         <DevTools />
       </div>
     );

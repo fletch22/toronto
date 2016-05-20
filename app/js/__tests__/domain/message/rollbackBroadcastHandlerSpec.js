@@ -37,7 +37,7 @@ describe('', () => {
     });
 
     const event = {
-      data: `{ "type": "${WorkerMessageTypes.StateRollback}" }`
+      data: `{ "type": "${WorkerMessageTypes.StateRollback}", "body": 7777777 }`
     };
 
     result.callback(event);

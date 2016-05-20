@@ -4,7 +4,10 @@ export const ACTIONS = {
     APP_LABEL_INPUT_CHANGE: 'APP_LABEL_INPUT_CHANGE',
     SET_STATE: 'SET_STATE',
     SHOW_STANDARD_MODAL: 'SHOW_OVERLAY',
-    HIDE_STANDARD_MODAL: 'HIDE_OVERLAY'
+    HIDE_STANDARD_MODAL: 'HIDE_OVERLAY',
+    TIME_TRAVEL_TO_PREVIOUS_STATE: 'TIME_TRAVEL_TO_PREVIOUS_STATE',
+    MODAL_STATE_ROLLBACK_HIDE: 'MODAL_STATE_ROLLBACK_HIDE',
+    MODAL_STATE_ROLLBACK_SHOW: 'MODAL_STATE_ROLLBACK_SHOW'
   }
 };
 
@@ -28,14 +31,21 @@ export const setState = (state) => {
   };
 };
 
-export const showStandardModal = (showModal, headerText, okCallback) => {
+export const showStandardModal = (showModal, headerText, okAction) => {
   return {
     type: ACTIONS.types.SHOW_STANDARD_MODAL,
     payload: {
       showModal,
       headerText,
-      okCallback
+      okAction
     }
+  };
+};
+
+export const timeTravelToPreviousState = (stateId) => {
+  return {
+    type: ACTIONS.types.TIME_TRAVEL_TO_PREVIOUS_STATE,
+    stateId
   };
 };
 
@@ -44,4 +54,19 @@ export const hideStandardModal = () => {
     type: ACTIONS.types.HIDE_STANDARD_MODAL
   };
 };
+
+export const stateRollbackModalShow = (stateId) => {
+  return {
+    type: ACTIONS.types.MODAL_STATE_ROLLBACK_SHOW,
+    stateId: stateId
+  };
+};
+
+export const hideStateRollbackModal = () => {
+  return {
+    type: ACTIONS.types.MODAL_STATE_ROLLBACK_HIDE
+  };
+};
+
+
 

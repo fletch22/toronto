@@ -8,7 +8,6 @@ import defaultState from '../state/defaultState';
 import { createStore } from 'redux';
 import apps from '../reducers';
 import DevTools from '../containers/DevTools';
-import currentStateRetriever from '../domain/stateRetriever';
 import AllStore from '../stores/allStore';
 
 class TestRenderedApp {

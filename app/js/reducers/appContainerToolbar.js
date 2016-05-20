@@ -36,6 +36,18 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.MODAL_STATE_ROLLBACK_HIDE: {
+      stateNew.dom.modal.stateRollback.showModal = false;
+      stateNew.dom.modal.stateRollback.stateId = '';
+
+      return stateNew;
+    }
+    case ACTIONS.types.MODAL_STATE_ROLLBACK_SHOW: {
+      stateNew.dom.modal.stateRollback.showModal = true;
+      stateNew.dom.modal.stateRollback.stateId = action.stateId;
+
+      return stateNew;
+    }
     default: {
       return state;
     }

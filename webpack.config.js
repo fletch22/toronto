@@ -13,18 +13,18 @@ module.exports = {
   debug: true,
   module: {
     loaders: [
-        {
-            test: /\.js$/,
-            exclude: /\.json$|(bower_components)/,
-            loader: 'babel-loader',
-            query: {
-            	presets: ['react', 'es2015']
-          	}
-        },
-      	{
-  	  		test: /\.scss$/,
-  	    	loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!'))
-  		  }
+      {
+        test: /\.js$/,
+        exclude: /\.json$|(bower_components)/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['react', 'es2015']
+        }
+      },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!'))
+      }
     ]
   },
   output: {

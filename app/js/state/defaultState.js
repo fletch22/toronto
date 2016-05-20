@@ -3,6 +3,14 @@ class DefaultState {
   getInstance() {
     return {
       dom: {
+        modal: {
+          stateRollback: {
+            showModal: false,
+            headerText: '',
+            bodyText: '',
+            stateId: ''
+          }
+        },
         standardModal: [],
         view: {
           appContainer: {

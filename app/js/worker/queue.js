@@ -108,9 +108,6 @@ class Queue {
 
       const queue = this;
       promise = new Promise((resolve, reject) => {
-        // NOTE: This is temporary. Remove after testing.
-        queue.emitEventRollbackState([]);
-
         stateSyncService.saveStateArray(stateArrayPackage)
           .then((response) => {
             this.sendArray = [];
