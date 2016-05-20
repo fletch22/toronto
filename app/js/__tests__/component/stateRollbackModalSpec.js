@@ -1,18 +1,12 @@
 import React from 'react';
-//import ReactDOM from 'react-dom';
-//import { expect } from 'chai';
 import StateRollbackModal from '../../component/modals/StateRollbackModal';
-//import TestRenderedApp from '../testRenderedApp';
 import TestUtils from 'react-addons-test-utils';
-//import jquery from 'jquery';
 import Provider from 'react-redux';
-//import App from '../../component/App';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import defaultState from '../../state/defaultState';
 import apps from '../../reducers';
 import { createStore } from 'redux';
-//import StandardModal from '../../component/modals/StandardModal';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
