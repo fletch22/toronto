@@ -25,6 +25,14 @@ class StateSyncService extends Service {
   getMostRecentHistoricalState() {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/mostRecentStateHistory`, 'get');
   }
+
+  getState(stateId) {
+    return this.fetch(`${this.getOrbServerRootUrl()}/component/states/${stateId}`, 'get');
+  }
+
+  determineLastGoodState(mostRecentSubmittedBlocks) {
+    return this.fetch(`${this.getOrbServerRootUrl()}/component/determineLastGoodState/`, 'post', mostRecentSubmittedBlocks);
+  }
 }
 
 export default new StateSyncService();

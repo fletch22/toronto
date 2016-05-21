@@ -3,6 +3,42 @@ import MessagePoster from '../domain/message/messagePoster';
 import { WorkerMessageTypes } from '../worker/workerMessage';
 import WorkerMessage from '../worker/workerMessage';
 
+export class SentStateAuditTrail {
+  constructor() {
+    this.collection = [];
+  }
+
+  collect(statePackageSendArray) {
+    if (statePackageSendArray) {
+      const ids = [];
+      statePackageSendArray.forEach((item) => {
+        ids.push(item.id);
+      });
+      this.save(ids);
+    }
+  }
+
+  gatherRecent() {
+    const maxToGather = 100;
+    let count = 0;
+    const lastSendArrayIndex = this.collection.length - 1;
+    const gathered = [];
+    for (let i = lastSendArrayIndex; i >= 0; i--) {
+      const sendArray = this.collection[i];
+      count += sendArray.length;
+      gathered.push(sendArray);
+      if (count >= maxToGather) {
+        break;
+      }
+    }
+    return gathered;
+  }
+
+  save(ids) {
+    this.collection.push(ids);
+  }
+}
+
 class Queue {
 
   constructor() {
@@ -12,6 +48,7 @@ class Queue {
     this.isAccumulatorProcessorPaused = false;
     this.messagePoster = new MessagePoster();
     this.sendArray = [];
+    this.sentStateAuditTrail = new SentStateAuditTrail();
   }
 
   postMessage(messageObject) {
@@ -103,6 +140,9 @@ class Queue {
     } else {
       this.sendArray = this.accumulator.splice(0, this.accumulator.length);
 
+      // Note: This will help us recover from an exception.
+      this.collectForAudit(this.sendArray);
+
       this.deliveryProcessingIsPaused = true;
       const stateArrayPackage = { states: this.sendArray };
 
@@ -117,7 +157,11 @@ class Queue {
           })
           .catch((error) => {
             queue.blockadeAndObliterate();
-            stateSyncService.getMostRecentHistoricalState()
+
+            // Note this is complex, but there exists scenarios of state saves unintentionally submitting and saving
+            // after a failed state. To mitigate this risk we send a log to the server. The log is exhaustive (100+ items at least) so we are somewhat sure
+            // the server can tell us the last known good save state.
+            stateSyncService.determineLastGoodState(this.gatherFromAuditLog())
               .then((result) => {
                 queue.emitEventRollbackState(result);
               });
@@ -127,6 +171,14 @@ class Queue {
       });
     }
     return promise;
+  }
+
+  collectForAudit(sendArray) {
+    this.sentStateAuditTrail.collect(sendArray);
+  }
+
+  gatherFromAuditLog() {
+    return this.sentStateAuditTrail.gatherRecent();
   }
 
   getQueueArrayIsPaused() {

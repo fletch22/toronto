@@ -40,6 +40,10 @@ class StateRetriever {
 
     return outerPromise;
   }
+
+  getState(stateId) {
+    return stateSyncService.getState(stateId);
+  }
 }
 
 export default new StateRetriever();

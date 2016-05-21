@@ -1,4 +1,5 @@
 import deepDiff from 'deep-diff';
+import uuid from 'node-uuid';
 
 class StatePackager {
 
@@ -7,7 +8,8 @@ class StatePackager {
 
     const package2 = {
       state: jsonStateNew,
-      diffBetweenOldAndNew: JSON.stringify(difference)
+      diffBetweenOldAndNew: JSON.stringify(difference),
+      clientId: uuid.v1()
     };
 
     return package2;

@@ -52,7 +52,7 @@ describe('Worker service', () => {
       const statePromise = new Promise((resolve) => {
         resolve([]);
       });
-      const getMostRecentHistoricalState = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState').returns(statePromise);
+      const getMostRecentHistoricalState = sandbox.stub(stateSyncService, 'determineLastGoodState').returns(statePromise);
 
       const message = new WorkerMessage(`Test 1: ${getString(1000)}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse);
       const promise = queue.push(message.body);
