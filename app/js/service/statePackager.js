@@ -1,18 +1,19 @@
 import deepDiff from 'deep-diff';
-import uuid from 'node-uuid';
+import F22Uuid from '../util/f22Uuid';
 
 class StatePackager {
 
   package(jsonStateOld, jsonStateNew) {
     const difference = deepDiff(JSON.parse(jsonStateOld).model, JSON.parse(jsonStateNew).model);
 
-    const package2 = {
+    // 'Package' is a reserved word and cannot be used.
+    const packageTmp = {
       state: jsonStateNew,
       diffBetweenOldAndNew: JSON.stringify(difference),
-      clientId: uuid.v1()
+      clientId: F22Uuid.generate()
     };
 
-    return package2;
+    return packageTmp;
   }
 }
 
