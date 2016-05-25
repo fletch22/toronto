@@ -16,7 +16,7 @@ describe('F22Uuid', () => {
 
   it('should generate ids that sort correctly.', () => {
 
-    let genArray = [];
+    const genArray = [];
     const max = 1000;
     for (let i = 0; i < max; i++) {
       const id = F22Uuid.generate();

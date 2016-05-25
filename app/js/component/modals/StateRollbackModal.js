@@ -3,6 +3,13 @@ import StandardModal from './StandardModal';
 import { connect } from 'react-redux';
 import { hideStateRollbackModal } from '../../actions/index';
 
+//stateRollback: {
+//  showModal: false,
+//    headerText: '',
+//    bodyText: '',
+//    stateId: ''
+//}
+
 class StateRollbackModal extends React.Component {
   render() {
     return (

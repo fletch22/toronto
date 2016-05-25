@@ -59,6 +59,10 @@ class Queue {
     this.postMessage(new WorkerMessage(stateArray, WorkerMessageTypes.StateRollback));
   }
 
+  emitEventError(error) {
+    this.postMessage(new WorkerMessage(error, WorkerMessageTypes.Error));
+  }
+
   // NOTE: 03-25-2016: Really only used by tests.
   emitEventQueueEmpty(id) {
     this.postMessage(new WorkerMessage(null, WorkerMessageTypes.QueueEmpty, id));
@@ -164,6 +168,8 @@ class Queue {
             stateSyncService.determineLastGoodState(this.gatherFromAuditLog())
               .then((result) => {
                 queue.emitEventRollbackState(result);
+              }).catch((error) => {
+                queue.emitEventError(error);
               });
 
             reject(error);

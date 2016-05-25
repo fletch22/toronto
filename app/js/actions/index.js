@@ -7,7 +7,8 @@ export const ACTIONS = {
     HIDE_STANDARD_MODAL: 'HIDE_OVERLAY',
     TIME_TRAVEL_TO_PREVIOUS_STATE: 'TIME_TRAVEL_TO_PREVIOUS_STATE',
     MODAL_STATE_ROLLBACK_HIDE: 'MODAL_STATE_ROLLBACK_HIDE',
-    MODAL_STATE_ROLLBACK_SHOW: 'MODAL_STATE_ROLLBACK_SHOW'
+    MODAL_STATE_ROLLBACK_SHOW: 'MODAL_STATE_ROLLBACK_SHOW',
+    MODAL_ERROR_SHOW: 'MODAL_ERROR_SHOW'
   }
 };
 
@@ -65,6 +66,12 @@ export const stateRollbackModalShow = (stateId) => {
 export const hideStateRollbackModal = () => {
   return {
     type: ACTIONS.types.MODAL_STATE_ROLLBACK_HIDE
+  };
+};
+
+export const showErrorModal = () => {
+  return {
+    type: ACTIONS.types.MODAL_ERROR_SHOW
   };
 };
 

@@ -13,7 +13,8 @@ export const WorkerMessageTypes = {
   Unblockade: 'Unblockade',
   QueueEmpty: 'QueueEmpty',
   QueueDrainedAndWaiting: 'QueueDrainedAndWaiting',
-  StateRollback: 'StateRollback'
+  StateRollback: 'StateRollback',
+  Error: 'Error'
 };
 
 class WorkerMessage {

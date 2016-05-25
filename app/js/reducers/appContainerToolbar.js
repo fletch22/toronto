@@ -1,11 +1,8 @@
 import { ACTIONS } from '../actions/index.js';
 import stateFixer from '../domain/stateFixer';
 import defaultState from '../state/defaultState';
-import stateSyncService from '../service/stateSyncService';
-import StatePackager from '../service/statePackager';
-import ModelTransformer from '../stores/modelTransformer';
-import uuid from 'node-uuid';
 import appContainerService from '../service/component/appContainerService';
+import { ErrorModalDtoFactory } from '../component/modals/ErrorModal';
 
 const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
@@ -45,6 +42,14 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.MODAL_STATE_ROLLBACK_SHOW: {
       stateNew.dom.modal.stateRollback.showModal = true;
       stateNew.dom.modal.stateRollback.stateId = action.stateId;
+
+      return stateNew;
+    }
+    case ACTIONS.types.MODAL_ERROR_SHOW: {
+      const errorModalDtoFactory = new ErrorModalDtoFactory();
+      const errorModal = errorModalDtoFactory.getInstance();
+
+      stateNew.dom.modal.push(errorModal);
 
       return stateNew;
     }

@@ -1,6 +1,6 @@
 import GenericListener from './genericListener';
 import { WorkerMessageTypes } from '../../worker/workerMessage';
-import { stateRollbackModalShow } from '../../actions/index';
+import { stateRollbackModalShow, showErrorModal } from '../../actions/index';
 
 class RollbackBroadcastHandler {
 
@@ -11,6 +11,10 @@ class RollbackBroadcastHandler {
 
   showRollbackModal(stateId) {
     this.dispatch(stateRollbackModalShow(stateId));
+  }
+
+  showErrorModal() {
+    this.dispatch(showErrorModal());
   }
 
   initialize() {
@@ -33,8 +37,21 @@ class RollbackBroadcastHandler {
 
         if (typeof eventMessage.type === 'string'
         && eventMessage.type === WorkerMessageTypes.StateRollback) {
-          this.showRollbackModal(eventMessage.body);
-          resolve();
+          switch (eventMessage.type) {
+            case WorkerMessageTypes.StateRollback: {
+              this.showRollbackModal(eventMessage.body);
+              resolve();
+              break;
+            }
+            case WorkerMessageTypes.Error: {
+              this.showErrorModal();
+              break;
+            }
+            default: {
+              // Do nothing.
+            }
+          }
+
         }
       };
     });

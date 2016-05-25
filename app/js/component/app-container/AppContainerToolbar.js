@@ -1,11 +1,13 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { appLabelOnChange, showStandardModal } from '../../actions';
+import { appLabelOnChange, showErrorModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
 import StateRollbackModal from '../../component/modals/StateRollbackModal';
+import ErrorModal from '../../component/modals/ErrorModal';
+import ModalWrangler from '../../component/modals/ModalWrangler';
 
 class AppContainerToolbar extends React.Component {
   render() {
@@ -27,10 +29,10 @@ class AppContainerToolbar extends React.Component {
             <TimeTravel />
           </div>
           <div className="col-lg-1">
-            <button className="showModal" onClick={this.props.onShowOverlay}>Show Overlay</button>
+            <button className="showModal" onClick={this.props.onShowError}>Show Error</button>
           </div>
         </div>
-        <StateRollbackModal />
+        <ModalWrangler />
       </div>
     );
   }
@@ -51,7 +53,7 @@ AppContainerToolbar.propTypes = {
   onClick: React.PropTypes.func.isRequired,
   onChange: React.PropTypes.func.isRequired,
   numberApps: React.PropTypes.number.isRequired,
-  onShowOverlay: React.PropTypes.func.isRequired
+  onShowError: React.PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -71,8 +73,8 @@ const mapDispatchToProps = (dispatch) => {
     onChange: (event) => {
       dispatch(appLabelOnChange(event.target.value));
     },
-    onShowOverlay: () => {
-      dispatch(showStandardModal(true, 'sampleHeaderText'));
+    onShowError: () => {
+      dispatch(showErrorModal('sampleHeaderText', 'sampleBodyText'));
     }
   };
 };
