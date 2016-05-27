@@ -28,8 +28,8 @@ const mapStateToProps = (state) => {
   let passThroughProps = {};
 
   if (state.dom.modal.length > 0) {
-    const modal = state.dom.modal.shift();
-    switch (modal.type) {
+    const modal = state.dom.modal[0];
+    switch (modal.modalType) {
       case ModalTypes.ErrorModal: {
         showErrorModal = true;
         passThroughProps = modal;

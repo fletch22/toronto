@@ -2,15 +2,15 @@ import React from 'react';
 import StandardModal from './StandardModal';
 import { connect } from 'react-redux';
 import ModalTypes from './ModalTypes';
+import { hideCurrentModal } from '../../actions/index';
 
 export class ErrorModalDtoFactory {
-  getInstance(headerText, bodyText, onOk) {
-    console.log('Getting dto.');
+  getInstance(headerText, bodyText, okAction) {
     return {
       headerText,
       bodyText,
-      onOk,
-      type: ModalTypes.ErrorModal
+      okAction,
+      modalType: ModalTypes.ErrorModal
     };
   }
 }
@@ -24,10 +24,13 @@ class ErrorModal extends React.Component {
 }
 
 function onOkDispatch() {
-  console.log('Ok Clicked.');
-  // return (dispatch, getState) => {
-  //   const state = getState();
-  // };
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const errorModal = state.dom.modal[0];
+
+    dispatch(errorModal.okAction);
+  };
 }
 
 ErrorModal.propTypes = {

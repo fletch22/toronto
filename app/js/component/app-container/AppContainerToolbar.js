@@ -1,13 +1,12 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { appLabelOnChange, showErrorModal } from '../../actions';
+import { appLabelOnChange, showErrorModal, setStateAndPersist } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
-import StateRollbackModal from '../../component/modals/StateRollbackModal';
-import ErrorModal from '../../component/modals/ErrorModal';
 import ModalWrangler from '../../component/modals/ModalWrangler';
+import defaultState from '../../state/defaultState';
 
 class AppContainerToolbar extends React.Component {
   render() {
@@ -65,6 +64,16 @@ const mapStateToProps = (state) => {
   };
 };
 
+function showSampleErrorModal() {
+  return (dispatch, getState) => {
+
+    // NOTE: Necessary to avoid circular references.
+    const jsonState = JSON.stringify(getState());
+
+    dispatch(showErrorModal('sampleHeaderText', 'sampleBodyText', setStateAndPersist(JSON.parse(jsonState))));
+  };
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     onClick: () => {
@@ -74,7 +83,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(appLabelOnChange(event.target.value));
     },
     onShowError: () => {
-      dispatch(showErrorModal('sampleHeaderText', 'sampleBodyText'));
+      dispatch(showSampleErrorModal());
     }
   };
 };

@@ -23,6 +23,11 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.SET_STATE: {
       return action.state;
     }
+    case ACTIONS.types.SET_STATE_AND_PERSIST: {
+      stateFixer.fix(jsonStateOld, JSON.stringify(action.state));
+
+      return action.state;
+    }
     case ACTIONS.types.SHOW_STANDARD_MODAL: {
       stateNew.dom.standardModal.push(action.payload);
 
@@ -45,9 +50,15 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.MODAL_HIDE_CURRENT: {
+      stateNew.dom.modal.shift();
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
     case ACTIONS.types.MODAL_ERROR_SHOW: {
       const errorModalDtoFactory = new ErrorModalDtoFactory();
-      const errorModal = errorModalDtoFactory.getInstance();
+      const errorModal = errorModalDtoFactory.getInstance(action.headerText, action.bodyText, action.okAction);
 
       stateNew.dom.modal.push(errorModal);
 

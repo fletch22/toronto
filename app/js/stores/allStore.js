@@ -13,7 +13,6 @@ class AllStore {
 
       promise.then((state) => {
         const store = applyMiddleware(thunk)(createStore)(apps, state, DevTools.instrument());
-        //const store = createStore(apps, state, DevTools.instrument(), applyMiddleware(thunk));
         resolve(store);
       });
 
