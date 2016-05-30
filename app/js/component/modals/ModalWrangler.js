@@ -7,7 +7,7 @@ class ModalWrangler extends React.Component {
   render() {
     let modal = null;
     if (this.props.showErrorModal) {
-      modal = <ErrorModal { ...this.props } />;
+      modal = <ErrorModal { ...this.props.passThroughProps } />;
     }
 
     return (

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { appLabelOnChange, showErrorModal, setStateAndPersist } from '../../actions';
+import { appLabelOnChange, actionShowErrorModal, setStateAndPersist } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
@@ -70,7 +70,7 @@ function showSampleErrorModal() {
     // NOTE: Necessary to avoid circular references.
     const jsonState = JSON.stringify(getState());
 
-    dispatch(showErrorModal('sampleHeaderText', 'sampleBodyText', setStateAndPersist(JSON.parse(jsonState))));
+    dispatch(actionShowErrorModal('sampleHeaderText', 'sampleBodyText', setStateAndPersist(JSON.parse(jsonState))));
   };
 }
 

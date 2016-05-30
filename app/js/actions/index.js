@@ -10,7 +10,8 @@ export const ACTIONS = {
     MODAL_STATE_ROLLBACK_HIDE: 'MODAL_STATE_ROLLBACK_HIDE',
     MODAL_STATE_ROLLBACK_SHOW: 'MODAL_STATE_ROLLBACK_SHOW',
     MODAL_ERROR_SHOW: 'MODAL_ERROR_SHOW',
-    MODAL_HIDE_CURRENT: 'MODAL_HIDE_CURRENT'
+    MODAL_HIDE_CURRENT: 'MODAL_HIDE_CURRENT',
+    STATE_ROLLBACK_TO_STATEID: 'STATE_ROLLBACK_TO_STATEID'
   }
 };
 
@@ -65,10 +66,10 @@ export const hideStandardModal = () => {
   };
 };
 
-export const stateRollbackModalShow = (stateId) => {
+export const stateRollbackModalShow = (rollbackPayload) => {
   return {
     type: ACTIONS.types.MODAL_STATE_ROLLBACK_SHOW,
-    stateId
+    rollbackPayload
   };
 };
 
@@ -78,7 +79,7 @@ export const hideStateRollbackModal = () => {
   };
 };
 
-export const showErrorModal = (headerText, bodyText, okAction) => {
+export const actionShowErrorModal = (headerText, bodyText, okAction) => {
   return {
     type: ACTIONS.types.MODAL_ERROR_SHOW,
     headerText,
@@ -87,9 +88,16 @@ export const showErrorModal = (headerText, bodyText, okAction) => {
   };
 };
 
-export const hideCurrentModal = () => {
+export const actionHideCurrentModal = () => {
   return {
     type: ACTIONS.types.MODAL_HIDE_CURRENT
+  };
+};
+
+export const actionRollbackToStateId = (rollbackPayload) => {
+  return {
+    type: ACTIONS.types.STATE_ROLLBACK_TO_STATEID,
+    rollbackPayload
   };
 };
 

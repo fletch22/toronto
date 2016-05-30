@@ -1,25 +1,29 @@
 import GenericListener from './genericListener';
 import { WorkerMessageTypes } from '../../worker/workerMessage';
-import { stateRollbackModalShow, showErrorModal } from '../../actions/index';
+import { stateRollbackModalShow, actionShowErrorModal, actionHideCurrentModal } from '../../actions/index';
 
 class RollbackBroadcastHandler {
 
   constructor(dispatch) {
     this.callback = null;
     this.dispatch = dispatch;
+    this.genericListener = new GenericListener();
   }
 
-  showRollbackModal(stateId) {
-    this.dispatch(stateRollbackModalShow(stateId));
+  showRollbackModal(rollbackPayload) {
+    console.log(`Rollback payload type: ${typeof rollbackPayload}`);
+
+    console.log(`Will rollback to ${rollbackPayload.clientId}`);
+
+    this.dispatch(stateRollbackModalShow(rollbackPayload));
   }
 
-  showErrorModal() {
-    this.dispatch(showErrorModal());
+  showErrorModal(errorObject) {
+    const okAction = actionHideCurrentModal();
+    this.dispatch(actionShowErrorModal('An Error in the Worker Thread Was Detected', errorObject.stack, okAction));
   }
 
   initialize() {
-    const genericListener = new GenericListener();
-
     const rollbackBroadcastHandler = this;
     const promise = new Promise((resolve) => {
       rollbackBroadcastHandler.callback = (event) => {
@@ -35,8 +39,7 @@ class RollbackBroadcastHandler {
           return;
         }
 
-        if (typeof eventMessage.type === 'string'
-        && eventMessage.type === WorkerMessageTypes.StateRollback) {
+        if (typeof eventMessage.type === 'string') {
           switch (eventMessage.type) {
             case WorkerMessageTypes.StateRollback: {
               this.showRollbackModal(eventMessage.body);
@@ -44,19 +47,19 @@ class RollbackBroadcastHandler {
               break;
             }
             case WorkerMessageTypes.Error: {
-              this.showErrorModal();
+              this.showErrorModal(eventMessage.body);
+              resolve();
               break;
             }
             default: {
               // Do nothing.
             }
           }
-
         }
       };
     });
 
-    genericListener.register(this.callback);
+    this.genericListener.register(this.callback);
 
     return {
       promise,

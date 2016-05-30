@@ -1,8 +1,9 @@
-import { ACTIONS } from '../actions/index.js';
+import { ACTIONS, actionRollbackToStateId } from '../actions/index.js';
 import stateFixer from '../domain/stateFixer';
 import defaultState from '../state/defaultState';
 import appContainerService from '../service/component/appContainerService';
 import { ErrorModalDtoFactory } from '../component/modals/ErrorModal';
+import stateSyncService from '../service/stateSyncService';
 
 const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
@@ -45,10 +46,23 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.MODAL_STATE_ROLLBACK_SHOW: {
-      stateNew.dom.modal.stateRollback.showModal = true;
-      stateNew.dom.modal.stateRollback.stateId = action.stateId;
+      const errorModalDtoFactory = new ErrorModalDtoFactory();
+
+      const okAction = actionRollbackToStateId(action.rollbackPayload);
+
+      const errorModal = errorModalDtoFactory.getInstance('Error Saving State', 'The system encountered an error saving a previous state. ' +
+        'When you click \'OK\' we will rollback the system to the last known good state.', okAction);
+
+      stateNew.dom.modal.push(errorModal);
 
       return stateNew;
+    }
+    case ACTIONS.types.STATE_ROLLBACK_TO_STATEID: {
+      const rollback = action.rollbackPayload;
+
+      stateSyncService.rollbackToStateId(rollback.clientId);
+
+      return rollback.state;
     }
     case ACTIONS.types.MODAL_HIDE_CURRENT: {
       stateNew.dom.modal.shift();

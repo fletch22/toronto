@@ -45,6 +45,10 @@ class Service {
 
       function checkStatus(response) {
         if (response.status < 200 || response.status > 300) {
+          response.text()
+            .then((text) => {
+              console.log(`'${response.statusText}': '${response.status}'. ${text}`);
+            });
           const error = new Error(response.statusText);
           error.response = response;
           throw error;

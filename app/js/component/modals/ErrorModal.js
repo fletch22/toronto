@@ -2,7 +2,7 @@ import React from 'react';
 import StandardModal from './StandardModal';
 import { connect } from 'react-redux';
 import ModalTypes from './ModalTypes';
-import { hideCurrentModal } from '../../actions/index';
+import { actionHideCurrentModal } from '../../actions/index';
 
 export class ErrorModalDtoFactory {
   getInstance(headerText, bodyText, okAction) {
@@ -29,6 +29,7 @@ function onOkDispatch() {
 
     const errorModal = state.dom.modal[0];
 
+    //console.log(`OK Clicked: ${JSON.stringify(errorModal.okAction)}`);
     dispatch(errorModal.okAction);
   };
 }

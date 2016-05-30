@@ -6,6 +6,10 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getOrbServerRootUrl()}/transaction/${transactionId}?action=rollbackTo`, 'post');
   }
 
+  rollbackToStateId(stateId) {
+    return this.fetch(`${this.getOrbServerRootUrl()}/component/states/${stateId}?action=rollbackTo`, 'post');
+  }
+
   saveStateArray(stateArray) {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/statePallet`, 'put', stateArray);
   }

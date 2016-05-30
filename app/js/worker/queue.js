@@ -2,46 +2,14 @@ import stateSyncService from '../service/stateSyncService';
 import MessagePoster from '../domain/message/messagePoster';
 import { WorkerMessageTypes } from '../worker/workerMessage';
 import WorkerMessage from '../worker/workerMessage';
-
-export class SentStateAuditTrail {
-  constructor() {
-    this.collection = [];
-  }
-
-  collect(statePackageSendArray) {
-    if (statePackageSendArray) {
-      const ids = [];
-      statePackageSendArray.forEach((item) => {
-        ids.push(item.id);
-      });
-      this.save(ids);
-    }
-  }
-
-  gatherRecent() {
-    const maxToGather = 100;
-    let count = 0;
-    const lastSendArrayIndex = this.collection.length - 1;
-    const gathered = [];
-    for (let i = lastSendArrayIndex; i >= 0; i--) {
-      const sendArray = this.collection[i];
-      count += sendArray.length;
-      gathered.push(sendArray);
-      if (count >= maxToGather) {
-        break;
-      }
-    }
-    return gathered;
-  }
-
-  save(ids) {
-    this.collection.push(ids);
-  }
-}
+import SentStateAuditTrail from './sentStateAuditTrail';
 
 class Queue {
-
   constructor() {
+    this.reset();
+  }
+
+  reset() {
     this.accumulator = [];
     this.deliveryProcessingIsPaused = false;
     this.blockadeIncoming = false;
@@ -55,8 +23,15 @@ class Queue {
     this.messagePoster.post(JSON.stringify(messageObject));
   }
 
-  emitEventRollbackState(stateArray) {
-    this.postMessage(new WorkerMessage(stateArray, WorkerMessageTypes.StateRollback));
+  emitEventRollbackState(clientId, state) {
+
+    console.log(`Got state: ${JSON.stringify(state)}`);
+
+    const payload = {
+      clientId,
+      state
+    };
+    this.postMessage(new WorkerMessage(payload, WorkerMessageTypes.StateRollback));
   }
 
   emitEventError(error) {
@@ -167,9 +142,17 @@ class Queue {
             // the server can tell us the last known good save state.
             stateSyncService.determineLastGoodState(this.gatherFromAuditLog())
               .then((result) => {
-                queue.emitEventRollbackState(result);
-              }).catch((error) => {
-                queue.emitEventError(error);
+                console.log('About to emit event rollback state...');
+                queue.emitEventRollbackState(result.clientId, JSON.parse(result.stateJson));
+              })
+              .catch((errorInner) => {
+                const errorObject = {
+                  name: errorInner.name,
+                  message: errorInner.message,
+                  stack: errorInner.stack
+                };
+
+                queue.emitEventError(errorObject);
               });
 
             reject(error);
