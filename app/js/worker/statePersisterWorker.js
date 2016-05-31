@@ -25,6 +25,10 @@ const StatePersisterWorker = function spw() {
             queue.isAccumulatorProcessorPaused = false;
             break;
           }
+          case WorkerMessageTypes.ResetQueue: {
+            queue.reset();
+            break;
+          }
           case WorkerMessageTypes.BlockadeAndDrain: {
             queue.blockadeAndDrain(message.id);
             break;

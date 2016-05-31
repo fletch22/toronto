@@ -29,7 +29,7 @@ function onOkDispatch() {
 
     const errorModal = state.dom.modal[0];
 
-    //console.log(`OK Clicked: ${JSON.stringify(errorModal.okAction)}`);
+    console.log(`OK Clicked: ${JSON.stringify(errorModal.okAction)}`);
     dispatch(errorModal.okAction);
   };
 }

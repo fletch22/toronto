@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { appLabelOnChange, actionShowErrorModal, setStateAndPersist } from '../../actions';
+import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
@@ -70,7 +70,7 @@ function showSampleErrorModal() {
     // NOTE: Necessary to avoid circular references.
     const jsonState = JSON.stringify(getState());
 
-    dispatch(actionShowErrorModal('sampleHeaderText', 'sampleBodyText', setStateAndPersist(JSON.parse(jsonState))));
+    dispatch(actionShowErrorModal('sampleHeaderText', 'sampleBodyText', actionSetStateAndPersist(JSON.parse(jsonState))));
   };
 }
 
@@ -80,7 +80,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addAppLocal());
     },
     onChange: (event) => {
-      dispatch(appLabelOnChange(event.target.value));
+      dispatch(actionChangeAppLabelInput(event.target.value));
     },
     onShowError: () => {
       dispatch(showSampleErrorModal());

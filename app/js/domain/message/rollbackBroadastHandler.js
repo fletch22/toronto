@@ -1,6 +1,6 @@
 import GenericListener from './genericListener';
 import { WorkerMessageTypes } from '../../worker/workerMessage';
-import { stateRollbackModalShow, actionShowErrorModal, actionHideCurrentModal } from '../../actions/index';
+import { actionShowStateRollbackModal, actionShowErrorModal, actionHideCurrentModal } from '../../actions/index';
 
 class RollbackBroadcastHandler {
 
@@ -15,7 +15,7 @@ class RollbackBroadcastHandler {
 
     console.log(`Will rollback to ${rollbackPayload.clientId}`);
 
-    this.dispatch(stateRollbackModalShow(rollbackPayload));
+    this.dispatch(actionShowStateRollbackModal(rollbackPayload));
   }
 
   showErrorModal(errorObject) {

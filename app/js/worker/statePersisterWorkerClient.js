@@ -48,6 +48,10 @@ class StatePersisterWorkerClient {
     this.worker.postMessage(new WorkerMessage('', WorkerMessageTypes.UnpauseQueue));
   }
 
+  resetPersister() {
+    this.worker.postMessage(new WorkerMessage('', WorkerMessageTypes.ResetQueue));
+  }
+
   blockadeAndDrain() {
     const message = new WorkerMessage('', WorkerMessageTypes.BlockadeAndDrain);
     this.worker.postMessage(message);

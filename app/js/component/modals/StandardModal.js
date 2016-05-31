@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
-import { hideStandardModal } from '../../actions/index';
+import { actionHideCurrentModal } from '../../actions/index';
 
 class StandardModal extends React.Component {
   render() {
@@ -34,7 +34,7 @@ StandardModal.propTypes = {
 const mapDispatchToProps = (dispatch) => {
   return {
     onCloseModal: () => {
-      dispatch(hideStandardModal());
+      dispatch(actionHideCurrentModal());
     }
   };
 };

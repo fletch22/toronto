@@ -29,22 +29,6 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
       return action.state;
     }
-    case ACTIONS.types.SHOW_STANDARD_MODAL: {
-      stateNew.dom.standardModal.push(action.payload);
-
-      return stateNew;
-    }
-    case ACTIONS.types.HIDE_STANDARD_MODAL: {
-      stateNew.dom.standardModal.shift();
-
-      return stateNew;
-    }
-    case ACTIONS.types.MODAL_STATE_ROLLBACK_HIDE: {
-      stateNew.dom.modal.stateRollback.showModal = false;
-      stateNew.dom.modal.stateRollback.stateId = '';
-
-      return stateNew;
-    }
     case ACTIONS.types.MODAL_STATE_ROLLBACK_SHOW: {
       const errorModalDtoFactory = new ErrorModalDtoFactory();
 
@@ -57,10 +41,13 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.STATE_ROLLBACK_TO_STATEID: {
+    case ACTIONS.types.STATE_ROLLBACK_TO_STATE_ID: {
       const rollback = action.rollbackPayload;
 
-      stateSyncService.rollbackToStateId(rollback.clientId);
+      const promise = stateSyncService.rollbackToStateId(rollback.clientId);
+      promise.then(() => {
+        stateFixer.resetStatePersister();
+      });
 
       return rollback.state;
     }

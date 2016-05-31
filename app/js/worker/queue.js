@@ -24,9 +24,6 @@ class Queue {
   }
 
   emitEventRollbackState(clientId, state) {
-
-    console.log(`Got state: ${JSON.stringify(state)}`);
-
     const payload = {
       clientId,
       state
@@ -142,7 +139,6 @@ class Queue {
             // the server can tell us the last known good save state.
             stateSyncService.determineLastGoodState(this.gatherFromAuditLog())
               .then((result) => {
-                console.log('About to emit event rollback state...');
                 queue.emitEventRollbackState(result.clientId, JSON.parse(result.stateJson));
               })
               .catch((errorInner) => {

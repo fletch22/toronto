@@ -1,5 +1,5 @@
 import stateSyncService from '../service/stateSyncService';
-import { setState } from '../actions';
+import { actionSetState } from '../actions';
 import stateRetriever from '../domain/stateRetriever';
 import timeTravelTransaction from '../domain/timeTravelTransaction';
 
@@ -22,7 +22,7 @@ class StateGetAndDispatch {
 
           promiseInner.then((stateInner) => {
             timeTravelTransaction.setTransactionToRewindToBeforeEarliestState();
-            dispatch(setState(stateInner));
+            dispatch(actionSetState(stateInner));
             resolve();
           });
 
@@ -35,7 +35,7 @@ class StateGetAndDispatch {
       } else {
         this.index = indexRetrieved;
         timeTravelTransaction.transactionId = data.transactionId;
-        dispatch(setState(state));
+        dispatch(actionSetState(state));
         resolve();
       }
     });

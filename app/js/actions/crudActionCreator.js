@@ -1,4 +1,4 @@
-import { setState } from '../actions';
+import { actionSetState } from '../actions';
 import statePersisterWorkerClient from '../worker/statePersisterWorkerClient';
 import GenericListener from '../domain/message/genericListener';
 
@@ -21,7 +21,7 @@ class CrudActionCreator {
 
           service(getState())
           .then((response) => {
-            dispatch(setState(response));
+            dispatch(actionSetState(response));
             statePersisterWorkerClient.unblockade();
           })
           .catch((error) => {

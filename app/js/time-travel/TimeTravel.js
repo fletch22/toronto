@@ -1,6 +1,6 @@
 import React from 'react';
 import stateSyncService from '../service/stateSyncService';
-import { setState } from '../actions';
+import { actionSetState } from '../actions';
 import stateGetAndDispatch from '../domain/stateGetAndDispatch';
 import { connect } from 'react-redux';
 
