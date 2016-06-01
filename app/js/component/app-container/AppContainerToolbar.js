@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist } from '../../actions';
+import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
@@ -38,12 +38,32 @@ class AppContainerToolbar extends React.Component {
 }
 
 function addAppLocal() {
-  const addApp = (state) => {
+  const addApp = (dispatch, state) => {
     const label = state.dom.view.appContainer.section.addNew.appLabel;
     const jsonStateOld = JSON.stringify(state);
     const stateNew = JSON.parse(jsonStateOld);
-    return appContainerService.addAppAsync(stateNew, jsonStateOld, label);
+    const promise = appContainerService.addAppAsync(stateNew, jsonStateOld, label);
+
+    promise.catch((error) => {
+      console.log('Catching it in the proper place.');
+
+      const errorModalDto = {
+        headerText: error.name,
+        bodyText: error.message
+      };
+
+      if (typeof error.responseObject === 'object') {
+        errorModalDto.headerText = 'There was an error creating the app.'
+        errorModalDto.bodyText = error.responseObject.systemMessage;
+      }
+
+      const okAction = actionHideCurrentModal();
+      dispatch(actionShowErrorModal(errorModalDto.headerText, errorModalDto.bodyText, okAction));
+    });
+
+    return promise;
   };
+
   return crudActionCreator.invoke(addApp);
 }
 

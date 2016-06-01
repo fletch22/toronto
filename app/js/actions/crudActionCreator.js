@@ -1,10 +1,11 @@
-import { actionSetState } from '../actions';
+import { actionSetState, actionShowErrorModal, actionHideCurrentModal } from '../actions';
 import statePersisterWorkerClient from '../worker/statePersisterWorkerClient';
 import GenericListener from '../domain/message/genericListener';
+import ServerErrorTransformer from '../service/serverErrorTransformer';
 
 class CrudActionCreator {
 
-  invoke(service) {
+  invoke(service, errorMessage) {
     return (dispatch, getState) => {
       let expectedId;
 
@@ -19,13 +20,13 @@ class CrudActionCreator {
         if (eventMessage.id === expectedId) {
           genericListener.unregister();
 
-          service(getState())
+          service(dispatch, getState())
           .then((response) => {
             dispatch(actionSetState(response));
             statePersisterWorkerClient.unblockade();
           })
-          .catch((error) => {
-            console.log(error.message);
+          .catch(() => {
+            statePersisterWorkerClient.unblockade();
           });
         }
       };

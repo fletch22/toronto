@@ -3,6 +3,7 @@ import MessagePoster from '../domain/message/messagePoster';
 import { WorkerMessageTypes } from '../worker/workerMessage';
 import WorkerMessage from '../worker/workerMessage';
 import SentStateAuditTrail from './sentStateAuditTrail';
+import ServerErrorTransformer from '../service/serverErrorTransformer';
 
 class Queue {
   constructor() {
@@ -142,11 +143,7 @@ class Queue {
                 queue.emitEventRollbackState(result.clientId, JSON.parse(result.stateJson));
               })
               .catch((errorInner) => {
-                const errorObject = {
-                  name: errorInner.name,
-                  message: errorInner.message,
-                  stack: errorInner.stack
-                };
+                const errorObject = ServerErrorTransformer.transform(errorInner);
 
                 queue.emitEventError(errorObject);
               });
