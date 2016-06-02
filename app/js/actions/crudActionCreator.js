@@ -1,7 +1,6 @@
-import { actionSetState, actionShowErrorModal, actionHideCurrentModal } from '../actions';
+import { actionSetState } from '../actions';
 import statePersisterWorkerClient from '../worker/statePersisterWorkerClient';
 import GenericListener from '../domain/message/genericListener';
-import ServerErrorTransformer from '../service/serverErrorTransformer';
 
 class CrudActionCreator {
 

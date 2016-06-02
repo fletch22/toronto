@@ -1,0 +1,14 @@
+@import 'css/config/colors';
+
+.time-travel-toolbar {
+  color: pink;
+  padding: 10px;
+  z-index: 10000;
+  position: fixed;
+  background-color: deepskyblue;
+  width: 125px;
+}
+
+.time-travel-toolbar.nav-buttons {
+  display: inline-block;
+}

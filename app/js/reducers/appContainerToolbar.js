@@ -65,6 +65,13 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.SHOW_TIME_TRAVEL_NAV_BAR: {
+      stateNew.dom.view.timeTravelNavBar.show = true;
+
+      // NOTE: This is temporary until we get it working.
+      window.showTimeTravelNavBar = true;
+      return stateNew;
+    }
     default: {
       return state;
     }

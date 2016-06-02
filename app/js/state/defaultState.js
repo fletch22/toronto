@@ -11,6 +11,9 @@ class DefaultState {
                 appLabel: ''
               }
             }
+          },
+          timeTravelNavBar: {
+            show: false
           }
         }
       },

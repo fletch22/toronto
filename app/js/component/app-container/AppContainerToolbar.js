@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal } from '../../actions';
+import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal, actionShowTimeTravelNavBar } from '../../actions';
 import TimeTravel from '../../time-travel/TimeTravel';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';
-import defaultState from '../../state/defaultState';
+import TimeTravelNavBar from '../../component/app-container/TimeTravelNavBar';
 
 class AppContainerToolbar extends React.Component {
   render() {
@@ -29,6 +29,8 @@ class AppContainerToolbar extends React.Component {
           </div>
           <div className="col-lg-1">
             <button className="showModal" onClick={this.props.onShowError}>Show Error</button>
+            <button onClick={this.props.onShowTimeTravelOverlay}>Show Overlay</button>
+            <TimeTravelNavBar />
           </div>
         </div>
         <ModalWrangler />
@@ -45,15 +47,13 @@ function addAppLocal() {
     const promise = appContainerService.addAppAsync(stateNew, jsonStateOld, label);
 
     promise.catch((error) => {
-      console.log('Catching it in the proper place.');
-
       const errorModalDto = {
         headerText: error.name,
         bodyText: error.message
       };
 
       if (typeof error.responseObject === 'object') {
-        errorModalDto.headerText = 'There was an error creating the app.'
+        errorModalDto.headerText = 'There was an error creating the app.';
         errorModalDto.bodyText = error.responseObject.systemMessage;
       }
 
@@ -72,7 +72,8 @@ AppContainerToolbar.propTypes = {
   onClick: React.PropTypes.func.isRequired,
   onChange: React.PropTypes.func.isRequired,
   numberApps: React.PropTypes.number.isRequired,
-  onShowError: React.PropTypes.func.isRequired
+  onShowError: React.PropTypes.func.isRequired,
+  onShowTimeTravelOverlay: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -104,6 +105,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShowError: () => {
       dispatch(showSampleErrorModal());
+    },
+    onShowTimeTravelOverlay: () => {
+      dispatch(actionShowTimeTravelNavBar());
     }
   };
 };
