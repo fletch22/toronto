@@ -9,7 +9,8 @@ export const ACTIONS = {
     MODAL_HIDE_CURRENT: 'MODAL_HIDE_CURRENT',
     MODAL_STATE_ROLLBACK_SHOW: 'MODAL_STATE_ROLLBACK_SHOW',
     STATE_ROLLBACK_TO_STATE_ID: 'STATE_ROLLBACK_TO_STATE_ID',
-    SHOW_TIME_TRAVEL_NAV_BAR: 'SHOW_TIME_TRAVEL_NAV_BAR'
+    SHOW_TIME_TRAVEL_NAV_BAR: 'SHOW_TIME_TRAVEL_NAV_BAR',
+    HIDE_TIME_TRAVEL_NAV_BAR: 'HIDE_TIME_TRAVEL_NAV_BAR'
   }
 };
 
@@ -66,6 +67,12 @@ export const actionRollbackToStateId = (rollbackPayload) => {
 export const actionShowTimeTravelNavBar = () => {
   return {
     type: ACTIONS.types.SHOW_TIME_TRAVEL_NAV_BAR
+  };
+};
+
+export const actionHideTimeTravelNavBar = () => {
+  return {
+    type: ACTIONS.types.HIDE_TIME_TRAVEL_NAV_BAR
   };
 };
 

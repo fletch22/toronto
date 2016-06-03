@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal, actionShowTimeTravelNavBar } from '../../actions';
-import TimeTravel from '../../time-travel/TimeTravel';
+import TimeTravel from '../../time-travel/TimeTravelButtons';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';

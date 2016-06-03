@@ -1,40 +1,27 @@
 import stateSyncService from '../service/stateSyncService';
-import { actionSetState } from '../actions';
-import stateRetriever from '../domain/stateRetriever';
-import timeTravelTransaction from '../domain/timeTravelTransaction';
+import { actionSetState, actionHideTimeTravelNavBar } from '../actions';
 
 class StateGetAndDispatch {
 
   constructor() {
+    this.init();
+  }
+
+  init() {
     this.index = 0;
+    this.currentStateClientId = null;
   }
 
   success(data, dispatch, indexRetrieved) {
     const promise = new Promise((resolve, reject) => {
 
       const state = JSON.parse(data.state);
+      this.currentStateClientId = data.clientId;
 
       if (state === null) {
-        if (data.isEarliestState) {
-          this.index = data.indexOfMaxElement + 1;
-
-          const promiseInner = stateRetriever.deriveState();
-
-          promiseInner.then((stateInner) => {
-            timeTravelTransaction.setTransactionToRewindToBeforeEarliestState();
-            dispatch(actionSetState(stateInner));
-            resolve();
-          });
-
-          promiseInner.catch((error) => {
-            reject(error);
-          });
-        } else {
-          throw new Error('There was an error condition that should not be possible in stateGetAndDispatch');
-        }
+        throw new Error('There was an error condition that should not be possible in stateGetAndDispatch. The state came back \'null\'.');
       } else {
         this.index = indexRetrieved;
-        timeTravelTransaction.transactionId = data.transactionId;
         dispatch(actionSetState(state));
         resolve();
       }
@@ -63,6 +50,24 @@ class StateGetAndDispatch {
       this.success(data, dispatch, indexOfState);
     });
     promise.catch(this.error);
+
+    return promise;
+  }
+
+  rollbackToCurrentState(dispatch) {
+    let promise;
+    if (this.currentStateClientId === null) {
+      const error = { message: 'No current state client ID found.' };
+      dispatch(actionHideTimeTravelNavBar());
+      promise = Promise.reject(error);
+    } else {
+      const self = this;
+      promise = stateSyncService.rollbackToStateId(this.currentStateClientId);
+      promise.then(() => {
+        self.init();
+        dispatch(actionHideTimeTravelNavBar());
+      });
+    }
 
     return promise;
   }

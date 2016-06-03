@@ -1,10 +1,8 @@
 import React from 'react';
-import stateSyncService from '../service/stateSyncService';
-import { actionSetState } from '../actions';
 import stateGetAndDispatch from '../domain/stateGetAndDispatch';
 import { connect } from 'react-redux';
 
-class TimeTravelComponent extends React.Component {
+class TimeTravelButtons extends React.Component {
   render() {
     return (
       <div>
@@ -19,7 +17,7 @@ class TimeTravelComponent extends React.Component {
   }
 }
 
-TimeTravelComponent.propTypes = {
+TimeTravelButtons.propTypes = {
   onClickGetLaterState: React.PropTypes.func.isRequired,
   onClickGetEarlierState: React.PropTypes.func.isRequired
 };
@@ -35,9 +33,9 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-TimeTravelComponent = connect(
+TimeTravelButtons = connect(
   null,
   mapDispatchToProps
-)(TimeTravelComponent);
+)(TimeTravelButtons);
 
-export default TimeTravelComponent;
+export default TimeTravelButtons;

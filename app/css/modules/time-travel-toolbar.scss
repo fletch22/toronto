@@ -1,14 +1,26 @@
 @import 'css/config/colors';
 
+$zIndexTimeTravelToolbar: 10000;
+
 .time-travel-toolbar {
+  position: fixed;
+  top: 0;
+}
+
+.time-travel-toolbar .modal-backdrop {
+  z-index: ($zIndexTimeTravelToolbar - 2);
+  opacity: 0.3;
+}
+
+.time-travel-toolbar-body {
   color: pink;
   padding: 10px;
-  z-index: 10000;
+  z-index: $zIndexTimeTravelToolbar;
   position: fixed;
-  background-color: deepskyblue;
+  background-color: blueviolet;
   width: 125px;
 }
 
-.time-travel-toolbar.nav-buttons {
+.time-travel-toolbar.nav-button {
   display: inline-block;
 }
