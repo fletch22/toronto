@@ -18,9 +18,7 @@ class StateGetAndDispatch {
       const state = JSON.parse(data.state);
       this.currentStateClientId = data.clientId;
 
-      if (state === null) {
-        throw new Error('There was an error condition that should not be possible in stateGetAndDispatch. The state came back \'null\'.');
-      } else {
+      if (state !== null) {
         this.index = indexRetrieved;
         dispatch(actionSetState(state));
         resolve();

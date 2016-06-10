@@ -11,15 +11,34 @@ global.jQuery = jQuery;
 
 import AllStore from 'js/stores/allStore';
 const allStore = new AllStore();
-const promise = allStore.getStore();
 
-promise.then((store) => {
+let count = 0;
+const maxRetry = 10;
+
+function renderApp(store) {
   ReactDOM.render(
     <Provider store={store}>
       <App />
     </Provider>,
     document.querySelector('#main'));
-});
+}
+
+function getStore() {
+  count++;
+
+  if (count < maxRetry) {
+    const promiseInner = allStore.getStore();
+
+    promiseInner.then((store) => {
+      console.log("Rendering app.");
+      renderApp(store);
+    }).catch(getStore);
+  } else {
+    console.log("Tried to reach server. Giving up.");
+  }
+}
+
+getStore();
 
 
 

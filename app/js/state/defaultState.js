@@ -3,6 +3,7 @@ class DefaultState {
   getInstance() {
     return {
       dom: {
+        hasInitialStateBeenSaved: false,
         modal: [],
         view: {
           appContainer: {

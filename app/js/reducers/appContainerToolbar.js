@@ -79,6 +79,15 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.ENSURE_INTIAL_STATE_SAVED: {
+      if (!stateNew.hasInitialStateBeenSaved) {
+        console.log('Saving initial state');
+        stateNew.hasInitialStateBeenSaved = true;
+        stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+      }
+
+      return stateNew;
+    }
     default: {
       return state;
     }

@@ -2,6 +2,7 @@ export const ACTIONS = {
   types: {
     ADD_APP: 'ADD_APP',
     APP_LABEL_INPUT_CHANGE: 'APP_LABEL_INPUT_CHANGE',
+    ENSURE_INTIAL_STATE_SAVED: 'ENSURE_INTIAL_STATE_SAVED',
     SET_STATE: 'SET_STATE',
     SET_STATE_AND_PERSIST: 'SET_STATE_AND_PERSIST',
     TIME_TRAVEL_TO_PREVIOUS_STATE: 'TIME_TRAVEL_TO_PREVIOUS_STATE',
@@ -73,6 +74,12 @@ export const actionShowTimeTravelNavBar = () => {
 export const actionHideTimeTravelNavBar = () => {
   return {
     type: ACTIONS.types.HIDE_TIME_TRAVEL_NAV_BAR
+  };
+};
+
+export const actionEnsureInitialStateSaved = () => {
+  return {
+    type: ACTIONS.types.ENSURE_INTIAL_STATE_SAVED
   };
 };
 

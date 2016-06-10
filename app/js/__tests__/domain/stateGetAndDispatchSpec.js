@@ -3,7 +3,6 @@ import RestService from '../../service/restService';
 import stateSyncService from '../../service/stateSyncService';
 import stateGetAndDispatch from '../../domain/stateGetAndDispatch';
 import stateRetriever from '../../domain/stateRetriever';
-import timeTravelTransaction from '../../domain/timeTravelTransaction';
 
 describe('Current state retriever', () => {
 
@@ -20,9 +19,10 @@ describe('Current state retriever', () => {
     sandbox.restore();
   });
 
-  it('should derive the state from the model when there is no earlier state.', (done) => {
+  it('should do nothing when there is no earlier state.', (done) => {
 
-    stateGetAndDispatch.index = 2;
+    const expectedIndex = 2;
+    stateGetAndDispatch.index = expectedIndex;
     const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState')
       .returns(Promise.resolve({ state: null, isEarliestState: true, indexOfMaxElement: 4 }));
 
@@ -31,8 +31,8 @@ describe('Current state retriever', () => {
     const promiseTest = stateGetAndDispatch.getEarlierStateAndDispatch(dispatch);
 
     promiseTest.then(() => {
-      expect(stateGetAndDispatch.index).to.equal(5);
       expect(getHistoricalState.called).to.equal(true);
+      expect(stateGetAndDispatch.index).to.equal(expectedIndex);
       done();
     });
 
@@ -79,41 +79,11 @@ describe('Current state retriever', () => {
 
     promiseTest.then(() => {
       expect(deriveState.called).to.equal(false);
-      expect(timeTravelTransaction.transactionId).to.equal(data.transactionId);
       done();
     });
 
     promiseTest.catch((error) => {
       console.log(`Error: ${error.stackTrace}`);
-    });
-  });
-
-  it('should call derived state when there is not state returned from the log and there are no more states.', (done) => {
-
-    stateGetAndDispatch.index = 2;
-    const deriveState = sandbox.stub(stateRetriever, 'deriveState').returns(Promise.resolve({}));
-
-    const dispatch = sandbox.mock();
-
-    const data = {
-      state: null,
-      isEarliestState: true,
-      transactionId: 123,
-      indexOfMaxElement: 3
-    };
-
-    const promiseTest = stateGetAndDispatch.success(data, dispatch, 2);
-
-    promiseTest.then(() => {
-      expect(deriveState.called).to.equal(true);
-      expect(stateGetAndDispatch.index).to.equal(data.indexOfMaxElement + 1);
-      expect(timeTravelTransaction.transactionId).to.equal(timeTravelTransaction.TransactionSignifier.TRANSACTION_ID_BEFORE_FIRST_TRANSACTION);
-      done();
-    });
-
-    promiseTest.catch((error) => {
-      console.log(`Error: ${error.stackTrace}`);
-      done();
     });
   });
 });

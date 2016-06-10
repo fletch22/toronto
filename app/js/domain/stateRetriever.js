@@ -17,6 +17,7 @@ class StateRetriever {
 
       promise.catch((error) => {
         console.log(error.stack);
+        reject(error);
       });
 
       promise.then((data) => {
