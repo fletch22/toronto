@@ -41,10 +41,9 @@ const common = {
 };
 
 module.exports = merge(common, {
-  devtool: 'inline-source-map',
+  devtool: 'eval',
   devServer: {
     contentBase: PATHS.build,
-    historyApiFallback: true,
     hot: true,
     inline: true,
     progress: true,

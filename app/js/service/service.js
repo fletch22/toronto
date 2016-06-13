@@ -45,36 +45,22 @@ class Service {
 
       function checkStatus(response) {
         if (response.status < 200 || response.status > 300) {
-          return response.text()
-            .then((text) => {
-              console.log(`'${response.statusText}': '${response.status}'. ${text}`);
-              const error = new Error(text);
-              error.responseObject = JSON.parse(text);
-              throw error;
-            });
+          reject(`Received response status '${response.status}' from backend.`);
         }
-
-        return response;
+        resolve(response);
       }
 
       function parseJSON(response) {
         return response.json();
       }
 
-      let tmpProm = fetch(url, options)
-        .then(checkStatus);
-
-      // Parse JSON response
-      tmpProm = tmpProm.then(parseJSON);
-
-      // Send the object on its way
-      tmpProm = tmpProm.then((data) => {
+      fetch(url, options)
+      .then(checkStatus)
+      .then(parseJSON)
+      .then((data) => {
         resolve(data);
-      });
-
-      // Handle any error
-      tmpProm.catch((error) => {
-        console.log('Rejecting service response.');
+      })
+      .catch((error) => {
         reject(error);
       });
     });

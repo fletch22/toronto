@@ -7,13 +7,15 @@ import thunk from 'redux-thunk';
 class AllStore {
 
   getStore() {
-    return new Promise((resolve) => {
-
+    return new Promise((resolve, reject) => {
       const promise = currentStateRetriever.getCurrent();
 
       promise.then((state) => {
         const store = applyMiddleware(thunk)(createStore)(apps, state, DevTools.instrument());
         resolve(store);
+      })
+      .catch((error) => {
+        reject(error);
       });
 
       return promise;

@@ -5,9 +5,15 @@ import stateSyncService from '../service/stateSyncService';
 class StateRetriever {
 
   deriveState() {
+
     return RestService.getAppContainer()
       .then((responseData) => {
+        console.log("Got data.");
         return new ModelToStateTransformer().transform(responseData);
+      })
+      .catch((error) => {
+        console.log("Got error calling getAppContainer.");
+        return Promise.reject(error);
       });
   }
 

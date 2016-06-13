@@ -74,6 +74,7 @@
     "bootstrap-loader": "^1.0.7",
     "bootstrap-sass": "^3.3.6",
     "compass-mixins": "^0.12.7",
+    "dateformat": "^1.0.12",
     "deep-diff": "^0.3.3",
     "es6-promise": "^3.1.2",
     "exports-loader": "^0.6.3",
