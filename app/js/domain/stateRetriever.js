@@ -6,13 +6,13 @@ class StateRetriever {
 
   deriveState() {
 
-    return RestService.getAppContainer()
+    return RestService.getRoot()
       .then((responseData) => {
-        console.log("Got data.");
-        return new ModelToStateTransformer().transform(responseData);
+        console.log('Got data.');
+        return new ModelToStateTransformer().transform(responseData.appContainer, responseData.startupTimestamp);
       })
       .catch((error) => {
-        console.log("Got error calling getAppContainer.");
+        console.log('Got error calling getAppContainer.');
         return Promise.reject(error);
       });
   }

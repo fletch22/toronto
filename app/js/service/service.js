@@ -29,7 +29,6 @@ class Service {
   }
 
   fetch(url, method, object) {
-
     const promise = new Promise((resolve, reject) => {
       const options = {
         method
@@ -45,9 +44,15 @@ class Service {
 
       function checkStatus(response) {
         if (response.status < 200 || response.status > 300) {
-          reject(`Received response status '${response.status}' from backend.`);
+          return response.text()
+            .then((text) => {
+              console.log(`'${response.statusText}': '${response.status}'. ${text}`);
+              const error = new Error(text);
+              error.responseObject = JSON.parse(text);
+              throw error;
+            });
         }
-        resolve(response);
+        return response;
       }
 
       function parseJSON(response) {

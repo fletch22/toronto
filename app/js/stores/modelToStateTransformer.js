@@ -3,11 +3,11 @@ import ModelTransformer from './modelTransformer';
 
 class ModelToStateTransformer {
 
-  transform(appContainerModel) {
-
+  transform(appContainerModel, serverStartupTimestamp) {
     const modelTransformer = new ModelTransformer();
     const state = Object.assign({}, defaultState.getInstance());
     state.model = modelTransformer.transform(appContainerModel);
+    state.serverStartupTimestamp = serverStartupTimestamp;
 
     return state;
   }

@@ -6,16 +6,12 @@ class RestService extends Service {
     return this.fetch(`${this.url}/appContainer/`, 'get');
   }
 
+  getRoot() {
+    return this.fetch(`${this.url}/root/`, 'get');
+  }
+
   addComponent(object) {
     return this.fetch(`${this.url}/component`, 'POST', object);
-  }
-
-  updateComponent(object) {
-    throw 'Not yet implemented';
-  }
-
-  deleteComponent(id) {
-    throw 'Not yet implemented';
   }
 
   getExceptionForTesting(value) {

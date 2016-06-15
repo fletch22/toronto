@@ -23,7 +23,8 @@ class DefaultState {
           id: -1,
           children: []
         }
-      }
+      },
+      serverStartupTimestamp: null
     };
   }
 }
