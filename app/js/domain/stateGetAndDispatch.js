@@ -13,12 +13,10 @@ class StateGetAndDispatch {
   }
 
   success(data, dispatch, indexRetrieved) {
-    const promise = new Promise((resolve, reject) => {
-
+    const promise = new Promise((resolve) => {
       const state = JSON.parse(data.state);
-      this.currentStateClientId = data.clientId;
-
       if (state !== null) {
+        this.currentStateClientId = data.clientId;
         this.index = indexRetrieved;
         dispatch(actionSetState(state));
         resolve();

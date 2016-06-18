@@ -4,7 +4,6 @@ import F22Uuid from '../util/f22Uuid';
 class StatePackager {
 
   package(jsonStateOld, jsonStateNew) {
-
     const stateNew = JSON.parse(jsonStateNew);
     const difference = deepDiff(JSON.parse(jsonStateOld).model, stateNew.model);
 

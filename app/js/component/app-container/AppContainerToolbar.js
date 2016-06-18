@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal, actionShowTimeTravelNavBar } from '../../actions';
-import TimeTravel from '../../time-travel/TimeTravelButtons';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';
@@ -24,9 +23,6 @@ class AppContainerToolbar extends React.Component {
             </button>
           </div>
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
-          <div className="col-lg-1">
-            <TimeTravel />
-          </div>
           <div className="col-lg-1">
             <button className="showModal" onClick={this.props.onShowError}>Show Error</button>
             <button onClick={this.props.onShowTimeTravelOverlay}>Show Overlay</button>
