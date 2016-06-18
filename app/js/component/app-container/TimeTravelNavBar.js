@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import 'css/modules/time-travel-toolbar';
 import stateGetAndDispatch from '../../domain/stateGetAndDispatch';
 import { actionHideTimeTravelNavBar } from '../../actions/index';
+import 'font-awesome/scss/font-awesome.scss';
 
 class TimeTravelNavBar extends React.Component {
 
@@ -10,15 +11,20 @@ class TimeTravelNavBar extends React.Component {
     return (
       <div style={{ display: this.props.displayCss }} className="time-travel-toolbar">
         <div className="time-travel-toolbar-body">
-          <button onClick={this.props.onClickGetEarlierState} className="time-travel">
-            &#8249;
-          </button>
-          <button onClick={this.props.onSetAndCloseClick} className="time-travel">
-            0
-          </button>
-          <button onClick={this.props.onClickGetLaterState} className="time-travel">
-            &#8250;
-          </button>
+          <div className="toolbar-buttons">
+            <button onClick={this.props.onClickGetEarlierState} className="time-travel">
+              <i className="fa fa-step-backward" aria-hidden="true"></i>
+            </button>
+            <button onClick={this.props.onSetAndCloseClick} className="time-travel">
+              <i className="fa fa-play" aria-hidden="true"></i>
+            </button>
+            <button onClick={this.props.onClickGetLaterState} className="time-travel">
+              <i className="fa fa-step-forward" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div className="close-button text-right">
+            <i className="fa fa-times" aria-hidden="true"></i>
+          </div>
         </div>
         <div className="modal-backdrop"></div>
       </div>

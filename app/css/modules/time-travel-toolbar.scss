@@ -13,14 +13,22 @@ $zIndexTimeTravelToolbar: 10000;
 }
 
 .time-travel-toolbar-body {
-  color: pink;
+  color: black;
   padding: 10px;
   z-index: $zIndexTimeTravelToolbar;
   position: fixed;
   background-color: blueviolet;
-  width: 125px;
+  width: 175px;
 }
 
-.time-travel-toolbar.nav-button {
+.time-travel-toolbar-body > .close-button {
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  position: relative;
+  top: -10px;
+}
+
+.toolbar-buttons {
   display: inline-block;
 }
