@@ -12,7 +12,7 @@ class App extends React.Component {
 
     return (
       <div className="container-app col-lg-2">
-        <HeaderWithClose label={this.props.label} id={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+        <HeaderWithClose headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
           {
             children.map((child) =>
               <GeneralOrbComponent key={child.id} child={child} />
@@ -40,7 +40,6 @@ function changeLabel(component, newLabelValue) {
 }
 
 const mapStateToProps = (state, ownProps) => {
-
   const appContainerModel = state.model.appContainer;
   const object = orbModelTraversal.find(appContainerModel, ownProps.id);
 

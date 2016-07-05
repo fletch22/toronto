@@ -1,28 +1,15 @@
 import React, { PropTypes } from 'react';
 import '../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
-import { connect } from 'react-redux';
-import orbModelTraversal from '../../state/orbModelTraversal';
-import { actionUpdateOrbPropertyNoPersist } from '../../actions/index';
+import F22Input from '../orb/F22Input';
 
 class HeaderWithClose extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.handleLabelKeyPress = this.handleLabelKeyPress.bind(this);
-  }
-
-  handleLabelKeyPress(event) {
-    if (event.key === 'Enter') {
-      this.refs.label.blur();
-    }
-  }
 
   render() {
     return (
       <div className="container-orb">
         <div className="header-left">
           <div>
-            <input type="text" ref="label" value={this.props.label} onChange={this.props.onChangeTest} onBlur={this.props.onChangeLabel} className="darkTextbox" onKeyUp={this.handleLabelKeyPress} />
+            <F22Input modelNodeId={this.props.modelNodeId} propertyName="label" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue} />
           </div>
         </div>
         <div className="header-right">
@@ -35,26 +22,11 @@ class HeaderWithClose extends React.Component {
 }
 
 HeaderWithClose.propTypes = {
-  label: PropTypes.string,
-  id: PropTypes.any,
+  headerTextValue: PropTypes.string,
+  modelNodeId: PropTypes.any,
   onClickClose: PropTypes.func,
-  onChangeLabel: PropTypes.func,
-  onLabelKeyPress: PropTypes.func,
-  onChangeTest: PropTypes.func
+  onChangeLabel: PropTypes.func
 };
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onChangeTest: (event) => {
-      dispatch(actionUpdateOrbPropertyNoPersist(ownProps.id, 'label', event.target.value));
-    }
-  };
-};
-
-HeaderWithClose = connect(
-  null,
-  mapDispatchToProps
-)(HeaderWithClose);
 
 export default HeaderWithClose;
 
