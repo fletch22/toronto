@@ -1,5 +1,12 @@
 @import 'css/config/colors';
 
+.button-close {
+	font-size: .7em;
+	top: -1px;
+	padding: 0;
+	position: relative;
+}
+
 .container-fluid {
 
 }
@@ -8,6 +15,39 @@
 	background-color: $gray;
 	margin: 10px;
 	border-radius: 5px;
+	padding: 0 0 0 0;
+}
+
+.container-app > .header-left {
+	float:left
+}
+
+.container-app > .header-right {
+	float:right
+}
+
+.container-orb {
+  background-color: $gray;
+  border-radius: 5px;
+  padding: 0 0 0 0;
+}
+
+.container-orb > .header-left {
+  float:left
+}
+
+.container-orb > .header-right {
+  float:right
+}
+
+.darkTextbox {
+	border: none;
+    background: transparent;
+}
+
+.darkTextbox:focus {
+  border: none;
+  background: silver;
 }
 
 .time-travel {

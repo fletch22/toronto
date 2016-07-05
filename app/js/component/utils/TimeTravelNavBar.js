@@ -12,6 +12,9 @@ class TimeTravelNavBar extends React.Component {
       <div style={{ display: this.props.displayCss }} className="time-travel-toolbar">
         <div className="time-travel-toolbar-body">
           <div className="toolbar-buttons">
+            <button onClick={this.props.onClickGetFirstState} className="time-travel">
+              <i className="fa fa-fast-backward" aria-hidden="true"></i>
+            </button>
             <button onClick={this.props.onClickGetEarlierState} className="time-travel">
               <i className="fa fa-step-backward" aria-hidden="true"></i>
             </button>
@@ -21,9 +24,9 @@ class TimeTravelNavBar extends React.Component {
             <button onClick={this.props.onClickGetLaterState} className="time-travel">
               <i className="fa fa-step-forward" aria-hidden="true"></i>
             </button>
-          </div>
-          <div className="close-button text-right">
-            <i className="fa fa-times" aria-hidden="true"></i>
+            <button onClick={this.props.onClickGetMostRecentState} className="time-travel">
+              <i className="fa fa-fast-forward" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
         <div className="modal-backdrop"></div>
@@ -34,8 +37,10 @@ class TimeTravelNavBar extends React.Component {
 
 TimeTravelNavBar.propTypes = {
   show: React.PropTypes.bool,
+  onClickGetFirstState: React.PropTypes.func.isRequired,
   onClickGetLaterState: React.PropTypes.func.isRequired,
   onClickGetEarlierState: React.PropTypes.func.isRequired,
+  onClickGetMostRecentState: React.PropTypes.func.isRequired,
   onSetAndCloseClick: React.PropTypes.func.isRequired,
   displayCss: React.PropTypes.string
 };
@@ -68,8 +73,13 @@ const mapDispatchToProps = (dispatch) => {
     },
     onSetAndCloseClick: () => {
       dispatch(rollbackServerAndHideTimeTravelBar());
+    },
+    onClickGetFirstState: () => {
+      stateGetAndDispatch.getFirstState(dispatch);
+    },
+    onClickGetMostRecentState: () => {
+      stateGetAndDispatch.getMostRecentState(dispatch);
     }
-
   };
 };
 

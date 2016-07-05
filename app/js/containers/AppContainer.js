@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AppContainerToolbar from '../component/app-container/AppContainerToolbar';
+import AppContainerToolbar from '../component/utils/AppContainerToolbar';
 import update from 'react-addons-update';
+import GeneralOrbComponent from './GeneralOrbComponent';
 
 class AppContainer extends React.Component {
   render() {
@@ -11,7 +12,7 @@ class AppContainer extends React.Component {
         <div className="container-fluid app-container">
           {
             this.props.children.map((child) =>
-              <div className="container-app col-lg-2" key={child.id}>{child.label}</div>
+              <GeneralOrbComponent key={child.id} child={child} />
             )
           }
         </div>
@@ -21,10 +22,7 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.propTypes = {
-  children: React.PropTypes.arrayOf(React.PropTypes.shape({
-    id: React.PropTypes.any.isRequired,
-    label: React.PropTypes.string.isRequired
-  })).isRequired
+  children: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
 };
 
 const mapStateToProps = (state, props) => {
@@ -36,15 +34,14 @@ const mapStateToProps = (state, props) => {
   || oldChildren !== newChildren) {
     children = update(state.model.appContainer.children, { $push: [] });
   }
-
   return {
     children
   };
 };
 
-
 AppContainer = connect(
-  mapStateToProps
+  mapStateToProps,
+  null
 )(AppContainer);
 
 export default AppContainer;

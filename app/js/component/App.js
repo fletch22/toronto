@@ -17,7 +17,6 @@ class App extends React.Component {
     return (
       <div className="container-fluid">
         <AppContainer numberApps="0" />
-        <DevTools />
       </div>
     );
   }

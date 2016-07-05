@@ -11,16 +11,6 @@ class AppContainerService extends ComponentService {
     this.statePackager = new StatePackager();
   }
 
-  saveNew(label) {
-    const appContainer = AppContainerFactory.createInstance(label);
-    return this._addComponent(appContainer);
-  }
-
-  update(label) {
-    const appContainer = AppContainerFactory.createInstance(label);
-    return this._updateComponent(appContainer);
-  }
-
   addApp(stateNew, jsonStateOld, label) {
     const appContainerModel = stateNew.model.appContainer;
     const app = appFactory.createInstance(appContainerModel.id, label);

@@ -11,7 +11,8 @@ export const ACTIONS = {
     MODAL_STATE_ROLLBACK_SHOW: 'MODAL_STATE_ROLLBACK_SHOW',
     STATE_ROLLBACK_TO_STATE_ID: 'STATE_ROLLBACK_TO_STATE_ID',
     SHOW_TIME_TRAVEL_NAV_BAR: 'SHOW_TIME_TRAVEL_NAV_BAR',
-    HIDE_TIME_TRAVEL_NAV_BAR: 'HIDE_TIME_TRAVEL_NAV_BAR'
+    HIDE_TIME_TRAVEL_NAV_BAR: 'HIDE_TIME_TRAVEL_NAV_BAR',
+    UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST'
   }
 };
 
@@ -82,6 +83,14 @@ export const actionEnsureInitialStateSaved = () => {
     type: ACTIONS.types.ENSURE_INTIAL_STATE_SAVED
   };
 };
+
+export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
+  return {
+    type: ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST,
+    payload: { id, propertyName, value }
+  };
+};
+
 
 
 

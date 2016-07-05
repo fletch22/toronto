@@ -5,7 +5,7 @@ import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersi
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';
-import TimeTravelNavBar from '../../component/app-container/TimeTravelNavBar';
+import TimeTravelNavBar from './TimeTravelNavBar';
 
 class AppContainerToolbar extends React.Component {
   render() {
@@ -24,8 +24,7 @@ class AppContainerToolbar extends React.Component {
           </div>
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
           <div className="col-lg-1">
-            <button className="showModal" onClick={this.props.onShowError}>Show Error</button>
-            <button onClick={this.props.onShowTimeTravelOverlay}>Show Overlay</button>
+            <button onClick={this.props.onShowTimeTravelOverlay}>Time Travel</button>
             <TimeTravelNavBar />
           </div>
         </div>

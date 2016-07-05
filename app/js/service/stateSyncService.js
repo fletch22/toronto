@@ -2,6 +2,10 @@ import Service from './service';
 
 class StateSyncService extends Service {
 
+  getEarliestState() {
+    return this.fetch(`${this.getOrbServerRootUrl()}/component/states?action=getEarliest`, 'post');
+  }
+
   rollbackToTransaction(transactionId) {
     return this.fetch(`${this.getOrbServerRootUrl()}/transaction/${transactionId}?action=rollbackTo`, 'post');
   }

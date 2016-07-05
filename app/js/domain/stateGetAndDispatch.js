@@ -12,12 +12,12 @@ class StateGetAndDispatch {
     this.currentStateClientId = null;
   }
 
-  success(data, dispatch, indexRetrieved) {
+  successHandler(data, dispatch) {
     const promise = new Promise((resolve) => {
       const state = JSON.parse(data.state);
       if (state !== null) {
         this.currentStateClientId = data.clientId;
-        this.index = indexRetrieved;
+        this.index = data.indexOfReturnedState;
         dispatch(actionSetState(state));
         resolve();
       }
@@ -25,8 +25,8 @@ class StateGetAndDispatch {
     return promise;
   }
 
-  error(error) {
-    console.log(new Error(error));
+  errorHandler(error) {
+    throw new Error(error.stack);
   }
 
   getEarlierStateAndDispatch(dispatch) {
@@ -43,9 +43,31 @@ class StateGetAndDispatch {
     const promise = stateSyncService.getHistoricalState(indexOfState);
 
     promise.then((data) => {
-      this.success(data, dispatch, indexOfState);
+      this.successHandler(data, dispatch);
     });
-    promise.catch(this.error);
+    promise.catch(this.errorHandler);
+
+    return promise;
+  }
+
+  getFirstState(dispatch) {
+    const promise = stateSyncService.getEarliestState();
+
+    promise.then((data) => {
+      this.successHandler(data, dispatch);
+    });
+    promise.catch(this.errorHandler);
+
+    return promise;
+  }
+
+  getMostRecentState(dispatch) {
+    const promise = stateSyncService.getMostRecentHistoricalState();
+
+    promise.then((data) => {
+      this.successHandler(data, dispatch);
+    });
+    promise.catch(this.errorHandler);
 
     return promise;
   }

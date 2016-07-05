@@ -75,7 +75,7 @@ describe('Current state retriever', () => {
       transactionId: 123
     };
 
-    const promiseTest = stateGetAndDispatch.success(data, dispatch, 2);
+    const promiseTest = stateGetAndDispatch.successHandler(data, dispatch, 2);
 
     promiseTest.then(() => {
       expect(deriveState.called).to.equal(false);

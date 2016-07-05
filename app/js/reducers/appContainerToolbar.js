@@ -5,7 +5,7 @@ import appContainerService from '../service/component/appContainerService';
 import { ErrorModalDtoFactory } from '../component/modals/ErrorModal';
 import stateSyncService from '../service/stateSyncService';
 
-const appContainerToolbar = (state = defaultState.getInstance(), action) => {
+export default function appContainerToolbar(state = defaultState.getInstance(), action) {
 
   const jsonStateOld = JSON.stringify(state);
   const stateNew = Object.assign({}, state);
@@ -85,13 +85,12 @@ const appContainerToolbar = (state = defaultState.getInstance(), action) => {
         stateNew.hasInitialStateBeenSaved = true;
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
-
       return stateNew;
     }
     default: {
       return state;
     }
   }
-};
+}
 
-export default appContainerToolbar;
+//export default appContainerToolbar;
