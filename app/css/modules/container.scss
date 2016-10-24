@@ -7,6 +7,12 @@
 	position: relative;
 }
 
+.button-ellipses-v {
+  border: 1px solid darkgray;
+  background: transparent;
+  margin: 2px 0 0 0;
+}
+
 .container-fluid {
 
 }
@@ -24,6 +30,10 @@
 
 .container-app > .header-right {
 	float:right
+}
+
+.container-app  .header-menu {
+	position: absolute;
 }
 
 .container-orb {

@@ -7,10 +7,10 @@ import stateSyncService from '../service/stateSyncService';
 import orbModelTraversal from '../state/orbModelTraversal';
 
 // Note: 07/05/2016: For some reason this yields an error. Seems like state gets undefined.
-//export default combineReducers({
+// export default combineReducers({
 //  appContainerToolbar,
-//  headerWithClose
-//});
+//  header
+// });
 
 const reducer = (state = defaultState.getInstance(), action) => {
 

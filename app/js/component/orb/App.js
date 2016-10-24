@@ -1,18 +1,27 @@
 import React, { PropTypes } from 'react';
 import GeneralOrbComponent from '../../containers/GeneralOrbComponent';
 import { connect } from 'react-redux';
-import HeaderWithClose from '../../component/utils/HeaderWithClose';
+import Header from '../utils/Header';
 import crudComponentOperations from './ComponentCrudOperations';
 import orbModelTraversal from '../../state/orbModelTraversal';
 
 class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.showMenu = this.showMenu.bind(this.showMenu);
+  }
+
+  showMenu() {
+
+  }
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
 
     return (
       <div className="container-app col-lg-2">
-        <HeaderWithClose headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+        <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} onClickOpenMenu={this.showMenu} />
           {
             children.map((child) =>
               <GeneralOrbComponent key={child.id} child={child} />
