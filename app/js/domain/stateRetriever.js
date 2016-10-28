@@ -5,14 +5,13 @@ import stateSyncService from '../service/stateSyncService';
 class StateRetriever {
 
   deriveState() {
-
     return RestService.getRoot()
       .then((responseData) => {
-        console.log('Got data.');
+        console.debug('Got root data.');
         return new ModelToStateTransformer().transform(responseData.appContainer, responseData.startupTimestamp);
       })
       .catch((error) => {
-        console.log('Got error calling getAppContainer.');
+        console.debug('Got error calling getAppContainer.');
         return Promise.reject(error);
       });
   }
@@ -22,7 +21,7 @@ class StateRetriever {
       const promise = stateSyncService.getMostRecentHistoricalState();
 
       promise.catch((error) => {
-        console.log(error.stack);
+        console.error(error.stack);
         reject(error);
       });
 

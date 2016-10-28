@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import GeneralOrbComponent from '../../containers/GeneralOrbComponent';
 import { connect } from 'react-redux';
-import Header from '../utils/Header';
+import Header from './app/header/Header';
 import crudComponentOperations from './ComponentCrudOperations';
 import orbModelTraversal from '../../state/orbModelTraversal';
 

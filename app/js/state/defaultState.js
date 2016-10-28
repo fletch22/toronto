@@ -11,7 +11,8 @@ class DefaultState {
               addNew: {
                 appLabel: ''
               }
-            }
+            },
+            children: []
           },
           timeTravelNavBar: {
             show: false

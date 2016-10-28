@@ -1,5 +1,6 @@
 
 
+
 class ModelTransformer {
 
   transform(appContainerModel) {
@@ -19,6 +20,7 @@ class ModelTransformer {
         id: child.id,
         parentId: child.parentId
       };
+
       model.appContainer.children.push(application);
     });
 

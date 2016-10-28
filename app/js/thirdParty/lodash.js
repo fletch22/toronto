@@ -1390,7 +1390,7 @@
       WeakMap = getNative(context, 'WeakMap'),
       nativeCreate = getNative(Object, 'create');
 
-    /** Used to store function metadata. */
+    /** Used to stores function metadata. */
     var metaMap = WeakMap && new WeakMap;
 
     /** Detect if properties shadowing those on `Object.prototype` are non-enumerable. */
@@ -1804,7 +1804,7 @@
     /*------------------------------------------------------------------------*/
 
     /**
-     * Creates a map cache object to store key-value pairs.
+     * Creates a map cache object to stores key-value pairs.
      *
      * @private
      * @constructor
@@ -1913,7 +1913,7 @@
 
     /**
      *
-     * Creates a set cache object to store unique values.
+     * Creates a set cache object to stores unique values.
      *
      * @private
      * @constructor
@@ -1972,7 +1972,7 @@
     /*------------------------------------------------------------------------*/
 
     /**
-     * Creates a stack cache object to store key-value pairs.
+     * Creates a stack cache object to stores key-value pairs.
      *
      * @private
      * @constructor

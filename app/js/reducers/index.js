@@ -6,7 +6,7 @@ import { ErrorModalDtoFactory } from '../component/modals/ErrorModal';
 import stateSyncService from '../service/stateSyncService';
 import orbModelTraversal from '../state/orbModelTraversal';
 
-// Note: 07/05/2016: For some reason this yields an error. Seems like state gets undefined.
+// Note: 07/05/2016: For some reason this yields an error. Seems like defaultState gets undefined.
 // export default combineReducers({
 //  appContainerToolbar,
 //  header
@@ -18,7 +18,14 @@ const reducer = (state = defaultState.getInstance(), action) => {
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
 
+  console.log(action.type);
+
   switch (action.type) {
+    case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
+      // appContainerDom.section.addNew.appLabel = !action.showMenu;
+
+      return stateNew;
+    }
     case ACTIONS.types.ADD_APP: {
       return appContainerService.addApp(state, jsonStateOld, appContainerDom.section.addNew.appLabel);
     }
@@ -79,7 +86,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.HIDE_TIME_TRAVEL_NAV_BAR: {
-      console.log("Trying to hide.");
+      console.log('Trying to hide.');
 
       stateNew.dom.view.timeTravelNavBar.show = false;
       window.showTimeTravelNavBar = false;

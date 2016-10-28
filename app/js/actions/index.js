@@ -1,3 +1,6 @@
+import dashboard from './dashboard';
+import _ from 'lodash';
+
 export const ACTIONS = {
   types: {
     ADD_APP: 'ADD_APP',
@@ -15,6 +18,7 @@ export const ACTIONS = {
     UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST'
   }
 };
+_.extend(ACTIONS.types, dashboard.ActionTypes);
 
 export const actionChangeAppLabelInput = (appLabel) => {
   return {

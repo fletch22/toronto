@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
-import Menu, { SubMenu, MenuItem } from 'rc-menu';
 import { connect } from 'react-redux';
-import '../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
-import F22Input from '../orb/F22Input';
+import '../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
+import F22Input from '../../../orb/F22Input';
 import 'rc-menu/assets/index.css';
 import animate from 'css-animation';
+import HeaderMenu from '../../app/header/HeaderMenu';
+import { actionAppToggleMenu } from '../../../../actions/dashboard/app';
 
 class Header extends React.Component {
 
@@ -18,39 +19,27 @@ class Header extends React.Component {
         </div>
         <div className="header-right">
           <button type="button" className="fa fa-ellipsis-v button-ellipses-v" aria-label="Close" onClick={this.props.onClickOpenMenu} />
-          <div className="header-menu">
-            <Menu>
-              <MenuItem>1</MenuItem>
-              <SubMenu title="2">
-                <MenuItem>2-1</MenuItem>
-              </SubMenu>
-            </Menu>
-          </div>
+          <HeaderMenu hideMenu={this.props.showHeaderMenu} />
         </div>
       </div>
-
     );
   }
 }
-
-//  <button type="button" className="fa fa-ellipsis-v button-ellipses-v" aria-label="Close" onClick={this.props.onClickClose} />
 
 Header.propTypes = {
   headerTextValue: PropTypes.string,
   modelNodeId: PropTypes.any,
   onClickClose: PropTypes.func,
   onChangeLabel: PropTypes.func,
-  onClickOpenMenu: PropTypes.func
+  onClickOpenMenu: PropTypes.func,
+  showHeaderMenu: PropTypes.bool
 };
 
-function jackson() {
-  console.log('Clicked ellipse.');
-}
-
-const mapDispatchToProps = () => {
+const mapDispatchToProps = (dispatch) => {
   return {
     onClickOpenMenu: () => {
-      jackson();
+      console.log(typeof actionAppToggleMenu);
+      dispatch(actionAppToggleMenu());
     }
   };
 };

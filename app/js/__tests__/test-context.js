@@ -1,2 +1,2 @@
-const context = require.context('./', true, /Spec\.js$/);
+const context = require.context('./', true, /orSpec\.js$/);
 context.keys().forEach(context);

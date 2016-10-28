@@ -15,7 +15,7 @@ class TestRenderedApp {
   setup(sandbox) {
     const state = Object.assign({}, defaultState.getInstance());
     state.model.appContainer.id = 123;
-    //state.model.appContainer.children = [{ label: 'HelloWorldApp', id: 1040, parentId: 1039 }, { parentId: 1039, id: 1, label: 'asdf' }];
+    //defaultState.model.appContainer.children = [{ label: 'HelloWorldApp', id: 1040, parentId: 1039 }, { parentId: 1039, id: 1, label: 'asdf' }];
 
     return new Promise((resolve, reject) => {
       const currentStateRetriever = sandbox.stub(CurrentStateRetriever, 'getCurrent').returns(Promise.resolve(state));
