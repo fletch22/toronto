@@ -3,10 +3,10 @@ export const ACTIONS = {
   ADD_WEBSITE: 'ADD_WEBSITE'
 };
 
-export const actionAppToggleMenu = (isShowing) => {
+export const actionAppToggleMenu = (modelId) => {
   return {
     type: ACTIONS.TOGGLE_HEADER_MENU,
-    isShowing
+    modelId
   };
 };
 

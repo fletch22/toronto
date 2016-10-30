@@ -23,7 +23,7 @@ describe('Rest service', () => {
     promise.then(success).catch(error);
   });
 
-  it('should execute addApp correctly.', (done) => {
+  it('should execute createApp correctly.', (done) => {
 
     const promise = RestService.getAppContainer();
 

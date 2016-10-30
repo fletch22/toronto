@@ -1,12 +1,14 @@
 import defaultState from './../state/defaultState';
-import ModelTransformer from './modelTransformer';
+import ModelToStateGenerator from './ModelToStateGenerator';
 
+// Deprecated: Use ModelToStateGenerator instead.
 class ModelToStateTransformer {
 
   transform(appContainerModel, serverStartupTimestamp) {
-    const modelTransformer = new ModelTransformer();
     const state = Object.assign({}, defaultState.getInstance());
-    state.model = modelTransformer.transform(appContainerModel);
+
+    const modelToStateGenerator = new ModelToStateGenerator(state);
+    modelToStateGenerator.process(appContainerModel);
     state.serverStartupTimestamp = serverStartupTimestamp;
 
     return state;
@@ -18,7 +20,6 @@ class ModelToStateTransformer {
     && model.children.haveChildrenBeenResolved) {
       result = true;
     }
-
     return result;
   }
 }

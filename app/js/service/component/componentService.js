@@ -1,5 +1,5 @@
 import stateSyncService from '../stateSyncService';
-import orbModelTraversal from '../../state/orbModelTraversal';
+import graphTraversal from '../../state/graphTraversal';
 import _ from 'lodash';
 import StatePackager from '../../service/statePackager';
 class ComponentService {
@@ -11,7 +11,7 @@ class ComponentService {
   delete(stateNew, jsonStateOld, parentId, childId) {
     const appContainerModel = stateNew.model.appContainer;
 
-    const parent = orbModelTraversal.find(appContainerModel, parentId);
+    const parent = graphTraversal.find(appContainerModel, parentId);
 
     _.remove(parent.children, (child) => {
       return child.id === childId;
@@ -24,12 +24,17 @@ class ComponentService {
   update(stateNew, jsonStateOld, id, property, newValue) {
     const appContainerModel = stateNew.model.appContainer;
 
-    const object = orbModelTraversal.find(appContainerModel, id);
+    const object = graphTraversal.find(appContainerModel, id);
 
     object[property] = newValue;
 
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveState(statePackage);
+  }
+
+  stateInjector(parentModel, parentDom, component) {
+    parentModel.children.push(component.model);
+    parentDom.children.push(component.dom);
   }
 }
 

@@ -1,13 +1,10 @@
 import ComponentTypes from '../domain/component/componentTypes';
-import appModelFactory from '../domain/component/appModelFactory';
-import domFactory from '../domain/component/domFactory';
+import componentGenerator from '../domain/component/componentGenerator';
 
 class ModelToStateGenerator {
 
   constructor(state) {
     this.state = state;
-    this.modelAppContainer = state.model.appContainer;
-    this.domAppContainer = state.dom.view.appContainer;
   }
 
   ensureDefined(object) {
@@ -26,31 +23,32 @@ class ModelToStateGenerator {
     this.state.model.appContainer.id = modelFromServer.id;
     this.state.model.appContainer.typeLabel = modelFromServer.typeLabel;
 
-    console.log(`Is not null? ${typeof this.state.dom.view.appContainer}`);
-
-    return this.processChildren(this.state.model.appContainer, this.state.dom.view.appContainer, modelFromServer);
+    return this.createChildren(this.state.model.appContainer, this.state.dom.view.appContainer, modelFromServer);
   }
 
-  processChildren(modelParent, domParent, parent) {
+  createChildren(modelParent, domParent, parent) {
     this.ensureDefined(domParent);
-    parent.children.forEach((child) => this.processChild(modelParent, domParent, child));
+    if (parent.children && parent.children.list) {
+      parent.children.list.forEach((child) => this.createChild(modelParent, domParent, child));
+    }
+
+    return this.state;
   }
 
-  processChild(modelParent, domParent, child) {
-    let modelChild;
-    let domChild;
+  createChild(modelParent, domParent, child) {
+    let component;
+
     switch (child.typeLabel) {
       case ComponentTypes.App: {
-        modelChild = appModelFactory.createInstance(child.parentId, child.label);
-        domChild = domFactory.createApp(modelChild);
-        if (child.children) this.processChildren(modelChild, domChild, child.children);
+        component = componentGenerator.createApp(child.parentId, child.label);
         break;
       }
       default:
         throw new Error('Could not find generator to render model.');
     }
-    modelParent.children.push(modelChild);
-    domParent.children.push(domChild);
+    this.createChildren(component.model, component.dom, child);
+    modelParent.children.push(component.model);
+    domParent.children.push(component.dom);
   }
 }
 

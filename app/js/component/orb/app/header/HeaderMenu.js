@@ -5,9 +5,8 @@ import 'rc-menu/assets/index.css';
 
 class HeaderMenu extends React.Component {
   render() {
-
     let menu;
-    if (!this.props.hideMenu) {
+    if (this.props.isShowingHeaderMenu) {
       menu = (<Menu>
         <MenuItem>Create Website</MenuItem>
         <SubMenu title="2">
@@ -25,7 +24,7 @@ class HeaderMenu extends React.Component {
 }
 
 HeaderMenu.propTypes = {
-  hideMenu: PropTypes.bool
+  isShowingHeaderMenu: PropTypes.bool
 };
 
 export default HeaderMenu;

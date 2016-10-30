@@ -2,7 +2,7 @@ import ComponentService from './componentService';
 import StatePackager from '../statePackager';
 import stateSyncService from '../stateSyncService';
 import appModelFactory from '../../domain/component/appModelFactory';
-import domFactory from '../../domain/component/domFactory';
+import componentGenerator from '../../domain/component/componentGenerator';
 
 class AppContainerService extends ComponentService {
 
@@ -11,26 +11,22 @@ class AppContainerService extends ComponentService {
     this.statePackager = new StatePackager();
   }
 
+  addAppToState(state, label) {
+    const modelAppContainer = state.model.appContainer;
+    const component = componentGenerator.createApp(modelAppContainer.id, label);
+    const domAppContainer = state.dom.view.appContainer;
+    this.stateInjector(modelAppContainer, domAppContainer, component);
+  }
+
   addApp(stateNew, jsonStateOld, label) {
-
-    console.log('Is this invoked on startup?');
-
-    const modelAppContainer = stateNew.model.appContainer;
-    const app = appModelFactory.createInstance(modelAppContainer.id, label);
-
-    modelAppContainer.children.push(app);
-    const domAppContainer = stateNew.dom.appContainer;
-    domAppContainer.children.push(domFactory.createApp(app));
+    this.addAppToState(stateNew, label);
 
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveStateSynchronous(statePackage);
   }
 
   addAppAsync(stateNew, jsonStateOld, label) {
-    const appContainerModel = stateNew.model.appContainer;
-    const app = appModelFactory.createInstance(appContainerModel.id, label);
-
-    appContainerModel.children.push(app);
+    this.addAppToState(stateNew, label);
 
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveState(statePackage);

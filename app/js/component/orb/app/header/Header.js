@@ -6,6 +6,7 @@ import 'rc-menu/assets/index.css';
 import animate from 'css-animation';
 import HeaderMenu from '../../app/header/HeaderMenu';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app';
+import graphTraversal from '../../../../state/graphTraversal';
 
 class Header extends React.Component {
 
@@ -14,12 +15,12 @@ class Header extends React.Component {
       <div className="container-orb">
         <div className="header-left">
           <div>
-            <F22Input modelNodeId={this.props.modelNodeId} propertyName="label" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue} />
+            <F22Input modelNodeId={this.props.modelNodeId} propertyName="label" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue + ' ' + this.props.modelNodeId} />
           </div>
         </div>
         <div className="header-right">
           <button type="button" className="fa fa-ellipsis-v button-ellipses-v" aria-label="Close" onClick={this.props.onClickOpenMenu} />
-          <HeaderMenu hideMenu={this.props.showHeaderMenu} />
+          <HeaderMenu isShowingHeaderMenu={this.props.isShowingHeaderMenu} />
         </div>
       </div>
     );
@@ -32,20 +33,28 @@ Header.propTypes = {
   onClickClose: PropTypes.func,
   onChangeLabel: PropTypes.func,
   onClickOpenMenu: PropTypes.func,
-  showHeaderMenu: PropTypes.bool
+  isShowingHeaderMenu: PropTypes.bool
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state, ownProps) => {
+  const appContainerDom = state.dom.view.appContainer;
+  const app = graphTraversal.find(appContainerDom.children, ownProps.modelNodeId);
+
+  return {
+    isShowingHeaderMenu: app.isShowingHeaderMenu
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickOpenMenu: () => {
-      console.log(typeof actionAppToggleMenu);
-      dispatch(actionAppToggleMenu());
+      dispatch(actionAppToggleMenu(ownProps.modelNodeId));
     }
   };
 };
 
 Header = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Header);
 

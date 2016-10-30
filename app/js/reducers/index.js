@@ -4,7 +4,7 @@ import defaultState from '../state/defaultState';
 import appContainerService from '../service/component/appContainerService';
 import { ErrorModalDtoFactory } from '../component/modals/ErrorModal';
 import stateSyncService from '../service/stateSyncService';
-import orbModelTraversal from '../state/orbModelTraversal';
+import graphTraversal from '../state/graphTraversal';
 
 // Note: 07/05/2016: For some reason this yields an error. Seems like defaultState gets undefined.
 // export default combineReducers({
@@ -22,8 +22,10 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
-      // appContainerDom.section.addNew.appLabel = !action.showMenu;
+      const node = graphTraversal.find(appContainerDom, action.modelId);
+      node.isShowingHeaderMenu = !node.isShowingHeaderMenu;
 
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       return stateNew;
     }
     case ACTIONS.types.ADD_APP: {
@@ -103,7 +105,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST: {
       const appContainerModel = stateNew.model.appContainer;
-      const object = orbModelTraversal.find(appContainerModel, action.payload.id);
+      const object = graphTraversal.find(appContainerModel, action.payload.id);
       object[action.payload.propertyName] = action.payload.value;
 
       return stateNew;

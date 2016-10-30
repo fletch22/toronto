@@ -86,7 +86,7 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     autoWatch: true,
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'], //, 'PhantomJS', ],
+    browsers: ['PhantomJS'], //, 'Chrome' 'PhantomJS', ],
     webpack: webpackConfig,
     webpackMiddleware: {
       noInfo: true

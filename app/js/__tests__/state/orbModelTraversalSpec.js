@@ -1,7 +1,7 @@
-import orbModelTraversal from '../../state/orbModelTraversal';
+import graphTraversal from '../../state/graphTraversal';
 import { expect } from 'chai';
 
-describe('OrbModelTraversal', () => {
+describe('GraphTraversal', () => {
 
   const state = {
     id: 'banana',
@@ -34,7 +34,7 @@ describe('OrbModelTraversal', () => {
   };
 
   it('should find an object correctly.', () => {
-    const object = orbModelTraversal.find(state, 'foo');
+    const object = graphTraversal.find(state, 'foo');
 
     expect(object).is.not.equal(null);
     expect(typeof object).is.equal('object');
@@ -42,13 +42,13 @@ describe('OrbModelTraversal', () => {
   });
 
   it('should not find an object that does not exist.', () => {
-    const object = orbModelTraversal.find({}, 'foo');
+    const object = graphTraversal.find({}, 'foo');
 
     expect(object).is.equal(undefined);
   });
 
   it('should find parent object.', () => {
-    const object = orbModelTraversal.findParent(state, 'foo');
+    const object = graphTraversal.findParent(state, 'foo');
 
     expect(object).is.not.equal(null);
     expect(typeof object).is.equal('object');
@@ -56,7 +56,7 @@ describe('OrbModelTraversal', () => {
   });
 
   it('should find parent object.', () => {
-    const object = orbModelTraversal.findParent(state, 'foo');
+    const object = graphTraversal.findParent(state, 'foo');
 
     expect(object).is.not.equal(null);
     expect(typeof object).is.equal('object');
@@ -68,7 +68,7 @@ describe('OrbModelTraversal', () => {
 
     const startDate = new Date().getTime();
     for (let i = 0; i < 100; i++) {
-      object = orbModelTraversal.findParent(state, 'section7');
+      object = graphTraversal.findParent(state, 'section7');
     }
     const endDate = new Date().getTime();
 

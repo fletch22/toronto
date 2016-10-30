@@ -3,26 +3,17 @@ import GeneralOrbComponent from '../../containers/GeneralOrbComponent';
 import { connect } from 'react-redux';
 import Header from './app/header/Header';
 import crudComponentOperations from './ComponentCrudOperations';
-import orbModelTraversal from '../../state/orbModelTraversal';
+import graphTraversal from '../../state/graphTraversal';
 
 class App extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.showMenu = this.showMenu.bind(this.showMenu);
-  }
-
-  showMenu() {
-
-  }
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
 
     return (
       <div className="container-app col-lg-2">
-        <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} onClickOpenMenu={this.showMenu} />
-          {
+        <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+        {
             children.map((child) =>
               <GeneralOrbComponent key={child.id} child={child} />
             )
@@ -50,7 +41,7 @@ function changeLabel(component, newLabelValue) {
 
 const mapStateToProps = (state, ownProps) => {
   const appContainerModel = state.model.appContainer;
-  const object = orbModelTraversal.find(appContainerModel, ownProps.id);
+  const object = graphTraversal.find(appContainerModel, ownProps.id);
 
   return {
     label: object.label

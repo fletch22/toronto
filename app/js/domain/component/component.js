@@ -4,6 +4,6 @@ class Component {
     object.typeLabel = typeLabel;
     return object;
   }
-};
+}
 
 export default Component;

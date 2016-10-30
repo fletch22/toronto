@@ -1,6 +1,6 @@
 
 
-class OrbModelTraversal {
+class GraphTraversal {
 
   // Called with every property and it's value
   process(key, value, id) {
@@ -32,18 +32,18 @@ class OrbModelTraversal {
     return foundObject;
   }
 
-  find(state, id) {
-    return this.traverseIt(state, this.process, id);
+  find(node, id) {
+    return this.traverseIt(node, this.process, id);
   }
 
-  findParent(state, id) {
+  findParent(node, id) {
     let parent;
-    const child = this.find(state, id);
+    const child = this.find(node, id);
     if (child) {
-      parent = this.find(state, child.parentId);
+      parent = this.find(node, child.parentId);
     }
     return parent;
   }
 }
 
-export default new OrbModelTraversal();
+export default new GraphTraversal();
