@@ -1,6 +1,7 @@
-import ModelToStateTransformer from '../stores/modelToStateTransformer';
+import ModelToStateGenerator from '../stores/modelToStateGenerator';
 import RestService from '../service/restService';
 import stateSyncService from '../service/stateSyncService';
+import defaultState from '../state/defaultState';
 
 class StateRetriever {
 
@@ -8,7 +9,13 @@ class StateRetriever {
     return RestService.getRoot()
       .then((responseData) => {
         console.debug('Got root data.');
-        return new ModelToStateTransformer().transform(responseData.appContainer, responseData.startupTimestamp);
+        const state = defaultState.getInstance();
+
+        const modelToStateGenerator = new ModelToStateGenerator(state);
+        modelToStateGenerator.process(responseData.appContainer);
+        state.serverStartupTimestamp = responseData.startupTimestamp;
+
+        return state;
       })
       .catch((error) => {
         console.debug('Got error calling getAppContainer.');

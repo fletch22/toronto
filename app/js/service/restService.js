@@ -17,6 +17,10 @@ class RestService extends Service {
   getExceptionForTesting(value) {
     return this.fetch(`${this.url}/component/getExceptionForTesting`, 'GET', value);
   }
+
+  nukeAndPave() {
+    return this.fetch(`${this.url}/component/nukeAndPave`, 'POST');
+  }
 }
 
 export default new RestService();

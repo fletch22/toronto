@@ -40,12 +40,13 @@ class ModelToStateGenerator {
 
     switch (child.typeLabel) {
       case ComponentTypes.App: {
-        component = componentGenerator.createApp(child.parentId, child.label);
+        component = componentGenerator.createApp(child.parentId, child.label, child.id);
         break;
       }
       default:
         throw new Error('Could not find generator to render model.');
     }
+
     this.createChildren(component.model, component.dom, child);
     modelParent.children.push(component.model);
     domParent.children.push(component.dom);

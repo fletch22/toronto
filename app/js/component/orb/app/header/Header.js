@@ -15,7 +15,7 @@ class Header extends React.Component {
       <div className="container-orb">
         <div className="header-left">
           <div>
-            <F22Input modelNodeId={this.props.modelNodeId} propertyName="label" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue + ' ' + this.props.modelNodeId} />
+            <F22Input modelNodeId={this.props.modelNodeId} propertyName="label" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue} />
           </div>
         </div>
         <div className="header-right">
@@ -36,9 +36,15 @@ Header.propTypes = {
   isShowingHeaderMenu: PropTypes.bool
 };
 
+const punkit = (label, value) => {
+  console.log(`${label}: ${JSON.stringify(value)}`);
+};
+
 const mapStateToProps = (state, ownProps) => {
   const appContainerDom = state.dom.view.appContainer;
   const app = graphTraversal.find(appContainerDom.children, ownProps.modelNodeId);
+
+   punkit('app', app);
 
   return {
     isShowingHeaderMenu: app.isShowingHeaderMenu
@@ -48,6 +54,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickOpenMenu: () => {
+      console.log('modelNodeId: ' + ownProps.modelNodeId);
       dispatch(actionAppToggleMenu(ownProps.modelNodeId));
     }
   };

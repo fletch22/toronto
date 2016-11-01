@@ -3,8 +3,8 @@ import domFactory from './domFactory';
 
 class ComponentGenerator {
 
-  createApp(parentId, childLabel) {
-    const modelChild = appModelFactory.createInstance(parentId, childLabel);
+  createApp(parentId, childLabel, childId) {
+    const modelChild = appModelFactory.createInstance(parentId, childLabel, childId);
     return {
       model: modelChild,
       dom: domFactory.createApp(modelChild)

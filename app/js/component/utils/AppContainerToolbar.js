@@ -6,8 +6,26 @@ import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';
 import TimeTravelNavBar from './TimeTravelNavBar';
+import restService from '../../service/restService';
 
 class AppContainerToolbar extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.onNukeAndPaveClick = this.onNukeAndPaveClick.bind(this);
+  }
+
+  onNukeAndPaveClick() {
+    restService.nukeAndPave()
+      .then((result) => {
+        console.log(`Success: ${JSON.stringify(result)}`);
+        window.document.location.href = window.document.location.href;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <div className="container-fluid toolbar-container">
@@ -23,8 +41,9 @@ class AppContainerToolbar extends React.Component {
             </button>
           </div>
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
-          <div className="col-lg-1">
-            <button onClick={this.props.onShowTimeTravelOverlay}>Time Travel</button>
+          <div className="col-lg-2">
+            <button onClick={this.props.onShowTimeTravelOverlay} className="toolbar-buttons">Time Travel</button>
+            <button onClick={this.onNukeAndPaveClick} className="toolbar-buttons">Nuke & Pave</button>
             <TimeTravelNavBar />
           </div>
         </div>
@@ -68,7 +87,8 @@ AppContainerToolbar.propTypes = {
   onChange: React.PropTypes.func.isRequired,
   numberApps: React.PropTypes.number.isRequired,
   onShowError: React.PropTypes.func.isRequired,
-  onShowTimeTravelOverlay: React.PropTypes.func
+  onShowTimeTravelOverlay: React.PropTypes.func,
+  onNukeAndPaveClick: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -90,6 +110,17 @@ function showSampleErrorModal() {
   };
 }
 
+const processNukeAndPaveClick = (dispatch) => {
+  restService.nukeAndPave()
+    .then((result) => {
+      console.log(`Success: ${JSON.stringify(result)}`);
+      // window.document.location.href = window.document.location.href;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     onClick: () => {
@@ -103,6 +134,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShowTimeTravelOverlay: () => {
       dispatch(actionShowTimeTravelNavBar());
+    },
+    onNukeAndPaveClick: () => {
+      processNukeAndPaveClick(dispatch);
     }
   };
 };

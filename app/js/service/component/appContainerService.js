@@ -1,7 +1,6 @@
 import ComponentService from './componentService';
 import StatePackager from '../statePackager';
 import stateSyncService from '../stateSyncService';
-import appModelFactory from '../../domain/component/appModelFactory';
 import componentGenerator from '../../domain/component/componentGenerator';
 
 class AppContainerService extends ComponentService {
@@ -11,9 +10,9 @@ class AppContainerService extends ComponentService {
     this.statePackager = new StatePackager();
   }
 
-  addAppToState(state, label) {
+  addAppToState(state, label, childId) {
     const modelAppContainer = state.model.appContainer;
-    const component = componentGenerator.createApp(modelAppContainer.id, label);
+    const component = componentGenerator.createApp(modelAppContainer.id, label, childId);
     const domAppContainer = state.dom.view.appContainer;
     this.stateInjector(modelAppContainer, domAppContainer, component);
   }
