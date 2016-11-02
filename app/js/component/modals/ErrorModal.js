@@ -1,19 +1,6 @@
 import React from 'react';
 import StandardModal from './StandardModal';
 import { connect } from 'react-redux';
-import ModalTypes from './ModalTypes';
-import { actionHideCurrentModal } from '../../actions/index';
-
-export class ErrorModalDtoFactory {
-  getInstance(headerText, bodyText, okAction) {
-    return {
-      headerText,
-      bodyText,
-      okAction,
-      modalType: ModalTypes.ErrorModal
-    };
-  }
-}
 
 class ErrorModal extends React.Component {
   render() {

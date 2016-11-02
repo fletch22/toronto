@@ -1,5 +1,6 @@
-import dashboard from './dashboard';
 import _ from 'lodash';
+import dashboard from './dashboard';
+import { ActionTypes as ModalActionTypes } from './modal';
 
 export const ACTIONS = {
   types: {
@@ -15,10 +16,12 @@ export const ACTIONS = {
     STATE_ROLLBACK_TO_STATE_ID: 'STATE_ROLLBACK_TO_STATE_ID',
     SHOW_TIME_TRAVEL_NAV_BAR: 'SHOW_TIME_TRAVEL_NAV_BAR',
     HIDE_TIME_TRAVEL_NAV_BAR: 'HIDE_TIME_TRAVEL_NAV_BAR',
-    UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST'
+    UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST',
+    REFRESH_PAGE: 'REFRESH_PAGE'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
+_.extend(ACTIONS.types, ModalActionTypes);
 
 export const actionChangeAppLabelInput = (appLabel) => {
   return {
@@ -95,6 +98,8 @@ export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
   };
 };
 
-
-
-
+export const actionRefreshPage = () => {
+  return {
+    type: ACTIONS.types.REFRESH_PAGE
+  };
+};

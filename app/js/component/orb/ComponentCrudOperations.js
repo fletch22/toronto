@@ -1,6 +1,6 @@
 import crudActionCreator from '../../actions/crudActionCreator';
 import ComponentService from '../../service/component/componentService';
-import errorHandlerDispatch from '../../component/modals/ErrorHandlerDispatch';
+import modalDispatcher from '../modals/ModalDispatcher';
 import { connect } from 'react-redux';
 
 class ComponentCrudOperations {
@@ -15,7 +15,7 @@ class ComponentCrudOperations {
       const promise = componentService.delete(stateNew, jsonStateOld, component.parentId, component.id);
 
       promise.catch((error) => {
-        errorHandlerDispatch.handle(error, `There was an error removing the ${component.typeLabel}.`, dispatch);
+        modalDispatcher.dispatchErrorModal(error, `There was an error removing the ${component.typeLabel}.`, dispatch);
       });
 
       return promise;
@@ -33,7 +33,7 @@ class ComponentCrudOperations {
       const promise = componentService.update(stateNew, jsonStateOld, component.id, property, newPropertyValue);
 
       promise.catch((error) => {
-        errorHandlerDispatch.handle(error, `There was an error updating the ${component.typeLabel} object.`, dispatch);
+        modalDispatcher.dispatchErrorModal(error, `There was an error updating the ${component.typeLabel} object.`, dispatch);
       });
 
       return promise;

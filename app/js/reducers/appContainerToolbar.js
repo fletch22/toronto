@@ -2,7 +2,7 @@ import { ACTIONS, actionRollbackToStateId } from '../actions/index.js';
 import stateFixer from '../domain/stateFixer';
 import defaultState from '../state/defaultState';
 import appContainerService from '../service/component/appContainerService';
-import { ErrorModalDtoFactory } from '../component/modals/ErrorModal';
+import ErrorModalDtoFactory from '../component/modals/ErrorModalDtoFactory';
 import stateSyncService from '../service/stateSyncService';
 
 export default function appContainerToolbar(state = defaultState.getInstance(), action) {

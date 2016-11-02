@@ -2,15 +2,10 @@ import { ACTIONS, actionRollbackToStateId } from '../actions/index.js';
 import stateFixer from '../domain/stateFixer';
 import defaultState from '../state/defaultState';
 import appContainerService from '../service/component/appContainerService';
-import { ErrorModalDtoFactory } from '../component/modals/ErrorModal';
+import ErrorModalDtoFactory from '../component/modals/ErrorModalDtoFactory';
 import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
-
-// Note: 07/05/2016: For some reason this yields an error. Seems like defaultState gets undefined.
-// export default combineReducers({
-//  appContainerToolbar,
-//  header
-// });
+import ModalTypes from '../component/modals/ModalTypes';
 
 const reducer = (state = defaultState.getInstance(), action) => {
 
@@ -25,7 +20,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const node = graphTraversal.find(appContainerDom, action.modelId);
 
       if (!node) {
-        console.log('State: ' + JSON.stringify(state));
+        console.log(`State:  ${JSON.stringify(state)}`);
         console.error('Could not find node to toggle header menu.');
         return state;
       }
@@ -51,6 +46,22 @@ const reducer = (state = defaultState.getInstance(), action) => {
       stateFixer.fix(jsonStateOld, JSON.stringify(action.state));
 
       return action.state;
+    }
+    case ACTIONS.types.MODAL.MODAL_CONFIRM_SHOW: {
+      const modal = {
+        modalType: ModalTypes.ConfirmModal,
+        headerText: action.headerText,
+        bodyText: action.bodyText,
+        yesAction: action.yesAction,
+        noAction: action.noAction,
+        cancelAction: action.cancelAction
+      };
+
+      console.log(JSON.stringify(modal));
+
+      stateNew.dom.modal.push(modal);
+
+      return stateNew;
     }
     case ACTIONS.types.MODAL_STATE_ROLLBACK_SHOW: {
       const errorModalDtoFactory = new ErrorModalDtoFactory();
@@ -109,6 +120,10 @@ const reducer = (state = defaultState.getInstance(), action) => {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
       return stateNew;
+    }
+    case ACTIONS.types.REFRESH_PAGE: {
+      document.location.href = document.location.href;
+      break;
     }
     case ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST: {
       const appContainerModel = stateNew.model.appContainer;

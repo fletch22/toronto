@@ -1,12 +1,14 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal, actionShowTimeTravelNavBar } from '../../actions';
+import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal, actionShowTimeTravelNavBar, actionRefreshPage } from '../../actions';
+import { actionShowConfirm } from '../../actions/modal';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';
 import TimeTravelNavBar from './TimeTravelNavBar';
 import restService from '../../service/restService';
+
 
 class AppContainerToolbar extends React.Component {
 
@@ -43,7 +45,7 @@ class AppContainerToolbar extends React.Component {
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
           <div className="col-lg-2">
             <button onClick={this.props.onShowTimeTravelOverlay} className="toolbar-buttons">Time Travel</button>
-            <button onClick={this.onNukeAndPaveClick} className="toolbar-buttons">Nuke & Pave</button>
+            <button onClick={this.props.onNukeAndPaveClick} className="toolbar-buttons">Nuke & Pave</button>
             <TimeTravelNavBar />
           </div>
         </div>
@@ -102,7 +104,6 @@ const mapStateToProps = (state) => {
 
 function showSampleErrorModal() {
   return (dispatch, getState) => {
-
     // NOTE: Necessary to avoid circular references.
     const jsonState = JSON.stringify(getState());
 
@@ -110,15 +111,29 @@ function showSampleErrorModal() {
   };
 }
 
-const processNukeAndPaveClick = (dispatch) => {
-  restService.nukeAndPave()
-    .then((result) => {
-      console.log(`Success: ${JSON.stringify(result)}`);
-      // window.document.location.href = window.document.location.href;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const processNukeAndPaveClick = () => {
+
+  // const addApp = (dispatch, state) => {
+  //     dispatch(actionShowErrorModal(errorModalDto.headerText, errorModalDto.bodyText, okAction));
+  //   });
+  //
+  //   return promise;
+  // };
+
+  return (dispatch) => {
+    const headerText = 'Danger!';
+    const bodyText = 'You are about to destroy all your data. Are you sure?';
+
+    dispatch(actionShowConfirm(headerText, bodyText, actionRefreshPage(), actionHideCurrentModal(), actionHideCurrentModal()));
+
+    // restService.nukeAndPave()
+    //   .then((result) => {
+    //      window.document.location.href = window.document.location.href;
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -136,7 +151,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actionShowTimeTravelNavBar());
     },
     onNukeAndPaveClick: () => {
-      processNukeAndPaveClick(dispatch);
+      dispatch(processNukeAndPaveClick());
     }
   };
 };

@@ -1,8 +1,8 @@
 import { actionShowErrorModal, actionHideCurrentModal } from '../../actions/index';
 
-class ErrorHandlerDispatch {
+class ModalDispatcher {
 
-  handle(error, title, dispatch) {
+  dispatchErrorModal(error, title, dispatch) {
     const errorModalDto = {
       headerText: error.name,
       bodyText: error.message
@@ -18,4 +18,4 @@ class ErrorHandlerDispatch {
   }
 }
 
-export default new ErrorHandlerDispatch();
+export default new ModalDispatcher();
