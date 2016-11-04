@@ -8,7 +8,10 @@ import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';
 import TimeTravelNavBar from './TimeTravelNavBar';
 import restService from '../../service/restService';
-
+import nukeAndPaveUrl from 'file!../../../images/mushroom-cloud.svg';
+import policeBox from 'file!../../../images/policeBox.svg';
+import waterfall from 'file!../../../images/waterfall.png';
+import 'css/modules/time-travel-toolbar';
 
 class AppContainerToolbar extends React.Component {
 
@@ -43,9 +46,9 @@ class AppContainerToolbar extends React.Component {
             </button>
           </div>
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
-          <div className="col-lg-2">
-            <button onClick={this.props.onShowTimeTravelOverlay} className="toolbar-buttons">Time Travel</button>
-            <button onClick={this.props.onNukeAndPaveClick} className="toolbar-buttons">Nuke & Pave</button>
+          <div className="col-lg-3">
+            <button id="police-box" onClick={this.props.onShowTimeTravelOverlay} className="btn btn-default police-box"></button>
+            <button id="nuke-and-pave" onClick={this.props.onNukeAndPaveClick} className="btn btn-default nuke-and-pave"></button>
             <TimeTravelNavBar />
           </div>
         </div>
@@ -112,14 +115,6 @@ function showSampleErrorModal() {
 }
 
 const processNukeAndPaveClick = () => {
-
-  // const addApp = (dispatch, state) => {
-  //     dispatch(actionShowErrorModal(errorModalDto.headerText, errorModalDto.bodyText, okAction));
-  //   });
-  //
-  //   return promise;
-  // };
-
   return (dispatch) => {
     const headerText = 'Danger!';
     const bodyText = 'You are about to destroy all your data. Are you sure?';

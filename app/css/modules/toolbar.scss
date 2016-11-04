@@ -8,6 +8,30 @@
 
 .toolbar-button {
   color: $darkText;
+  margin: 2px;
+  display: inline-block;
+}
+
+#nuke-and-pave {
+  background-image: url('../../images/mushroom-cloud.svg');
+  background-size: 17px 15px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px;
+  display: inline-block;
+}
+
+#police-box {
+  background-image: url('../../images/police-box.svg');
+  background-size: 18px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px;
+  display: inline-block;
 }
 
 .toolbar-label {

@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 
 const PATHS = {
+  images: path.join(__dirname, 'app/images'),
   build: path.join(__dirname, 'build'),
   worker: path.join(__dirname, 'app/js/worker')
 };
