@@ -8,9 +8,6 @@ import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';
 import TimeTravelNavBar from './TimeTravelNavBar';
 import restService from '../../service/restService';
-import nukeAndPaveUrl from 'file!../../../images/mushroom-cloud.svg';
-import policeBox from 'file!../../../images/policeBox.svg';
-import waterfall from 'file!../../../images/waterfall.png';
 import 'css/modules/time-travel-toolbar';
 
 class AppContainerToolbar extends React.Component {
