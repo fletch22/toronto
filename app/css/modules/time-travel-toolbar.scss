@@ -14,11 +14,11 @@ $zIndexTimeTravelToolbar: 10000;
 
 .time-travel-toolbar-body {
   color: black;
-  padding: 10px;
+  padding: 10px 0 10px 15px;
   z-index: $zIndexTimeTravelToolbar;
   position: fixed;
-  background-color: blueviolet;
-  width: 225px;
+  background-color: whitesmoke;
+  width: 230px;
 }
 
 .time-travel-toolbar-body > .close-button {
