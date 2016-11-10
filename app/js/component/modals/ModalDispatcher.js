@@ -1,4 +1,5 @@
 import { actionShowErrorModal, actionHideCurrentModal } from '../../actions/index';
+import { actionShowConfirm } from '../../actions/modal/index';
 
 class ModalDispatcher {
 
@@ -15,6 +16,10 @@ class ModalDispatcher {
 
     const okAction = actionHideCurrentModal();
     dispatch(actionShowErrorModal(errorModalDto.headerText, errorModalDto.bodyText, okAction));
+  }
+
+  dispatchConfirmModal(dispatch, headerText, bodyText, yesAction, noAction, cancelAction) {
+    dispatch(actionShowConfirm(headerText, bodyText, yesAction(), noAction(), cancelAction()));
   }
 }
 
