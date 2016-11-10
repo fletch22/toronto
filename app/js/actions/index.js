@@ -17,7 +17,8 @@ export const ACTIONS = {
     SHOW_TIME_TRAVEL_NAV_BAR: 'SHOW_TIME_TRAVEL_NAV_BAR',
     HIDE_TIME_TRAVEL_NAV_BAR: 'HIDE_TIME_TRAVEL_NAV_BAR',
     UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST',
-    REFRESH_PAGE: 'REFRESH_PAGE'
+    REFRESH_PAGE: 'REFRESH_PAGE',
+    NUKE_AND_PAVE: 'NUKE_AND_PAVE'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -103,3 +104,8 @@ export const actionRefreshPage = () => {
     type: ACTIONS.types.REFRESH_PAGE
   };
 };
+
+export const actionNukeAndPave = () => ({
+  type: ACTIONS.types.NUKE_AND_PAVE
+});
+

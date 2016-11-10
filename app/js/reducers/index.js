@@ -6,6 +6,7 @@ import ErrorModalDtoFactory from '../component/modals/ErrorModalDtoFactory';
 import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
+import restService from '../service/restService';
 
 const reducer = (state = defaultState.getInstance(), action) => {
 
@@ -56,9 +57,15 @@ const reducer = (state = defaultState.getInstance(), action) => {
         noAction: action.noAction,
         cancelAction: action.cancelAction
       };
+      stateNew.dom.modal.push(modal);
 
-      console.log(JSON.stringify(modal));
-
+      return stateNew;
+    }
+    case ACTIONS.types.MODAL.MODAL_FORM_SHOW: {
+      const modal = {
+        modalType: ModalTypes.FormModal,
+        modalFormType: action.modalFormType
+      };
       stateNew.dom.modal.push(modal);
 
       return stateNew;
@@ -125,6 +132,16 @@ const reducer = (state = defaultState.getInstance(), action) => {
       document.location.href = document.location.href;
       break;
     }
+    case ACTIONS.types.NUKE_AND_PAVE: {
+      restService.nukeAndPave()
+        .then(() => {
+          window.document.location.href = window.document.location.href;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    }
     case ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST: {
       const appContainerModel = stateNew.model.appContainer;
       const object = graphTraversal.find(appContainerModel, action.payload.id);
@@ -132,6 +149,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.
     default: {
       return state;
     }
