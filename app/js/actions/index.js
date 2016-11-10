@@ -105,7 +105,9 @@ export const actionRefreshPage = () => {
   };
 };
 
-export const actionNukeAndPave = () => ({
-  type: ACTIONS.types.NUKE_AND_PAVE
-});
+export const actionNukeAndPave = () => {
+  return {
+    type: ACTIONS.types.NUKE_AND_PAVE
+  };
+};
 

@@ -9,7 +9,6 @@ import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
 
 const reducer = (state = defaultState.getInstance(), action) => {
-
   const jsonStateOld = JSON.stringify(state);
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;

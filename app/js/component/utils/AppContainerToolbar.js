@@ -1,32 +1,15 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal, actionShowTimeTravelNavBar, actionRefreshPage } from '../../actions';
-import { actionShowConfirm } from '../../actions/modal';
+import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal, actionShowTimeTravelNavBar, actionNukeAndPave } from '../../actions';
 import appContainerService from '../../service/component/appContainerService';
 import crudActionCreator from '../../actions/crudActionCreator';
 import ModalWrangler from '../../component/modals/ModalWrangler';
 import TimeTravelNavBar from './TimeTravelNavBar';
-import restService from '../../service/restService';
+import modalDispatch from '../../component/modals/ModalDispatcher';
 import 'css/modules/time-travel-toolbar';
 
 class AppContainerToolbar extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.onNukeAndPaveClick = this.onNukeAndPaveClick.bind(this);
-  }
-
-  onNukeAndPaveClick() {
-    restService.nukeAndPave()
-      .then((result) => {
-        console.log(`Success: ${JSON.stringify(result)}`);
-        window.document.location.href = window.document.location.href;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
   render() {
     return (
@@ -73,8 +56,7 @@ function addAppLocal() {
         errorModalDto.bodyText = error.responseObject.systemMessage;
       }
 
-      const okAction = actionHideCurrentModal();
-      dispatch(actionShowErrorModal(errorModalDto.headerText, errorModalDto.bodyText, okAction));
+      modalDispatch.dispatchErrorModal(errorModalDto.headerText, errorModalDto.bodyText, dispatch);
     });
 
     return promise;
@@ -111,42 +93,30 @@ function showSampleErrorModal() {
   };
 }
 
-const processNukeAndPaveClick = () => {
-  return (dispatch) => {
-    const headerText = 'Danger!';
-    const bodyText = 'You are about to destroy all your data. Are you sure?';
+const processNukeAndPaveClick = () => (dispatch) => {
+  const headerText = 'Danger!';
+  const bodyText = 'You are about to destroy all your data. Are you sure?';
 
-    dispatch(actionShowConfirm(headerText, bodyText, actionRefreshPage(), actionHideCurrentModal(), actionHideCurrentModal()));
-
-    // restService.nukeAndPave()
-    //   .then((result) => {
-    //      window.document.location.href = window.document.location.href;
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  };
+  modalDispatch.dispatchConfirmModal(dispatch, headerText, bodyText, actionNukeAndPave, actionHideCurrentModal, actionHideCurrentModal);
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onClick: () => {
-      dispatch(addAppLocal());
-    },
-    onChange: (event) => {
-      dispatch(actionChangeAppLabelInput(event.target.value));
-    },
-    onShowError: () => {
-      dispatch(showSampleErrorModal());
-    },
-    onShowTimeTravelOverlay: () => {
-      dispatch(actionShowTimeTravelNavBar());
-    },
-    onNukeAndPaveClick: () => {
-      dispatch(processNukeAndPaveClick());
-    }
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  onClick: () => {
+    dispatch(addAppLocal());
+  },
+  onChange: (event) => {
+    dispatch(actionChangeAppLabelInput(event.target.value));
+  },
+  onShowError: () => {
+    dispatch(showSampleErrorModal());
+  },
+  onShowTimeTravelOverlay: () => {
+    dispatch(actionShowTimeTravelNavBar());
+  },
+  onNukeAndPaveClick: () => {
+    dispatch(processNukeAndPaveClick());
+  }
+});
 
 AppContainerToolbar = connect(
   mapStateToProps,
