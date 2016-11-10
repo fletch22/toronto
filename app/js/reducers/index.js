@@ -149,7 +149,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.
     default: {
       return state;
     }
