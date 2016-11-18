@@ -63,7 +63,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.MODAL.MODAL_FORM_SHOW: {
       const modal = {
         modalType: ModalTypes.FormModal,
-        modalFormType: action.modalFormType
+        modalFormType: action.modalFormType,
+        data: action.data
       };
       stateNew.dom.modal.push(modal);
 
@@ -145,6 +146,28 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const appContainerModel = stateNew.model.appContainer;
       const object = graphTraversal.find(appContainerModel, action.payload.id);
       object[action.payload.propertyName] = action.payload.value;
+
+      return stateNew;
+    }
+    case ACTIONS.types.UPDATE_VIEW_PROPERTY_VALUE: {
+      const payload = action.payload;
+      const object = graphTraversal.find(stateNew.dom.view, payload.modelNodeId);
+
+      if (typeof object.views === 'undefined') {
+        object.views = {};
+      }
+
+      const views = object.views;
+      if (typeof views[payload.viewName] === 'undefined') {
+        views[payload.viewName] = {};
+      }
+
+      const theView = views[payload.viewName];
+      theView[payload.propertyName] = payload.propertyValue;
+
+      if (payload.needsPersisting) {
+        stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+      }
 
       return stateNew;
     }

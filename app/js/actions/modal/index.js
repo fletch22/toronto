@@ -22,8 +22,9 @@ export const actionShowConfirm = (headerText, bodyText, yesAction, noAction, can
   };
 };
 
-export const actionModalFormShow = (modalFormType) => ({
+export const actionModalFormShow = (modalFormType, data) => ({
   type: ActionTypes.MODAL.MODAL_FORM_SHOW,
-  modalFormType
+  modalFormType,
+  data
 });
 

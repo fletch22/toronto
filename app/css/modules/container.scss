@@ -13,9 +13,6 @@
   margin: 2px 0 0 0;
 }
 
-.container-fluid {
-
-}
 
 .container-app {
 	background-color: $gray;
@@ -68,4 +65,10 @@
 
 .menu-item {
 	cursor: pointer;
+}
+
+.vertical-center {
+  display: inline-block;
+  vertical-align: baseline;
+  float: none;
 }

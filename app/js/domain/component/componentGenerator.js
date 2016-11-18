@@ -1,4 +1,5 @@
 import appModelFactory from './appModelFactory';
+import websiteModelFactory from './websiteModelFactory';
 import domFactory from './domFactory';
 
 class ComponentGenerator {
@@ -8,6 +9,14 @@ class ComponentGenerator {
     return {
       model: modelChild,
       dom: domFactory.createApp(modelChild)
+    };
+  }
+
+  createWebsite(parentId, childLabel, childId) {
+    const modelChild = websiteModelFactory.createInstance(parentId, childLabel, childId);
+    return {
+      model: modelChild,
+      dom: domFactory.createWebsite(modelChild)
     };
   }
 }

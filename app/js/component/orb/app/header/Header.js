@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import '../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
 import F22Input from '../../../orb/F22Input';
 import 'rc-menu/assets/index.css';
-import animate from 'css-animation';
 import HeaderMenu from '../../app/header/HeaderMenu';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app';
 import graphTraversal from '../../../../state/graphTraversal';
@@ -20,7 +19,7 @@ class Header extends React.Component {
         </div>
         <div className="header-right">
           <button type="button" className="fa fa-ellipsis-v button-ellipses-v" aria-label="Close" onClick={this.props.onClickOpenMenu} />
-          <HeaderMenu isShowingHeaderMenu={this.props.isShowingHeaderMenu} />
+          <HeaderMenu isShowingHeaderMenu={this.props.isShowingHeaderMenu} modelNodeId={this.props.modelNodeId} />
         </div>
       </div>
     );
@@ -36,15 +35,9 @@ Header.propTypes = {
   isShowingHeaderMenu: PropTypes.bool
 };
 
-const punkit = (label, value) => {
-  console.log(`${label}: ${JSON.stringify(value)}`);
-};
-
 const mapStateToProps = (state, ownProps) => {
   const appContainerDom = state.dom.view.appContainer;
   const app = graphTraversal.find(appContainerDom.children, ownProps.modelNodeId);
-
-   punkit('app', app);
 
   return {
     isShowingHeaderMenu: app.isShowingHeaderMenu
@@ -54,7 +47,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickOpenMenu: () => {
-      console.log('modelNodeId: ' + ownProps.modelNodeId);
+      console.log(JSON.stringify(ownProps));
+
       dispatch(actionAppToggleMenu(ownProps.modelNodeId));
     }
   };

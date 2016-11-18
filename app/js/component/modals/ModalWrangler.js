@@ -39,8 +39,6 @@ const mapStateToProps = (state) => {
   let showFormModal = false;
   let passThroughProps = {};
 
-  console.log('TA DA!!!');
-
   if (state.dom.modal.length > 0) {
     const modal = state.dom.modal[0];
     switch (modal.modalType) {
@@ -57,6 +55,7 @@ const mapStateToProps = (state) => {
       case ModalTypes.FormModal: {
         showFormModal = true;
         passThroughProps = modal;
+
         break;
       }
       default: {

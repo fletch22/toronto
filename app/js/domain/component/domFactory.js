@@ -4,7 +4,16 @@ class DomFactory {
     return {
       parentId: app.parentId,
       id: app.id,
-      isShowingHeaderMenu: false
+      isShowingHeaderMenu: false,
+      children: app.children
+    };
+  }
+
+  createWebsite(website) {
+    return {
+      parentId: website.parentId,
+      id: website.id,
+      children: website.children
     };
   }
 }

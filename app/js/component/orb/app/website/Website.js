@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
-import GeneralOrbComponent from '../../containers/GeneralOrbComponent';
+import GeneralOrbComponent from '../../../../containers/GeneralOrbComponent';
 import { connect } from 'react-redux';
-import Header from './app/header/Header';
-import crudComponentOperations from './ComponentCrudOperations';
-import graphTraversal from '../../state/graphTraversal';
+import Header from '../../app/header/Header';
+import crudComponentOperations from '../../ComponentCrudOperations';
+import graphTraversal from '../../../../state/graphTraversal';
 
-class App extends React.Component {
+class Website extends React.Component {
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
@@ -14,7 +14,7 @@ class App extends React.Component {
       <div className="container-app col-lg-2">
         <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
         {
-          children.forEach((child) =>
+          children.map((child) =>
             <GeneralOrbComponent key={child.id} child={child} />
           )
         }
@@ -23,10 +23,10 @@ class App extends React.Component {
   }
 }
 
-App.propTypes = {
+Website.propTypes = {
   id: PropTypes.any.isRequired,
   label: PropTypes.string.isRequired,
-  children: PropTypes.array,
+  children: PropTypes.object,
   onClickRemoveApp: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
@@ -59,10 +59,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-App = connect(
+Website = connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(Website);
 
 
-export default App;
+export default Website;

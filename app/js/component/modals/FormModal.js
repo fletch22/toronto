@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 import { actionHideCurrentModal } from '../../actions/index';
 import { ModalFormTypes } from '../../actions/modal/index';
+import CreateUpdateWebsite from '../../component/orb/app/website/CreateUpdateWebsite';
 
 class FormModal extends React.Component {
   render() {
     let body;
     switch (this.props.modalFormType) {
       case ModalFormTypes.APP.CREATE_WEBSITE: {
-        body = <div>This will be the create/update website content.</div>;
+        body = <CreateUpdateWebsite data={this.props.data} />;
         break;
       }
       default: {
@@ -31,6 +32,7 @@ class FormModal extends React.Component {
 
 FormModal.propTypes = {
   modalFormType: React.PropTypes.string,
+  data: React.PropTypes.object,
   showModal: React.PropTypes.bool,
   onCloseModal: React.PropTypes.func.isRequired
 };

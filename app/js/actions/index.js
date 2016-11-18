@@ -18,7 +18,8 @@ export const ACTIONS = {
     HIDE_TIME_TRAVEL_NAV_BAR: 'HIDE_TIME_TRAVEL_NAV_BAR',
     UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST',
     REFRESH_PAGE: 'REFRESH_PAGE',
-    NUKE_AND_PAVE: 'NUKE_AND_PAVE'
+    NUKE_AND_PAVE: 'NUKE_AND_PAVE',
+    UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -99,6 +100,17 @@ export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
   };
 };
 
+export const actionUpdateViewPropertyValue = (modelNodeId, viewName, propertyName, propertyValue, needsPersisting) => ({
+  type: ACTIONS.types.UPDATE_VIEW_PROPERTY_VALUE,
+  payload: {
+    viewName,
+    modelNodeId,
+    propertyName,
+    propertyValue,
+    needsPersisting
+  }
+});
+
 export const actionRefreshPage = () => {
   return {
     type: ACTIONS.types.REFRESH_PAGE
@@ -110,4 +122,5 @@ export const actionNukeAndPave = () => {
     type: ACTIONS.types.NUKE_AND_PAVE
   };
 };
+
 

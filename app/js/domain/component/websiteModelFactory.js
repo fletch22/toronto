@@ -2,7 +2,7 @@ import ComponentTypes from './componentTypes';
 import Component from './component';
 import uuid from 'node-uuid';
 
-class AppModelFactory extends Component {
+class WebsiteModelFactory extends Component {
 
   createInstance(parentId, label, childId) {
     if (label === null
@@ -20,12 +20,11 @@ class AppModelFactory extends Component {
       parentId: parentId,
       id: id,
       label: label,
-      typeLabel: ComponentTypes.App,
-      children: []
+      typeLabel: ComponentTypes.Website
     };
 
     return app;
   }
 }
 
-export default new AppModelFactory();
+export default new WebsiteModelFactory();
