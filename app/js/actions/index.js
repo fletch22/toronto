@@ -12,6 +12,7 @@ export const ACTIONS = {
     TIME_TRAVEL_TO_PREVIOUS_STATE: 'TIME_TRAVEL_TO_PREVIOUS_STATE',
     MODAL_ERROR_SHOW: 'MODAL_ERROR_SHOW',
     MODAL_HIDE_CURRENT: 'MODAL_HIDE_CURRENT',
+    MODAL_HIDE: 'MODAL_HIDE',
     MODAL_STATE_ROLLBACK_SHOW: 'MODAL_STATE_ROLLBACK_SHOW',
     STATE_ROLLBACK_TO_STATE_ID: 'STATE_ROLLBACK_TO_STATE_ID',
     SHOW_TIME_TRAVEL_NAV_BAR: 'SHOW_TIME_TRAVEL_NAV_BAR',
@@ -19,7 +20,8 @@ export const ACTIONS = {
     UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST',
     REFRESH_PAGE: 'REFRESH_PAGE',
     NUKE_AND_PAVE: 'NUKE_AND_PAVE',
-    UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE'
+    UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
+    CONSTRUCT_VIEW_MODEL: 'CONSTRUCT_VIEW_MODEL'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -68,6 +70,11 @@ export const actionHideCurrentModal = () => {
   };
 };
 
+export const actionHideModal = (id) => ({
+  type: ACTIONS.types.MODAL_HIDE,
+  id
+});
+
 export const actionRollbackToStateId = (rollbackPayload) => {
   return {
     type: ACTIONS.types.STATE_ROLLBACK_TO_STATE_ID,
@@ -100,15 +107,19 @@ export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
   };
 };
 
-export const actionUpdateViewPropertyValue = (modelNodeId, viewName, propertyName, propertyValue, needsPersisting) => ({
+export const actionUpdateViewPropertyValue = (viewId, propertyName, propertyValue, needsPersisting) => ({
   type: ACTIONS.types.UPDATE_VIEW_PROPERTY_VALUE,
   payload: {
-    viewName,
-    modelNodeId,
+    viewId,
     propertyName,
     propertyValue,
     needsPersisting
   }
+});
+
+export const actionConstructViewModel = (viewModel) => ({
+  type: ACTIONS.types.CONSTRUCT_VIEW_MODEL,
+  payload: viewModel
 });
 
 export const actionRefreshPage = () => {

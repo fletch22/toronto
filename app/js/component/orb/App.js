@@ -11,13 +11,16 @@ class App extends React.Component {
     const children = (this.props.children) ? this.props.children : [];
 
     return (
-      <div className="container-app col-lg-2">
-        <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
-        {
-          children.forEach((child) =>
-            <GeneralOrbComponent key={child.id} child={child} />
-          )
-        }
+
+      <div className="container-app col-lg-2 dashboard-app">
+        <div>
+          <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+          {
+            children.map((child) =>
+              <GeneralOrbComponent key={child.id} child={child} />
+            )
+          }
+        </div>
       </div>
     );
   }
@@ -26,7 +29,7 @@ class App extends React.Component {
 App.propTypes = {
   id: PropTypes.any.isRequired,
   label: PropTypes.string.isRequired,
-  children: PropTypes.array,
+  children: PropTypes.arrayOf(React.PropTypes.object),
   onClickRemoveApp: PropTypes.func,
   onChangeLabel: PropTypes.func
 };

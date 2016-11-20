@@ -1,22 +1,21 @@
 @import 'css/config/colors';
-
-$zIndexTimeTravelToolbar: 10000;
+@import 'css/modules/z-index';
 
 .time-travel-toolbar {
-  position: fixed;
+  position: absolute;
   top: 0;
 }
 
 .time-travel-toolbar .modal-backdrop {
-  z-index: ($zIndexTimeTravelToolbar - 2);
+  z-index: ($zIndexMax - 2);
   opacity: 0.3;
 }
 
 .time-travel-toolbar-body {
   color: black;
   padding: 10px 0 10px 15px;
-  z-index: $zIndexTimeTravelToolbar;
-  position: fixed;
+  z-index: $zIndexMax;
+  position: relative;
   background-color: whitesmoke;
   width: 230px;
 }
@@ -31,5 +30,6 @@ $zIndexTimeTravelToolbar: 10000;
 
 .toolbar-buttons {
   display: inline-block;
+  z-index: ($zIndexMax - 3);
   margin: 0 3px 0 3px;
 }

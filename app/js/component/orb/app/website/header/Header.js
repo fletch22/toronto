@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import '../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
+import F22Input from '../../../../orb/F22Input';
 import 'rc-menu/assets/index.css';
-import '../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
-import F22Input from '../../../orb/F22Input';
-import HeaderMenu from '../../app/header/HeaderMenu';
-import { actionAppToggleMenu } from '../../../../actions/dashboard/app';
-import graphTraversal from '../../../../state/graphTraversal';
+import HeaderMenu from './HeaderMenu';
+import { actionAppToggleMenu } from '../../../../../actions/dashboard/app';
+import graphTraversal from '../../../../../state/graphTraversal';
 
 class Header extends React.Component {
 

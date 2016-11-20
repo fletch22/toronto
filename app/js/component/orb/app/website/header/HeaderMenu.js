@@ -2,23 +2,27 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Menu, { MenuItem } from 'rc-menu';
 import 'rc-menu/assets/index.css';
-import '../../../../../css/modules/container.scss';
-import { actionModalFormShow, ModalFormTypes } from '../../../../actions/modal/index';
-import { actionAppToggleMenu } from '../../../../actions/dashboard/app/index';
+import '../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
+import { actionModalFormShow, ModalFormTypes } from '../../../../../actions/modal/index';
+import { actionAppToggleMenu } from '../../../../../actions/dashboard/app/index';
 import 'css/modules/menu';
 
 class HeaderMenu extends React.Component {
   static menuKeys() {
     return {
-      CREATE_WEBSITE: 'CREATE_WEBSITE'
+      ADD_FOLDER: 'ADD_FOLDER'
     };
+  }
+
+  foo() {
+
   }
 
   render() {
     let menu;
     if (this.props.isShowingHeaderMenu) {
       menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
-        <MenuItem key={HeaderMenu.menuKeys().CREATE_WEBSITE} className="menu-item">Create Website</MenuItem>
+        <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add Folder</MenuItem>
       </Menu>);
     }
 
@@ -40,9 +44,8 @@ HeaderMenu.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
-      case HeaderMenu.menuKeys().CREATE_WEBSITE: {
-        dispatch(actionModalFormShow(ModalFormTypes.APP.CREATE_WEBSITE, { modelNodeId: ownProps.modelNodeId }));
-        dispatch(actionAppToggleMenu(ownProps.modelNodeId));
+      case HeaderMenu.menuKeys().ADD_FOLDER: {
+        dispatch(actionModalFormShow(ModalFormTypes.WEBSITE.CREATE_FOLDER, { modelNodeId: ownProps.modelNodeId }));
         break;
       }
       default:

@@ -5,3 +5,8 @@ $lightGray: adjust-hue($gray, -20deg);
 $lightRed: adjust-hue($red, -20deg);
 $darkText: #000;
 $black: #fff;
+
+$gray0: #888888;
+$gray1: lighten($gray0, 20);
+$gray2: lighten($gray1, 20);
+$gray3: lighten($gray2, 20);

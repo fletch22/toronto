@@ -4,7 +4,7 @@ import GenericListener from '../domain/message/genericListener';
 
 class CrudActionCreator {
 
-  invoke(service, errorMessage) {
+  invoke(service, successCallback) {
 
     console.log('About to return invoked function.');
 
@@ -29,6 +29,8 @@ class CrudActionCreator {
           .then((response) => {
             dispatch(actionSetState(response));
             statePersisterWorkerClient.unblockade();
+            successCallback();
+            return Promise.resolve();
           })
           .catch(() => {
             statePersisterWorkerClient.unblockade();

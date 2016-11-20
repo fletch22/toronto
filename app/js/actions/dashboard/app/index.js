@@ -10,4 +10,3 @@ export const actionAppToggleMenu = (modelId) => {
     modelId
   };
 };
-

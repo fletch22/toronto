@@ -1,0 +1,8 @@
+@import 'css/config/colors';
+@import 'css/modules/z-index';
+
+.f22-menu {
+  background-color: white;
+  position: relative;
+  z-index: $zIndexMax - 4;
+}

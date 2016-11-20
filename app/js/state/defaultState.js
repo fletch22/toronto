@@ -16,7 +16,8 @@ class DefaultState {
           },
           timeTravelNavBar: {
             show: false
-          }
+          },
+          miscViews: {}
         }
       },
       model: {

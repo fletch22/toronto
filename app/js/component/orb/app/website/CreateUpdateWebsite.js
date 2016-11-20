@@ -1,32 +1,47 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import 'css/modules/form';
 import websiteContainerService from '../../../../service/component/websiteContainerService';
-import modalDispatch from '../../../../component/modals/ModalDispatcher';
 import crudActionCreator from '../../../../actions/crudActionCreator';
-import { actionUpdateViewPropertyValue } from '../../../../actions/index';
-import graphTraversal from '../../../../state/graphTraversal';
+import { actionConstructViewModel, actionUpdateViewPropertyValue } from '../../../../actions/index';
+import modalDispatch from '../../../../component/modals/ModalDispatcher';
 
 class CreateUpdateWebsite extends React.Component {
+
+  constructor(props, { store }) {
+    super(props);
+    this.store = store;
+  }
+
+  componentDidMount() {
+    const viewModel = {
+      id: this.props.id,
+      label: this.props.label
+    };
+
+    this.store.dispatch(actionConstructViewModel(viewModel));
+  }
+
   render() {
     return (
-      <div className="container">
+      <div>
         <div className="row">
-          <div className="col-xs-1"><label>ID:</label></div>
-          <div className="col-lg-1">{this.props.data.id}</div>
+          <div className="col-xs-2"><label>ID:</label></div>
+          <div className="col-lg-10">{this.props.data.id}</div>
         </div>
         <div className="row">
-          <div className="col-xs-1"><label>Parent ID:</label></div>
-          <div className="col-lg-1">{this.props.data.modelNodeId}</div>
+          <div className="col-xs-2"><label>Parent ID:</label></div>
+          <div className="col-lg-10">{this.props.data.modelNodeId}</div>
         </div>
         <div className="row">
-          <div className="col-lg-1" style={{ margin: '4px 0 0 0' }}><label>Label:</label></div>
-          <div className="col-lg-1"><input className="form-control f22-text-input" type="text" value={this.props.label} onChange={this.props.onChangeLabel} /></div>
+          <div className="col-lg-2" style={{ margin: '4px 0 0 0' }}><label>Label:</label></div>
+          <div className="col-lg-10"><input className="form-control f22-text-input" type="text" value={this.props.label} onChange={this.props.onChangeLabel} /></div>
         </div>
         <div className="row">
-          <div className="col-lg-2">
-            <button type="button" onClick={this.props.onSaveClick}>Save</button>
-            <button type="button" onClick={this.props.onCancelClick}>Cancel</button>
+          <div className="col-lg-12">
+            <div style={{ display: 'inline', float: 'right' }}>
+              <button type="button" onClick={this.props.onSaveClick}>Save</button>
+              <button type="button" onClick={this.props.onCancelClick}>Cancel</button>
+            </div>
           </div>
         </div>
       </div>
@@ -35,83 +50,64 @@ class CreateUpdateWebsite extends React.Component {
 }
 
 CreateUpdateWebsite.propTypes = {
+  id: PropTypes.string,
   data: PropTypes.object,
   label: PropTypes.string,
   onSaveClick: PropTypes.func,
   onCancelClick: PropTypes.func
 };
 
-function addWebsiteLocal(dispatch, ownProps) {
+CreateUpdateWebsite.contextTypes = {
+  store: React.PropTypes.object
+};
+
+function addWebsiteLocal(_dispatch, ownProps) {
   const dispatchHelper = () => {
     const addWebsite = (dispatch, state) => {
-      console.log(`ownProps: ${JSON.stringify(ownProps)}`);
+      try {
+        const view = state.dom.view.miscViews[ownProps.id];
 
-      const label = ownProps.label;
-      const jsonStateOld = JSON.stringify(state);
-      const stateNew = JSON.parse(jsonStateOld);
-      const promise = websiteContainerService.addWebsiteAsync(stateNew, jsonStateOld, ownProps.data.modelNodeId, label);
+        const jsonStateOld = JSON.stringify(state);
+        const stateNew = JSON.parse(jsonStateOld);
 
-      promise.catch((error) => {
-        const errorModalDto = {
-          headerText: error.name,
-          bodyText: error.message
-        };
-
-        if (typeof error.responseObject === 'object') {
-          errorModalDto.headerText = 'There was an error creating the app.';
-          errorModalDto.bodyText = error.responseObject.systemMessage;
-        }
-
-        modalDispatch.dispatchErrorModal(errorModalDto.headerText, errorModalDto.bodyText, dispatch);
-      });
-
-      return promise;
+        return websiteContainerService.addWebsiteAsync(stateNew, jsonStateOld, ownProps.data.modelNodeId, view.label)
+          .then((result) => {
+            return Promise.resolve(result);
+          })
+          .catch((error) => {
+            modalDispatch.dispatchErrorModal(error, 'Encountered error while trying to add website.', dispatch);
+          });
+      } catch (error) {
+        return Promise.reject(error);
+      }
     };
 
-    // Return a function that
-    console.log('About to invoke crud process.');
-    return crudActionCreator.invoke(addWebsite);
+    const successCallback = () => {
+      ownProps.onCancelClick();
+    };
+
+    return crudActionCreator.invoke(addWebsite, successCallback)
   };
 
-  console.log('About to dispatch helper.');
-  dispatch(dispatchHelper());
+  _dispatch(dispatchHelper());
 }
 
 const mapStateToProps = (state, ownProps) => {
+  const editWebsite = state.dom.view.miscViews[ownProps.id];
 
-  const object = graphTraversal.find(state.dom.view, ownProps.data.modelNodeId);
-
-  if (typeof object.views === 'undefined') {
-    object.views = {};
-  }
-
-  const views = object.views;
-  if (typeof views.editwebsite === 'undefined') {
-    views.editwebsite = {};
-  }
-
-  const editWebsite = views.editWebsite;
+  const label = (editWebsite && typeof editWebsite.label !== 'undefined') ? editWebsite.label : '';
 
   return {
-    label: (typeof editWebsite.label !== 'undefined') ? editWebsite.label : ''
+    label
   };
-};
-
-const actionUpdateWebsiteProperty = (modelNodeId, propertyName, propertyValue) => {
-  return actionUpdateViewPropertyValue(modelNodeId, 'editWebsite', propertyName, propertyValue, false);
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSaveClick: () => {
-    console.log(`object in mdtp: ${JSON.stringify(ownProps)}`);
-
     addWebsiteLocal(dispatch, ownProps);
   },
-  onCancelClick: () => {
-    // dispatch();
-  },
   onChangeLabel: (event) => {
-    dispatch(actionUpdateWebsiteProperty(ownProps.data.modelNodeId, 'label', event.target.value));
+    dispatch(actionUpdateViewPropertyValue(ownProps.id, 'label', event.target.value, true));
   }
 });
 

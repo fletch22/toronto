@@ -27,8 +27,8 @@ class AppContainerToolbar extends React.Component {
           </div>
           <div className="col-lg-1"><span className="toolbar-label">Number Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
           <div className="col-lg-3">
-            <button id="police-box" onClick={this.props.onShowTimeTravelOverlay} className="btn btn-default police-box"></button>
-            <button id="nuke-and-pave" onClick={this.props.onNukeAndPaveClick} className="btn btn-default nuke-and-pave"></button>
+            <button id="police-box" onClick={this.props.onShowTimeTravelOverlay} className="btn btn-default button-pentultimate"></button>
+            <button id="nuke-and-pave" onClick={this.props.onNukeAndPaveClick} className="btn btn-default button-pentultimate"></button>
             <TimeTravelNavBar />
           </div>
         </div>

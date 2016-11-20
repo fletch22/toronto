@@ -1,5 +1,9 @@
 @import 'css/config/colors';
 
+.modal-content {
+	top: 20px;
+}
+
 .button-close {
 	font-size: .7em;
 	top: -1px;
@@ -12,7 +16,6 @@
   background: transparent;
   margin: 2px 0 0 0;
 }
-
 
 .container-app {
 	background-color: $gray;
@@ -30,11 +33,12 @@
 }
 
 .container-app  .header-menu {
-	position: absolute;
+  position: absolute;
+  top: 0;
 }
 
 .container-orb {
-  background-color: $gray;
+  background-color: lightgrey;
   border-radius: 5px;
   padding: 0 0 0 0;
 }
@@ -71,4 +75,24 @@
   display: inline-block;
   vertical-align: baseline;
   float: none;
+}
+
+/**
+
+Begin Dashboard
+
+ */
+
+.dashboard-app:hover {
+  background-color: $gray0;
+  color: #000;
+}
+
+.dashboard-website:hover {
+  background-color: $gray1;
+  color: #000;
+}
+
+.dashboard-website.col-sm-12 {
+  padding: 0 0 0 10px;
 }

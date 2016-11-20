@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
-import { actionHideCurrentModal } from '../../actions/index';
+import { actionHideModal } from '../../actions/index';
 import { ModalFormTypes } from '../../actions/modal/index';
 import CreateUpdateWebsite from '../../component/orb/app/website/CreateUpdateWebsite';
+import 'css/modules/form';
 
 class FormModal extends React.Component {
   render() {
     let body;
     switch (this.props.modalFormType) {
       case ModalFormTypes.APP.CREATE_WEBSITE: {
-        body = <CreateUpdateWebsite data={this.props.data} />;
+        body = <CreateUpdateWebsite data={this.props.data} id={this.props.id} onCancelClick={this.props.onCloseModal} />;
         break;
       }
       default: {
@@ -19,9 +20,9 @@ class FormModal extends React.Component {
     }
 
     return (
-      <Modal show={this.props.showModal} onHide={this.props.onCloseModal}>
+      <Modal show={this.props.showModal} bsSize="large" onHide={this.props.onCloseModal}>
         <Modal.Body>
-          <div>
+          <div className="formModal">
             { body }
           </div>
         </Modal.Body>
@@ -31,6 +32,7 @@ class FormModal extends React.Component {
 }
 
 FormModal.propTypes = {
+  id: React.PropTypes.string,
   modalFormType: React.PropTypes.string,
   data: React.PropTypes.object,
   showModal: React.PropTypes.bool,
@@ -40,7 +42,7 @@ FormModal.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCloseModal: () => {
-      dispatch(actionHideCurrentModal());
+      dispatch(actionHideModal(ownProps.id));
     }
   };
 };

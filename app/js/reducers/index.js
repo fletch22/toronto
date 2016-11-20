@@ -1,8 +1,10 @@
+import _ from 'lodash';
 import { ACTIONS, actionRollbackToStateId } from '../actions/index.js';
 import stateFixer from '../domain/stateFixer';
 import defaultState from '../state/defaultState';
 import appContainerService from '../service/component/appContainerService';
 import ErrorModalDtoFactory from '../component/modals/ErrorModalDtoFactory';
+import modalDtoFactory from '../component/modals/ModalDtoFactory';
 import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
@@ -56,17 +58,20 @@ const reducer = (state = defaultState.getInstance(), action) => {
         noAction: action.noAction,
         cancelAction: action.cancelAction
       };
+
       stateNew.dom.modal.push(modal);
 
       return stateNew;
     }
     case ACTIONS.types.MODAL.MODAL_FORM_SHOW: {
-      const modal = {
-        modalType: ModalTypes.FormModal,
+      const modal = modalDtoFactory.getFormModalInstance({
         modalFormType: action.modalFormType,
         data: action.data
-      };
+      });
+
       stateNew.dom.modal.push(modal);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
     }
@@ -91,6 +96,14 @@ const reducer = (state = defaultState.getInstance(), action) => {
       });
 
       return rollback.state;
+    }
+    case ACTIONS.types.MODAL_HIDE: {
+      _.remove(stateNew.dom.modal, {
+        id: action.id
+      });
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
     }
     case ACTIONS.types.MODAL_HIDE_CURRENT: {
       stateNew.dom.modal.shift();
@@ -151,23 +164,20 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.UPDATE_VIEW_PROPERTY_VALUE: {
       const payload = action.payload;
-      const object = graphTraversal.find(stateNew.dom.view, payload.modelNodeId);
+      const view = stateNew.dom.view.miscViews[payload.viewId];
 
-      if (typeof object.views === 'undefined') {
-        object.views = {};
-      }
-
-      const views = object.views;
-      if (typeof views[payload.viewName] === 'undefined') {
-        views[payload.viewName] = {};
-      }
-
-      const theView = views[payload.viewName];
-      theView[payload.propertyName] = payload.propertyValue;
+      view[payload.propertyName] = payload.propertyValue;
 
       if (payload.needsPersisting) {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
+
+      return stateNew;
+    }
+    case ACTIONS.types.CONSTRUCT_VIEW_MODEL: {
+      const payload = action.payload;
+
+      stateNew.dom.view.miscViews[payload.id] = _.cloneDeep(payload);
 
       return stateNew;
     }
