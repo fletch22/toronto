@@ -7,7 +7,6 @@ class CrudActionCreator {
   invoke(service, successCallback) {
 
     console.log('About to return invoked function.');
-
     return (dispatch, getState) => {
       console.log('return function finally invoked.');
       let expectedId;
@@ -15,26 +14,37 @@ class CrudActionCreator {
       const genericListener = new GenericListener();
 
       const messageProcessor = (event) => {
-        if (typeof event.data !== 'string') {
-          return;
-        }
+        try {
+          if (typeof event.data !== 'string') {
+            return;
+          }
 
-        const eventMessage = JSON.parse(event.data);
-        if (eventMessage.id === expectedId) {
-          genericListener.unregister();
+          const eventMessage = JSON.parse(event.data);
+          if (eventMessage.id === expectedId) {
+            genericListener.unregister();
 
-          console.log('About to invoke service.');
 
-          service(dispatch, getState())
-          .then((response) => {
-            dispatch(actionSetState(response));
-            statePersisterWorkerClient.unblockade();
-            successCallback();
-            return Promise.resolve();
-          })
-          .catch(() => {
-            statePersisterWorkerClient.unblockade();
-          });
+
+            service(dispatch, getState())
+              .then((response) => {
+
+                console.log('About to invoke service.');
+                throw new Error('This is an error.');
+
+                dispatch(actionSetState(response));
+                statePersisterWorkerClient.unblockade();
+                if (successCallback) {
+                  successCallback();
+                }
+                return Promise.resolve();
+              })
+              .catch(() => {
+                statePersisterWorkerClient.unblockade();
+              });
+          }
+        } catch (error) {
+          console.log('Got errrrr.');
+          // modalDispatch.dispatchErrorModal(error, 'Encountered error while trying to add website.', dispatch);
         }
       };
 

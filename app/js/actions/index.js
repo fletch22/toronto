@@ -21,7 +21,8 @@ export const ACTIONS = {
     REFRESH_PAGE: 'REFRESH_PAGE',
     NUKE_AND_PAVE: 'NUKE_AND_PAVE',
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
-    CONSTRUCT_VIEW_MODEL: 'CONSTRUCT_VIEW_MODEL'
+    CONSTRUCT_VIEW_MODEL: 'CONSTRUCT_VIEW_MODEL',
+    DELETE_VIEW_MODEL: 'DELETE_VIEW_MODEL'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -133,5 +134,12 @@ export const actionNukeAndPave = () => {
     type: ACTIONS.types.NUKE_AND_PAVE
   };
 };
+
+export const actionDeleteViewModel = (viewModelId) => ({
+  type: ACTIONS.types.DELETE_VIEW_MODEL,
+  payload: {
+    viewModelId
+  }
+});
 
 

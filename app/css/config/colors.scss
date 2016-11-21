@@ -10,3 +10,11 @@ $gray0: #888888;
 $gray1: lighten($gray0, 20);
 $gray2: lighten($gray1, 20);
 $gray3: lighten($gray2, 20);
+
+@mixin alpha-background-color($color, $background) {
+  $percent: alpha($color) * 100%;
+  $opaque: opacify($color, 1);
+  $solid-color: mix($opaque, $background, $percent);
+  background-color: $solid-color;
+  background-color: $color;
+}

@@ -15,7 +15,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
 
-  console.log(action.type);
+  console.log(`About to proces action \' ${action.type}\'`);
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
@@ -66,7 +66,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.MODAL.MODAL_FORM_SHOW: {
       const modal = modalDtoFactory.getFormModalInstance({
         modalFormType: action.modalFormType,
-        data: action.data
+        data: action.payload
       });
 
       stateNew.dom.modal.push(modal);
@@ -178,6 +178,15 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const payload = action.payload;
 
       stateNew.dom.view.miscViews[payload.id] = _.cloneDeep(payload);
+
+      return stateNew;
+    }
+    case ACTIONS.types.DELETE_VIEW_MODEL: {
+      const payload = action.payload;
+
+      console.log('About to do the dirtry deed.');
+
+      // delete stateNew.dom.view.miscViews[payload.id];
 
       return stateNew;
     }

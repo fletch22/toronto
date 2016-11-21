@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import AppContainerToolbar from '../component/utils/AppContainerToolbar';
 import update from 'react-addons-update';
 import GeneralOrbComponent from './GeneralOrbComponent';
+import PseudoModalWrangler from '../component/modals/PseudoModalWrangler';
 
 class AppContainer extends React.Component {
   render() {
@@ -16,6 +17,7 @@ class AppContainer extends React.Component {
             )
           }
         </div>
+        <PseudoModalWrangler />
       </div>
     );
   }
@@ -34,6 +36,7 @@ const mapStateToProps = (state, props) => {
   || oldChildren !== newChildren) {
     children = update(state.model.appContainer.children, { $push: [] });
   }
+
   return {
     children
   };

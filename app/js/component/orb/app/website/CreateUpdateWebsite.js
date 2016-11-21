@@ -2,8 +2,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import websiteContainerService from '../../../../service/component/websiteContainerService';
 import crudActionCreator from '../../../../actions/crudActionCreator';
-import { actionConstructViewModel, actionUpdateViewPropertyValue } from '../../../../actions/index';
+import { actionConstructViewModel, actionUpdateViewPropertyValue, actionDeleteViewModel } from '../../../../actions/index';
 import modalDispatch from '../../../../component/modals/ModalDispatcher';
+import graphTraversal from '../../../../state/graphTraversal';
 
 class CreateUpdateWebsite extends React.Component {
 
@@ -54,7 +55,8 @@ CreateUpdateWebsite.propTypes = {
   data: PropTypes.object,
   label: PropTypes.string,
   onSaveClick: PropTypes.func,
-  onCancelClick: PropTypes.func
+  onCancelClick: PropTypes.func,
+  cleanUp: PropTypes.func
 };
 
 CreateUpdateWebsite.contextTypes = {
@@ -83,10 +85,13 @@ function addWebsiteLocal(_dispatch, ownProps) {
     };
 
     const successCallback = () => {
+      // console.log('About to cleanUp ...');
+      // ownProps.cleanUp();
+      // console.log('About to onCancelClick ...');
       ownProps.onCancelClick();
     };
 
-    return crudActionCreator.invoke(addWebsite, successCallback)
+    return crudActionCreator.invoke(addWebsite, successCallback);
   };
 
   _dispatch(dispatchHelper());
@@ -94,6 +99,10 @@ function addWebsiteLocal(_dispatch, ownProps) {
 
 const mapStateToProps = (state, ownProps) => {
   const editWebsite = state.dom.view.miscViews[ownProps.id];
+
+  // const modal = graphTraversal.find(state.dom.modal, ownProps.id);
+  // console.log(JSON.stringify(modal));
+  // console.log(`In CUW mstp: ${ownProps.id}`);
 
   const label = (editWebsite && typeof editWebsite.label !== 'undefined') ? editWebsite.label : '';
 
@@ -108,6 +117,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   onChangeLabel: (event) => {
     dispatch(actionUpdateViewPropertyValue(ownProps.id, 'label', event.target.value, true));
+  },
+  cleanUp: () => {
+    dispatch(actionDeleteViewModel(ownProps.id));
   }
 });
 
