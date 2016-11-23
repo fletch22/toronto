@@ -1,22 +1,20 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { actionModalPseudoForget } from '../../../js/actions/modal/index';
 
 class PseudoModal extends React.Component {
 
   render() {
+    const width = (this.props.data && this.props.data.width) ? this.props.data.width : '400px';
+
     return (
-      <div>
+      <div style={{ zIndex: this.props.zIndex }}>
         <div className="dashboard-canvas">
-          <div className="container">
+          <div className="container pseudo-modal-content" style={{ width }}>
             <div className="row">
-              <div className="col-sm-6 cell" style={{ border: '1px solid crimson' }}>
-                Berry
-              </div>
-              <div className="col-sm-3 cell" style={{ border: '1px solid green' }}>
-                Banana
-                <div className="close">
-                  close
-                </div>
+              <div className="col-sm-12 cell" style={{ height: '200px' }}>
+                <button type="button" className="btn btn-default close" onClick={this.props.onCloseModal}>close</button>
+                Content
               </div>
             </div>
           </div>
@@ -28,19 +26,24 @@ class PseudoModal extends React.Component {
 }
 
 PseudoModal.propTypes = {
-  psuedoModals: PropTypes.object
+  id: PropTypes.string,
+  data: PropTypes.object,
+  zIndex: PropTypes.number,
+  width: PropTypes.number,
+  onCloseModal: PropTypes.func
 };
 
-const mapStateToProps = (state) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    pseudoModals: state.dom.pseudoModals
+    onCloseModal: () => {
+      dispatch(actionModalPseudoForget(ownProps.id));
+    }
   };
 };
 
-
 PseudoModal = connect(
-  mapStateToProps,
-  null
+  null,
+  mapDispatchToProps
 )(PseudoModal);
 
 export default PseudoModal;

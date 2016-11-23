@@ -14,7 +14,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid">
+      <div className="f22-app-root container-fluid">
         <AppContainer numberApps="0" />
       </div>
     );

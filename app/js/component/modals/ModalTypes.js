@@ -2,7 +2,8 @@ const ModalTypes = {
   ErrorModal: 'ErrorModal',
   StateRollback: 'StateRollback',
   ConfirmModal: 'ConfirmModal',
-  FormModal: 'FormModal'
+  FormModal: 'FormModal',
+  PseudoModal: 'PseudoModal'
 };
 
 export default ModalTypes;

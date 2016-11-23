@@ -13,6 +13,10 @@ class ModalDtoFactory {
   getFormModalInstance(properties) {
     return Object.assign(this.getCore(ModalTypes.FormModal), properties);
   }
+
+  getPseudoModalInstance(properties) {
+    return Object.assign(this.getCore(ModalTypes.PseudoModal), properties);
+  }
 }
 
 export default new ModalDtoFactory();

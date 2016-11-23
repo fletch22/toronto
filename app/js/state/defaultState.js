@@ -1,14 +1,11 @@
 class DefaultState {
 
   getInstance() {
-
-    console.log("Anyone calling?");
-
     return {
       dom: {
         hasInitialStateBeenSaved: false,
         modal: [],
-        pseudoModals: ['test'],
+        pseudoModals: [],
         view: {
           appContainer: {
             section: {

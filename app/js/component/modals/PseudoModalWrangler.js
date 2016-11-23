@@ -1,30 +1,39 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import update from 'react-addons-update';
 import PseudoModal from '../../component/modals/PseudoModal';
 
 class PseudoModalWrangler extends React.Component {
   render() {
     return (
       <div>
-        {
-          this.props.pseudoModals.map(() =>
-            <PseudoModal />
-          )
-        }
+      {
+        this.props.pseudoModals.map((pseudoModal, index) =>
+          <PseudoModal key={index} zIndex={1000 + index}  />
+        )
+      }
       </div>
     );
   }
 }
 
 PseudoModalWrangler.propTypes = {
-  pseudoModals: PropTypes.arrayOf(React.PropTypes.object)
+  pseudoModals: PropTypes.arrayOf(React.PropTypes.object),
+  onCloseModal: PropTypes.func
 };
 
-const mapStateToProps = (state) => {
-  const pseudoModals = (state.dom.pseudoModals) ? state.dom.pseudoModals : [{}];
+const mapStateToProps = (state, props) => {
+  let statePseudoModals = state.dom.pseudoModals;
+  const oldChildren = JSON.stringify(props.pseudoModals);
+  const newChildren = JSON.stringify(state.model.appContainer.children);
+
+  if ((props.pseudoModals && statePseudoModals && props.pseudoModals.length !== statePseudoModals.length)
+    || oldChildren !== newChildren) {
+    statePseudoModals = update(state.dom.pseudoModals, { $push: [] });
+  }
 
   return {
-    pseudoModals
+    pseudoModals: statePseudoModals
   };
 };
 

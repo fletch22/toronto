@@ -15,7 +15,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
 
-  console.log(`About to proces action \' ${action.type}\'`);
+  console.log(`About to process action \'${action.type}\'`);
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
@@ -70,6 +70,30 @@ const reducer = (state = defaultState.getInstance(), action) => {
       });
 
       stateNew.dom.modal.push(modal);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.MODAL.MODAL_PSEUDO_SHOW: {
+
+      console.log(JSON.stringify(action));
+
+      const viewData = modalDtoFactory.getPseudoModalInstance({
+        modalFormType: action.modalFormType,
+        data: action.payload
+      });
+
+      stateNew.dom.pseudoModals.push(viewData);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.MODAL.MODAL_PSEUDO_FORGET: {
+      stateNew.dom.pseudoModals = _.remove(stateNew.dom.pseudoModals, (n) => {
+        return n.id === action.payload.id;
+      });
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

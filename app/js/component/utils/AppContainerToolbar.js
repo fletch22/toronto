@@ -46,17 +46,7 @@ function addAppLocal() {
     const promise = appContainerService.addAppAsync(stateNew, jsonStateOld, label);
 
     promise.catch((error) => {
-      const errorModalDto = {
-        headerText: error.name,
-        bodyText: error.message
-      };
-
-      if (typeof error.responseObject === 'object') {
-        errorModalDto.headerText = 'There was an error creating the app.';
-        errorModalDto.bodyText = error.responseObject.systemMessage;
-      }
-
-      modalDispatch.dispatchErrorModal(errorModalDto.headerText, errorModalDto.bodyText, dispatch);
+      modalDispatch.dispatchErrorModal(error, 'There was an error creating the app.', dispatch);
     });
 
     return promise;
