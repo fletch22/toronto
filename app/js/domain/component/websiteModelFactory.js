@@ -1,4 +1,4 @@
-import ComponentTypes from './componentTypes';
+import ComponentTypes from './ComponentTypes';
 import Component from './component';
 import uuid from 'node-uuid';
 

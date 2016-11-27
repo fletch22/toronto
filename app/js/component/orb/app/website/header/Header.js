@@ -19,7 +19,7 @@ class Header extends React.Component {
         </div>
         <div className="header-right">
           <button type="button" className="fa fa-ellipsis-v button-ellipses-v" aria-label="Close" onClick={this.props.onClickOpenMenu} />
-          <HeaderMenu isShowingHeaderMenu={this.props.isShowingHeaderMenu} modelNodeId={this.props.modelNodeId} />
+          <HeaderMenu isShowingHeaderMenu={this.props.isShowingHeaderMenu} modelNodeId={this.props.modelNodeId} parentModelNodeId={this.props.parentModelNodeId} />
         </div>
       </div>
     );
@@ -29,6 +29,7 @@ class Header extends React.Component {
 Header.propTypes = {
   headerTextValue: PropTypes.string,
   modelNodeId: PropTypes.any,
+  parentModelNodeId: PropTypes.number,
   onClickClose: PropTypes.func,
   onChangeLabel: PropTypes.func,
   onClickOpenMenu: PropTypes.func,

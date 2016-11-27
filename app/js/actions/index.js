@@ -22,7 +22,8 @@ export const ACTIONS = {
     NUKE_AND_PAVE: 'NUKE_AND_PAVE',
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
     CONSTRUCT_VIEW_MODEL: 'CONSTRUCT_VIEW_MODEL',
-    DELETE_VIEW_MODEL: 'DELETE_VIEW_MODEL'
+    DELETE_VIEW_MODEL: 'DELETE_VIEW_MODEL',
+    CREATE_COMPONENT: 'CREATE_COMPONENT'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -108,11 +109,11 @@ export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
   };
 };
 
-export const actionUpdateViewPropertyValue = (viewId, propertyName, propertyValue, needsPersisting) => ({
+export const actionUpdateViewPropertyValue = (viewId, path, propertyValue, needsPersisting) => ({
   type: ACTIONS.types.UPDATE_VIEW_PROPERTY_VALUE,
   payload: {
     viewId,
-    propertyName,
+    path,
     propertyValue,
     needsPersisting
   }
@@ -139,6 +140,14 @@ export const actionDeleteViewModel = (viewModelId) => ({
   type: ACTIONS.types.DELETE_VIEW_MODEL,
   payload: {
     viewModelId
+  }
+});
+
+export const actionCreateComponent = (componentType, options) => ({
+  type: ACTIONS.types.CREATE_COMPONENT,
+  payload: {
+    componentType,
+    options
   }
 });
 

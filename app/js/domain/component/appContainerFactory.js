@@ -1,4 +1,4 @@
-import ComponentTypes from './componentTypes';
+import ComponentTypes from './ComponentTypes';
 import Component from './component';
 
 class AppContainerFactory extends Component {

@@ -9,6 +9,9 @@ import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
+import ComponentTypes from '../domain/component/ComponentTypes';
+import EditorNames from '../component/EditorNames';
+import f22Uuid from '../util/f22Uuid';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
@@ -63,24 +66,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.MODAL.MODAL_FORM_SHOW: {
-      const modal = modalDtoFactory.getFormModalInstance({
-        modalFormType: action.modalFormType,
-        data: action.payload
-      });
-
-      stateNew.dom.modal.push(modal);
-
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-
-      return stateNew;
-    }
     case ACTIONS.types.MODAL.MODAL_PSEUDO_SHOW: {
-
-      console.log(JSON.stringify(action));
-
       const viewData = modalDtoFactory.getPseudoModalInstance({
-        modalFormType: action.modalFormType,
+        componentViewName: action.componentViewName,
         data: action.payload
       });
 
@@ -91,9 +79,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.MODAL.MODAL_PSEUDO_FORGET: {
-      stateNew.dom.pseudoModals = _.remove(stateNew.dom.pseudoModals, (n) => {
-        return n.id === action.payload.id;
-      });
+      _.remove(stateNew.dom.pseudoModals, _.matches({ id: action.payload.id }));
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
@@ -188,9 +174,20 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.UPDATE_VIEW_PROPERTY_VALUE: {
       const payload = action.payload;
-      const view = stateNew.dom.view.miscViews[payload.viewId];
+      let node = graphTraversal.find(stateNew.dom, payload.viewId);
 
-      view[payload.propertyName] = payload.propertyValue;
+      let propertyName;
+      const path = payload.path.split('.');
+      if (path.length > 1) {
+        propertyName = path.splice(-1, 1);
+        path.forEach((prop) => {
+          node = node[prop];
+        });
+      } else {
+        propertyName = path;
+      }
+
+      node[propertyName] = payload.propertyValue;
 
       if (payload.needsPersisting) {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
@@ -211,6 +208,45 @@ const reducer = (state = defaultState.getInstance(), action) => {
       console.log('About to do the dirtry deed.');
 
       // delete stateNew.dom.view.miscViews[payload.id];
+
+      return stateNew;
+    }
+    case ACTIONS.types.CREATE_COMPONENT: {
+      const type = action.payload.componentType;
+      let componentViewName;
+      switch (type) {
+        case ComponentTypes.Website: {
+          componentViewName = EditorNames.EDIT_WEBSITE_DETAILS;
+          break;
+        }
+        default: {
+          throw new Error(`Action not yet configured to handle ${type}.`);
+        }
+      }
+
+      console.log(`${JSON.stringify(action.payload)}`);
+
+      const options = action.payload.options;
+      const modelNodeId = options.modelNodeId;
+      let model;
+      if (modelNodeId) {
+        model = _.cloneDeep(graphTraversal.find(stateNew.model, modelNodeId));
+      } else {
+        model = { parentId: action.payload.options.parentModelId };
+      }
+
+      const data = Object.assign({}, action.payload.options, { id: f22Uuid.generate() }, { model });
+
+      const viewData = modalDtoFactory.getPseudoModalInstance({
+        componentViewName,
+        data
+      });
+
+      console.log(`In CREATE_COMPONENT action: ${JSON.stringify(viewData)}`);
+
+      stateNew.dom.pseudoModals.push(viewData);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
     }

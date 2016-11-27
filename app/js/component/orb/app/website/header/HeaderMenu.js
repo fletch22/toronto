@@ -3,25 +3,27 @@ import { connect } from 'react-redux';
 import Menu, { MenuItem } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import '../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
-import { actionModalFormShow, ModalFormTypes } from '../../../../../actions/modal/index';
+import { actionModalPseudoShow } from '../../../../../actions/modal/index';
 import { actionAppToggleMenu } from '../../../../../actions/dashboard/app/index';
+import { actionCreateComponent } from '../../../../../actions/index';
+import f22Uuid from '../../../../../util/f22Uuid';
+import EditorNames from '../../../../EditorNames';
+import ComponentTypes from '../../../../../domain/component/ComponentTypes';
 import 'css/modules/menu';
 
 class HeaderMenu extends React.Component {
   static menuKeys() {
     return {
-      ADD_FOLDER: 'ADD_FOLDER'
+      ADD_FOLDER: 'ADD_FOLDER',
+      EDIT: 'EDIT'
     };
-  }
-
-  foo() {
-
   }
 
   render() {
     let menu;
     if (this.props.isShowingHeaderMenu) {
       menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
+        <MenuItem key={HeaderMenu.menuKeys().EDIT} className="menu-item">Edit</MenuItem>
         <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add Folder</MenuItem>
       </Menu>);
     }
@@ -35,9 +37,10 @@ class HeaderMenu extends React.Component {
 }
 
 HeaderMenu.propTypes = {
+  modelNodeId: PropTypes.any,
+  parentModelNodeId: PropTypes.number,
   isShowingHeaderMenu: PropTypes.bool,
   onMenuClick: PropTypes.func,
-  modelNodeId: PropTypes.any,
   onMouseLeave: PropTypes.func
 };
 
@@ -45,7 +48,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
       case HeaderMenu.menuKeys().ADD_FOLDER: {
-        dispatch(actionModalFormShow(ModalFormTypes.WEBSITE.CREATE_FOLDER, { modelNodeId: ownProps.modelNodeId }));
+        dispatch(actionModalPseudoShow(EditorNames.EDIT_WEBSITE_FOLDER_DETAILS, { id: f22Uuid.generate(), parentModelId: ownProps.modelNodeId }));
+        break;
+      }
+      case HeaderMenu.menuKeys().EDIT: {
+        dispatch(actionCreateComponent(ComponentTypes.Website, { modelNodeId: ownProps.modelNodeId, parentModelNodeId: ownProps.parentModelNodeId }));
         break;
       }
       default:

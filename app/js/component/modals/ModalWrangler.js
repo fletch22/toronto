@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import ErrorModal from './ErrorModal';
 import ConfirmModal from './ConfirmModal';
 import ModalTypes from './ModalTypes';
-import FormModal from './FormModal';
 
 class ModalWrangler extends React.Component {
   render() {
@@ -13,9 +12,6 @@ class ModalWrangler extends React.Component {
     }
     if (this.props.showConfirmModal) {
       modal = <ConfirmModal showModal { ...this.props.passThroughProps } />;
-    }
-    if (this.props.showFormModal) {
-      modal = <FormModal showModal { ...this.props.passThroughProps } />;
     }
 
     return (
@@ -29,14 +25,12 @@ class ModalWrangler extends React.Component {
 ModalWrangler.propTypes = {
   showErrorModal: React.PropTypes.bool,
   showConfirmModal: React.PropTypes.bool,
-  showFormModal: React.PropTypes.bool,
   passThroughProps: React.PropTypes.object
 };
 
 const mapStateToProps = (state) => {
   let showErrorModal = false;
   let showConfirmModal = false;
-  let showFormModal = false;
   let passThroughProps = {};
 
   if (state.dom.modal.length > 0) {
@@ -52,12 +46,6 @@ const mapStateToProps = (state) => {
         passThroughProps = modal;
         break;
       }
-      case ModalTypes.FormModal: {
-        showFormModal = true;
-        passThroughProps = modal;
-
-        break;
-      }
       default: {
         throw new Error(`Encountered problem deciphering which modal type to create. Did not recognize modal type '${modal.type}'.`);
       }
@@ -67,7 +55,6 @@ const mapStateToProps = (state) => {
   return {
     showErrorModal,
     showConfirmModal,
-    showFormModal,
     passThroughProps
   };
 };

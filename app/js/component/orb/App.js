@@ -9,9 +9,7 @@ class App extends React.Component {
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
-
     return (
-
       <div className="container-app col-lg-2 dashboard-app">
         <div>
           <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />

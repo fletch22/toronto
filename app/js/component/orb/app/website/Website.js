@@ -13,7 +13,7 @@ class Website extends React.Component {
     return (
       <div>
         <div className="dashboard-website col-sm-12">
-          <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+          <Header headerTextValue={this.props.label} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
           {
             children.map((child) =>
               <GeneralOrbComponent key={child.id} child={child} />
@@ -27,6 +27,7 @@ class Website extends React.Component {
 
 Website.propTypes = {
   id: PropTypes.any.isRequired,
+  parentId: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   children: PropTypes.arrayOf(React.PropTypes.object),
   onClickRemoveApp: PropTypes.func,

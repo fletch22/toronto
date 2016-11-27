@@ -1,7 +1,6 @@
 export const ActionTypes = {
   MODAL: {
     MODAL_CONFIRM_SHOW: 'MODAL_CONFIRM_SHOW',
-    MODAL_FORM_SHOW: 'MODAL_FORM_SHOW',
     MODAL_PSEUDO_SHOW: 'MODAL_PSEUDO_SHOW',
     MODAL_PSEUDO_FORGET: 'MODAL_PSEUDO_FORGET'
   }
@@ -31,9 +30,9 @@ export const actionModalFormShow = (modalFormType, data) => ({
   payload: data
 });
 
-export const actionModalPseudoShow = (modalFormType, data) => ({
+export const actionModalPseudoShow = (componentViewName, data) => ({
   type: ActionTypes.MODAL.MODAL_PSEUDO_SHOW,
-  modalFormType,
+  componentViewName,
   payload: data
 });
 

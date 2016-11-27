@@ -1,4 +1,4 @@
-import ComponentTypes from '../domain/component/componentTypes';
+import ComponentTypes from '../domain/component/ComponentTypes';
 import componentGenerator from '../domain/component/componentGenerator';
 
 class ModelToStateGenerator {

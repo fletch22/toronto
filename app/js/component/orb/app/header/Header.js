@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import 'rc-menu/assets/index.css';
 import '../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
 import F22Input from '../../../orb/F22Input';
+import F22Input2 from '../../../view/TextInput';
 import HeaderMenu from '../../app/header/HeaderMenu';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app';
 import graphTraversal from '../../../../state/graphTraversal';
 
 class Header extends React.Component {
-
   render() {
     return (
       <div className="container-orb">

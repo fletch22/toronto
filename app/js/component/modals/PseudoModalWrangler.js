@@ -8,9 +8,9 @@ class PseudoModalWrangler extends React.Component {
     return (
       <div>
       {
-        this.props.pseudoModals.map((pseudoModal, index) =>
-          <PseudoModal key={index} zIndex={1000 + index}  />
-        )
+        this.props.pseudoModals.map((pseudoModal, index) => {
+          return <PseudoModal id={pseudoModal.id} key={pseudoModal.id} zIndex={1000 + index} data={pseudoModal.data} viewName={pseudoModal.componentViewName} />;
+        })
       }
       </div>
     );
