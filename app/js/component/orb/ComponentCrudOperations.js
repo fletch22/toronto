@@ -1,21 +1,27 @@
 import crudActionCreator from '../../actions/crudActionCreator';
 import ComponentService from '../../service/component/componentService';
 import modalDispatcher from '../modals/ModalDispatcher';
-import { connect } from 'react-redux';
+import graphTraversal from '../../state/graphTraversal';
 
 class ComponentCrudOperations {
 
-  removeNode(component) {
+  removeNode(id, successCallback) {
     const removeAppCallback = (dispatch, state) => {
+      const model = graphTraversal.find(state.model, id);
+
+      console.log(`Model for delete: ${JSON.stringify(model)}`);
 
       const jsonStateOld = JSON.stringify(state);
       const stateNew = JSON.parse(jsonStateOld);
 
       const componentService = new ComponentService();
-      const promise = componentService.delete(stateNew, jsonStateOld, component.parentId, component.id);
+      const promise = componentService.delete(stateNew, jsonStateOld, model.parentId, model.id);
 
-      promise.catch((error) => {
-        modalDispatcher.dispatchErrorModal(error, `There was an error removing the ${component.typeLabel}.`, dispatch);
+      promise.then((obj) => {
+        successCallback();
+        Promise.resolve(obj);
+      }).catch((error) => {
+        modalDispatcher.dispatchErrorModal(error, `There was an error removing the ${model.typeLabel}.`, dispatch);
       });
 
       return promise;

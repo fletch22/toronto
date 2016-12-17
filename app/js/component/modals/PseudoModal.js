@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { actionModalPseudoForget } from '../../../js/actions/modal/index';
 import ComponentModalNames from '../EditorNames';
-import EditWebsiteDetails from '../orb/app/website/EditWebsiteWebsiteDetails';
+import EditWebsiteDetails from '../orb/app/website/EditWebsiteDetails';
+import EditFolderDetails from '../orb/app/website/folder/EditFolderDetails';
 
 class PseudoModal extends React.Component {
 
@@ -10,8 +11,19 @@ class PseudoModal extends React.Component {
     const width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
 
     let component;
-    if (this.props.viewName === ComponentModalNames.EDIT_WEBSITE_DETAILS) {
-      component = <EditWebsiteDetails { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+    switch (this.props.viewName) {
+      case ComponentModalNames.EDIT_WEBSITE_DETAILS: {
+        component = <EditWebsiteDetails { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+        break;
+      }
+      case ComponentModalNames.EDIT_WEBSITE_FOLDER_DETAILS: {
+        component = <EditFolderDetails { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+        break;
+      }
+      default: {
+        console.log('Encountered problem while trying to determine view name for pseudo modal.');
+        break;
+      }
     }
 
     return (

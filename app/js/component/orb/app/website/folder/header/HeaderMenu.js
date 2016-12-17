@@ -3,18 +3,20 @@ import { connect } from 'react-redux';
 import Menu, { MenuItem } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import '../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
+import { actionModalPseudoShow } from '../../../../../actions/modal/index';
 import { actionAppToggleMenu } from '../../../../../actions/dashboard/app/index';
 import { actionCreateComponent } from '../../../../../actions/index';
+import f22Uuid from '../../../../../util/f22Uuid';
+import EditorNames from '../../../../EditorNames';
 import ComponentTypes from '../../../../../domain/component/ComponentTypes';
-import crudComponentOperations from '../../../../orb/ComponentCrudOperations';
 import 'css/modules/menu';
 
 class HeaderMenu extends React.Component {
   static menuKeys() {
     return {
       ADD_FOLDER: 'ADD_FOLDER',
-      EDIT: 'EDIT',
-      REMOVE: 'REMOVE'
+      ADD_PAGE: 'ADD_PAGE',
+      EDIT: 'EDIT'
     };
   }
 
@@ -23,7 +25,6 @@ class HeaderMenu extends React.Component {
     if (this.props.isShowingHeaderMenu) {
       menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
         <MenuItem key={HeaderMenu.menuKeys().EDIT} className="menu-item">Edit</MenuItem>
-        <MenuItem key={HeaderMenu.menuKeys().REMOVE} className="menu-item">Remove Website</MenuItem>
         <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add Folder</MenuItem>
       </Menu>);
     }
@@ -44,15 +45,6 @@ HeaderMenu.propTypes = {
   onMouseLeave: PropTypes.func
 };
 
-const remove = (dispatch, id) => {
-
-  const successCallback = () => {
-    dispatch(actionAppToggleMenu(id));
-  };
-
-  return crudComponentOperations.removeNode(id, successCallback);
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
@@ -64,10 +56,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       case HeaderMenu.menuKeys().EDIT: {
         dispatch(actionCreateComponent(ComponentTypes.Website, { modelNodeId: ownProps.modelNodeId, parentModelNodeId: ownProps.parentModelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));
-        break;
-      }
-      case HeaderMenu.menuKeys().REMOVE: {
-        dispatch(remove(dispatch, ownProps.modelNodeId));
         break;
       }
       default:

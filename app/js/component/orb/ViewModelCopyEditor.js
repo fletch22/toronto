@@ -16,10 +16,13 @@ class ViewModelCopyEditor extends React.Component {
 
           return createUpdateCallback(stateNew, jsonStateOld, view.model)
             .then((result) => {
+              console.debug('Success Callback.');
               return Promise.resolve(result);
             })
             .catch((error) => {
+              console.debug('Failure Callback.');
               modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to add website.', dispatch);
+              return Promise.reject(error);
             });
         } catch (error) {
           console.log(error);

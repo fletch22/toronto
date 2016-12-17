@@ -195,22 +195,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.CONSTRUCT_VIEW_MODEL: {
-      const payload = action.payload;
-
-      stateNew.dom.view.miscViews[payload.id] = _.cloneDeep(payload);
-
-      return stateNew;
-    }
-    case ACTIONS.types.DELETE_VIEW_MODEL: {
-      const payload = action.payload;
-
-      console.log('About to do the dirtry deed.');
-
-      // delete stateNew.dom.view.miscViews[payload.id];
-
-      return stateNew;
-    }
     case ACTIONS.types.CREATE_COMPONENT: {
       const type = action.payload.componentType;
       let componentViewName;
@@ -219,12 +203,14 @@ const reducer = (state = defaultState.getInstance(), action) => {
           componentViewName = EditorNames.EDIT_WEBSITE_DETAILS;
           break;
         }
+        case ComponentTypes.WebFolder: {
+          componentViewName = EditorNames.EDIT_WEBSITE_FOLDER_DETAILS;
+          break;
+        }
         default: {
           throw new Error(`Action not yet configured to handle ${type}.`);
         }
       }
-
-      console.log(`${JSON.stringify(action.payload)}`);
 
       const options = action.payload.options;
       const modelNodeId = options.modelNodeId;

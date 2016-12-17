@@ -39,6 +39,7 @@ class EditWebsiteDetails extends ViewModelCopyEditor {
 EditWebsiteDetails.propTypes = {
   id: PropTypes.string,
   label: PropTypes.string,
+  model: PropTypes.object,
   parentModelId: PropTypes.number,
   modelNodeId: PropTypes.any,
   onSaveClick: PropTypes.func,
@@ -47,11 +48,10 @@ EditWebsiteDetails.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const viewData = graphTraversal.find(state, ownProps.id);
-  const label = (typeof viewData.model.label === typeof undefined) ? '' : viewData.model.label;
+  const view = graphTraversal.find(state, ownProps.id);
 
   return {
-    label
+    label: view.model.label
   };
 };
 
