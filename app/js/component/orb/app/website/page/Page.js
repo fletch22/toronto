@@ -1,19 +1,19 @@
 import React, { PropTypes } from 'react';
 import GeneralOrbComponent from '../../../../../containers/GeneralOrbComponent';
 import { connect } from 'react-redux';
-import Header from '../../website/folder/header/Header';
+import Header from '../../website/page/header/Header';
 import crudComponentOperations from '../../../ComponentCrudOperations';
 import graphTraversal from '../../../../../state/graphTraversal';
 
-class Folder extends React.Component {
+class Page extends React.Component {
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
 
     return (
       <div>
-        <div className="dashboard-item dashboard-webfolder col-sm-12">
-          <Header headerTextValue={this.props.label} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+        <div className="dashboard-item dashboard-webpage col-sm-12">
+          <Header headerTextValue={this.props.pageName} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemove} onChangeLabel={this.props.onChangeLabel} />
           {
             children.map((child) =>
               <GeneralOrbComponent key={child.id} child={child} />
@@ -25,12 +25,12 @@ class Folder extends React.Component {
   }
 }
 
-Folder.propTypes = {
+Page.propTypes = {
   id: PropTypes.any.isRequired,
   parentId: PropTypes.number.isRequired,
-  label: PropTypes.string.isRequired,
+  pageName: PropTypes.string.isRequired,
   children: PropTypes.arrayOf(React.PropTypes.object),
-  onClickRemoveApp: PropTypes.func,
+  onClickRemove: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
 
@@ -38,8 +38,8 @@ function remove(component) {
   return crudComponentOperations.removeNode(component);
 }
 
-function changeLabel(component, newLabelValue) {
-  return crudComponentOperations.updateProperty(component, 'label', newLabelValue);
+function changePageName(component, newLabelValue) {
+  return crudComponentOperations.updateProperty(component, 'pageName', newLabelValue);
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -53,19 +53,18 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClickRemoveApp: () => {
+    onClickRemove: () => {
       dispatch(remove(ownProps));
     },
     onChangeLabel: (event) => {
-      dispatch(changeLabel(ownProps, event.target.value));
+      dispatch(changePageName(ownProps, event.target.value));
     }
   };
 };
 
-Folder = connect(
+Page = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Folder);
+)(Page);
 
-
-export default Folder;
+export default Page;

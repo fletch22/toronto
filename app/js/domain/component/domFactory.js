@@ -13,7 +13,24 @@ class DomFactory {
     return {
       parentId: website.parentId,
       id: website.id,
-      children: website.children
+      children: []
+    };
+  }
+
+  createWebFolder(webFolder) {
+    return {
+      parentId: webFolder.parentId,
+      id: webFolder.id,
+      children: []
+    };
+  }
+
+  createWebPage(webPage) {
+    return {
+      parentId: webPage.parentId,
+      id: webPage.id,
+      activeTab: null,
+      children: []
     };
   }
 }

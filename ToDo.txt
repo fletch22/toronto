@@ -2,3 +2,25 @@
 
 2. Refactor menuing to be more DRY.
 
+3. Add New Component Steps: 
+
+	Adding New Component to Dashboard Tree
+
+	1. Create Menu Item.
+
+		i. Find parent. Go to Header Menu. Add item.
+		ii. Goto mapPropsToDispatch. Add handler.
+
+	2. Goto reducer/index.js. Find CREATE_COMPONENT. Add handler to get viewName.
+
+	3. Goto PseudoModal add handler to component handler.
+
+	4. Go to Vancouver Project
+
+		i. Edit ServiceFactory.java
+		ii. Add Service class
+		iii. Add Transformer Orb --> Front End Ready Model
+		iv. Add Dao -- set up method to copy Front-end-model --> Orb
+		v. Edit AppDesignerDao.
+
+	5. Go to GeneratorComponent and add item to switch case statement..

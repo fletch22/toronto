@@ -38,10 +38,10 @@ Header.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const appContainerDom = state.dom.view.appContainer;
-  const app = graphTraversal.find(appContainerDom.children, ownProps.modelNodeId);
+  const model = graphTraversal.find(appContainerDom.children, ownProps.modelNodeId);
 
   return {
-    isShowingHeaderMenu: app.isShowingHeaderMenu
+    isShowingHeaderMenu: model.isShowingHeaderMenu
   };
 };
 

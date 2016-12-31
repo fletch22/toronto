@@ -12,8 +12,7 @@ import crudComponentOperations from '../../../../../orb/ComponentCrudOperations'
 class HeaderMenu extends React.Component {
   static menuKeys() {
     return {
-      ADD_FOLDER: 'ADD_FOLDER',
-      ADD_PAGE: 'ADD_PAGE',
+      ADD_DIV: 'ADD_DIV',
       EDIT: 'EDIT',
       REMOVE: 'REMOVE'
     };
@@ -24,10 +23,9 @@ class HeaderMenu extends React.Component {
     if (this.props.isShowingHeaderMenu) {
       menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
         <MenuItem key={HeaderMenu.menuKeys().EDIT} className="menu-item">Edit</MenuItem>
-        <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add Folder</MenuItem>
-        <MenuItem key={HeaderMenu.menuKeys().ADD_PAGE} className="menu-item">Add Page</MenuItem>
+        <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add Div</MenuItem>
         <Divider />
-        <MenuItem key={HeaderMenu.menuKeys().REMOVE} className="menu-item">Remove Web Folder</MenuItem>
+        <MenuItem key={HeaderMenu.menuKeys().REMOVE} className="menu-item">Remove Page</MenuItem>
       </Menu>);
     }
 
@@ -48,7 +46,6 @@ HeaderMenu.propTypes = {
 };
 
 const remove = (dispatch, id) => {
-
   const successCallback = () => {
     dispatch(actionAppToggleMenu(id));
   };
@@ -59,18 +56,13 @@ const remove = (dispatch, id) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
-      case HeaderMenu.menuKeys().ADD_FOLDER: {
-        dispatch(actionCreateComponent(ComponentTypes.WebFolder, { parentModelId: ownProps.modelNodeId }));
+      case HeaderMenu.menuKeys().ADD_DIV: {
+        dispatch(actionCreateComponent(ComponentTypes.Div, { parentModelId: ownProps.modelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));
         break;
       }
       case HeaderMenu.menuKeys().EDIT: {
-        dispatch(actionCreateComponent(ComponentTypes.Website, { modelNodeId: ownProps.modelNodeId, parentModelNodeId: ownProps.parentModelNodeId }));
-        dispatch(actionAppToggleMenu(ownProps.modelNodeId));
-        break;
-      }
-      case HeaderMenu.menuKeys().ADD_PAGE: {
-        dispatch(actionCreateComponent(ComponentTypes.WebPage, { parentModelId: ownProps.modelNodeId }));
+        dispatch(actionCreateComponent(ComponentTypes.WebPage, { modelNodeId: ownProps.modelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));
         break;
       }

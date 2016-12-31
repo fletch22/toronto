@@ -11,15 +11,13 @@ class Website extends React.Component {
     const children = (this.props.children) ? this.props.children : [];
 
     return (
-      <div>
-        <div className="dashboard-website col-sm-12">
-          <Header headerTextValue={this.props.label} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
-          {
-            children.map((child) =>
-              <GeneralOrbComponent key={child.id} child={child} />
-            )
-          }
-        </div>
+      <div className="dashboard-item dashboard-website col-sm-12">
+        <Header headerTextValue={this.props.label} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+        {
+          children.map((child) =>
+            <GeneralOrbComponent key={child.id} child={child} />
+          )
+        }
       </div>
     );
   }
@@ -34,7 +32,7 @@ Website.propTypes = {
   onChangeLabel: PropTypes.func
 };
 
-function removeApp(component) {
+function remove(component) {
   return crudComponentOperations.removeNode(component);
 }
 
@@ -54,7 +52,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickRemoveApp: () => {
-      dispatch(removeApp(ownProps));
+      dispatch(remove(ownProps));
     },
     onChangeLabel: (event) => {
       dispatch(changeLabel(ownProps, event.target.value));

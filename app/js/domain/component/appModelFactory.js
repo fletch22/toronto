@@ -1,5 +1,5 @@
 import ComponentTypes from './ComponentTypes';
-import Component from './component';
+import Component from './Component';
 import uuid from 'node-uuid';
 
 class AppModelFactory extends Component {

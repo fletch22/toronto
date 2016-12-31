@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Menu, { MenuItem } from 'rc-menu';
+import Menu, { MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import '../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
 import { actionAppToggleMenu } from '../../../../../actions/dashboard/app/index';
@@ -23,8 +23,9 @@ class HeaderMenu extends React.Component {
     if (this.props.isShowingHeaderMenu) {
       menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
         <MenuItem key={HeaderMenu.menuKeys().EDIT} className="menu-item">Edit</MenuItem>
+        <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add New Web Folder</MenuItem>
+        <Divider />
         <MenuItem key={HeaderMenu.menuKeys().REMOVE} className="menu-item">Remove Website</MenuItem>
-        <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add Folder</MenuItem>
       </Menu>);
     }
 

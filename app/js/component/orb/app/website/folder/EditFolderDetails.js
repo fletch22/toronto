@@ -1,50 +1,38 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import websiteContainerService from '../../../../../service/component/websiteContainerService';
+import containerService from '../../../../../service/component/containerService';
 import graphTraversal from '../../../../../state/graphTraversal';
 import ViewModelCopyEditor from '../../../ViewModelCopyEditor';
 import TextInput from '../../../../view/TextInput';
+import EditorIdDisplay from '../../EditorIdDisplay';
+import EditorButtons from '../../EditorButtons';
 
 class EditFolderDetails extends ViewModelCopyEditor {
 
   render() {
-    const modelIdDisplay = this.props.model.id || '-';
     return (
       <div>
+        <EditorIdDisplay model={this.props.model} />
         <div className="row">
-          <div className="col-xs-2"><label>ID:</label></div>
-          <div className="col-lg-10">{modelIdDisplay}</div>
-        </div>
-        <div className="row">
-          <div className="col-xs-2"><label>Parent ID:</label></div>
-          <div className="col-lg-10">{this.props.model.parentId}</div>
-        </div>
-        <div className="row">
-          <div className="col-lg-2" style={{ margin: '4px 0 0 0' }}><label>Label:</label></div>
-          <div className="col-lg-10"><TextInput id={this.props.id} path={'model.label'} value={this.props.label} /></div>
-        </div>
-        <div className="row">
-          <div className="col-lg-12">
-            <div style={{ display: 'inline', float: 'right' }}>
-              <button type="button" onClick={this.props.onSaveClick}>Save</button>
-              <button type="button" onClick={this.props.onCancelClick}>Cancel</button>
-            </div>
+          <div className="col-lg-2 editor-label-container"><label>Label:</label></div>
+          <div className="col-lg-10">
+            <TextInput id={this.props.id} path={'model.label'} value={this.props.label} />
           </div>
         </div>
+        <EditorButtons onSaveClick={this.props.onSaveClick} onCancelClick={this.props.onCancelClick} />
       </div>
     );
   }
 }
 
 EditFolderDetails.propTypes = {
-  id: PropTypes.string,
-  label: PropTypes.string,
-  model: PropTypes.object,
-  parentModelId: PropTypes.number,
-  modelNodeId: PropTypes.any,
+  id: PropTypes.string, // NOTE: ID of this editor
+  label: PropTypes.string, // NOTE: Label attribute on object.
+  model: PropTypes.object, // NOTE: Model object carrying attribute values
+  parentModelId: PropTypes.number, // NOTE: Parent to model object.
+  modelNodeId: PropTypes.any, // NOTE: Model ID - if new this value will be a UUID.
   onSaveClick: PropTypes.func,
-  onCancelClick: PropTypes.func,
-  cleanUp: PropTypes.func
+  onCancelClick: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -57,7 +45,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSaveClick: () => {
-    ViewModelCopyEditor.createUpdate(dispatch, ownProps, websiteContainerService.createOrUpdate);
+    ViewModelCopyEditor.createUpdate(dispatch, ownProps, containerService.createOrUpdate);
   }
 });
 

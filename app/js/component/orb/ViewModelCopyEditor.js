@@ -14,6 +14,8 @@ class ViewModelCopyEditor extends React.Component {
           const jsonStateOld = JSON.stringify(state);
           const stateNew = JSON.parse(jsonStateOld);
 
+          console.log(JSON.stringify(view.model));
+
           return createUpdateCallback(stateNew, jsonStateOld, view.model)
             .then((result) => {
               console.debug('Success Callback.');

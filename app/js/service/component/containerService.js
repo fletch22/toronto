@@ -4,7 +4,7 @@ import stateSyncService from '../stateSyncService';
 import componentGenerator from '../../domain/component/componentGenerator';
 import graphTraversal from '../../../js/state/graphTraversal';
 
-class WebsiteContainerService extends ComponentService {
+class ContainerService extends ComponentService {
 
   constructor() {
     super();
@@ -40,4 +40,4 @@ class WebsiteContainerService extends ComponentService {
   }
 }
 
-export default new WebsiteContainerService();
+export default new ContainerService();

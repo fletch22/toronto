@@ -174,7 +174,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.UPDATE_VIEW_PROPERTY_VALUE: {
       const payload = action.payload;
-      let node = graphTraversal.find(stateNew.dom, payload.viewId);
+      let node = graphTraversal.find(stateNew, payload.viewId);
 
       let propertyName;
       const path = payload.path.split('.');
@@ -207,28 +207,30 @@ const reducer = (state = defaultState.getInstance(), action) => {
           componentViewName = EditorNames.EDIT_WEBSITE_FOLDER_DETAILS;
           break;
         }
+        case ComponentTypes.WebPage: {
+          componentViewName = EditorNames.EDIT_WEBSITE_PAGE_DETAILS;
+          break;
+        }
         default: {
           throw new Error(`Action not yet configured to handle ${type}.`);
         }
       }
 
-      const options = action.payload.options;
+      const options = _.cloneDeep(action.payload.options);
       const modelNodeId = options.modelNodeId;
       let model;
       if (modelNodeId) {
         model = _.cloneDeep(graphTraversal.find(stateNew.model, modelNodeId));
       } else {
-        model = { parentId: action.payload.options.parentModelId };
+        model = { parentId: action.payload.options.parentModelId, typeLabel: type };
       }
 
-      const data = Object.assign({}, action.payload.options, { id: f22Uuid.generate() }, { model });
+      const data = Object.assign({}, options, { id: f22Uuid.generate() }, { model });
 
       const viewData = modalDtoFactory.getPseudoModalInstance({
         componentViewName,
         data
       });
-
-      console.log(`In CREATE_COMPONENT action: ${JSON.stringify(viewData)}`);
 
       stateNew.dom.pseudoModals.push(viewData);
 

@@ -1,22 +1,21 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import containerService from '../../../../service/component/containerService';
-import graphTraversal from '../../../../state/graphTraversal';
-import ViewModelCopyEditor from '../../ViewModelCopyEditor';
-import TextInput from '../../../view/TextInput';
-import EditorIdDisplay from '../EditorIdDisplay';
-import EditorButtons from '../EditorButtons';
+import graphTraversal from '../../../../../state/graphTraversal';
+import TextInput from '../../../../view/TextInput';
+import EditorIdDisplay from '../../EditorIdDisplay';
+import EditorButtons from '../../EditorButtons';
+import containerService from '../../../../../service/component/containerService';
+import ViewModelCopyEditor from '../../../ViewModelCopyEditor';
 
-class EditWebsiteDetails extends ViewModelCopyEditor {
-
+class MetaData extends ViewModelCopyEditor {
   render() {
     return (
-      <div>
+      <div className="tab-content">
         <EditorIdDisplay model={this.props.model} />
         <div className="row">
-          <div className="col-lg-2 editor-label-container"><label>Label:</label></div>
+          <div className="col-lg-2 editor-label-container"><label>Page Name:</label></div>
           <div className="col-lg-10">
-            <TextInput id={this.props.id} path={'model.label'} value={this.props.label} />
+            <TextInput id={this.props.id} path={'model.pageName'} value={this.props.pageName} />
           </div>
         </div>
         <EditorButtons onSaveClick={this.props.onSaveClick} onCancelClick={this.props.onCancelClick} />
@@ -25,10 +24,9 @@ class EditWebsiteDetails extends ViewModelCopyEditor {
   }
 }
 
-EditWebsiteDetails.propTypes = {
+MetaData.propTypes = {
   id: PropTypes.string, // NOTE: ID of this editor
-  typeLabel: PropTypes.string,
-  label: PropTypes.string, // NOTE: Label attribute on object.
+  pageName: PropTypes.string, // NOTE: Label attribute on object.
   model: PropTypes.object, // NOTE: Model object carrying attribute values
   parentModelId: PropTypes.number, // NOTE: Parent to model object.
   modelNodeId: PropTypes.any, // NOTE: Model ID - if new this value will be a UUID.
@@ -40,7 +38,7 @@ const mapStateToProps = (state, ownProps) => {
   const view = graphTraversal.find(state, ownProps.id);
 
   return {
-    label: view.model.label
+    pageName: view.model.pageName
   };
 };
 
@@ -50,9 +48,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 });
 
-EditWebsiteDetails = connect(
+MetaData = connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditWebsiteDetails);
+)(MetaData);
 
-export default EditWebsiteDetails;
+
+export default MetaData;

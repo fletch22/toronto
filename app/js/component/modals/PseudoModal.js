@@ -4,6 +4,7 @@ import { actionModalPseudoForget } from '../../../js/actions/modal/index';
 import ComponentModalNames from '../EditorNames';
 import EditWebsiteDetails from '../orb/app/website/EditWebsiteDetails';
 import EditFolderDetails from '../orb/app/website/folder/EditFolderDetails';
+import EditPageDetails from '../orb/app/website/page/EditorPage';
 
 class PseudoModal extends React.Component {
 
@@ -20,6 +21,10 @@ class PseudoModal extends React.Component {
         component = <EditFolderDetails { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
         break;
       }
+      case ComponentModalNames.EDIT_WEBSITE_PAGE_DETAILS: {
+        component = <EditPageDetails { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+        break;
+      }
       default: {
         console.log('Encountered problem while trying to determine view name for pseudo modal.');
         break;
@@ -31,7 +36,7 @@ class PseudoModal extends React.Component {
         <div className="dashboard-canvas">
           <div className="container pseudo-modal-content" style={{ width }}>
             <div className="row">
-              <div className="col-sm-12 cell" style={{ height: '200px' }}>
+              <div className="col-sm-12 cell">
                 <button type="button" className="btn btn-default close" onClick={this.props.onCloseModal}>close</button>
                 { component }
               </div>
