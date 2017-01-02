@@ -22,5 +22,6 @@
 		iii. Add Transformer Orb --> Front End Ready Model
 		iv. Add Dao -- set up method to copy Front-end-model --> Orb
 		v. Edit AppDesignerDao.
+		vi. Add to ReferenceResolverService.
 
-	5. Go to GeneratorComponent and add item to switch case statement..
+	5. Go to GeneratorComponent and add item to switch case statement.

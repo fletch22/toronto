@@ -5,17 +5,19 @@ import { Tabs, Tab } from 'react-bootstrap';
 import MetaData from './MetaData';
 import graphTraversal from '../../../../../state/graphTraversal';
 import { actionUpdateViewPropertyValue } from '../../../../../actions/index';
+import Root from '../../../bodyChildren/Root';
 
 class EditorPage extends React.Component {
 
   render() {
+
     return (
       <div>
         <Tabs activeKey={this.props.activeTab} onSelect={this.props.handleSelect} id="controlled-tab-example">
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body">Tab 2 content</Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><Root /></Tab>
         </Tabs>
       </div>
     );
@@ -25,7 +27,8 @@ class EditorPage extends React.Component {
 EditorPage.propTypes = {
   id: PropTypes.string, // NOTE: ID of this editor
   activeTab: PropTypes.number,
-  handleSelect: PropTypes.func
+  handleSelect: PropTypes.func,
+  tabBodyDisabled: PropTypes.bool
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -33,9 +36,11 @@ const mapStateToProps = (state, ownProps) => {
   const object = graphTraversal.find(viewContainer, ownProps.id);
 
   const activeTab = (_.has(object, 'activeTab')) ? object.activeTab : 1;
+  const tabBodyDisabled = !_.has(ownProps, 'modelNodeId');
 
   return {
-    activeTab
+    activeTab,
+    tabBodyDisabled
   };
 };
 

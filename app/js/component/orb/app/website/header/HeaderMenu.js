@@ -13,6 +13,7 @@ class HeaderMenu extends React.Component {
   static menuKeys() {
     return {
       ADD_FOLDER: 'ADD_FOLDER',
+      ADD_PAGE: 'ADD_PAGE',
       EDIT: 'EDIT',
       REMOVE: 'REMOVE'
     };
@@ -24,6 +25,7 @@ class HeaderMenu extends React.Component {
       menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
         <MenuItem key={HeaderMenu.menuKeys().EDIT} className="menu-item">Edit</MenuItem>
         <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add New Web Folder</MenuItem>
+        <MenuItem key={HeaderMenu.menuKeys().ADD_PAGE} className="menu-item">Add New Page</MenuItem>
         <Divider />
         <MenuItem key={HeaderMenu.menuKeys().REMOVE} className="menu-item">Remove Website</MenuItem>
       </Menu>);
@@ -59,6 +61,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     switch (info.key) {
       case HeaderMenu.menuKeys().ADD_FOLDER: {
         dispatch(actionCreateComponent(ComponentTypes.WebFolder, { parentModelId: ownProps.modelNodeId }));
+        dispatch(actionAppToggleMenu(ownProps.modelNodeId));
+        break;
+      }
+      case HeaderMenu.menuKeys().ADD_PAGE: {
+        dispatch(actionCreateComponent(ComponentTypes.WebPage, { parentModelId: ownProps.modelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));
         break;
       }

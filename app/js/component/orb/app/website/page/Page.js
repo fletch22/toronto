@@ -47,7 +47,7 @@ const mapStateToProps = (state, ownProps) => {
   const object = graphTraversal.find(appContainerModel, ownProps.id);
 
   return {
-    label: object.label
+    pageName: object.pageName
   };
 };
 

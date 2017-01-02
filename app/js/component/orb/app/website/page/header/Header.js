@@ -14,7 +14,7 @@ class Header extends React.Component {
       <div className="container-orb">
         <div className="header-left">
           <div>
-            <F22Input modelNodeId={this.props.modelNodeId} propertyName="label" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue} />
+            <F22Input modelNodeId={this.props.modelNodeId} propertyName="pageName" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue} />
           </div>
         </div>
         <div className="header-right">

@@ -168,6 +168,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST: {
       const appContainerModel = stateNew.model.appContainer;
       const object = graphTraversal.find(appContainerModel, action.payload.id);
+
       object[action.payload.propertyName] = action.payload.value;
 
       return stateNew;

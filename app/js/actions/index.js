@@ -101,6 +101,9 @@ export const actionEnsureInitialStateSaved = () => {
 };
 
 export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
+
+  console.log(propertyName);
+
   return {
     type: ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST,
     payload: { id, propertyName, value }
