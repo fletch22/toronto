@@ -16,8 +16,8 @@ class Component {
   }
 
   ensureId(model) {
-    let id = model.childId;
-    if (!model.childId) {
+    let id = model.id;
+    if (!id) {
       id = uuid.v1();
     }
     return id;

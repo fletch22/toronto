@@ -1,24 +1,23 @@
 import ComponentTypes from './ComponentTypes';
 import Component from './Component';
-import uuid from 'node-uuid';
 
-class AppModelFactory extends Component {
+class AppContainerFactory extends Component {
 
   createInstance(model) {
     this.validateNotNull(model.label);
 
     const id = this.ensureId(model);
 
-    const app = {
+    const appContainer = {
       parentId: model.parentId,
       id,
       label: model.label,
-      typeLabel: ComponentTypes.App,
+      typeLabel: ComponentTypes.AppContainer,
       children: []
     };
 
-    return app;
+    return appContainer;
   }
 }
 
-export default new AppModelFactory();
+export default new AppContainerFactory();

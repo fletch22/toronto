@@ -1,16 +1,13 @@
 import ComponentTypes from '../domain/component/ComponentTypes';
 import componentGenerator from '../domain/component/componentGenerator';
+import containerService from '../service/component/containerService';
+import graphTraversal from '../state/graphTraversal';
+import _ from 'lodash';
 
 class ModelToStateGenerator {
 
   constructor(state) {
     this.state = state;
-  }
-
-  ensureDefined(object) {
-    if (typeof object.children === typeof undefined) {
-      object.children = [];
-    }
   }
 
   process(modelFromServer) {
@@ -22,34 +19,22 @@ class ModelToStateGenerator {
 
     this.state.model.appContainer.id = modelFromServer.id;
     this.state.model.appContainer.typeLabel = modelFromServer.typeLabel;
+    this.state.dom.view.appContainer.id = modelFromServer.id;
 
-    return this.createChildren(this.state.model.appContainer, this.state.dom.view.appContainer, modelFromServer);
-  }
-
-  createChildren(modelParent, domParent, parent) {
-    this.ensureDefined(domParent);
-    if (parent.children && parent.children.list) {
-      parent.children.list.forEach((child) => this.createChild(modelParent, domParent, child));
-    }
+    this.createChildren(modelFromServer);
 
     return this.state;
   }
 
-  createChild(modelParent, domParent, child) {
-    let component;
-
-    switch (child.typeLabel) {
-      case ComponentTypes.App: {
-        component = componentGenerator.createApp(child.parentId, child.label, child.id);
-        break;
-      }
-      default:
-        throw new Error('Could not find generator to render model.');
+  createChildren(parent) {
+    if (parent.children && !!parent.children.list) {
+      parent.children.list.forEach((child) => this.createChild(child));
     }
+  }
 
-    this.createChildren(component.model, component.dom, child);
-    modelParent.children.push(component.model);
-    domParent.children.push(component.dom);
+  createChild(child) {
+    containerService.addModel(this.state, child);
+    return this.createChildren(child);
   }
 }
 

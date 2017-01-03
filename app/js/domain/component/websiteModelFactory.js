@@ -11,10 +11,7 @@ class WebsiteModelFactory extends Component {
       throw new Error('Encountered problem with label. Must have non-zeo-length value.');
     }
 
-    let id = model.childId;
-    if (!model.childId) {
-      id = uuid.v1();
-    }
+    let id = this.ensureId(model);
 
     const instance = {
       parentId: model.parentId,

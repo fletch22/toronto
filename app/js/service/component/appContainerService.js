@@ -12,7 +12,14 @@ class AppContainerService extends ComponentService {
 
   addAppToState(state, label, childId) {
     const modelAppContainer = state.model.appContainer;
-    const component = componentGenerator.createApp(modelAppContainer.id, label, childId);
+
+    const app = {
+      parentId: modelAppContainer.id,
+      label,
+      id: childId
+    };
+
+    const component = componentGenerator.createApp(app);
     const domAppContainer = state.dom.view.appContainer;
     this.stateInjector(modelAppContainer, domAppContainer, component);
   }

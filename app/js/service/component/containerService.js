@@ -16,11 +16,17 @@ class ContainerService extends ComponentService {
 
   addModel(state, model) {
     const modelParentNode = graphTraversal.find(state.model, model.parentId);
-
-    const component = componentGenerator.createComponent(model);
     const viewParentNode = graphTraversal.find(state.dom.view, model.parentId);
 
+    const component = componentGenerator.createComponent(model);
+
     this.stateInjector(modelParentNode, viewParentNode, component);
+
+    return {
+      component,
+      modelParentNode,
+      viewParentNode
+    };
   }
 
   updateModel(state, model) {

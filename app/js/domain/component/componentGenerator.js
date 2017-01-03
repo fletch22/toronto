@@ -1,3 +1,4 @@
+import appContainerModelFactory from './appContainerModelFactory';
 import appModelFactory from './appModelFactory';
 import websiteModelFactory from './websiteModelFactory';
 import webFolderModelFactory from './webFolderModelFactory';
@@ -7,8 +8,16 @@ import ComponentTypes from '../component/ComponentTypes';
 
 class ComponentGenerator {
 
-  createApp(parentId, childLabel, childId) {
-    const modelChild = appModelFactory.createInstance(parentId, childLabel, childId);
+  createAppContainer(model) {
+    const modelChild = appContainerModelFactory.createInstance(model);
+    return {
+      model: modelChild,
+      dom: domFactory.createAppContainer(modelChild)
+    };
+  }
+
+  createApp(model) {
+    const modelChild = appModelFactory.createInstance(model);
     return {
       model: modelChild,
       dom: domFactory.createApp(modelChild)
@@ -40,7 +49,12 @@ class ComponentGenerator {
   }
 
   createComponent(model) {
+    console.log(model.typeLabel);
+
     switch (model.typeLabel) {
+      case ComponentTypes.AppContainer: {
+        return this.createAppContainer(model);
+      }
       case ComponentTypes.App: {
         return this.createApp(model);
       }

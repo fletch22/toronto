@@ -1,11 +1,24 @@
 class DomFactory {
 
+  createAppContainer(model) {
+    return {
+      section: {
+        addNew: {
+          appLabel: ''
+        }
+      },
+      id: model.id,
+      isShowingHeaderMenu: false,
+      children: []
+    };
+  }
+
   createApp(app) {
     return {
       parentId: app.parentId,
       id: app.id,
       isShowingHeaderMenu: false,
-      children: app.children
+      children: []
     };
   }
 
