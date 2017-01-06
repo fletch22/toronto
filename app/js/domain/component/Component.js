@@ -8,7 +8,7 @@ class Component {
     return object;
   }
 
-  validateNotNull(value, propertyName) {
+  validateNotBlank(value, propertyName) {
     if (!!value === false
       || _.trim(value) === '') {
       throw new Error(`Encountered problem with property \'${propertyName}\'. Must have non-zeo-length value.`);

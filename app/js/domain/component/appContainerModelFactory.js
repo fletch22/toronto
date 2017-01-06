@@ -4,7 +4,7 @@ import Component from './Component';
 class AppContainerFactory extends Component {
 
   createInstance(model) {
-    this.validateNotNull(model.label);
+    this.validateNotBlank(model.label);
 
     const id = this.ensureId(model);
 

@@ -3,6 +3,7 @@ import StatePackager from '../statePackager';
 import stateSyncService from '../stateSyncService';
 import componentGenerator from '../../domain/component/componentGenerator';
 import graphTraversal from '../../../js/state/graphTraversal';
+import _ from 'lodash';
 
 class ContainerService extends ComponentService {
 
@@ -31,7 +32,8 @@ class ContainerService extends ComponentService {
 
   updateModel(state, model) {
     const modelNode = graphTraversal.find(state.model, model.id);
-    Object.assign(modelNode, model);
+    //Object.assign(modelNode, model);
+    _.mergeWith(modelNode, model);
   }
 
   createOrUpdate(stateNew, jsonStateOld, model) {

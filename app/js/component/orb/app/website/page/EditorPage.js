@@ -5,7 +5,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import MetaData from './MetaData';
 import graphTraversal from '../../../../../state/graphTraversal';
 import { actionUpdateViewPropertyValue } from '../../../../../actions/index';
-import Root from '../../../bodyChildren/Root';
+import GridLayout from '../../../bodyChildren/GridLayout';
 
 class EditorPage extends React.Component {
 
@@ -17,7 +17,7 @@ class EditorPage extends React.Component {
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><Root /></Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><GridLayout { ...this.props.model } /></Tab>
         </Tabs>
       </div>
     );
@@ -26,6 +26,8 @@ class EditorPage extends React.Component {
 
 EditorPage.propTypes = {
   id: PropTypes.string, // NOTE: ID of this editor
+  model: PropTypes.object,
+  modelNodeId: PropTypes.any,
   activeTab: PropTypes.number,
   handleSelect: PropTypes.func,
   tabBodyDisabled: PropTypes.bool
@@ -47,6 +49,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     handleSelect: (event) => {
+      window.dispatchEvent(new Event('resize'));
       dispatch(actionUpdateViewPropertyValue(ownProps.id, 'activeTab', event, true));
     }
   };

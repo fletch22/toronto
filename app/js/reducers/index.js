@@ -12,6 +12,7 @@ import restService from '../service/restService';
 import ComponentTypes from '../domain/component/ComponentTypes';
 import EditorNames from '../component/EditorNames';
 import f22Uuid from '../util/f22Uuid';
+import LayoutTranslator from '../component/orb/bodyChildren/LayoutTranslator';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
@@ -33,6 +34,18 @@ const reducer = (state = defaultState.getInstance(), action) => {
       node.isShowingHeaderMenu = !node.isShowingHeaderMenu;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+      return stateNew;
+    }
+    case ACTIONS.types.DASHBOARD.BODY_CHILDREN.ACTION_PROCESS_ROOT_LAYOUT: {
+      const model = graphTraversal.find(stateNew.model, action.payload.pageId);
+
+      if (!model) {
+        console.log(`State:  ${JSON.stringify(action.payload.pageId)}`);
+        return state;
+      }
+
+      LayoutTranslator.translate(model, action.payload.layout);
+
       return stateNew;
     }
     case ACTIONS.types.ADD_APP: {

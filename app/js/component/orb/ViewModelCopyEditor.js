@@ -14,8 +14,6 @@ class ViewModelCopyEditor extends React.Component {
           const jsonStateOld = JSON.stringify(state);
           const stateNew = JSON.parse(jsonStateOld);
 
-          console.log(JSON.stringify(view.model));
-
           return createUpdateCallback(stateNew, jsonStateOld, view.model)
             .then((result) => {
               console.debug('Success Callback.');
@@ -23,7 +21,7 @@ class ViewModelCopyEditor extends React.Component {
             })
             .catch((error) => {
               console.debug('Failure Callback.');
-              modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to add website.', dispatch);
+              modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to update component.', dispatch);
               return Promise.reject(error);
             });
         } catch (error) {

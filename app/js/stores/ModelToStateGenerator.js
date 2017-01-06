@@ -1,8 +1,4 @@
-import ComponentTypes from '../domain/component/ComponentTypes';
-import componentGenerator from '../domain/component/componentGenerator';
 import containerService from '../service/component/containerService';
-import graphTraversal from '../state/graphTraversal';
-import _ from 'lodash';
 
 class ModelToStateGenerator {
 
@@ -34,7 +30,7 @@ class ModelToStateGenerator {
 
   createChild(child) {
     containerService.addModel(this.state, child);
-    return this.createChildren(child);
+    this.createChildren(child);
   }
 }
 

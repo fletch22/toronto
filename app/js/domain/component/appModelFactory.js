@@ -5,7 +5,7 @@ import uuid from 'node-uuid';
 class AppModelFactory extends Component {
 
   createInstance(model) {
-    this.validateNotNull(model.label);
+    this.validateNotBlank(model.label);
 
     const id = this.ensureId(model);
 

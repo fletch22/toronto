@@ -3,7 +3,7 @@ import Component from './Component';
 class WebFolderModelFactory extends Component {
 
   createInstance(model) {
-    this.validateNotNull(model.pageName, 'pageName');
+    this.validateNotBlank(model.pageName, 'pageName');
 
     const id = this.ensureId(model);
 

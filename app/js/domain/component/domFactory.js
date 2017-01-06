@@ -46,6 +46,14 @@ class DomFactory {
       children: []
     };
   }
+
+  createLayoutDiv(layoutDiv) {
+    return {
+      parentId: layoutDiv.parentId,
+      id: layoutDiv.id,
+      children: []
+    };
+  }
 }
 
 export default new DomFactory();
