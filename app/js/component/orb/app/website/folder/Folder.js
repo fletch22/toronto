@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import GeneralOrbComponent from '../../../../../containers/GeneralOrbComponent';
+import Island from '../../../../dashboard/Island';
 import { connect } from 'react-redux';
 import Header from '../../website/folder/header/Header';
 import crudComponentOperations from '../../../ComponentCrudOperations';
@@ -16,7 +16,7 @@ class Folder extends React.Component {
           <Header headerTextValue={this.props.label} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
           {
             children.map((child) =>
-              <GeneralOrbComponent key={child.id} child={child} />
+              <Island key={child.id} child={child} />
             )
           }
         </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppContainerToolbar from '../component/utils/AppContainerToolbar';
 import update from 'react-addons-update';
-import GeneralOrbComponent from './GeneralOrbComponent';
+import Island from '../component/dashboard/Island';
 import PseudoModalWrangler from '../component/modals/PseudoModalWrangler';
 
 class AppContainer extends React.Component {
@@ -13,7 +13,7 @@ class AppContainer extends React.Component {
         <div className="container-fluid app-container">
           {
             this.props.children.map((child) =>
-              <GeneralOrbComponent key={child.id} child={child} />
+              <Island key={child.id} child={child} />
             )
           }
         </div>

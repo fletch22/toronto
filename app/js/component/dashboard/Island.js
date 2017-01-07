@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
-import App from '../component/orb/App';
-import Website from '../component/orb/app/website/Website';
-import WebFolder from '../component/orb/app/website/folder/Folder';
-import Page from '../component/orb/app/website/page/Page';
-import ComponentTypes from '../domain/component/ComponentTypes';
+import App from '../orb/App';
+import Website from '../orb/app/website/Website';
+import WebFolder from '../orb/app/website/folder/Folder';
+import Page from '../orb/app/website/page/Page';
+import ComponentTypes from '../../domain/component/ComponentTypes';
 
-class GeneralOrbComponent extends React.Component {
+class Island extends React.Component {
 
   render() {
     let component;
@@ -38,8 +38,8 @@ class GeneralOrbComponent extends React.Component {
   }
 }
 
-GeneralOrbComponent.propTypes = {
+Island.propTypes = {
   child: PropTypes.object.isRequired
 };
 
-export default GeneralOrbComponent;
+export default Island;

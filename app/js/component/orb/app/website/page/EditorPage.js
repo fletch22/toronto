@@ -5,7 +5,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import MetaData from './MetaData';
 import graphTraversal from '../../../../../state/graphTraversal';
 import { actionUpdateViewPropertyValue } from '../../../../../actions/index';
-import GridLayout from '../../../bodyChildren/GridLayout';
+import BodyChildren from '../../../bodyChildren/BodyChildren';
 
 class EditorPage extends React.Component {
 
@@ -17,7 +17,7 @@ class EditorPage extends React.Component {
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><GridLayout { ...this.props.model } /></Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><BodyChildren { ...this.props.model } /></Tab>
         </Tabs>
       </div>
     );

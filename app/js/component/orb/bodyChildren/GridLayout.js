@@ -103,7 +103,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       console.log('layout changed.');
       window.dispatchEvent(new Event('resize'));
 
-      //dispatch(translateAndSaveLayout(layout, ownProps));
+      // dispatch(translateAndSaveLayout(layout, ownProps));
       // console.log(JSON.stringify(layout));
       // if (!_.isEqual(layout, ownProps.layout)) {
       //   dispatch(actionProcessRootLayout(ownProps.pageId, layout));
