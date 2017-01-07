@@ -7,7 +7,7 @@ import { actionCreateComponent } from '../../../../actions/index';
 import ComponentTypes from '../../../../domain/component/ComponentTypes';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app/index';
 import 'css/modules/menu';
-import crudComponentOperations from '../../../orb/ComponentCrudOperations';
+import crudComponentOperations from '../../../CrudOperations';
 
 class HeaderMenu extends React.Component {
   static menuKeys() {

@@ -1,8 +1,8 @@
 import ComponentTypes from './ComponentTypes';
-import Component from './Component';
+import ModelFactory from './ModelFactory';
 import uuid from 'node-uuid';
 
-class AppModelFactory extends Component {
+class AppModelFactory extends ModelFactory {
 
   createInstance(model) {
     this.validateNotBlank(model.label);

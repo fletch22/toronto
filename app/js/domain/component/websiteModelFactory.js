@@ -1,8 +1,8 @@
 import ComponentTypes from './ComponentTypes';
-import Component from './Component';
+import ModelFactory from './ModelFactory';
 import uuid from 'node-uuid';
 
-class WebsiteModelFactory extends Component {
+class WebsiteModelFactory extends ModelFactory {
 
   createInstance(model) {
     if (model.label === null

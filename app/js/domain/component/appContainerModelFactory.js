@@ -1,7 +1,7 @@
 import ComponentTypes from './ComponentTypes';
-import Component from './Component';
+import ModelFactory from './ModelFactory';
 
-class AppContainerFactory extends Component {
+class AppContainerFactory extends ModelFactory {
 
   createInstance(model) {
     this.validateNotBlank(model.label);

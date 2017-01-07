@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import '../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
-import F22Input from '../../../../orb/F22Input';
+import F22Input from '../../../../editors/F22Input';
 import 'rc-menu/assets/index.css';
 import HeaderMenu from './HeaderMenu';
 import { actionAppToggleMenu } from '../../../../../actions/dashboard/app';

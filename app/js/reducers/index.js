@@ -10,9 +10,9 @@ import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
 import ComponentTypes from '../domain/component/ComponentTypes';
-import EditorNames from '../component/EditorNames';
+import EditorNames from '../component/editors/EditorNames';
 import f22Uuid from '../util/f22Uuid';
-import LayoutTranslator from '../component/orb/bodyChildren/LayoutTranslator';
+import LayoutTranslator from '../component/bodyChildren/LayoutTranslator';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);

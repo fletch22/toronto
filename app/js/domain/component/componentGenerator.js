@@ -4,7 +4,7 @@ import websiteModelFactory from './websiteModelFactory';
 import webFolderModelFactory from './webFolderModelFactory';
 import webPageModelFactory from './webPageModelFactory';
 import layoutDivModelFactory from './layoutDivModelFactory';
-import domFactory from './domFactory';
+import DomFactory from './DomFactory';
 import ComponentTypes from '../component/ComponentTypes';
 
 class ComponentGenerator {
@@ -13,7 +13,7 @@ class ComponentGenerator {
     const modelChild = appContainerModelFactory.createInstance(model);
     return {
       model: modelChild,
-      dom: domFactory.createAppContainer(modelChild)
+      dom: DomFactory.createAppContainer(modelChild)
     };
   }
 
@@ -21,7 +21,7 @@ class ComponentGenerator {
     const modelChild = appModelFactory.createInstance(model);
     return {
       model: modelChild,
-      dom: domFactory.createApp(modelChild)
+      dom: DomFactory.createApp(modelChild)
     };
   }
 
@@ -29,7 +29,7 @@ class ComponentGenerator {
     const modelChild = websiteModelFactory.createInstance(model);
     return {
       model: modelChild,
-      dom: domFactory.createWebsite(modelChild)
+      dom: DomFactory.createWebsite(modelChild)
     };
   }
 
@@ -37,7 +37,7 @@ class ComponentGenerator {
     const modelChild = webFolderModelFactory.createInstance(model);
     return {
       model: modelChild,
-      dom: domFactory.createWebFolder(modelChild)
+      dom: DomFactory.createWebFolder(modelChild)
     };
   }
 
@@ -45,7 +45,7 @@ class ComponentGenerator {
     const modelChild = webPageModelFactory.createInstance(model);
     return {
       model: modelChild,
-      dom: domFactory.createWebPage(modelChild)
+      dom: DomFactory.createWebPage(modelChild)
     };
   }
 
@@ -53,7 +53,7 @@ class ComponentGenerator {
     const modelChild = layoutDivModelFactory.createInstance(model);
     return {
       model: modelChild,
-      dom: domFactory.createLayoutDiv(modelChild)
+      dom: DomFactory.createLayoutDiv(modelChild)
     };
   }
 

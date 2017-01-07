@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
-import MetaData from './MetaData';
-import graphTraversal from '../../../../../state/graphTraversal';
-import { actionUpdateViewPropertyValue } from '../../../../../actions/index';
+import MetaData from '../../../orb/app/website/page/MetaData';
+import graphTraversal from '../../../../state/graphTraversal';
+import { actionUpdateViewPropertyValue } from '../../../../actions/index';
 import BodyChildren from '../../../bodyChildren/BodyChildren';
 
-class EditorPage extends React.Component {
+class PageEditor extends React.Component {
 
   render() {
 
@@ -24,7 +24,7 @@ class EditorPage extends React.Component {
   }
 }
 
-EditorPage.propTypes = {
+PageEditor.propTypes = {
   id: PropTypes.string, // NOTE: ID of this editor
   model: PropTypes.object,
   modelNodeId: PropTypes.any,
@@ -55,9 +55,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-EditorPage = connect(
+PageEditor = connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditorPage);
+)(PageEditor);
 
-export default EditorPage;
+export default PageEditor;

@@ -1,6 +1,6 @@
 class DomFactory {
 
-  createAppContainer(model) {
+  static createAppContainer(model) {
     return {
       section: {
         addNew: {
@@ -13,7 +13,7 @@ class DomFactory {
     };
   }
 
-  createApp(app) {
+  static createApp(app) {
     return {
       parentId: app.parentId,
       id: app.id,
@@ -22,7 +22,7 @@ class DomFactory {
     };
   }
 
-  createWebsite(website) {
+  static createWebsite(website) {
     return {
       parentId: website.parentId,
       id: website.id,
@@ -30,7 +30,7 @@ class DomFactory {
     };
   }
 
-  createWebFolder(webFolder) {
+  static createWebFolder(webFolder) {
     return {
       parentId: webFolder.parentId,
       id: webFolder.id,
@@ -38,7 +38,7 @@ class DomFactory {
     };
   }
 
-  createWebPage(webPage) {
+  static createWebPage(webPage) {
     return {
       parentId: webPage.parentId,
       id: webPage.id,
@@ -47,7 +47,7 @@ class DomFactory {
     };
   }
 
-  createLayoutDiv(layoutDiv) {
+  static createLayoutDiv(layoutDiv) {
     return {
       parentId: layoutDiv.parentId,
       id: layoutDiv.id,
@@ -56,4 +56,4 @@ class DomFactory {
   }
 }
 
-export default new DomFactory();
+export default DomFactory;

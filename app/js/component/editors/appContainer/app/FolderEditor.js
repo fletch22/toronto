@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import containerService from '../../../../service/component/containerService';
 import graphTraversal from '../../../../state/graphTraversal';
 import ViewModelCopyEditor from '../../ViewModelCopyEditor';
-import TextInput from '../../../view/TextInput';
-import EditorIdDisplay from '../EditorIdDisplay';
-import EditorButtons from '../EditorButtons';
+import TextInput from '../../TextInput';
+import EditorIdDisplay from '../../EditorIdDisplay';
+import EditorButtons from '../../EditorButtons';
 
-class EditWebsiteDetails extends ViewModelCopyEditor {
+class FolderEditor extends ViewModelCopyEditor {
 
   render() {
     return (
@@ -25,9 +25,8 @@ class EditWebsiteDetails extends ViewModelCopyEditor {
   }
 }
 
-EditWebsiteDetails.propTypes = {
+FolderEditor.propTypes = {
   id: PropTypes.string, // NOTE: ID of this editor
-  typeLabel: PropTypes.string,
   label: PropTypes.string, // NOTE: Label attribute on object.
   model: PropTypes.object, // NOTE: Model object carrying attribute values
   parentModelId: PropTypes.number, // NOTE: Parent to model object.
@@ -50,9 +49,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 });
 
-EditWebsiteDetails = connect(
+FolderEditor = connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditWebsiteDetails);
+)(FolderEditor);
 
-export default EditWebsiteDetails;
+export default FolderEditor;

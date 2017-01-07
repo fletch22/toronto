@@ -1,9 +1,9 @@
-import crudActionCreator from '../../actions/crudActionCreator';
-import ComponentService from '../../service/component/componentService';
-import modalDispatcher from '../modals/ModalDispatcher';
-import graphTraversal from '../../state/graphTraversal';
+import crudActionCreator from '../actions/crudActionCreator';
+import ComponentService from '../service/component/componentService';
+import modalDispatcher from './modals/ModalDispatcher';
+import graphTraversal from '../state/graphTraversal';
 
-class ComponentCrudOperations {
+class CrudOperations {
 
   removeNode(id, successCallback) {
     const removeAppCallback = (dispatch, state) => {
@@ -49,4 +49,4 @@ class ComponentCrudOperations {
   }
 }
 
-export default new ComponentCrudOperations();
+export default new CrudOperations();

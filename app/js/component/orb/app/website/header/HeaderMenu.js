@@ -6,7 +6,7 @@ import '../../../../../../css/modules/container.scss';  // ''font-awesome/scss/f
 import { actionAppToggleMenu } from '../../../../../actions/dashboard/app/index';
 import { actionCreateComponent } from '../../../../../actions/index';
 import ComponentTypes from '../../../../../domain/component/ComponentTypes';
-import crudComponentOperations from '../../../../orb/ComponentCrudOperations';
+import crudComponentOperations from '../../../../CrudOperations';
 import 'css/modules/menu';
 
 class HeaderMenu extends React.Component {

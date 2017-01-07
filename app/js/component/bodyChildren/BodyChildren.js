@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import graphTraversal from '../../../state/graphTraversal';
+import graphTraversal from '../../state/graphTraversal';
 
 class BodyChildren extends React.Component {
 

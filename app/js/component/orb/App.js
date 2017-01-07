@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Island from '../dashboard/Island';
 import { connect } from 'react-redux';
 import Header from './app/header/Header';
-import crudComponentOperations from './ComponentCrudOperations';
+import crudComponentOperations from '../CrudOperations';
 import graphTraversal from '../../state/graphTraversal';
 
 class App extends React.Component {

@@ -1,6 +1,6 @@
-import Component from './Component';
+import ModelFactory from './ModelFactory';
 
-class WebFolderModelFactory extends Component {
+class WebFolderModelFactory extends ModelFactory {
 
   createInstance(model) {
     this.validateNotBlank(model.label, 'label');

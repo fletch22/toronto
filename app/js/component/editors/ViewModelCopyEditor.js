@@ -1,7 +1,7 @@
 import React from 'react';
 import graphTraversal from '../../state/graphTraversal';
-import modalDispatcher from '../../component/modals/ModalDispatcher';
-import crudActionCreator from '../../../js/actions/crudActionCreator';
+import modalDispatcher from '../modals/ModalDispatcher';
+import crudActionCreator from '../../actions/crudActionCreator';
 
 class ViewModelCopyEditor extends React.Component {
   static createUpdate(_dispatch, ownProps, createUpdateCallback) {

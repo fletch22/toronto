@@ -1,7 +1,7 @@
 //import React from 'react';
 //import { Modal, Button } from 'react-bootstrap';
 //
-//class NinjaModal extends React.Component {
+//class NinjaModal extends React.ModelFactory {
 //
 //  render() {
 //    return (

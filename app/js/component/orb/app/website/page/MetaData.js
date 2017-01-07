@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import graphTraversal from '../../../../../state/graphTraversal';
-import TextInput from '../../../../view/TextInput';
-import EditorIdDisplay from '../../EditorIdDisplay';
-import EditorButtons from '../../EditorButtons';
+import TextInput from '../../../../editors/TextInput';
+import EditorIdDisplay from '../../../../editors/EditorIdDisplay';
+import EditorButtons from '../../../../editors/EditorButtons';
 import containerService from '../../../../../service/component/containerService';
-import ViewModelCopyEditor from '../../../ViewModelCopyEditor';
+import ViewModelCopyEditor from '../../../../editors/ViewModelCopyEditor';
 
 class MetaData extends ViewModelCopyEditor {
   render() {

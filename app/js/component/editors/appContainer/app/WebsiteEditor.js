@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import containerService from '../../../../../service/component/containerService';
-import graphTraversal from '../../../../../state/graphTraversal';
-import ViewModelCopyEditor from '../../../ViewModelCopyEditor';
-import TextInput from '../../../../view/TextInput';
+import containerService from '../../../../service/component/containerService';
+import graphTraversal from '../../../../state/graphTraversal';
+import ViewModelCopyEditor from '../../ViewModelCopyEditor';
+import TextInput from '../../TextInput';
 import EditorIdDisplay from '../../EditorIdDisplay';
 import EditorButtons from '../../EditorButtons';
 
-class EditFolderDetails extends ViewModelCopyEditor {
+class EditWebsiteDetails extends ViewModelCopyEditor {
 
   render() {
     return (
@@ -25,8 +25,9 @@ class EditFolderDetails extends ViewModelCopyEditor {
   }
 }
 
-EditFolderDetails.propTypes = {
+EditWebsiteDetails.propTypes = {
   id: PropTypes.string, // NOTE: ID of this editor
+  typeLabel: PropTypes.string,
   label: PropTypes.string, // NOTE: Label attribute on object.
   model: PropTypes.object, // NOTE: Model object carrying attribute values
   parentModelId: PropTypes.number, // NOTE: Parent to model object.
@@ -49,9 +50,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 });
 
-EditFolderDetails = connect(
+EditWebsiteDetails = connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditFolderDetails);
+)(EditWebsiteDetails);
 
-export default EditFolderDetails;
+export default EditWebsiteDetails;

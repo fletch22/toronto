@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { actionModalPseudoForget } from '../../../js/actions/modal/index';
-import ComponentModalNames from '../EditorNames';
-import EditWebsiteDetails from '../orb/app/website/EditWebsiteDetails';
-import EditFolderDetails from '../orb/app/website/folder/EditFolderDetails';
-import EditPageDetails from '../orb/app/website/page/EditorPage';
+import ComponentModalNames from '../editors/EditorNames';
+import WebsiteEditor from '../editors/appContainer/app/WebsiteEditor';
+import FolderEditor from '../editors/appContainer/app/FolderEditor';
+import PageEditor from '../editors/appContainer/app/PageEditor';
 
 class PseudoModal extends React.Component {
 
@@ -14,15 +14,15 @@ class PseudoModal extends React.Component {
     let component;
     switch (this.props.viewName) {
       case ComponentModalNames.EDIT_WEBSITE_DETAILS: {
-        component = <EditWebsiteDetails { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+        component = <WebsiteEditor { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
         break;
       }
       case ComponentModalNames.EDIT_WEBSITE_FOLDER_DETAILS: {
-        component = <EditFolderDetails { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+        component = <FolderEditor { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
         break;
       }
       case ComponentModalNames.EDIT_WEBSITE_PAGE_DETAILS: {
-        component = <EditPageDetails { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+        component = <PageEditor { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
         break;
       }
       default: {

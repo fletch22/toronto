@@ -1,6 +1,6 @@
-import Component from './Component';
+import ModelFactory from './ModelFactory';
 
-class LayoutDivModelFactory extends Component {
+class LayoutDivModelFactory extends ModelFactory {
 
   createInstance(model) {
     this.validateNotBlank(model, 'x');
