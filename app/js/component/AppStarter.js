@@ -1,7 +1,7 @@
 import 'css/base';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from '../component/App';
+import AppRoot from '../component/AppRoot';
 import { Provider } from 'react-redux';
 import 'css/modules/container';
 import 'css/modules/toolbar';
@@ -20,7 +20,7 @@ class AppStarter {
   renderApp(store) {
     ReactDOM.render(
       <Provider store={store}>
-        <App />
+        <AppRoot />
       </Provider>,
       document.querySelector('#main'));
   }

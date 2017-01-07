@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import Island from '../../../dashboard/Island';
+import Island from '../../Island';
 import { connect } from 'react-redux';
-import Header from '../website/header/Header';
+import Header from './header/Header';
 import crudComponentOperations from '../../../CrudOperations';
 import graphTraversal from '../../../../state/graphTraversal';
 

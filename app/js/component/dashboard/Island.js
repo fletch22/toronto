@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import App from '../orb/App';
-import Website from '../orb/app/website/Website';
-import WebFolder from '../orb/app/website/folder/Folder';
-import Page from '../orb/app/website/page/Page';
+import App from './app/App';
+import Website from './app/website/Website';
+import WebFolder from './app/website/folder/Folder';
+import Page from './app/website/page/Page';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class Island extends React.Component {
