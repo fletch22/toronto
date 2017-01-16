@@ -7,7 +7,7 @@ import TextInput from '../../TextInput';
 import EditorIdDisplay from '../../EditorIdDisplay';
 import EditorButtons from '../../EditorButtons';
 
-class EditWebsiteDetails extends ViewModelCopyEditor {
+class WebsiteEditor extends ViewModelCopyEditor {
 
   render() {
     return (
@@ -25,7 +25,7 @@ class EditWebsiteDetails extends ViewModelCopyEditor {
   }
 }
 
-EditWebsiteDetails.propTypes = {
+WebsiteEditor.propTypes = {
   id: PropTypes.string, // NOTE: ID of this editor
   typeLabel: PropTypes.string,
   label: PropTypes.string, // NOTE: Label attribute on object.
@@ -50,9 +50,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 });
 
-EditWebsiteDetails = connect(
+WebsiteEditor = connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditWebsiteDetails);
+)(WebsiteEditor);
 
-export default EditWebsiteDetails;
+export default WebsiteEditor;

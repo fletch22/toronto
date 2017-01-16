@@ -47,7 +47,7 @@ class DomFactory {
     };
   }
 
-  static createLayoutDiv(layoutDiv) {
+  static createLayout(layoutDiv) {
     return {
       parentId: layoutDiv.parentId,
       id: layoutDiv.id,

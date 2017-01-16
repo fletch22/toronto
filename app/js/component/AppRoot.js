@@ -2,6 +2,7 @@ import React from 'react';
 import AppContainer from '../containers/AppContainer';
 import RollbackBroadcastHandler from '../domain/message/rollbackBroadastHandler';
 import { actionEnsureInitialStateSaved } from '../actions/index';
+import 'expose?$!expose?c!c'; // Globally exposes the an instance of 'c' class (a custom console class).
 
 class App extends React.Component {
 

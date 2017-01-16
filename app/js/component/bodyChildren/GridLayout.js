@@ -4,9 +4,9 @@ import _ from 'lodash';
 import { WidthProvider as widthProvider } from 'react-grid-layout';
 import ReactGridLayout from 'react-grid-layout';
 const ReactGridLayoutInitialized = widthProvider(ReactGridLayout);
-import '../../../../css/f22-react-grid-layout.css';
-import graphTraversal from '../../../state/graphTraversal';
-import crudActionCreator from '../../../actions/crudActionCreator'
+import '../../../css/f22-react-grid-layout.css';
+import graphTraversal from '../../state/graphTraversal';
+import crudActionCreator from '../../actions/crudActionCreator';
 
 class GridLayout extends React.Component {
 

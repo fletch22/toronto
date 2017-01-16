@@ -6,18 +6,18 @@ import MetaData from '../../../dashboard/app/website/page/MetaData';
 import graphTraversal from '../../../../state/graphTraversal';
 import { actionUpdateViewPropertyValue } from '../../../../actions/index';
 import BodyChildren from '../../../bodyChildren/BodyChildren';
+import f22Uuid from '../../../../util/f22Uuid';
 
 class PageEditor extends React.Component {
 
   render() {
-
     return (
       <div>
         <Tabs activeKey={this.props.activeTab} onSelect={this.props.handleSelect} id="controlled-tab-example">
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><BodyChildren { ...this.props.model } /></Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><BodyChildren id={this.props.viewModel.id} viewModel={this.props.viewModel} /></Tab>
         </Tabs>
       </div>
     );
@@ -27,6 +27,7 @@ class PageEditor extends React.Component {
 PageEditor.propTypes = {
   id: PropTypes.string, // NOTE: ID of this editor
   model: PropTypes.object,
+  viewModel: PropTypes.object,
   modelNodeId: PropTypes.any,
   activeTab: PropTypes.number,
   handleSelect: PropTypes.func,

@@ -4,6 +4,7 @@ import stateSyncService from '../../service/stateSyncService';
 import stateGetAndDispatch from '../../domain/stateGetAndDispatch';
 import stateRetriever from '../../domain/stateRetriever';
 
+
 describe('Current state retriever', () => {
 
   let sandbox = null;
@@ -37,30 +38,40 @@ describe('Current state retriever', () => {
     });
 
     promiseTest.catch((error) => {
-      console.log(`Error: ${error}`);
+      done(error);
     });
   });
 
   it('should get the state from the log but not try to derive the state.', (done) => {
 
-    const getAppContainer = sandbox.stub(RestService, 'getAppContainer').returns(Promise.reject());
-    const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState')
-      .returns(Promise.resolve({ state: {}, isEarliestState: false, indexOfMaxElement: 4 }));
+    const startIndex = 267896789;
+    stateGetAndDispatch.index = startIndex;
+
+    const successHandler = sandbox.stub(stateGetAndDispatch, 'successHandler').returns(Promise.resolve());
+    const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState', () => {
+      return Promise.resolve({ state: {}, isEarliestState: false, indexOfMaxElement: 4 });
+    });
 
     const dispatch = sandbox.mock();
 
-    const promiseTest = stateGetAndDispatch.getEarlierStateAndDispatch(dispatch);
+    stateGetAndDispatch.getEarlierStateAndDispatch(dispatch)
+      .then(() => {
+        try {
+          expect(getHistoricalState.calledOnce).to.equal(true);
 
-    promiseTest.then(() => {
-      expect(stateGetAndDispatch.index).to.equal(0);
-      expect(getHistoricalState.called).to.equal(true);
-      expect(getAppContainer.called).to.equal(false);
-      done();
-    });
+          const getHistArgs = getHistoricalState.getCall(0).args;
 
-    promiseTest.catch((error) => {
-      console.log(`Error: ${error}`);
-    });
+          // NOTE: Paradoxically the state history starts at zero and increments; more specifically current state is zero. Previous state is 1. Previous to 1 is 2. Etc.
+          expect(getHistArgs[0]).to.equal(startIndex + 1);
+
+          expect(successHandler.calledOnce).to.equal(true);
+        } catch (err) {
+          done(err);
+          return;
+        }
+        done();
+      })
+      .catch(done);
   });
 
   it('should reset state to currently selected state when invoked', (done) => {
@@ -82,8 +93,6 @@ describe('Current state retriever', () => {
       done();
     });
 
-    promiseTest.catch((error) => {
-      console.log(`Error: ${error.stackTrace}`);
-    });
+    promiseTest.catch(done);
   });
 });

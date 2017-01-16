@@ -8,6 +8,7 @@
   },
   "globals": {
     "sinon": true,
-    "assert": true
+    "assert": true,
+    "c": true
   }
 }

@@ -21,7 +21,8 @@ export const ACTIONS = {
     REFRESH_PAGE: 'REFRESH_PAGE',
     NUKE_AND_PAVE: 'NUKE_AND_PAVE',
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
-    CREATE_COMPONENT: 'CREATE_COMPONENT'
+    CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT',
+    CREATE_BODY_COMPONENT: 'CREATE_BODY_COMPONENT'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -126,14 +127,20 @@ export const actionRefreshPage = () => {
   };
 };
 
-export const actionNukeAndPave = () => {
-  return {
-    type: ACTIONS.types.NUKE_AND_PAVE
-  };
-};
+export const actionNukeAndPave = () => ({
+  type: ACTIONS.types.NUKE_AND_PAVE
+});
 
-export const actionCreateComponent = (componentType, options) => ({
-  type: ACTIONS.types.CREATE_COMPONENT,
+export const actionCreatePseudoModalComponent = (componentType, options) => ({
+  type: ACTIONS.types.CREATE_PSEUDO_MODAL_COMPONENT,
+  payload: {
+    componentType,
+    options
+  }
+});
+
+export const actionCreateBodyComponent = (componentType, options) => ({
+  type: ACTIONS.types.CREATE_BODY_COMPONENT,
   payload: {
     componentType,
     options

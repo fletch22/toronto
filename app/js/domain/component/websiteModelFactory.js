@@ -1,6 +1,5 @@
 import ComponentTypes from './ComponentTypes';
 import ModelFactory from './ModelFactory';
-import uuid from 'node-uuid';
 
 class WebsiteModelFactory extends ModelFactory {
 
@@ -11,7 +10,7 @@ class WebsiteModelFactory extends ModelFactory {
       throw new Error('Encountered problem with label. Must have non-zeo-length value.');
     }
 
-    let id = this.ensureId(model);
+    const id = this.ensureId(model);
 
     const instance = {
       parentId: model.parentId,

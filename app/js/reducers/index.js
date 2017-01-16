@@ -9,9 +9,7 @@ import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
-import ComponentTypes from '../domain/component/ComponentTypes';
-import EditorNames from '../component/editors/EditorNames';
-import f22Uuid from '../util/f22Uuid';
+import actionComponentCreator from './ActionComponentCreator';
 import LayoutTranslator from '../component/bodyChildren/LayoutTranslator';
 
 const reducer = (state = defaultState.getInstance(), action) => {
@@ -19,7 +17,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
 
-  console.log(`About to process action \'${action.type}\'`);
+  console.debug(`About to process action \'${action.type}\'`);
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
@@ -149,7 +147,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.HIDE_TIME_TRAVEL_NAV_BAR: {
-      console.log('Trying to hide.');
+      console.log('Trying to hide time travel nav bar.');
 
       stateNew.dom.view.timeTravelNavBar.show = false;
       window.showTimeTravelNavBar = false;
@@ -158,7 +156,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.ENSURE_INTIAL_STATE_SAVED: {
       if (!stateNew.hasInitialStateBeenSaved) {
-        console.log('Saving initial state');
+        console.log('Saving initial state in reducer ...');
         stateNew.hasInitialStateBeenSaved = true;
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
@@ -209,42 +207,14 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.CREATE_COMPONENT: {
-      const type = action.payload.componentType;
-      let componentViewName;
-      switch (type) {
-        case ComponentTypes.Website: {
-          componentViewName = EditorNames.EDIT_WEBSITE_DETAILS;
-          break;
-        }
-        case ComponentTypes.WebFolder: {
-          componentViewName = EditorNames.EDIT_WEBSITE_FOLDER_DETAILS;
-          break;
-        }
-        case ComponentTypes.WebPage: {
-          componentViewName = EditorNames.EDIT_WEBSITE_PAGE_DETAILS;
-          break;
-        }
-        default: {
-          throw new Error(`Action not yet configured to handle ${type}.`);
-        }
-      }
+    case ACTIONS.types.CREATE_BODY_COMPONENT: {
+      actionComponentCreator.generatePageChildComponent(stateNew, action);
+      return stateNew;
+    }
+    case ACTIONS.types.CREATE_PSEUDO_MODAL_COMPONENT: {
+      const component = actionComponentCreator.createComponentEditorData(stateNew, action);
 
-      const options = _.cloneDeep(action.payload.options);
-      const modelNodeId = options.modelNodeId;
-      let model;
-      if (modelNodeId) {
-        model = _.cloneDeep(graphTraversal.find(stateNew.model, modelNodeId));
-      } else {
-        model = { parentId: action.payload.options.parentModelId, typeLabel: type };
-      }
-
-      const data = Object.assign({}, options, { id: f22Uuid.generate() }, { model });
-
-      const viewData = modalDtoFactory.getPseudoModalInstance({
-        componentViewName,
-        data
-      });
+      const viewData = modalDtoFactory.getPseudoModalInstance(component);
 
       stateNew.dom.pseudoModals.push(viewData);
 

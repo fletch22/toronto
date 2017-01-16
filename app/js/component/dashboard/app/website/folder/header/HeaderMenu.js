@@ -4,7 +4,7 @@ import Menu, { MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import '../../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
 import { actionAppToggleMenu } from '../../../../../../actions/dashboard/app/index';
-import { actionCreateComponent } from '../../../../../../actions/index';
+import { actionCreatePseudoModalComponent } from '../../../../../../actions/index';
 import ComponentTypes from '../../../../../../domain/component/ComponentTypes';
 import 'css/modules/menu';
 import crudComponentOperations from '../../../../../CrudOperations';
@@ -60,17 +60,17 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
       case HeaderMenu.menuKeys().ADD_FOLDER: {
-        dispatch(actionCreateComponent(ComponentTypes.WebFolder, { parentModelId: ownProps.modelNodeId }));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebFolder, { parentModelId: ownProps.modelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));
         break;
       }
       case HeaderMenu.menuKeys().EDIT: {
-        dispatch(actionCreateComponent(ComponentTypes.Website, { modelNodeId: ownProps.modelNodeId, parentModelNodeId: ownProps.parentModelNodeId }));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.Website, { modelNodeId: ownProps.modelNodeId, parentModelNodeId: ownProps.parentModelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));
         break;
       }
       case HeaderMenu.menuKeys().ADD_PAGE: {
-        dispatch(actionCreateComponent(ComponentTypes.WebPage, { parentModelId: ownProps.modelNodeId }));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebPage, { parentModelId: ownProps.modelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));
         break;
       }

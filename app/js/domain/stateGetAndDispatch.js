@@ -40,12 +40,15 @@ class StateGetAndDispatch {
   getStateAndDispatch(dispatch, step) {
     let indexOfState = this.index + step;
     indexOfState = (indexOfState < 0) ? 0 : indexOfState;
+
     const promise = stateSyncService.getHistoricalState(indexOfState);
 
     promise.then((data) => {
-      this.successHandler(data, dispatch);
+      return this.successHandler(data, dispatch);
     });
-    promise.catch(this.errorHandler);
+    promise.catch((err) => {
+      this.errorHandler(err);
+    });
 
     return promise;
   }

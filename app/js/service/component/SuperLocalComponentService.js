@@ -4,18 +4,21 @@ import stateSyncService from '../stateSyncService';
 import componentGenerator from '../../domain/component/componentGenerator';
 import graphTraversal from '../../../js/state/graphTraversal';
 
-class ContainerService extends ComponentService {
+class SuperLocalComponentService extends ComponentService {
 
   constructor() {
     super();
     this.statePackager = new StatePackager();
-    this.addModel = this.addModel.bind(this);
-    this.updateModel = this.updateModel.bind(this);
+    this.add = this.add.bind(this);
+    this.update = this.update.bind(this);
     this.createOrUpdate = this.createOrUpdate.bind(this);
   }
 
-  addModel(state, model) {
+  add(state, model, viewId) {
     const modelParentNode = graphTraversal.find(state.model, model.parentId);
+
+    const view = graphTraversal.find(state, viewId);
+
     const viewParentNode = graphTraversal.find(state.dom.view, model.parentId);
 
     const component = componentGenerator.createComponent(model);
@@ -29,7 +32,7 @@ class ContainerService extends ComponentService {
     };
   }
 
-  updateModel(state, model) {
+  update(state, model) {
     const modelNode = graphTraversal.find(state.model, model.id);
     Object.assign(modelNode, model);
 
@@ -44,11 +47,11 @@ class ContainerService extends ComponentService {
     // _.mergeWith(modelNode, model, customizer);
   }
 
-  createOrUpdate(stateNew, jsonStateOld, model) {
+  createOrUpdate(stateNew, jsonStateOld, model, viewId) {
     if (model.id) {
-      this.updateModel(stateNew, model);
+      this.update(stateNew, model, viewId);
     } else {
-      this.addModel(stateNew, model);
+      this.add(stateNew, model, viewId);
     }
 
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
@@ -56,4 +59,4 @@ class ContainerService extends ComponentService {
   }
 }
 
-export default new ContainerService();
+export default new SuperLocalComponentService();

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Menu, { MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import '../../../../../css/modules/container.scss';
-import { actionCreateComponent } from '../../../../actions/index';
+import { actionCreatePseudoModalComponent } from '../../../../actions/index';
 import ComponentTypes from '../../../../domain/component/ComponentTypes';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app/index';
 import 'css/modules/menu';
@@ -50,7 +50,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
       case HeaderMenu.menuKeys().CREATE_WEBSITE: {
-        dispatch(actionCreateComponent(ComponentTypes.Website, { parentModelId: ownProps.modelNodeId }));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.Website, { parentModelId: ownProps.modelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));
         break;
       }

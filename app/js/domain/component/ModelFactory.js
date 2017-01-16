@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import uuid from 'node-uuid';
 
-class Component {
+class ModelViewFactory {
 
   wrapType(typeLabel, object) {
     object.typeLabel = typeLabel;
@@ -15,8 +15,8 @@ class Component {
     }
   }
 
-  ensureId(model) {
-    let id = model.id;
+  ensureId(protoModel) {
+    let id = protoModel.id;
     if (!id) {
       id = uuid.v1();
     }
@@ -24,4 +24,4 @@ class Component {
   }
 }
 
-export default Component;
+export default ModelViewFactory;

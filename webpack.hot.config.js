@@ -48,7 +48,7 @@ const common = {
 };
 
 module.exports = merge(common, {
-  devtool: 'eval',
+  devtool: 'source-map',
   devServer: {
     contentBase: PATHS.build,
     hot: true,
@@ -72,6 +72,9 @@ module.exports = merge(common, {
   ],
   resolve: {
     extensions: ['', '.js', '.scss'],
-    modulesDirectories: ['app', 'node_modules']
+    modulesDirectories: ['app', 'node_modules'],
+    alias: {
+      c: path.resolve(__dirname, 'app', 'js', 'util', 'c.js')
+    }
   }
 });

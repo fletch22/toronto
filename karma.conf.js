@@ -1,50 +1,11 @@
 const webpackConfig = require('./webpack.hot.config.js');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const path = require('path');
-
-const PATHS = {
-  app: path.join(__dirname, 'app'),
-  build: path.join(__dirname, 'build')
-};
-
-const webpackConfigCustom = {
-  watch: true,
-  resolve: {
-    extensions: ['', '.js', '.scss'],
-    modulesDirectories: ['app', 'node_modules']
-  },
-  entry: ['./app/css/modules/header.scss', 'bootstrap-loader'],
-  devtool: 'inline-source-map',
-  module: {
-    loaders: [
-      { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015']
-        }
-      },
-      {
-        test: /\.scss$/,
-        exclude: /node_modules/,
-        loader: `style-loader!css-loader!postcss-loader!sass-loader?includePaths[]=${path.resolve(__dirname, './app')}`,
-        include: PATHS.app
-      },
-      {
-        test: /bootstrap-sass\/assets\/javascripts\//,
-        exclude: /node_modules/,
-        loader: 'imports?jQuery=jquery'
-      }
-    ]
-  },
-  plugins: [
-    new ExtractTextPlugin('[name].css')
-  ]
-};
 
 const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
+
+  console.log(JSON.stringify(config));
+
+  const webpackConfigTest = webpackConfig;
+
   config.set({
     basePath: '',
     // frameworks to use
@@ -86,8 +47,8 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     autoWatch: true,
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'], //, 'Chrome' 'PhantomJS', ],
-    webpack: webpackConfig,
+    browsers: ['Chrome'], // ['Chrome', 'PhantomJS', ],
+    webpack: webpackConfigTest,
     webpackMiddleware: {
       noInfo: true
     },
@@ -97,12 +58,19 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
   });
   if (process.env.EXECUTE_INTEGRATION_TESTS) {
     console.log('Running INTEGRATION tests only ...');
-    config.files.push({ pattern: 'app/js/__integrationTests__/test-context.js', watched: false });
-    config.preprocessors['app/js/__integrationTests__/test-context.js'] = ['webpack'];
+    const pattern = 'app/js/__integrationTests__/test-context.js';
+    config.files.push({ pattern, watched: false });
+
+    /* eslint-disable no-param-reassign */
+    config.preprocessors[pattern] = ['webpack'];
   } else {
     console.log('Running UNIT tests only ...');
-    config.files.push({ pattern: 'app/js/__tests__/test-context.js', watched: false });
-    config.preprocessors['app/js/__tests__/test-context.js'] = ['webpack'];
+    config.files.unshift({ pattern: 'node_modules/babel-polyfill/dist/polyfill.js', watched: false }); // Needed for Promise to be recognized. Note 'unshift'. Needs to be first element.
+
+    const pattern = 'app/js/__tests__/test-context.js';
+    config.files.push({ pattern, watched: false });
+    /* eslint-disable no-param-reassign */
+    config.preprocessors[pattern] = ['webpack'];
   }
 };
 

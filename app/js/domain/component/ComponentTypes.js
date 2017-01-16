@@ -4,7 +4,7 @@ const ComponentTypes = {
   Website: 'Website',
   WebFolder: 'WebFolder',
   WebPage: 'Page',
-  LayoutDiv: 'LayoutDiv',
+  Layout: 'Layout',
   Div: 'Div'
 };
 
