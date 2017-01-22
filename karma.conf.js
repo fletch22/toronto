@@ -1,9 +1,8 @@
 const webpackConfig = require('./webpack.hot.config.js');
+/* eslint-disable no-var */
+var pattern;
 
 const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
-
-  console.log(JSON.stringify(config));
-
   const webpackConfigTest = webpackConfig;
 
   config.set({
@@ -35,7 +34,7 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
+    reporters: ['progress'],
     // web server port
     port: 9876,
     // enable / disable colors in the output (reporters and logs)
@@ -58,7 +57,7 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
   });
   if (process.env.EXECUTE_INTEGRATION_TESTS) {
     console.log('Running INTEGRATION tests only ...');
-    const pattern = 'app/js/__integrationTests__/test-context.js';
+    pattern = 'app/js/__integrationTests__/test-context.js';
     config.files.push({ pattern, watched: false });
 
     /* eslint-disable no-param-reassign */
@@ -67,7 +66,7 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     console.log('Running UNIT tests only ...');
     config.files.unshift({ pattern: 'node_modules/babel-polyfill/dist/polyfill.js', watched: false }); // Needed for Promise to be recognized. Note 'unshift'. Needs to be first element.
 
-    const pattern = 'app/js/__tests__/test-context.js';
+    pattern = 'app/js/__tests__/test-context.js';
     config.files.push({ pattern, watched: false });
     /* eslint-disable no-param-reassign */
     config.preprocessors[pattern] = ['webpack'];

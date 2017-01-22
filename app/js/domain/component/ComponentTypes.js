@@ -5,6 +5,7 @@ const ComponentTypes = {
   WebFolder: 'WebFolder',
   WebPage: 'Page',
   Layout: 'Layout',
+  LayoutMinion: 'LayoutMinion',
   Div: 'Div'
 };
 

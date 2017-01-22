@@ -3,7 +3,6 @@ import appModelFactory from './appModelFactory';
 import websiteModelFactory from './websiteModelFactory';
 import webFolderModelFactory from './webFolderModelFactory';
 import webPageModelFactory from './webPageModelFactory';
-import layoutModelFactory from './layoutModelFactory';
 import DomFactory from './DomFactory';
 import ComponentTypes from '../component/ComponentTypes';
 
@@ -49,14 +48,6 @@ class ComponentGenerator {
     };
   }
 
-  createLayout(model) {
-    const modelChild = layoutModelFactory.createInstance(model);
-    return {
-      model: modelChild,
-      dom: DomFactory.createLayout(modelChild)
-    };
-  }
-
   createComponent(model) {
     switch (model.typeLabel) {
       case ComponentTypes.AppContainer: {
@@ -73,9 +64,6 @@ class ComponentGenerator {
       }
       case ComponentTypes.WebPage: {
         return this.createWebPage(model);
-      }
-      case ComponentTypes.Layout: {
-        return this.createLayout(model);
       }
       default: {
         throw new Error(`Could not determine component type from model's type label \'${model.typeLabel}\'`);

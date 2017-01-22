@@ -5,10 +5,10 @@ import GridLayout from './GridLayout';
 class BodyChildrenGenerator extends React.Component {
 
   render() {
-    let component = <div>banana</div>;
+    let component;
     switch (this.props.viewModel.viewModel.typeLabel) {
       case ComponentTypes.Layout: {
-        component = <GridLayout id={123} pageChildren={[]} />;
+        component = <GridLayout { ... this.props } />;
         break;
       }
       default: {
@@ -16,8 +16,6 @@ class BodyChildrenGenerator extends React.Component {
         break;
       }
     }
-
-    console.log(JSON.stringify(this.props.viewModel));
 
     return (
       component

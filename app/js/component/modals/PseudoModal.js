@@ -9,7 +9,7 @@ import PageEditor from '../editors/appContainer/app/PageEditor';
 class PseudoModal extends React.Component {
 
   render() {
-    const width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
+    let width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
 
     let component;
     switch (this.props.viewName) {
@@ -23,6 +23,7 @@ class PseudoModal extends React.Component {
       }
       case ComponentModalNames.EDIT_WEBSITE_PAGE_DETAILS: {
         component = <PageEditor { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+        width = (this.props.data && this.props.data.width) ? this.props.data.width : '1200px';
         break;
       }
       default: {

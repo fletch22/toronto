@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import uuid from 'node-uuid';
+import f22Uuid from '../../util/f22Uuid';
 
 class ModelViewFactory {
 
@@ -18,7 +18,7 @@ class ModelViewFactory {
   ensureId(protoModel) {
     let id = protoModel.id;
     if (!id) {
-      id = uuid.v1();
+      id = f22Uuid.generate();
     }
     return id;
   }

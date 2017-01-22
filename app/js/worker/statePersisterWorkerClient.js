@@ -1,6 +1,6 @@
 import Worker from 'worker!./statePersisterWorker.js';
 import WorkerMessage, { WorkerMessageTypes } from './workerMessage';
-import StatePackager from '../service/statePackager';
+import StatePackager from '../service/StatePackager';
 import MessagePoster from '../domain/message/messagePoster';
 
 class StatePersisterWorkerClient {

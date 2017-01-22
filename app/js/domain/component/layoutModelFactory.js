@@ -1,14 +1,15 @@
 import ModelFactory from './ModelFactory';
+import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class LayoutModelFactory extends ModelFactory {
 
-  createInstance(model) {
-    const id = this.ensureId(model);
+  createInstance(parentId) {
+    const id = this.ensureId({});
 
     const instance = {
-      parentId: model.parentId,
+      parentId,
       id,
-      typeLabel: model.typeLabel,
+      typeLabel: ComponentTypes.Layout,
       children: []
     };
 

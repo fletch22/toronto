@@ -9,7 +9,7 @@ import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
-import actionComponentCreator from './ActionComponentCreator';
+import actionComponentCreator from './actionComponentCreator';
 import LayoutTranslator from '../component/bodyChildren/LayoutTranslator';
 
 const reducer = (state = defaultState.getInstance(), action) => {

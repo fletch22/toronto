@@ -1,26 +1,38 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import update from 'react-addons-update';
 import BodyChildrenGenerator from './BodyChildrenGenerator';
-import { actionCreateBodyComponent } from '../../actions/index';
-import ComponentTypes from '../../domain/component/ComponentTypes';
 import graphTraversal from '../../state/graphTraversal';
+import util from '../../util/util';
+import bodyChildrenCreator from '../../component/editors/bodyChildren/bodyChildrenCreator';
+import 'css/modules/time-travel-toolbar';
+import layoutService from '../../service/component/layoutService';
+import ComponentTypes from '../../domain/component/ComponentTypes';
+import { actionCreateBodyComponent } from '../../actions/index';
+import layoutModelFactory from '../../domain/component/layoutModelFactory';
+import actionComponentCreator from '../../reducers/actionComponentCreator';
 
 class BodyChildren extends React.Component {
 
   render() {
-    const children = (this.props.viewModel.children) ? this.props.viewModel.children : [];
-
+    const children = (this.props.children) ? this.props.children : [];
     return (
       <div>
-        <button onClick={this.props.makeLayout}>Make Layout</button>
-        <div>
-        {
-          children.map((child) =>
-            <BodyChildrenGenerator key={child.id} id={child.id} viewModel={child} />
-          )
-        }
-        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td className="body-children-toolbar-col">
+                <button className="btn-f22-sys btn btn-default fa fa-object-group" onClick={this.props.makeLayout}></button>
+              </td>
+              <td style={{ width: '100%' }}>
+                {
+                  children.map((child) =>
+                    <BodyChildrenGenerator key={child.id} id={child.id} viewModel={child} />
+                  )
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -38,35 +50,24 @@ const mapStateToProps = (state, ownProps) => {
   const stateChildren = parent.viewModel.children;
   const propsChildren = ownProps.viewModel.children;
 
-  if (ownProps.children) {
-    console.log(`ownProps.children length: ${ownProps.children.length}`);
+  let children = stateChildren;
+  if (!util.doArrayElementsMatchIdentities(propsChildren, stateChildren)) {
+    children = [].concat(stateChildren);
   }
-  const pcLength = (!!propsChildren) ? propsChildren.length : 0;
-  console.log(`propsChildren length: ${pcLength}`);
-
-  const scLength = (!!stateChildren) ? stateChildren.length : 0;
-  console.log(`stateChildren length: ${scLength}`);
-
-  c.lo({});
-
-  // let children = stateChildren;
-  // if ((pcLength !== scLength) || ) {
-  //     children = [].concat(stateChildren);
-  // }
-
-  // children = JSON.parse(JSON.stringify((stateChildren)));
-  let children = [];
 
   return {
-
+    children
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    makeLayout: (event) => {
-      // ViewModelCopyEditor.createUpdate(dispatch, ownProps, containerService.createOrUpdate);
-      dispatch(actionCreateBodyComponent(ComponentTypes.Layout, { parentId: ownProps.id }));
+    makeLayout: () => {
+      const parentViewModel = Object.assign({}, ownProps);
+      const model = layoutModelFactory.createInstance(ownProps.viewModel.id);
+      const viewModel = actionComponentCreator.generateViewModel(ownProps.id, model);
+
+      bodyChildrenCreator.createUpdate(dispatch, parentViewModel, viewModel, layoutService.createOrUpdate);
     }
   };
 };

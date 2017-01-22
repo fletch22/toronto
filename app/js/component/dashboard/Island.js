@@ -27,7 +27,7 @@ class Island extends React.Component {
         break;
       }
       default:
-        component = <div className="container-app col-lg-2">unknown object</div>;
+        component = null;
     }
 
     return (

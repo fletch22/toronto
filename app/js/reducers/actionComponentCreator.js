@@ -7,6 +7,7 @@ import viewFactory from '../domain/component/view/viewFactory';
 import modelGenerator from '../../js/domain/component/modelGenerator';
 
 class ActionComponentCreator {
+
   createComponentEditorData(state, action) {
     const type = action.payload.componentType;
     let componentViewName;
@@ -22,8 +23,6 @@ class ActionComponentCreator {
       }
       case ComponentTypes.WebPage: {
         componentViewName = EditorNames.EDIT_WEBSITE_PAGE_DETAILS;
-        console.log('Generating page model');
-        viewModel = this.generatePageViewModel(state, action);
         break;
       }
       case ComponentTypes.Layout: {
@@ -44,6 +43,12 @@ class ActionComponentCreator {
       model = { parentId: action.payload.options.parentModelId, typeLabel: type };
     }
 
+    if (!model.children) model.children = [];
+
+    if (type === ComponentTypes.WebPage) {
+      viewModel = this.generateViewModel(null, model);
+    }
+
     const data = Object.assign({}, options, { id: f22Uuid.generate() }, { model }, { viewModel });
 
     return {
@@ -52,49 +57,56 @@ class ActionComponentCreator {
     };
   }
 
-  generateView(model) {
+  generateViewModel(viewModelParentId, model) {
     let view;
     switch (model.typeLabel) {
       case ComponentTypes.WebPage: {
-        view = Object.assign({}, viewFactory.createPageView(), { viewModel: this.generateViewModel(model) });
+        view = viewFactory.createPageView();
         break;
       }
       case ComponentTypes.Layout: {
-        view = Object.assign({}, viewFactory.createLayoutView(), { viewModel: this.generateViewModel(model) });
+        view = viewFactory.createLayoutView();
         break;
       }
       default: {
         throw new Error('Encountered error trying to determine view to create.');
       }
     }
-
-    return view;
+    return Object.assign(view, { parentId: viewModelParentId }, { viewModel: this.generateChildrensViewModels(view.id, model) });
   }
 
-  generateViewModel(itemParent) {
-    itemParent.children.forEach((model, index) => {
-      itemParent.children[index] = this.generateView(model);
+  generateChildrensViewModels(viewModelParentId, modelParent) {
+    modelParent.children.forEach((model, index) => {
+      modelParent.children[index] = this.generateViewModel(viewModelParentId, model);
     });
 
-    return itemParent;
-  }
-
-  generatePageViewModel(state, action) {
-    const options = _.cloneDeep(action.payload.options);
-    const model = _.cloneDeep(graphTraversal.find(state.model, options.modelNodeId));
-
-    return this.generateView(model);
+    return modelParent;
   }
 
   generatePageChildComponent(state, action) {
     const options = _.cloneDeep(action.payload.options);
     const parentModel = graphTraversal.find(state, options.parentId);
-    const model = modelGenerator.generate(parentModel.viewModel.id, action.payload.componentType);
-    const viewModel = this.generateView(model);
 
-    console.log(JSON.stringify(parentModel));
+    throw new Error('Not implemented yet.');
+
+    const model = modelGenerator.generate(parentModel.viewModel.id, action.payload.componentType);
+    const viewModel = this.generateViewModel(model);
 
     parentModel.viewModel.children.push(viewModel);
+  }
+
+  extractModelFromViewModel(viewModel) {
+    const clone = _.cloneDeep(viewModel.viewModel);
+    clone.children = this.extractChildrenFromViewModel(clone.children);
+    return clone;
+  }
+
+  extractChildrenFromViewModel(viewModelsChildren) {
+    const modelChildren = [];
+    viewModelsChildren.forEach((item, index) => {
+      modelChildren[index] = this.extractModelFromViewModel(item);
+    });
+    return modelChildren;
   }
 }
 

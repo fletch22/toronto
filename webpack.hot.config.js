@@ -48,7 +48,7 @@ const common = {
 };
 
 module.exports = merge(common, {
-  devtool: 'source-map',
+  devtool: 'eval',
   devServer: {
     contentBase: PATHS.build,
     hot: true,

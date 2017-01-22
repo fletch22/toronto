@@ -7,6 +7,8 @@ const ReactGridLayoutInitialized = widthProvider(ReactGridLayout);
 import '../../../css/f22-react-grid-layout.css';
 import graphTraversal from '../../state/graphTraversal';
 import crudActionCreator from '../../actions/crudActionCreator';
+import ComponentTypes from '../../domain/component/ComponentTypes';
+import LayoutMinionFactory from '../../domain/component/LayoutMinionFactory';
 
 class GridLayout extends React.Component {
 
@@ -57,42 +59,59 @@ GridLayout.propTypes = {
 
 
 const mapStateToProps = (state, ownProps) => {
-  const appContainerModel = state.model.appContainer;
-  const object = graphTraversal.find(appContainerModel, ownProps.id);
 
-  // const layout = _.cloneDeep(ownProps.layout);
-  console.log('Firefight in daggas');
-  const layout = ownProps.layout;
+  // const appContainerModel = state.model.appContainer;
+  // const object = graphTraversal.find(appContainerModel, ownProps.id);
+  //
+  // // const layout = _.cloneDeep(ownProps.layout);
+  // console.log('Firefight in daggas');
+  // const layout = ownProps.layout;
 
   return {
-    layout
+
   };
 };
 
 const translateAndSaveLayout = (layout, ownProps) => {
 
-  // console.log(JSON.stringify(ownProps));
-  //
-  // if (Array.isArray(layout)) {
-  //
-  // } else {
-  //   ownProps.pageChildren = [];
-  // }
+  const saveLayout = (dispatch, state) => {
 
-  // const saveLayout = (dispatch, state) => {
-  //
-  //   // const jsonStateOld = JSON.stringify(state);
-  //   // const stateNew = JSON.parse(jsonStateOld);
-  //   // const promise = appContainerService.addAppAsync(stateNew, jsonStateOld, label);
-  //   //
-  //   // promise.catch((error) => {
-  //   //   modalDispatch.dispatchErrorModal(error, 'There was an error creating the app.', dispatch);
-  //   // });
-  //
-  //   return promise;
-  // };
-  //
-  // return crudActionCreator.invoke(saveLayout);
+    const jsonStateOld = JSON.stringify(state);
+    const stateNew = JSON.parse(jsonStateOld);
+
+    const object = graphTraversal.find(stateNew, ownProps.id);
+    const children = object.viewModel.children;
+
+    layout.forEach((item) => {
+      const key = parseInt(item.i, 10);
+      let child = _.find(children, { key });
+      if (child) {
+        if (child.typeLabel !== ComponentTypes.LayoutMinion) {
+          c.l(`Fatal error. I think. A child of Layout was not a '${ComponentTypes.LayoutMinion}'`);
+        }
+        child.height = item.h;
+        child.width = item.w;
+        child.x = item.x;
+        child.y = item.y;
+      } else {
+        // create new LayoutMinion
+        // TODO: There is a problem here. The Layout Tag has not yet been saved to disk. We need to do that when the button is clicked first.
+        // child = LayoutMinionFactory.createInstance(undefined, object., key, typeLabel, height, width, x, y);
+      }
+    });
+
+    // convert pageEditor model to regular model and replace in state.
+
+    // const promise = appContainerService.addAppAsync(stateNew, jsonStateOld, label);
+    //
+    // promise.catch((error) => {
+    //   modalDispatch.dispatchErrorModal(error, 'There was an error creating the app.', dispatch);
+    // });
+
+    return Promise.resolve();
+  };
+
+  return crudActionCreator.invoke(saveLayout);
   // ViewModelCopyEditor.createUpdate(dispatch, ownProps, containerService.createOrUpdate);
 };
 
@@ -103,7 +122,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       console.log('layout changed.');
       window.dispatchEvent(new Event('resize'));
 
-      // dispatch(translateAndSaveLayout(layout, ownProps));
+      //dispatch(translateAndSaveLayout(layout, ownProps));
       // console.log(JSON.stringify(layout));
       // if (!_.isEqual(layout, ownProps.layout)) {
       //   dispatch(actionProcessRootLayout(ownProps.pageId, layout));

@@ -5,7 +5,6 @@ import GenericListener from '../domain/message/genericListener';
 class CrudActionCreator {
 
   invoke(service, successCallback) {
-
     console.log('About to return invoked function.');
 
     return (dispatch, getState) => {

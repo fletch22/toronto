@@ -3,7 +3,6 @@ import appModelFactory from './appModelFactory';
 import websiteModelFactory from './websiteModelFactory';
 import webFolderModelFactory from './webFolderModelFactory';
 import webPageModelFactory from './webPageModelFactory';
-import layoutModelFactory from './layoutModelFactory';
 import ComponentTypes from '../component/ComponentTypes';
 
 class ModelGenerator {
@@ -32,9 +31,6 @@ class ModelGenerator {
       }
       case ComponentTypes.WebPage: {
         return webPageModelFactory.createInstance(protoModel);
-      }
-      case ComponentTypes.Layout: {
-        return layoutModelFactory.createInstance(protoModel);
       }
       default: {
         throw new Error(`Could not determine component type from model's type label \'${protoModel.typeLabel}\'`);

@@ -1,7 +1,7 @@
 import stateSyncService from '../stateSyncService';
 import graphTraversal from '../../state/graphTraversal';
 import _ from 'lodash';
-import StatePackager from '../../service/statePackager';
+import StatePackager from '../../service/StatePackager';
 class ComponentService {
 
   constructor() {
