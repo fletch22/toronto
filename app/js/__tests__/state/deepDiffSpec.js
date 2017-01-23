@@ -74,7 +74,7 @@ describe('Two objects when compared with deep diff', () => {
     }
     const end = new Date().getMilliseconds();
 
-    console.log(end - start);
+    console.debug(end - start);
     assert(end - start < 60, 'Elapsed time for deepDiff should be acceptable amount.');
   });
 });

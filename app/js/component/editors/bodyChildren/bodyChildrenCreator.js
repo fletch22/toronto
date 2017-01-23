@@ -51,7 +51,7 @@ class BodyChildrenCreator {
               return Promise.reject(error);
             });
         } catch (error) {
-          console.log(error);
+          console.error(error);
           return Promise.reject(error);
         }
       };

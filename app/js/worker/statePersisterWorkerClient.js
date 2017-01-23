@@ -25,7 +25,7 @@ class StatePersisterWorkerClient {
   persistStateExpectResponse(jsonStateOld, jsonStateNew) {
 
     this.worker.addEventListener('message', (event) => {
-      console.log(event);
+      console.debug(event);
     });
 
     this.persistState(jsonStateOld, jsonStateNew, WorkerMessageTypes.PersistMessageGuaranteedResponse);

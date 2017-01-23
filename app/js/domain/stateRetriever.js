@@ -8,7 +8,6 @@ class StateRetriever {
   deriveState() {
     return RestService.getRoot()
       .then((responseData) => {
-        console.debug('Got root data.');
         const state = defaultState.getInstance();
 
         const modelToStateGenerator = new ModelToStateGenerator(state);

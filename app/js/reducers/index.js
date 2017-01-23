@@ -147,8 +147,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.HIDE_TIME_TRAVEL_NAV_BAR: {
-      console.log('Trying to hide time travel nav bar.');
-
       stateNew.dom.view.timeTravelNavBar.show = false;
       window.showTimeTravelNavBar = false;
 
@@ -156,7 +154,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.ENSURE_INTIAL_STATE_SAVED: {
       if (!stateNew.hasInitialStateBeenSaved) {
-        console.log('Saving initial state in reducer ...');
+        console.debug('Saving initial state in reducer ...');
         stateNew.hasInitialStateBeenSaved = true;
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
@@ -172,7 +170,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
           window.document.location.href = window.document.location.href;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
       break;
     }
@@ -219,6 +217,29 @@ const reducer = (state = defaultState.getInstance(), action) => {
       stateNew.dom.pseudoModals.push(viewData);
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
+      const viewModelId = action.payload.viewModelId;
+
+      const viewModel = graphTraversal.find(state, viewModelId);
+
+      let pageViewNode = viewModel;
+      let parentNodeId = viewModel.id;
+      while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
+        const parentNode = graphTraversal.findParent(stateNew, parentNodeId);
+        if (!parentNode) {
+          throw new Error('Encountered problem trying to find web page root node.');
+        }
+        parentNodeId = parentNode.parentId;
+        if (parentNodeId === actionComponentCreator.WEB_PAGE_ROOT) {
+          pageViewNode = parentNode;
+          break;
+        }
+      }
+
+      pageViewNode.selectedChildViewId = viewModelId;
 
       return stateNew;
     }

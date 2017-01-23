@@ -58,7 +58,7 @@ function rollbackServerAndHideTimeTravelBar()  {
     const promise = stateGetAndDispatch.rollbackToCurrentState(dispatch);
 
     promise.catch((error) => {
-      console.log(error.message);
+      console.error(error.message);
     });
   };
 }

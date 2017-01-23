@@ -39,7 +39,7 @@ class TestRenderedApp {
             renderedComponent
           });
         } catch (error) {
-          console.log(`Encountered exception: ${error.stack}`);
+          console.error(`Encountered exception: ${error.stack}`);
         }
       });
 

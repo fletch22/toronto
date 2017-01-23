@@ -23,7 +23,7 @@ class Service {
         dataType: 'json'
       }).responseText);
     } catch (error) {
-      console.log('Encountered error while attempting to asynchronously fetch something.');
+      console.error('Encountered error while attempting to asynchronously fetch something.');
       throw error;
     }
   }
@@ -46,7 +46,7 @@ class Service {
         if (response.status < 200 || response.status > 300) {
           return response.text()
             .then((text) => {
-              console.log(`'${response.statusText}': '${response.status}'. ${text}`);
+              console.error(`'${response.statusText}': '${response.status}'. ${text}`);
               const error = new Error(text);
               error.responseObject = JSON.parse(text);
               throw error;

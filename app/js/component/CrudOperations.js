@@ -9,7 +9,7 @@ class CrudOperations {
     const removeAppCallback = (dispatch, state) => {
       const model = graphTraversal.find(state.model, id);
 
-      console.log(`Model for delete: ${JSON.stringify(model)}`);
+      console.debug(`Model for delete: ${JSON.stringify(model)}`);
 
       const jsonStateOld = JSON.stringify(state);
       const stateNew = JSON.parse(jsonStateOld);

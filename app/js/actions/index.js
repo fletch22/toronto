@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import dashboard from './dashboard';
 import { ActionTypes as ModalActionTypes } from './modal';
+import { ACTIONS as bodyChildrenEditorActions } from './bodyChildrenEditor/index';
 
 export const ACTIONS = {
   types: {
@@ -27,6 +28,7 @@ export const ACTIONS = {
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
 _.extend(ACTIONS.types, ModalActionTypes);
+_.extend(ACTIONS.types, bodyChildrenEditorActions);
 
 export const actionChangeAppLabelInput = (appLabel) => {
   return {
@@ -103,7 +105,7 @@ export const actionEnsureInitialStateSaved = () => {
 
 export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
 
-  console.log(propertyName);
+  console.debug(propertyName);
 
   return {
     type: ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST,

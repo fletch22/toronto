@@ -8,6 +8,10 @@ import modelGenerator from '../../js/domain/component/modelGenerator';
 
 class ActionComponentCreator {
 
+  constructor() {
+    this.WEB_PAGE_ROOT = 'WEB_PAGE_ROOT';
+  }
+
   createComponentEditorData(state, action) {
     const type = action.payload.componentType;
     let componentViewName;
@@ -46,7 +50,7 @@ class ActionComponentCreator {
     if (!model.children) model.children = [];
 
     if (type === ComponentTypes.WebPage) {
-      viewModel = this.generateViewModel(null, model);
+      viewModel = this.generateViewModel(this.WEB_PAGE_ROOT, model);
     }
 
     const data = Object.assign({}, options, { id: f22Uuid.generate() }, { model }, { viewModel });

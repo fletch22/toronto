@@ -49,7 +49,7 @@ describe('Current state retriever', () => {
     });
 
     promise.catch((error) => {
-      console.log(error);
+      console.debug(error);
     });
   });
 });

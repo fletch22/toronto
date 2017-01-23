@@ -12,7 +12,7 @@ class BodyChildrenGenerator extends React.Component {
         break;
       }
       default: {
-        console.log('Encountered problem while trying to determine view name for pseudo modal.');
+        console.error('Encountered problem while trying to determine view name for pseudo modal.');
         break;
       }
     }

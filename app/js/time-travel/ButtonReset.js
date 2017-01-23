@@ -2,12 +2,6 @@ import React from 'react';
 import _reduxDevtools from 'redux-devtools';
 import { connect } from 'react-redux';
 
-console.log(_reduxDevtools);
-
-//const reset = _reduxDevtools.ActionCreators.reset;
-// var jumpToState = _reduxDevtools.ActionCreators.jumpToState;
-
-
 class ButtonReset extends React.Component {
   render() {
     return (

@@ -36,8 +36,8 @@ describe('Rest service', () => {
       };
 
       const error = (errorObj) => {
-        console.log(errorObj);
-        console.log(`Error: StatusCode: ${errorObj.status}: Status Text: ${errorObj.statusText}`);
+        console.error(errorObj);
+        console.error(`Error: StatusCode: ${errorObj.status}: Status Text: ${errorObj.statusText}`);
         assert.fail(true, false);
         done();
       };
@@ -55,12 +55,12 @@ describe('Rest service', () => {
     const promise = RestService.getExceptionForTesting();
 
     promise.then((response) => {
-      console.log(repsonse);
+      console.debug(response);
       assert.fail('Should not see this message. The call should fail with an exception.');
     });
 
     promise.catch((error) => {
-      console.log(error.message);
+      console.error(error.message);
       done();
     });
   });

@@ -150,11 +150,29 @@ Begin Dashboard
   vertical-align: top;
 }
 
+.body-children-toolbar-col > .btn-f22-create-layout {
+  background-image: url('../../images/police-box.svg');
+  background-size: 18px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px;
+  display: inline-block;
+}
+
 :root .btn-f22-sys {
   width: 26px;
   height: 26px;
   margin: 2px;
   padding: 4px 4px 4px;
+}
+
+.layout-minion {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
 }
 
 /**

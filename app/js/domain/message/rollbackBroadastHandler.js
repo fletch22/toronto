@@ -11,7 +11,6 @@ class RollbackBroadcastHandler {
   }
 
   showRollbackModal(rollbackPayload) {
-    console.debug(`Rollback payload type: ${typeof rollbackPayload}`);
     console.debug(`Will rollback to ${rollbackPayload.clientId}`);
 
     this.dispatch(actionShowStateRollbackModal(rollbackPayload));

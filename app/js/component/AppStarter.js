@@ -43,8 +43,8 @@ class AppStarter {
             <CrusoeModal showModal headerText="Render Error" bodyText1={error.stack} bodyText2={bodyText2} bodyText3={bodyText3} />,
           document.querySelector('#main'));
 
-        console.log(error.stack);
-        console.log(`Could not connect to back end. Will try again in ${this.retryWaitMillis}`);
+        console.error(error.stack);
+        console.error(`Could not connect to back end. Will try again in ${this.retryWaitMillis}`);
 
         const promiseOnTimer = new Promise((resolve) => {
           window.setTimeout(resolve, this.retryWaitMillis);
@@ -55,7 +55,7 @@ class AppStarter {
         });
       });
     } else {
-      console.log('Tried to reach server. Giving up.');
+      console.error('Tried to reach server. Giving up.');
     }
   }
 }

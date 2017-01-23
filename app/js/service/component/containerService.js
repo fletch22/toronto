@@ -32,16 +32,6 @@ class ContainerService extends ComponentService {
   updateModel(state, model) {
     const modelNode = graphTraversal.find(state.model, model.id);
     Object.assign(modelNode, model);
-
-    // NOTE: This should be remove after we know fore sure that we will not need a deep-sh copy of the model (child replacement).
-    // modelNode.children = [];
-    // const customizer = (objValue, srcValue) => {
-    //   if (_.isArray(objValue)) {
-    //     console.log('concatting array.');
-    //     return objValue.concat(srcValue);
-    //   }
-    // };
-    // _.mergeWith(modelNode, model, customizer);
   }
 
   createOrUpdate(stateNew, jsonStateOld, model) {

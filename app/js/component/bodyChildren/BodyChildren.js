@@ -7,21 +7,37 @@ import bodyChildrenCreator from '../../component/editors/bodyChildren/bodyChildr
 import 'css/modules/time-travel-toolbar';
 import layoutService from '../../service/component/layoutService';
 import ComponentTypes from '../../domain/component/ComponentTypes';
-import { actionCreateBodyComponent } from '../../actions/index';
 import layoutModelFactory from '../../domain/component/layoutModelFactory';
 import actionComponentCreator from '../../reducers/actionComponentCreator';
+import { default as LayoutToolbar } from './layout/Toolbar';
+import { default as BodyToolbar } from './body/Toolbar';
 
 class BodyChildren extends React.Component {
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
+
+    let toolbar = '';
+    switch (this.props.typeLabel) {
+      case ComponentTypes.WebPage: {
+        toolbar = <BodyToolbar selectedViewModelId={this.props.selectedChildViewId} />;
+        break;
+      }
+      case ComponentTypes.Layout: {
+        toolbar = <LayoutToolbar selectedViewModelId={this.props.selectedChildViewId} />;
+        break;
+      }
+      default:
+        break;
+    }
+
     return (
       <div>
         <table>
           <tbody>
             <tr>
               <td className="body-children-toolbar-col">
-                <button className="btn-f22-sys btn btn-default fa fa-object-group" onClick={this.props.makeLayout}></button>
+                { toolbar }
               </td>
               <td style={{ width: '100%' }}>
                 {
@@ -41,6 +57,8 @@ class BodyChildren extends React.Component {
 BodyChildren.propTypes = {
   id: PropTypes.any,
   viewModel: PropTypes.object,
+  selectedChildViewId: PropTypes.any,
+  typeLabel: PropTypes.string,
   children: PropTypes.array,
   makeLayout: PropTypes.func
 };
@@ -55,8 +73,17 @@ const mapStateToProps = (state, ownProps) => {
     children = [].concat(stateChildren);
   }
 
+  let typeLabel;
+  const selectedChildViewId = (parent.selectedChildViewId) ? parent.selectedChildViewId : parent.id;
+  if (selectedChildViewId) {
+    const viewModel = graphTraversal.find(state, selectedChildViewId);
+    typeLabel = viewModel.viewModel.typeLabel;
+  }
+
   return {
-    children
+    children,
+    selectedChildViewId,
+    typeLabel
   };
 };
 

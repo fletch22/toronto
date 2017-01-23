@@ -72,10 +72,26 @@ describe('GraphTraversal', () => {
     }
     const endDate = new Date().getTime();
 
-    console.log(`Elapsed millis: ${endDate - startDate}`);
-
     expect(object.id).to.equal('seed');
     expect(endDate - startDate < 10).to.equal(true);
   });
 
+  it('should find an object correctly.', () => {
+
+    let object;
+    const start = new Date();
+    for (let i = 0; i < 10000; i++) {
+      object = graphTraversal.find(state, 'section0');
+    }
+    const end = new Date();
+
+    c.l(`Elapsed: ${end-start}`);
+
+    // object = graphTraversal.findNew(state, 'foo');
+
+    expect(object).is.not.equal(null);
+    expect(typeof object).is.equal('object');
+    expect(object.id).to.equal('section0');
+
+  });
 });
