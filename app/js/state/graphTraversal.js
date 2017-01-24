@@ -3,9 +3,9 @@ class GraphTraversal {
 
   findParent(node, id) {
     let parent;
-    const child = this.find(node, id, 'id');
+    const child = this.find(node, id);
     if (child) {
-      parent = this.find(node, child.parentId, 'id');
+      parent = this.find(node, child.parentId);
     }
     return parent;
   }

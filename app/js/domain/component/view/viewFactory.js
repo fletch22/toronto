@@ -5,13 +5,15 @@ class ViewFactory {
   createPageView()  {
     return {
       id: f22Uuid.generate(),
-      selectedChildViewId: null
+      selectedChildViewId: null,
+      isSelected: false
     };
   }
 
   createLayoutView() {
     return {
-      id: f22Uuid.generate()
+      id: f22Uuid.generate(),
+      isSelected: false
     };
   }
 }

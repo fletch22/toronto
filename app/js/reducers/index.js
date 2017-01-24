@@ -224,6 +224,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const viewModelId = action.payload.viewModelId;
 
       const viewModel = graphTraversal.find(state, viewModelId);
+      viewModel.isSelected = true;
 
       let pageViewNode = viewModel;
       let parentNodeId = viewModel.id;

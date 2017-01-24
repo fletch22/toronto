@@ -12,12 +12,11 @@ class BodyChildrenCreator {
     this.statePackager = new StatePackager();
   }
 
-  createUpdate(dispatch, parentViewModel, viewModel, successCallback) {
+  createUpdate(dispatch, parentViewModelId, viewModel, successCallback) {
     const dispatchHelper = () => {
       const createUpdate = (cuDispatch, state) => {
         try {
-          const stateParentViewModel = graphTraversal.find(state, parentViewModel.id);
-
+          const stateParentViewModel = graphTraversal.find(state, parentViewModelId);
           const stateViewModel = _.find(stateParentViewModel.viewModel.children, { id: viewModel.id });
           if (stateViewModel) {
             Object.assign(stateViewModel, viewModel);
@@ -36,8 +35,6 @@ class BodyChildrenCreator {
 
           const jsonStateOld = JSON.stringify(state);
           const stateNew = JSON.parse(jsonStateOld);
-
-          // throw new Error('foo');
 
           const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
           return stateSyncService.saveState(statePackage)

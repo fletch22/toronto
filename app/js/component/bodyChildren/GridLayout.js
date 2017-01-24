@@ -7,6 +7,7 @@ const ReactGridLayoutInitialized = widthProvider(ReactGridLayout);
 import '../../../css/f22-react-grid-layout.css';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
+import graphTraversal from '../../state/graphTraversal';
 
 class GridLayout extends React.Component {
 
@@ -61,8 +62,10 @@ class GridLayout extends React.Component {
   }
 
   render() {
+    const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
+
     return (
-      <div data-type={ComponentTypes.Layout} data-viewid={this.props.id} onClick={this.props.onClick}>
+      <div data-type={ComponentTypes.Layout} className={wrapperClass} data-viewid={this.props.viewModel.id} onClick={this.props.onClick}>
         <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} { ...this.props }>
           {this.generateDOM()}
         </ReactGridLayoutInitialized>
@@ -73,9 +76,23 @@ class GridLayout extends React.Component {
 
 GridLayout.propTypes = {
   id: PropTypes.any,
+  viewModel: PropTypes.any,
+  isSelected: PropTypes.bool,
   pageChildren: PropTypes.array,
   onLayoutChange: PropTypes.func,
   onClick: PropTypes.func
+};
+
+const mapStateToProps = (state, ownProps) => {
+  const stateViewModel = graphTraversal.find(state, ownProps.id);
+  // let viewModel = ownProps.viewModel;
+  // if (viewModel.isSelected !== ownProps.viewModel.isSelected) {
+  //   viewModel = Object.assign({}, graphTraversal.find(state, ownProps.id));
+  // }
+
+  return {
+    isSelected: stateViewModel.isSelected
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -86,7 +103,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       window.dispatchEvent(new Event('resize'));
     },
     onClick: (event) => {
-      c.lo(event.currentTarget.dataset.viewid);
       event.stopPropagation();
       dispatch(actionSetCurrentBodyTool(event.currentTarget.dataset.viewid));
     }
@@ -94,7 +110,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 GridLayout = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(GridLayout);
 

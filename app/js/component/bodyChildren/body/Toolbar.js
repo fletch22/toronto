@@ -1,13 +1,16 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
+import layoutModelFactory from '../../../domain/component/layoutModelFactory';
+import actionComponentCreator from '../../../reducers/actionComponentCreator';
+import bodyChildrenCreator from '../../../component/editors/bodyChildren/bodyChildrenCreator';
+import layoutService from '../../../service/component/layoutService';
 
 class Toolbar extends React.Component {
-
   render() {
     return (
       <div>
-        <Button faClass="fa-object-group" onClick={this.props.makeMinion} />
+        <Button faClass="fa-object-group" onClick={this.props.createLayout} tooltipText="Create Layout" />
       </div>
     );
   }
@@ -15,51 +18,22 @@ class Toolbar extends React.Component {
 
 Toolbar.propTypes = {
   selectedChildViewId: PropTypes.any,
-  makeMinion: PropTypes.func
+  selectedChildModelId: PropTypes.any,
+  createLayout: PropTypes.func
 };
-
-const mapStateToProps = (state, ownProps) => {
-  // const parent = graphTraversal.find(state, ownProps.id);
-  // const stateChildren = parent.viewModel.children;
-  // const propsChildren = ownProps.viewModel.children;
-  //
-  // let children = stateChildren;
-  // if (!util.doArrayElementsMatchIdentities(propsChildren, stateChildren)) {
-  //   children = [].concat(stateChildren);
-  // }
-  //
-  // let typeLabel;
-  // const selectedChildViewId = parent.selectedChildViewId;
-  // if (selectedChildViewId) {
-  //   const viewModel = graphTraversal.find(state, selectedChildViewId);
-  //   typeLabel = viewModel.viewModel.typeLabel;
-  // }
-  //
-  // return {
-  //   children,
-  //   selectedChildViewId,
-  //   typeLabel
-  // };
-
-  return {};
-};
-
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    makeMinion: () => {
-      c.l('test');
-      // const parentViewModel = Object.assign({}, ownProps);
-      // const model = layoutModelFactory.createInstance(ownProps.viewModel.id);
-      // const viewModel = actionComponentCreator.generateViewModel(ownProps.id, model);
-      //
-      // bodyChildrenCreator.createUpdate(dispatch, parentViewModel, viewModel, layoutService.createOrUpdate);
+    createLayout: () => {
+      const model = layoutModelFactory.createInstance(ownProps.selectedChildModelId);
+      const viewModel = actionComponentCreator.generateViewModel(ownProps.selectedChildViewId, model);
+      bodyChildrenCreator.createUpdate(dispatch, ownProps.selectedChildViewId, viewModel, layoutService.createOrUpdate);
     }
   };
 };
 
 Toolbar = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(Toolbar);
 

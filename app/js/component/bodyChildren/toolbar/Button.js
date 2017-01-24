@@ -7,7 +7,7 @@ class Button extends React.Component {
 
     return (
       <div>
-        <button className={className} onClick={this.props.onClick}></button>
+        <button className={className} onClick={this.props.onClick} title={this.props.tooltipText}></button>
       </div>
     );
   }
@@ -15,6 +15,7 @@ class Button extends React.Component {
 
 Button.propTypes = {
   faClass: PropTypes.string,
+  tooltipText: PropTypes.string,
   onClick: PropTypes.func
 };
 

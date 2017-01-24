@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import BodyChildrenGenerator from './BodyChildrenGenerator';
 import graphTraversal from '../../state/graphTraversal';
 import util from '../../util/util';
-import bodyChildrenCreator from '../../component/editors/bodyChildren/bodyChildrenCreator';
 import 'css/modules/time-travel-toolbar';
-import layoutService from '../../service/component/layoutService';
 import ComponentTypes from '../../domain/component/ComponentTypes';
-import layoutModelFactory from '../../domain/component/layoutModelFactory';
-import actionComponentCreator from '../../reducers/actionComponentCreator';
 import { default as LayoutToolbar } from './layout/Toolbar';
 import { default as BodyToolbar } from './body/Toolbar';
+import HierNavButtonToolbar from '../../component/bodyChildren/HierNavButtonToolbar';
+import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 
 class BodyChildren extends React.Component {
 
@@ -18,13 +16,13 @@ class BodyChildren extends React.Component {
     const children = (this.props.children) ? this.props.children : [];
 
     let toolbar = '';
-    switch (this.props.typeLabel) {
+    switch (this.props.selectedTypeLabel) {
       case ComponentTypes.WebPage: {
-        toolbar = <BodyToolbar selectedViewModelId={this.props.selectedChildViewId} />;
+        toolbar = <BodyToolbar selectedChildViewId={this.props.selectedChildViewId} selectedChildModelId={this.props.selectedChildModelId} />;
         break;
       }
       case ComponentTypes.Layout: {
-        toolbar = <LayoutToolbar selectedViewModelId={this.props.selectedChildViewId} />;
+        toolbar = <LayoutToolbar selectedChildViewId={this.props.selectedChildViewId} selectedChildModelId={this.props.selectedChildModelId} />;
         break;
       }
       default:
@@ -37,9 +35,10 @@ class BodyChildren extends React.Component {
           <tbody>
             <tr>
               <td className="body-children-toolbar-col">
+                <HierNavButtonToolbar />
                 { toolbar }
               </td>
-              <td style={{ width: '100%' }}>
+              <td style={{ width: '100%' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
                 {
                   children.map((child) =>
                     <BodyChildrenGenerator key={child.id} id={child.id} viewModel={child} />
@@ -58,12 +57,15 @@ BodyChildren.propTypes = {
   id: PropTypes.any,
   viewModel: PropTypes.object,
   selectedChildViewId: PropTypes.any,
-  typeLabel: PropTypes.string,
-  children: PropTypes.array,
-  makeLayout: PropTypes.func
+  selectedChildModelId: PropTypes.any,
+  selectedTypeLabel: PropTypes.string,
+  selectChild: PropTypes.func,
+  children: PropTypes.array
 };
 
 const mapStateToProps = (state, ownProps) => {
+  c.lo(ownProps, 'BodyChildren: ');
+
   const parent = graphTraversal.find(state, ownProps.id);
   const stateChildren = parent.viewModel.children;
   const propsChildren = ownProps.viewModel.children;
@@ -73,28 +75,29 @@ const mapStateToProps = (state, ownProps) => {
     children = [].concat(stateChildren);
   }
 
-  let typeLabel;
+  let selectedTypeLabel;
+  let selectedChildModelId;
   const selectedChildViewId = (parent.selectedChildViewId) ? parent.selectedChildViewId : parent.id;
   if (selectedChildViewId) {
     const viewModel = graphTraversal.find(state, selectedChildViewId);
-    typeLabel = viewModel.viewModel.typeLabel;
+    selectedChildModelId = viewModel.viewModel.id;
+    selectedTypeLabel = viewModel.viewModel.typeLabel;
   }
 
   return {
     children,
     selectedChildViewId,
-    typeLabel
+    selectedChildModelId,
+    selectedTypeLabel
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    makeLayout: () => {
-      const parentViewModel = Object.assign({}, ownProps);
-      const model = layoutModelFactory.createInstance(ownProps.viewModel.id);
-      const viewModel = actionComponentCreator.generateViewModel(ownProps.id, model);
-
-      bodyChildrenCreator.createUpdate(dispatch, parentViewModel, viewModel, layoutService.createOrUpdate);
+    // This and the tags above can be abstracted into it's own tag.
+    onClick: (event) => {
+      event.stopPropagation();
+      dispatch(actionSetCurrentBodyTool(event.currentTarget.dataset.viewid));
     }
   };
 };
