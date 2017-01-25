@@ -4,41 +4,26 @@ import BodyChildrenGenerator from './BodyChildrenGenerator';
 import graphTraversal from '../../state/graphTraversal';
 import util from '../../util/util';
 import 'css/modules/time-travel-toolbar';
-import ComponentTypes from '../../domain/component/ComponentTypes';
-import { default as LayoutToolbar } from './layout/Toolbar';
-import { default as BodyToolbar } from './body/Toolbar';
-import HierNavButtonToolbar from '../../component/bodyChildren/HierNavButtonToolbar';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
+import SelectedContextToolbar from './SelectedContextToolbar';
 
 class BodyChildren extends React.Component {
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
 
-    let toolbar = '';
-    switch (this.props.selectedTypeLabel) {
-      case ComponentTypes.WebPage: {
-        toolbar = <BodyToolbar selectedChildViewId={this.props.selectedChildViewId} selectedChildModelId={this.props.selectedChildModelId} />;
-        break;
-      }
-      case ComponentTypes.Layout: {
-        toolbar = <LayoutToolbar selectedChildViewId={this.props.selectedChildViewId} selectedChildModelId={this.props.selectedChildModelId} />;
-        break;
-      }
-      default:
-        break;
-    }
+    const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
+    c.lo(this.props.selectedChildViewId, 'In BC: ');
 
     return (
       <div>
-        <table>
+        <table style={{ width: '100%' }}>
           <tbody>
             <tr>
               <td className="body-children-toolbar-col">
-                <HierNavButtonToolbar />
-                { toolbar }
+                <SelectedContextToolbar selectedTypeLabel={this.props.selectedTypeLabel} selectedChildViewId={this.props.selectedChildViewId} selectedChildModelId={this.props.selectedChildModelId} />
               </td>
-              <td style={{ width: '100%' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
+              <td className={wrapperClass} style={{ minWidth: '1300px', maxWidth: '1300px' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
                 {
                   children.map((child) =>
                     <BodyChildrenGenerator key={child.id} id={child.id} viewModel={child} />
@@ -60,12 +45,11 @@ BodyChildren.propTypes = {
   selectedChildModelId: PropTypes.any,
   selectedTypeLabel: PropTypes.string,
   selectChild: PropTypes.func,
+  isSelected: PropTypes.bool,
   children: PropTypes.array
 };
 
 const mapStateToProps = (state, ownProps) => {
-  c.lo(ownProps, 'BodyChildren: ');
-
   const parent = graphTraversal.find(state, ownProps.id);
   const stateChildren = parent.viewModel.children;
   const propsChildren = ownProps.viewModel.children;
@@ -75,6 +59,7 @@ const mapStateToProps = (state, ownProps) => {
     children = [].concat(stateChildren);
   }
 
+  let isSelected = false;
   let selectedTypeLabel;
   let selectedChildModelId;
   const selectedChildViewId = (parent.selectedChildViewId) ? parent.selectedChildViewId : parent.id;
@@ -82,13 +67,15 @@ const mapStateToProps = (state, ownProps) => {
     const viewModel = graphTraversal.find(state, selectedChildViewId);
     selectedChildModelId = viewModel.viewModel.id;
     selectedTypeLabel = viewModel.viewModel.typeLabel;
+    isSelected = viewModel.isSelected;
   }
 
   return {
     children,
     selectedChildViewId,
     selectedChildModelId,
-    selectedTypeLabel
+    selectedTypeLabel,
+    isSelected
   };
 };
 

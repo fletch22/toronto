@@ -23,7 +23,7 @@ class PseudoModal extends React.Component {
       }
       case ComponentModalNames.EDIT_WEBSITE_PAGE_DETAILS: {
         component = <PageEditor { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
-        width = (this.props.data && this.props.data.width) ? this.props.data.width : '1200px';
+        width = (this.props.data && this.props.data.width) ? this.props.data.width : '1500px';
         break;
       }
       default: {

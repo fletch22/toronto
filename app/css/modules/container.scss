@@ -146,7 +146,8 @@ Begin Dashboard
 }
 
 .body-children-toolbar-col {
-  width: 15px;
+  min-width: 185px;
+  max-width: 185px;
   vertical-align: top;
 }
 
@@ -177,6 +178,36 @@ Begin Dashboard
 
 .body-child-selected {
   border: 2px solid red;
+}
+
+.bc-toolbar-col-1 {
+  float: left;
+  display: inline-block;
+  width: 80%;
+  padding: 0 0 0 3px;
+}
+
+.bc-toolbar-title-label {
+  padding: 3px 0 0 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.bc-toolbar-description {
+  float: left;
+  display: inline-block;
+  font-size: 9px;
+  font-style: italic;
+  padding: 3px 0 0 0;
+}
+
+.bc-toolbar-col-2 {
+  float: right;
+  display: inline-block;
+  width: 20%;
+  padding: 0;
+  margin: 0;
+  text-align: center;
 }
 
 /**
