@@ -220,17 +220,14 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     // TODO: Needs a test.
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
-      const viewModelId = action.payload.viewModelId;
+      const intendedSelectedViewModelId = action.payload.viewModelId;
 
-      const viewModel = graphTraversal.find(stateNew, viewModelId);
-      viewModel.isSelected = true;
+      const intendedSelectedViewModel = graphTraversal.find(stateNew, intendedSelectedViewModelId);
+      intendedSelectedViewModel.isSelected = true;
 
-      c.lo(viewModel, 'reducer after set...');
-
-      let pageViewNode = viewModel;
-      let parentNodeId = viewModel.parentId;
+      let pageViewNode = intendedSelectedViewModel;
+      let parentNodeId = intendedSelectedViewModel.parentId;
       while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
-        c.l('here we go...');
         const parentNode = graphTraversal.find(stateNew, parentNodeId);
         if (!parentNode) {
           throw new Error('Encountered problem trying to find web page root node.');
@@ -239,29 +236,25 @@ const reducer = (state = defaultState.getInstance(), action) => {
         pageViewNode = parentNode;
       }
 
-      if (pageViewNode.selectedChildViewId) {
+      if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== intendedSelectedViewModel.id) {
         const currentlySelectedViewModel = graphTraversal.find(stateNew, pageViewNode.selectedChildViewId);
         currentlySelectedViewModel.isSelected = false;
       }
-      pageViewNode.selectedChildViewId = viewModelId;
+      pageViewNode.selectedChildViewId = intendedSelectedViewModelId;
 
-      // c.lo(viewModel, 'reducer: ');
       return stateNew;
     }
     // TODO: Needs a test.
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {
-      const viewModelId = action.payload.viewModelId;
+      const childViewModelId = action.payload.viewModelId;
 
       let pageViewNode;
-      const parentViewModel = graphTraversal.findParent(stateNew, viewModelId);
-      const intendedSelectedViewModel = graphTraversal.find(stateNew, viewModelId);
+      const intendedSelectedViewModel = graphTraversal.findParent(stateNew, childViewModelId);
       intendedSelectedViewModel.isSelected = true;
-      c.lo(intendedSelectedViewModel, 'reducer: ');
 
-      pageViewNode = parentViewModel;
+      pageViewNode = intendedSelectedViewModel;
       let parentId = pageViewNode.parentId;
       while (parentId !== actionComponentCreator.WEB_PAGE_ROOT) {
-        c.l('here we go...');
         const parentNode = graphTraversal.find(stateNew, parentId);
         if (!parentNode) {
           throw new Error('Encountered problem trying to find web page root node.');
@@ -270,15 +263,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
         pageViewNode = parentNode;
       }
 
-      if (pageViewNode.selectedChildViewId) {
-        const viewModelCurrentlySelected = graphTraversal.findParent(stateNew, pageViewNode.selectedChildViewId);
-        // c.lo(viewModelCurrentlySelected, 'Before setting...');
+      if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== intendedSelectedViewModel.id) {
+        const viewModelCurrentlySelected = graphTraversal.find(stateNew, pageViewNode.selectedChildViewId);
         viewModelCurrentlySelected.isSelected = false;
-        // c.lo(viewModelCurrentlySelected, 'After setting...');
       }
 
-      pageViewNode.selectedChildViewId = viewModelId;
-
+      pageViewNode.selectedChildViewId = intendedSelectedViewModel.id;
 
       return stateNew;
     }

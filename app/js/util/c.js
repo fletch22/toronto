@@ -45,6 +45,8 @@ class C {
         if (type === 'object') {
           message += `, enumerableProps:${JSON.stringify(Object.keys(value))}`;
         }
+      } else {
+        message = `typeof=${typeof val}, ${val}`;
       }
     } else {
       message = 'undefined';

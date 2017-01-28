@@ -24,7 +24,7 @@ describe('c', () => {
     expect(call).to.not.equal(undefined);
 
     const arg1 = log.getCall(0).args[0];
-    expect(undefined).to.equal(arg1);
+    expect('typeof=undefined, undefined').to.equal(arg1);
   });
 
   it('function lo should invoke the console successfully with a prefix', () => {
@@ -40,7 +40,7 @@ describe('c', () => {
     expect(call).to.not.equal(undefined);
 
     const arg1 = log.getCall(0).args[0];
-    expect('foo.bar -> undefined').to.equal(arg1);
+    expect('foo.bar -> typeof=undefined, undefined').to.equal(arg1);
   });
 
   it('function lo should log to the console successfully without being imported', () => {
@@ -102,5 +102,19 @@ describe('c', () => {
     c.l('boar');
 
     expect(log.calledOnce).to.equal(true);
+  });
+
+  it('function \'lo\' should handle numbers successfully.', () => {
+    const log = sandbox.stub(console, 'log');
+
+    c.lo(123);
+
+    expect(log.calledOnce).to.equal(true);
+
+    const call = log.getCall(0);
+
+    const arg1 = log.getCall(0).args[0];
+
+    expect(arg1).to.equal('typeof=number, 123');
   });
 });

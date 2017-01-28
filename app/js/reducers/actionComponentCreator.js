@@ -76,7 +76,6 @@ class ActionComponentCreator {
         throw new Error('Encountered error trying to determine view to create.');
       }
     }
-    // const modelClone = _.cloneDeep(model);
     return Object.assign(view, { parentId: viewModelParentId }, { viewModel: this.generateChildrensViewModels(view.id, model) });
   }
 

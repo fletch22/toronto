@@ -48,29 +48,38 @@ BodyChildren.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  // c.lo(state, 'state: ');
+
   const parent = graphTraversal.find(state, ownProps.id);
   const stateChildren = parent.viewModel.children;
   const propsChildren = ownProps.viewModel.children;
 
   let children = stateChildren;
-  if (!util.doArrayElementsMatchIdentities(propsChildren, stateChildren)) {
+  // children = ownProps.children;
+  // if (!util.doArrayElementsMatchIdentities(propsChildren, stateChildren)) {
     children = [].concat(stateChildren);
-  }
+  // }
 
   let selectedTypeLabel;
   let selectedChildModelId;
   const selectedChildViewId = (parent.selectedChildViewId) ? parent.selectedChildViewId : parent.id;
   if (selectedChildViewId) {
     const viewModel = graphTraversal.find(state, selectedChildViewId);
+
     selectedChildModelId = viewModel.viewModel.id;
     selectedTypeLabel = viewModel.viewModel.typeLabel;
+
+    c.lo(viewModel, 'viewModel: ');
+    c.lo(selectedChildViewId, 'selectedChildViewId: ');
+    c.lo(selectedChildModelId, 'selectedChildModelId: ');
+    c.lo(selectedTypeLabel, 'selectedTypeLabel: ');
   }
 
-  children = [].concat(stateChildren);
-  // c.lo(state, 'children: ');
+  // children = [].concat(stateChildren);
+  // c.lo(selectedChildViewId, 'selectedChildViewId: ');
 
   return {
-    children,
+    children: children,
     selectedChildViewId,
     selectedChildModelId,
     selectedTypeLabel,
