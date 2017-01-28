@@ -4,7 +4,7 @@ import Button from '../toolbar/Button';
 import layoutModelFactory from '../../../domain/component/layoutModelFactory';
 import actionComponentCreator from '../../../reducers/actionComponentCreator';
 import bodyChildrenCreator from '../../../component/editors/bodyChildren/bodyChildrenCreator';
-import layoutService from '../../../service/component/layoutService';
+import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/index';
 
 class Toolbar extends React.Component {
   render() {
@@ -27,7 +27,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     createLayout: () => {
       const model = layoutModelFactory.createInstance(ownProps.selectedChildModelId);
       const viewModel = actionComponentCreator.generateViewModel(ownProps.selectedChildViewId, model);
-      bodyChildrenCreator.createUpdate(dispatch, ownProps.selectedChildViewId, viewModel, layoutService.createOrUpdate);
+
+      const successCallback = () => {
+        dispatch(actionSetCurrentBodyTool(viewModel.id));
+      };
+
+      bodyChildrenCreator.createUpdate(dispatch, ownProps.selectedChildViewId, viewModel, successCallback);
     }
   };
 };

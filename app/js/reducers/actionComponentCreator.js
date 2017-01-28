@@ -76,22 +76,24 @@ class ActionComponentCreator {
         throw new Error('Encountered error trying to determine view to create.');
       }
     }
+    // const modelClone = _.cloneDeep(model);
     return Object.assign(view, { parentId: viewModelParentId }, { viewModel: this.generateChildrensViewModels(view.id, model) });
   }
 
   generateChildrensViewModels(viewModelParentId, modelParent) {
-    modelParent.children.forEach((model, index) => {
-      modelParent.children[index] = this.generateViewModel(viewModelParentId, model);
+    const viewModelParent = Object.assign({}, modelParent);
+    viewModelParent.children.forEach((model, index) => {
+      viewModelParent.children[index] = this.generateViewModel(viewModelParentId, model);
     });
 
-    return modelParent;
+    return viewModelParent;
   }
 
   generatePageChildComponent(state, action) {
+    throw new Error('Not implemented yet.');
     const options = _.cloneDeep(action.payload.options);
     const parentModel = graphTraversal.find(state, options.parentId);
 
-    throw new Error('Not implemented yet.');
 
     const model = modelGenerator.generate(parentModel.viewModel.id, action.payload.componentType);
     const viewModel = this.generateViewModel(model);

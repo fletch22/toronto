@@ -8,7 +8,8 @@ class BodyChildrenGenerator extends React.Component {
     let component;
     switch (this.props.viewModel.viewModel.typeLabel) {
       case ComponentTypes.Layout: {
-        component = <GridLayout { ... this.props } />;
+        c.lo(this.props.isSelected, 'BodyChildrenGen: ');
+        component = <GridLayout id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
         break;
       }
       default: {
@@ -25,6 +26,7 @@ class BodyChildrenGenerator extends React.Component {
 
 BodyChildrenGenerator.propTypes = {
   id: PropTypes.any,
+  isSelected: PropTypes.bool,
   viewModel: PropTypes.object
 };
 

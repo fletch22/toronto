@@ -7,7 +7,7 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div>
-        <Button faClass="fa-reddit-square" onClick={this.props.createLayout}  />
+        <Button faClass="fa-reddit-square" onClick={this.props.createLayout} />
       </div>
     );
   }

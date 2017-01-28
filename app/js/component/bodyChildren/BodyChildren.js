@@ -11,9 +11,7 @@ class BodyChildren extends React.Component {
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
-
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
-    c.lo(this.props.selectedChildViewId, 'In BC: ');
 
     return (
       <div>
@@ -26,7 +24,7 @@ class BodyChildren extends React.Component {
               <td className={wrapperClass} style={{ minWidth: '1300px', maxWidth: '1300px' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
                 {
                   children.map((child) =>
-                    <BodyChildrenGenerator key={child.id} id={child.id} viewModel={child} />
+                    <BodyChildrenGenerator key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
                   )
                 }
               </td>
@@ -59,7 +57,6 @@ const mapStateToProps = (state, ownProps) => {
     children = [].concat(stateChildren);
   }
 
-  let isSelected = false;
   let selectedTypeLabel;
   let selectedChildModelId;
   const selectedChildViewId = (parent.selectedChildViewId) ? parent.selectedChildViewId : parent.id;
@@ -67,15 +64,17 @@ const mapStateToProps = (state, ownProps) => {
     const viewModel = graphTraversal.find(state, selectedChildViewId);
     selectedChildModelId = viewModel.viewModel.id;
     selectedTypeLabel = viewModel.viewModel.typeLabel;
-    isSelected = viewModel.isSelected;
   }
+
+  children = [].concat(stateChildren);
+  // c.lo(state, 'children: ');
 
   return {
     children,
     selectedChildViewId,
     selectedChildModelId,
     selectedTypeLabel,
-    isSelected
+    isSelected: selectedChildViewId === ownProps.id
   };
 };
 

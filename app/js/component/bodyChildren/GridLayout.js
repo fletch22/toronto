@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { WidthProvider as widthProvider } from 'react-grid-layout';
@@ -10,6 +11,11 @@ import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index
 import graphTraversal from '../../state/graphTraversal';
 
 class GridLayout extends React.Component {
+
+  constructor() {
+    super();
+    this.div = null;
+  }
 
   generateLayout() {
     const items = [{
@@ -64,11 +70,13 @@ class GridLayout extends React.Component {
   render() {
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
 
+    // <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} { ...this.props }>
+    // { genderateDOM() }
+    // </ReactGridLayoutInitialized>
+
     return (
-      <div data-type={ComponentTypes.Layout} className={wrapperClass} data-viewid={this.props.viewModel.id} onClick={this.props.onClick}>
-        <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} { ...this.props }>
-          {this.generateDOM()}
-        </ReactGridLayoutInitialized>
+      <div data-type={ComponentTypes.Layout} className={wrapperClass} data-viewid={this.props.viewModel.id} onClick={this.props.onClick} style={{ height: '100px' }}>
+
       </div>
     );
   }
@@ -83,17 +91,16 @@ GridLayout.propTypes = {
   onClick: PropTypes.func
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const stateViewModel = graphTraversal.find(state, ownProps.id);
-  // let viewModel = ownProps.viewModel;
-  // if (viewModel.isSelected !== ownProps.viewModel.isSelected) {
-  //   viewModel = Object.assign({}, graphTraversal.find(state, ownProps.id));
-  // }
-
-  return {
-    isSelected: stateViewModel.isSelected
-  };
-};
+// const mapStateToProps = (state, ownProps) => {
+//   const stateViewModel = graphTraversal.find(state, ownProps.id);
+//
+//   c.lo(stateViewModel, 'In ms2p:gridLayout: ');
+//   // TODO: Figure out how to handle selection.
+//
+//   return {
+//
+//   };
+// };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
@@ -110,7 +117,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 GridLayout = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(GridLayout);
 
