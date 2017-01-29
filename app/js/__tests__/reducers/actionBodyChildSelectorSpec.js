@@ -4,7 +4,7 @@ import actionBodyChildSelectorHandler from '../../reducers/actionBodyChildSelect
 import actionComponentCreatorHandler from '../../reducers/actionComponentCreatorHandler';
 import graphTraversal from '../../state/graphTraversal';
 
-describe.only('actionBodySelector', () => {
+describe('actionBodySelector', () => {
 
   let state = {
     id: 'viewIdRoot',
