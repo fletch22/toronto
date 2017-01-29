@@ -9,8 +9,13 @@ import '../../../css/f22-react-grid-layout.css';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 import LayoutMinion from './LayoutMinion';
+import ComponentChild from './ComponentChild';
 
 class GridLayout extends React.Component {
+
+  static updateLayout(layoutDeltas) {
+
+  }
 
   constructor() {
     super();
@@ -45,6 +50,7 @@ class GridLayout extends React.Component {
       return { x: i * 2 % 12, y: Math.floor(i / 6) * y, w, h: y, i: i.toString() };
     });
   }
+
   generateRandomDOM() {
     const layout = this.generateLayout();
     return _.map(layout, (item, i) => {
@@ -53,9 +59,11 @@ class GridLayout extends React.Component {
   }
 
   generateMinion(viewModel, gridItem) {
+    const wrapperClass = (viewModel.isSelected) ? 'body-child-selected' : '';
+
     return (
-      <div key={gridItem.i} data-grid={gridItem}>
-        <LayoutMinion viewModel={viewModel} />
+      <div className={wrapperClass} key={gridItem.i} data-grid={gridItem}>
+        <ComponentChild id={viewModel.id} viewModel={viewModel} isSelected={viewModel.isSelected} />
       </div>
     );
   }
@@ -90,11 +98,17 @@ GridLayout.propTypes = {
   onClick: PropTypes.func
 };
 
+
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onLayoutChange: (layout) => {
       // NOTE: Attempt to avoid misrendering.
-      console.log('layout changed.');
+      c.lo(layout, 'layout changed: ');
+
+      // const model = layoutMinionModelFactory.createInstance(ownProps.selectedChildModelId, 'foo', "1", "1", "0", "0");
+      // viewModelCreator.create(dispatch, model, ownProps.selectedChildViewId);
+
       window.dispatchEvent(new Event('resize'));
     },
     onClick: (event) => {

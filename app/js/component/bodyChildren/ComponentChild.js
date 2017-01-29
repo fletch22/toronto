@@ -1,14 +1,19 @@
 import React, { PropTypes } from 'react';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import GridLayout from './GridLayout';
+import LayoutMinion from './LayoutMinion';
 
-class BodyChildrenGenerator extends React.Component {
+class ComponentChild extends React.Component {
 
   render() {
     let component;
     switch (this.props.viewModel.viewModel.typeLabel) {
       case ComponentTypes.Layout: {
         component = <GridLayout id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
+        break;
+      }
+      case ComponentTypes.LayoutMinion: {
+        component = <LayoutMinion id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
         break;
       }
       default: {
@@ -23,10 +28,10 @@ class BodyChildrenGenerator extends React.Component {
   }
 }
 
-BodyChildrenGenerator.propTypes = {
+ComponentChild.propTypes = {
   id: PropTypes.any,
   isSelected: PropTypes.bool,
   viewModel: PropTypes.object
 };
 
-export default BodyChildrenGenerator;
+export default ComponentChild;

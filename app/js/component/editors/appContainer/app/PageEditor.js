@@ -5,8 +5,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import MetaData from '../../../dashboard/app/website/page/MetaData';
 import graphTraversal from '../../../../state/graphTraversal';
 import { actionUpdateViewPropertyValue } from '../../../../actions/index';
-import BodyChildren from '../../../bodyChildren/BodyChildren';
-import f22Uuid from '../../../../util/f22Uuid';
+import ComponentChildren from '../../../bodyChildren/ComponentChildren';
 
 class PageEditor extends React.Component {
 
@@ -17,7 +16,7 @@ class PageEditor extends React.Component {
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><BodyChildren { ... this.props.viewModel } /></Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><ComponentChildren { ... this.props.viewModel } /></Tab>
         </Tabs>
       </div>
     );

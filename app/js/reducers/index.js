@@ -204,32 +204,32 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     // TODO: Needs a test.
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
-      // const intendedSelectedViewModelId = action.payload.viewModelId;
-      //
-      // return actionBodyChildSelector.process(stateNew, intendedSelectedViewModelId);
       const intendedSelectedViewModelId = action.payload.viewModelId;
 
-      const intendedSelectedViewModel = graphTraversal.find(stateNew, intendedSelectedViewModelId);
-      intendedSelectedViewModel.isSelected = true;
-
-      let pageViewNode = intendedSelectedViewModel;
-      let parentNodeId = intendedSelectedViewModel.parentId;
-      while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
-        const parentNode = graphTraversal.find(stateNew, parentNodeId);
-        if (!parentNode) {
-          throw new Error('Encountered problem trying to find web page root node.');
-        }
-        parentNodeId = parentNode.parentId;
-        pageViewNode = parentNode;
-      }
-
-      if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== intendedSelectedViewModel.id) {
-        const currentlySelectedViewModel = graphTraversal.find(stateNew, pageViewNode.selectedChildViewId);
-        currentlySelectedViewModel.isSelected = false;
-      }
-      pageViewNode.selectedChildViewId = intendedSelectedViewModelId;
-
-      return stateNew;
+      return actionBodyChildSelector.process(stateNew, intendedSelectedViewModelId);
+      // const intendedSelectedViewModelId = action.payload.viewModelId;
+      //
+      // const intendedSelectedViewModel = graphTraversal.find(stateNew, intendedSelectedViewModelId);
+      // intendedSelectedViewModel.isSelected = true;
+      //
+      // let pageViewNode = intendedSelectedViewModel;
+      // let parentNodeId = intendedSelectedViewModel.parentId;
+      // while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
+      //   const parentNode = graphTraversal.find(stateNew, parentNodeId);
+      //   if (!parentNode) {
+      //     throw new Error('Encountered problem trying to find web page root node.');
+      //   }
+      //   parentNodeId = parentNode.parentId;
+      //   pageViewNode = parentNode;
+      // }
+      //
+      // if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== intendedSelectedViewModel.id) {
+      //   const currentlySelectedViewModel = graphTraversal.find(stateNew, pageViewNode.selectedChildViewId);
+      //   currentlySelectedViewModel.isSelected = false;
+      // }
+      // pageViewNode.selectedChildViewId = intendedSelectedViewModelId;
+      //
+      // return stateNew;
     }
     // TODO: Needs a test.
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {

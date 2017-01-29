@@ -1,14 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import BodyChildrenGenerator from './BodyChildrenGenerator';
+import ComponentChild from './ComponentChild';
 import graphTraversal from '../../state/graphTraversal';
-import util from '../../util/util';
 import 'css/modules/time-travel-toolbar';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 import SelectedContextToolbar from './SelectedContextToolbar';
 
-class BodyChildren extends React.Component {
-
+class ComponentChildren extends React.Component {
   render() {
     const children = (this.props.children) ? this.props.children : [];
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
@@ -24,7 +22,7 @@ class BodyChildren extends React.Component {
               <td className={wrapperClass} style={{ minWidth: '1300px', maxWidth: '1300px' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
                 {
                   children.map((child) =>
-                    <BodyChildrenGenerator key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
+                    <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
                   )
                 }
               </td>
@@ -36,7 +34,7 @@ class BodyChildren extends React.Component {
   }
 }
 
-BodyChildren.propTypes = {
+ComponentChildren.propTypes = {
   id: PropTypes.any,
   viewModel: PropTypes.object,
   selectedChildViewId: PropTypes.any,
@@ -85,9 +83,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-BodyChildren = connect(
+ComponentChildren = connect(
   mapStateToProps,
   mapDispatchToProps
-)(BodyChildren);
+)(ComponentChildren);
 
-export default BodyChildren;
+export default ComponentChildren;
