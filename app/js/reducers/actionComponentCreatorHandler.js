@@ -72,6 +72,10 @@ class ActionComponentCreatorHandler {
         view = viewFactory.createLayoutView();
         break;
       }
+      case ComponentTypes.LayoutMinion: {
+        view = viewFactory.createLayoutMinionView();
+        break;
+      }
       default: {
         throw new Error('Encountered error trying to determine view to create.');
       }
@@ -86,18 +90,6 @@ class ActionComponentCreatorHandler {
     });
 
     return viewModelParent;
-  }
-
-  generatePageChildComponent(state, action) {
-    throw new Error('Not implemented yet.');
-    const options = _.cloneDeep(action.payload.options);
-    const parentModel = graphTraversal.find(state, options.parentId);
-
-
-    const model = modelGenerator.generate(parentModel.viewModel.id, action.payload.componentType);
-    const viewModel = this.generateViewModel(model);
-
-    parentModel.viewModel.children.push(viewModel);
   }
 
   extractModelFromViewModel(viewModel) {

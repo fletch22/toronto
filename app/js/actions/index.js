@@ -22,8 +22,7 @@ export const ACTIONS = {
     REFRESH_PAGE: 'REFRESH_PAGE',
     NUKE_AND_PAVE: 'NUKE_AND_PAVE',
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
-    CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT',
-    CREATE_BODY_COMPONENT: 'CREATE_BODY_COMPONENT'
+    CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -104,9 +103,6 @@ export const actionEnsureInitialStateSaved = () => {
 };
 
 export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
-
-  console.debug(propertyName);
-
   return {
     type: ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST,
     payload: { id, propertyName, value }
@@ -140,13 +136,3 @@ export const actionCreatePseudoModalComponent = (componentType, options) => ({
     options
   }
 });
-
-export const actionCreateBodyComponent = (componentType, options) => ({
-  type: ACTIONS.types.CREATE_BODY_COMPONENT,
-  payload: {
-    componentType,
-    options
-  }
-});
-
-

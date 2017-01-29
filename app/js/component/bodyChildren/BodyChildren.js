@@ -51,7 +51,7 @@ const mapStateToProps = (state, ownProps) => {
   const parent = graphTraversal.find(state, ownProps.id);
   const stateChildren = parent.viewModel.children;
 
-  // NOTE: I'm assuming this will update all descendents. The alternative is to detecting differences in the
+  // NOTE: I'm assuming this will update all descendents. The alternative is to detect differences in the
   // arrays. If arrays are diff, then update. If this is not performant, will need to implement a comparison at each node where children are
   // rendered. If the array lengths are different, then will use [].concat to force update.
   const children = [].concat(stateChildren);
@@ -64,11 +64,6 @@ const mapStateToProps = (state, ownProps) => {
 
     selectedChildModelId = viewModel.viewModel.id;
     selectedTypeLabel = viewModel.viewModel.typeLabel;
-
-    // c.lo(viewModel, 'viewModel: ');
-    // c.lo(selectedChildViewId, 'selectedChildViewId: ');
-    // c.lo(selectedChildModelId, 'selectedChildModelId: ');
-    // c.lo(selectedTypeLabel, 'selectedTypeLabel: ');
   }
 
   return {

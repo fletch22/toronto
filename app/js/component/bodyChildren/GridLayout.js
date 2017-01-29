@@ -8,7 +8,7 @@ const ReactGridLayoutInitialized = widthProvider(ReactGridLayout);
 import '../../../css/f22-react-grid-layout.css';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
-import graphTraversal from '../../state/graphTraversal';
+import LayoutMinion from './LayoutMinion';
 
 class GridLayout extends React.Component {
 
@@ -45,38 +45,37 @@ class GridLayout extends React.Component {
       return { x: i * 2 % 12, y: Math.floor(i / 6) * y, w, h: y, i: i.toString() };
     });
   }
-
-  generateMinion(i, item) {
-    return (
-      <div key={i} data-grid={item}>
-        <span className="text">{i}</span>
-        <div className="layout-minion" data-view-id={i} onClick={this.props.onClick}>
-          <div style={{ width: '100%' }}>foo choo choo choo choofoo choo choo choo choofoo choo choo choo choofoo choo
-          choo choo choofoo choo choo choo choofoo choo choo choo choofoo choo choo choo choofoo choo choo choo choofoo
-          choo choo choo choofoo choo choo choo choofoo choo choo choo choofoo choo choo choo choofoo choo choo choo
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  generateDOM() {
+  generateRandomDOM() {
     const layout = this.generateLayout();
     return _.map(layout, (item, i) => {
       return this.generateMinion(i, item);
     });
   }
 
+  generateMinion(viewModel, gridItem) {
+    return (
+      <div key={gridItem.i} data-grid={gridItem}>
+        <LayoutMinion viewModel={viewModel} />
+      </div>
+    );
+  }
+
   render() {
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
 
-    // <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} { ...this.props }>
-    // { genderateDOM() }
-    // </ReactGridLayoutInitialized>
+    const generate = (layoutMinionViewModels) => {
+      return _.map(layoutMinionViewModels, (layoutMinViewModel, i) => {
+        const viewModel = layoutMinViewModel.viewModel;
+        const gridItem = { h: parseInt(viewModel.height, 10), w: parseInt(viewModel.width, 10), x: parseInt(viewModel.x, 10), y: parseInt(viewModel.y, 10), i: viewModel.key };
+        return this.generateMinion(layoutMinViewModel, gridItem);
+      });
+    };
 
     return (
-      <div data-type={ComponentTypes.Layout} className={wrapperClass} data-viewid={this.props.viewModel.id} onClick={this.props.onClick} style={{ height: '100px' }}>
-
+      <div data-type={ComponentTypes.Layout} className={wrapperClass} data-viewid={this.props.viewModel.id} onClick={this.props.onClick} style={{ minHeight: '100px' }}>
+        <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} { ...this.props }>
+          { generate(this.props.viewModel.viewModel.children)}
+        </ReactGridLayoutInitialized>
       </div>
     );
   }
@@ -90,17 +89,6 @@ GridLayout.propTypes = {
   onLayoutChange: PropTypes.func,
   onClick: PropTypes.func
 };
-
-// const mapStateToProps = (state, ownProps) => {
-//   const stateViewModel = graphTraversal.find(state, ownProps.id);
-//
-//   c.lo(stateViewModel, 'In ms2p:gridLayout: ');
-//   // TODO: Figure out how to handle selection.
-//
-//   return {
-//
-//   };
-// };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {

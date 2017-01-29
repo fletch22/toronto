@@ -16,12 +16,23 @@
 
 	4. Go to Vancouver Project
 
-		i. Edit ServiceFactory.java
-		ii. Add Service class
-		iii. Add Transformer Orb --> Front End Ready Model
-		iv. Add Dao -- set up method to copy Front-end-model --> Orb
-		v. Edit AppDesignerDao.
-		vi. Add to ReferenceResolverService.
+		ServiceJunction
+		ServiceFactory
+		DaoJunction
+		AppDesignerDao
+		AppDesignerModule
+		ReferenceResolverService
+
+		i. Add Child, Domain model, Dao, Service and Transformer
+		ii. Add the following in order:
+			ServiceJunction
+			ServiceFactory
+			DaoJunction
+			AppDesignerDao
+			AppDesignerModule
+			ReferenceResolverService // Code works without until you add a second sibling to 	//parent's children.
+		
+
 
 	5. If renderable on an dashboard island, add to Island component.
 	6. If renderable in a bodyChild component, add to the bodyChild generator.

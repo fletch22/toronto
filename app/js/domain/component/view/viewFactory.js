@@ -16,6 +16,13 @@ class ViewFactory {
       isSelected: false
     };
   }
+
+  createLayoutMinionView() {
+    return {
+      id: f22Uuid.generate(),
+      isSelected: false
+    };
+  }
 }
 
 export default new ViewFactory();

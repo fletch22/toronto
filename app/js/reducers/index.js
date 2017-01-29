@@ -10,7 +10,6 @@ import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
 import actionComponentCreator from './actionComponentCreatorHandler';
-import LayoutTranslator from '../component/bodyChildren/LayoutTranslator';
 import actionBodyChildSelector from './actionBodyChildSelectorHandler';
 
 const reducer = (state = defaultState.getInstance(), action) => {
@@ -31,18 +30,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       node.isShowingHeaderMenu = !node.isShowingHeaderMenu;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-      return stateNew;
-    }
-    case ACTIONS.types.DASHBOARD.BODY_CHILDREN.ACTION_PROCESS_ROOT_LAYOUT: {
-      const model = graphTraversal.find(stateNew.model, action.payload.pageId);
-
-      if (!model) {
-        console.log(`State:  ${JSON.stringify(action.payload.pageId)}`);
-        return state;
-      }
-
-      LayoutTranslator.translate(model, action.payload.layout);
-
       return stateNew;
     }
     case ACTIONS.types.ADD_APP: {
@@ -202,10 +189,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
 
-      return stateNew;
-    }
-    case ACTIONS.types.CREATE_BODY_COMPONENT: {
-      actionComponentCreator.generatePageChildComponent(stateNew, action);
       return stateNew;
     }
     case ACTIONS.types.CREATE_PSEUDO_MODAL_COMPONENT: {
