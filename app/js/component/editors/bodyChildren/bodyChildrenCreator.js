@@ -4,7 +4,7 @@ import crudActionCreator from '../../../actions/crudActionCreator';
 import graphTraversal from '../../../state/graphTraversal';
 import stateSyncService from '../../../service/stateSyncService';
 import StatePackager from '../../../service/StatePackager';
-import actionComponentCreator from '../../../reducers/actionComponentCreator';
+import actionComponentCreator from '../../../reducers/actionComponentCreatorHandler';
 
 class BodyChildrenCreator {
 

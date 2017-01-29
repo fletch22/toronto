@@ -1,13 +1,15 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
+import viewModelCreator from '../../utils/viewModelCreator';
+import layoutMinionModelFactory from '../../../domain/component/layoutMinionModelFactory';
 
 class Toolbar extends React.Component {
 
   render() {
     return (
       <div>
-        <Button faClass="fa-reddit-square" onClick={this.props.createLayout} />
+        <Button faClass="fa-reddit-square" onClick={this.props.createLayoutMinion} />
       </div>
     );
   }
@@ -15,50 +17,21 @@ class Toolbar extends React.Component {
 
 Toolbar.propTypes = {
   selectedChildViewId: PropTypes.any,
-  createLayout: PropTypes.func
+  selectedChildModelId: PropTypes.any,
+  createLayoutMinion: PropTypes.func
 };
-
-const mapStateToProps = (state, ownProps) => {
-  // const parent = graphTraversal.find(state, ownProps.id);
-  // const stateChildren = parent.viewModel.children;
-  // const propsChildren = ownProps.viewModel.children;
-  //
-  // let children = stateChildren;
-  // if (!util.doArrayElementsMatchIdentities(propsChildren, stateChildren)) {
-  //   children = [].concat(stateChildren);
-  // }
-  //
-  // let typeLabel;
-  // const selectedChildViewId = parent.selectedChildViewId;
-  // if (selectedChildViewId) {
-  //   const viewModel = graphTraversal.find(state, selectedChildViewId);
-  //   typeLabel = viewModel.viewModel.typeLabel;
-  // }
-  //
-  // return {
-  //   children,
-  //   selectedChildViewId,
-  //   typeLabel
-  // };
-
-  return {};
-};
-
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    createLayout: () => {
-      // const parentViewModel = Object.assign({}, ownProps);
-      // const model = layoutModelFactory.createInstance(ownProps.viewModel.id);
-      // const viewModel = actionComponentCreator.generateViewModel(ownProps.id, model);
-      //
-      // bodyChildrenCreator.createUpdate(dispatch, parentViewModel, viewModel, layoutService.createOrUpdate);
+    createLayoutMinion: () => {
+      const model = layoutMinionModelFactory.createInstance(ownProps.selectedChildModelId, 'foo', 1, 1, 0, 0);
+      viewModelCreator.create(dispatch, model, ownProps.selectedChildViewId);
     }
   };
 };
 
 Toolbar = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(Toolbar);
 

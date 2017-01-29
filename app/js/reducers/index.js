@@ -9,8 +9,9 @@ import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
-import actionComponentCreator from './actionComponentCreator';
+import actionComponentCreator from './actionComponentCreatorHandler';
 import LayoutTranslator from '../component/bodyChildren/LayoutTranslator';
+import actionBodyChildSelector from './actionBodyChildSelectorHandler';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
@@ -220,6 +221,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     // TODO: Needs a test.
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
+      // const intendedSelectedViewModelId = action.payload.viewModelId;
+      //
+      // return actionBodyChildSelector.process(stateNew, intendedSelectedViewModelId);
       const intendedSelectedViewModelId = action.payload.viewModelId;
 
       const intendedSelectedViewModel = graphTraversal.find(stateNew, intendedSelectedViewModelId);
@@ -248,29 +252,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {
       const childViewModelId = action.payload.viewModelId;
 
-      let pageViewNode;
       const intendedSelectedViewModel = graphTraversal.findParent(stateNew, childViewModelId);
-      intendedSelectedViewModel.isSelected = true;
-
-      pageViewNode = intendedSelectedViewModel;
-      let parentId = pageViewNode.parentId;
-      while (parentId !== actionComponentCreator.WEB_PAGE_ROOT) {
-        const parentNode = graphTraversal.find(stateNew, parentId);
-        if (!parentNode) {
-          throw new Error('Encountered problem trying to find web page root node.');
-        }
-        parentId = parentNode.parentId;
-        pageViewNode = parentNode;
-      }
-
-      if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== intendedSelectedViewModel.id) {
-        const viewModelCurrentlySelected = graphTraversal.find(stateNew, pageViewNode.selectedChildViewId);
-        viewModelCurrentlySelected.isSelected = false;
-      }
-
-      pageViewNode.selectedChildViewId = intendedSelectedViewModel.id;
-
-      return stateNew;
+      return actionBodyChildSelector.process(stateNew, intendedSelectedViewModel.id);
     }
     default: {
       return state;

@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import layoutModelFactory from '../../domain/component/layoutModelFactory';
-import actionComponentCreator from '../../reducers/actionComponentCreator';
+import actionComponentCreator from '../../reducers/actionComponentCreatorHandler';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 
-describe('actionComponentCreator', () => {
+describe('actionComponentCreatorHandler', () => {
   it('create a faithful model out of a view model', () => {
 
     const layoutModel = layoutModelFactory.createInstance('foo');

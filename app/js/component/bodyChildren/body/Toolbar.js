@@ -1,10 +1,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
+import ComponentTypes from '../../../domain/component/ComponentTypes';
+import viewModelCreator from '../../utils/viewModelCreator';
+import modelGenerator from '../../../domain/component/modelGenerator';
 import layoutModelFactory from '../../../domain/component/layoutModelFactory';
-import actionComponentCreator from '../../../reducers/actionComponentCreator';
-import bodyChildrenCreator from '../../../component/editors/bodyChildren/bodyChildrenCreator';
+import actionComponentCreatorHandler from '../../../reducers/actionComponentCreatorHandler';
 import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/index';
+import bodyChildrenCreator from '../../../component/editors/bodyChildren/bodyChildrenCreator';
 
 class Toolbar extends React.Component {
   render() {
@@ -25,14 +28,8 @@ Toolbar.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     createLayout: () => {
-      const model = layoutModelFactory.createInstance(ownProps.selectedChildModelId);
-      const viewModel = actionComponentCreator.generateViewModel(ownProps.selectedChildViewId, model);
-
-      const successCallback = () => {
-        dispatch(actionSetCurrentBodyTool(viewModel.id));
-      };
-
-      bodyChildrenCreator.createUpdate(dispatch, ownProps.selectedChildViewId, viewModel, successCallback);
+      const model = modelGenerator.generate(ownProps.selectedChildModelId, ComponentTypes.Layout);
+      viewModelCreator.create(dispatch, model, ownProps.selectedChildViewId);
     }
   };
 };

@@ -6,7 +6,7 @@ import f22Uuid from '../util/f22Uuid';
 import viewFactory from '../domain/component/view/viewFactory';
 import modelGenerator from '../../js/domain/component/modelGenerator';
 
-class ActionComponentCreator {
+class ActionComponentCreatorHandler {
 
   constructor() {
     this.WEB_PAGE_ROOT = 'WEB_PAGE_ROOT';
@@ -115,4 +115,4 @@ class ActionComponentCreator {
   }
 }
 
-export default new ActionComponentCreator();
+export default new ActionComponentCreatorHandler();
