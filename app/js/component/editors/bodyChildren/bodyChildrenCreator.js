@@ -20,6 +20,7 @@ class BodyChildrenCreator {
           const stateNew = JSON.parse(jsonStateOld);
 
           const stateParentViewModel = graphTraversal.find(stateNew, parentViewModelId);
+
           const stateViewModel = _.find(stateParentViewModel.viewModel.children, { id: viewModel.id });
           if (stateViewModel) {
             Object.assign(stateViewModel, viewModel);

@@ -6,8 +6,7 @@ class LayoutMinion extends React.Component {
 
   generate(layoutMinionViewModel) {
     const viewModel = layoutMinionViewModel.viewModel;
-    const gridItem = { h: parseInt(viewModel.height, 10), w: parseInt(viewModel.width, 10), x: parseInt(viewModel.x, 10), y: parseInt(viewModel.y, 10), i: viewModel.key };
-    return gridItem;
+    return { h: parseInt(viewModel.height, 10), w: parseInt(viewModel.width, 10), x: parseInt(viewModel.x, 10), y: parseInt(viewModel.y, 10), i: viewModel.key };
   }
 
   render() {

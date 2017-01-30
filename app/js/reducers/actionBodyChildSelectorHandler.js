@@ -6,8 +6,6 @@ class ActionBodyChildSelectorHandler {
   process(state, targetViewModelId) {
     const intendedSelectedViewModel = graphTraversal.find(state, targetViewModelId);
 
-    c.lo(intendedSelectedViewModel, 'intendedSelectedViewModel: ');
-
     intendedSelectedViewModel.isSelected = true;
 
     let pageViewNode = intendedSelectedViewModel;
