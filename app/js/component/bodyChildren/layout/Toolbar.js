@@ -24,7 +24,7 @@ Toolbar.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     createLayoutMinion: () => {
-      const model = layoutMinionModelFactory.createInstance(ownProps.selectedChildModelId, 'foo', "1", "1", "0", "0");
+      const model = layoutMinionModelFactory.createInstance(ownProps.selectedChildModelId, `${new Date().getTime()}`, '1', '1', '0', '0');
       viewModelCreator.create(dispatch, model, ownProps.selectedChildViewId);
     }
   };

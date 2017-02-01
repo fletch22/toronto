@@ -6,19 +6,23 @@ class ViewModelCreator {
   create(dispatch, model, parentViewId) {
     const viewModel = actionComponentCreatorHandler.generateViewModel(parentViewId, model);
 
-    const successCallback = () => {
-      dispatch(actionSetCurrentBodyTool(viewModel.id));
-    };
-
-    bodyChildrenCreator.createUpdate(dispatch, parentViewId, viewModel, successCallback);
+    this.persistArrayOfChildren(dispatch, [viewModel], parentViewId);
   }
 
   update(dispatch, viewModel, parentViewId) {
+    this.updateChildren(dispatch, [viewModel], parentViewId);
+  }
+
+  updateChildren(dispatch, viewModelChildren, parentViewId) {
+    this.persistArrayOfChildren(dispatch, viewModelChildren, parentViewId);
+  }
+
+  persistArrayOfChildren(dispatch, viewModelChildren, parentViewId) {
     const successCallback = () => {
-      dispatch(actionSetCurrentBodyTool(viewModel.id));
+      dispatch(actionSetCurrentBodyTool(parentViewId.id));
     };
 
-    bodyChildrenCreator.createUpdate(dispatch, parentViewId, viewModel, successCallback);
+    bodyChildrenCreator.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback);
   }
 }
 

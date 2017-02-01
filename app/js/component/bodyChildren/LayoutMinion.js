@@ -12,9 +12,12 @@ class LayoutMinion extends React.Component {
   render() {
     const gridItem = this.generate(this.props.viewModel);
 
+    let label = gridItem.i;
+    label = (label.length > 3) ? `${label.substring(0, 2)}...` : label;
+
     return (
       <div>
-        <span className="text">{gridItem.i}</span>
+        <span className="text">{label}</span>
         <div className="layout-minion" data-viewid={this.props.id} onClick={this.props.onClick}>
           <div style={{ width: '100%' }}>foo choo choo choo choofoo choo choo choo choofoo choo choo choo choofoo choo
             choo choo choofoo choo choo choo choofoo choo choo choo choofoo choo choo choo choofoo choo choo choo choofoo

@@ -12,7 +12,11 @@ class BodyChildrenCreator {
     this.statePackager = new StatePackager();
   }
 
-  createUpdate(dispatch, parentViewModelId, viewModel, successCallback) {
+  createUpdateChild(dispatch, parentViewModelId, viewModel, successCallback) {
+    return this.createUpdateChildren(dispatch, parentViewModelId, [viewModel], successCallback);
+  }
+
+  createUpdateChildren(dispatch, parentViewModelId, viewModelChildren, successCallback) {
     const dispatchHelper = () => {
       const createUpdate = (cuDispatch, state) => {
         try {
@@ -21,21 +25,25 @@ class BodyChildrenCreator {
 
           const stateParentViewModel = graphTraversal.find(stateNew, parentViewModelId);
 
-          const stateViewModel = _.find(stateParentViewModel.viewModel.children, { id: viewModel.id });
-          if (stateViewModel) {
-            Object.assign(stateViewModel, viewModel);
-          } else {
-            stateParentViewModel.viewModel.children.push(viewModel);
-          }
+          viewModelChildren.forEach((viewModel) => {
+            const stateViewModel = _.find(stateParentViewModel.viewModel.children, { id: viewModel.id });
+            if (stateViewModel) {
+              Object.assign(stateViewModel, viewModel);
+            } else {
+              this.clearViewModelTopRow(stateParentViewModel.viewModel.children);
+              stateParentViewModel.viewModel.children.push(viewModel);
+            }
 
-          const model = actionComponentCreator.extractModelFromViewModel(viewModel);
-          const parentModel = graphTraversal.find(stateNew.model, model.parentId);
-          const stateModel = _.find(parentModel.children, { id: model.id });
-          if (stateModel) {
-            Object.assign(stateModel, model);
-          } else {
-            parentModel.children.push(model);
-          }
+            const model = actionComponentCreator.extractModelFromViewModel(viewModel);
+            const parentModel = graphTraversal.find(stateNew.model, model.parentId);
+            const stateModel = _.find(parentModel.children, { id: model.id });
+            if (stateModel) {
+              Object.assign(stateModel, model);
+            } else {
+              this.clearModelTopRow(parentModel.children);
+              parentModel.children.push(model);
+            }
+          });
 
           const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
           return stateSyncService.saveState(statePackage)
@@ -58,6 +66,20 @@ class BodyChildrenCreator {
     };
 
     dispatch(dispatchHelper());
+  }
+
+  clearViewModelTopRow(viewModels) {
+    viewModels.forEach((vm) => {
+      /* eslint-disable no-param-reassign */
+      vm.viewModel.y += 1;
+    });
+  }
+
+  clearModelTopRow(models) {
+    models.forEach((model) => {
+      /* eslint-disable no-param-reassign */
+      model.y += 1;
+    });
   }
 }
 
