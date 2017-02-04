@@ -210,6 +210,17 @@ Begin Dashboard
   text-align: center;
 }
 
+#main .move-minion {
+  background-image: url('../../images/move-minion.svg');
+  background-size: 18px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px;
+  display: inline-block;
+}
+
 /**
 
 End Dashboard
@@ -222,4 +233,8 @@ End Dashboard
 
 .tab-content {
   margin: 5px 1.5px;
+}
+
+.hidden {
+  visibility: hidden;
 }

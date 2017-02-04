@@ -4,10 +4,6 @@ import Button from '../toolbar/Button';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
 import viewModelCreator from '../../utils/viewModelCreator';
 import modelGenerator from '../../../domain/component/modelGenerator';
-import layoutModelFactory from '../../../domain/component/layoutModelFactory';
-import actionComponentCreatorHandler from '../../../reducers/actionComponentCreatorHandler';
-import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/index';
-import bodyChildrenCreator from '../../../component/editors/bodyChildren/bodyChildrenCreator';
 
 class Toolbar extends React.Component {
   render() {

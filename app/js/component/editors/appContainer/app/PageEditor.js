@@ -5,10 +5,9 @@ import { Tabs, Tab } from 'react-bootstrap';
 import MetaData from '../../../dashboard/app/website/page/MetaData';
 import graphTraversal from '../../../../state/graphTraversal';
 import { actionUpdateViewPropertyValue } from '../../../../actions/index';
-import ComponentChildren from '../../../bodyChildren/ComponentChildren';
+import Body from '../../../../component/bodyChildren/body/Body';
 
 class PageEditor extends React.Component {
-
   render() {
     return (
       <div>
@@ -16,7 +15,7 @@ class PageEditor extends React.Component {
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><ComponentChildren { ... this.props.viewModel } /></Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><Body { ... this.props.viewModel } /></Tab>
         </Tabs>
       </div>
     );
@@ -49,7 +48,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     handleSelect: (event) => {
-      window.dispatchEvent(new Event('resize'));
       dispatch(actionUpdateViewPropertyValue(ownProps.id, 'activeTab', event, true));
     }
   };

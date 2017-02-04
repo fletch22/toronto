@@ -9,7 +9,7 @@ class ComponentChild extends React.Component {
     let component;
     switch (this.props.viewModel.viewModel.typeLabel) {
       case ComponentTypes.Layout: {
-        component = <GridLayout id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
+        component = <GridLayout id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} children={this.props.viewModel.viewModel.children} />;
         break;
       }
       case ComponentTypes.LayoutMinion: {
@@ -31,7 +31,7 @@ class ComponentChild extends React.Component {
 ComponentChild.propTypes = {
   id: PropTypes.any,
   isSelected: PropTypes.bool,
-  viewModel: PropTypes.object
+  viewModel: PropTypes.object,
 };
 
 export default ComponentChild;

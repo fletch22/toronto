@@ -6,7 +6,9 @@ import { actionSetCurrentBodyToolToParent } from '../../actions/bodyChildrenEdit
 class HierNavButtonToolbar extends React.Component {
   render() {
     return (
-      <Button faClass="fa-caret-square-o-up" tooltipText="Move up the hierarchy." onClick={this.props.onClick} />
+      <div>
+        <Button faClass="fa-caret-square-o-up" tooltipText="Move up the hierarchy." onClick={this.props.onClick} />
+      </div>
     );
   }
 }

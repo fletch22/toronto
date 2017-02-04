@@ -9,8 +9,19 @@ import ComponentTypes from '../../domain/component/ComponentTypes';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 import ComponentChild from './ComponentChild';
 import LayoutService from '../../service/component/LayoutChangeService';
+import graphTraversal from '../../state/graphTraversal';
+import update from 'react-addons-update';
 
 class GridLayout extends React.Component {
+
+  static refreshGrid() {
+    window.setTimeout(() => {
+      console.log('Dispatching resize event.');
+      const evt = document.createEvent('HTMLEvents');
+      evt.initEvent('resize', true, false);
+      window.dispatchEvent(evt);
+    }, 200);
+  }
 
   generateMinion(viewModel, gridItem) {
     const wrapperClass = (viewModel.isSelected) ? 'body-child-selected' : '';
@@ -26,22 +37,27 @@ class GridLayout extends React.Component {
     let wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
     wrapperClass += ' grid-item';
 
-    const generate = (layoutMinionViewModels) => {
-      return _.map(layoutMinionViewModels, (layoutMinViewModel, i) => {
+    const generate = () => {
+      const layoutMinionViewModels = this.props.children;
+      const isStatic = this.props.isStatic;
+
+      return _.map(layoutMinionViewModels, (layoutMinViewModel) => {
         const viewModel = layoutMinViewModel.viewModel;
-        const gridItem = { h: parseInt(viewModel.height, 10), w: parseInt(viewModel.width, 10), x: parseInt(viewModel.x, 10), y: parseInt(viewModel.y, 10), i: viewModel.key };
+        const gridItem = { h: parseInt(viewModel.height, 10),
+          w: parseInt(viewModel.width, 10),
+          x: parseInt(viewModel.x, 10),
+          y: parseInt(viewModel.y, 10),
+          i: isStatic ? `${viewModel.key}-static` : viewModel.key,
+          static: isStatic
+        };
         return this.generateMinion(layoutMinViewModel, gridItem);
       });
     };
 
-    // _.map(this.props.viewModel.viewModel.children, (child) =>
-    //   <GridLayoutMinion key={child.id} viewModel={child} />)
-    // }
-
     return (
       <div data-type={ComponentTypes.Layout} className={wrapperClass} data-viewid={this.props.viewModel.id} onClick={this.props.onClick} style={{ minHeight: '100px' }}>
-        <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} { ...this.props }>
-          { generate(this.props.viewModel.viewModel.children)}
+        <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange}>
+          { generate()}
         </ReactGridLayoutInitialized>
       </div>
     );
@@ -52,17 +68,25 @@ GridLayout.propTypes = {
   id: PropTypes.any,
   viewModel: PropTypes.any,
   isSelected: PropTypes.bool,
-  pageChildren: PropTypes.array,
+  isStatic: PropTypes.bool,
+  children: PropTypes.array,
   onLayoutChange: PropTypes.func,
   onClick: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => {
+  GridLayout.refreshGrid();
+
+  const viewModel = graphTraversal.find(state, ownProps.id);
+  // const children = graphTraversal.find(state, ownProps.id);
+
   c.l('Mapping state to props...');
-  const pageChildren = [].concat(ownProps.viewModel.viewModel.children);
+  const children = [].concat(viewModel.viewModel.children);
+  // const children = update(viewModel.viewModel.children, { $push: [] });
 
   return {
-    pageChildren
+    children,
+    isStatic: viewModel.isStatic
   };
 };
 
@@ -71,8 +95,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onLayoutChange: (layout) => {
       // NOTE: Attempt to avoid misrendering.
       LayoutService.handleLayoutChange(ownProps.viewModel, layout, dispatch);
-
-      window.dispatchEvent(new Event('resize'));
     },
     onClick: (event) => {
       event.stopPropagation();
@@ -87,4 +109,5 @@ GridLayout = connect(
 )(GridLayout);
 
 export default GridLayout;
+
 

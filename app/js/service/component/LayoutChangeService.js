@@ -11,7 +11,6 @@ class LayoutChangeService {
         const model = layoutMinion.viewModel;
 
         if (this.isGridInfoDifferent(gridItem, model)) {
-          c.l('Updating ...');
           model.height = gridItem.h;
           model.width = gridItem.w;
           model.x = gridItem.x;

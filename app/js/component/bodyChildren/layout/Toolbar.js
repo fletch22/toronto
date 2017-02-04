@@ -3,13 +3,17 @@ import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
 import viewModelCreator from '../../utils/viewModelCreator';
 import layoutMinionModelFactory from '../../../domain/component/layoutMinionModelFactory';
+import { actionToggleMinionStaticLock } from '../../../actions/bodyChildrenEditor/index';
 
 class Toolbar extends React.Component {
 
   render() {
+    const faClass = 'fa-unlock';
+
     return (
       <div>
         <Button faClass="fa-reddit-square" onClick={this.props.createLayoutMinion} />
+        <Button faClass={faClass} onClick={this.props.toggleMinionStaticLock} />
       </div>
     );
   }
@@ -18,7 +22,8 @@ class Toolbar extends React.Component {
 Toolbar.propTypes = {
   selectedChildViewId: PropTypes.any,
   selectedChildModelId: PropTypes.any,
-  createLayoutMinion: PropTypes.func
+  createLayoutMinion: PropTypes.func,
+  toggleMinionStaticLock: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -26,6 +31,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     createLayoutMinion: () => {
       const model = layoutMinionModelFactory.createInstance(ownProps.selectedChildModelId, `${new Date().getTime()}`, '1', '1', '0', '0');
       viewModelCreator.create(dispatch, model, ownProps.selectedChildViewId);
+    },
+    toggleMinionStaticLock: () => {
+      dispatch(actionToggleMinionStaticLock(ownProps.selectedChildViewId));
     }
   };
 };

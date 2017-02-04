@@ -13,7 +13,8 @@ class ViewFactory {
   createLayoutView() {
     return {
       id: f22Uuid.generate(),
-      isSelected: false
+      isSelected: false,
+      isStatic: false
     };
   }
 
