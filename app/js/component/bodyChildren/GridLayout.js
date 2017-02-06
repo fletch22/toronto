@@ -10,13 +10,13 @@ import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index
 import ComponentChild from './ComponentChild';
 import LayoutService from '../../service/component/LayoutChangeService';
 import graphTraversal from '../../state/graphTraversal';
-import update from 'react-addons-update';
+import actionComponentCreator from '../../reducers/actionComponentCreatorHandler';
 
 class GridLayout extends React.Component {
 
+  // NOTE: This is trick to get the grid to render correctly after load.
   static refreshGrid() {
     window.setTimeout(() => {
-      console.log('Dispatching resize event.');
       const evt = document.createEvent('HTMLEvents');
       evt.initEvent('resize', true, false);
       window.dispatchEvent(evt);
@@ -34,12 +34,12 @@ class GridLayout extends React.Component {
   }
 
   render() {
-    let wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
+    let wrapperClass = (this.props.isSelected) ? 'body-child-selected' : 'grid-layout';
     wrapperClass += ' grid-item';
 
     const generate = () => {
-      const layoutMinionViewModels = this.props.children;
-      const isStatic = this.props.isStatic;
+      const layoutMinionViewModels = this.props.viewModel.viewModel.children;
+      const isStatic = this.props.viewModel.isStatic;
 
       return _.map(layoutMinionViewModels, (layoutMinViewModel) => {
         const viewModel = layoutMinViewModel.viewModel;
@@ -54,9 +54,20 @@ class GridLayout extends React.Component {
       });
     };
 
+    let rowHeight = 35;
+
+    if (this.props.ancestorCount > 2) {
+      rowHeight = rowHeight - (0.1 * this.props.ancestorCount);
+    }
+
     return (
-      <div data-type={ComponentTypes.Layout} className={wrapperClass} data-viewid={this.props.viewModel.id} onClick={this.props.onClick} style={{ minHeight: '100px' }}>
-        <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange}>
+      <div data-type={ComponentTypes.Layout}
+        className={wrapperClass}
+        data-viewid={this.props.viewModel.id}
+        onClick={this.props.onClick}
+        style={{ height: '100%', width: '100%', minHeight: '50px', backgroundColor: 'white', padding: '5px', margin: '0px', verticalAlign: 'top' }}
+      >
+        <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} margin={[1, 2]} containerPadding={[1, 0]} rowHeight={rowHeight}>
           { generate()}
         </ReactGridLayoutInitialized>
       </div>
@@ -71,22 +82,43 @@ GridLayout.propTypes = {
   isStatic: PropTypes.bool,
   children: PropTypes.array,
   onLayoutChange: PropTypes.func,
+  ancestorCount: PropTypes.number,
   onClick: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => {
   GridLayout.refreshGrid();
-
   const viewModel = graphTraversal.find(state, ownProps.id);
-  // const children = graphTraversal.find(state, ownProps.id);
 
-  c.l('Mapping state to props...');
-  const children = [].concat(viewModel.viewModel.children);
-  // const children = update(viewModel.viewModel.children, { $push: [] });
+  let ancestorCount = 1;
+
+  let children = null;
+  let isStatic = false;
+  let isSelected = false;
+  if (viewModel) {
+    children = [].concat(viewModel.viewModel.children);
+    isStatic = viewModel.isStatic;
+    isSelected = viewModel.isSelected;
+
+    // TEST
+    let parentNodeId = viewModel.parentId;
+    while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
+      const parentNode = graphTraversal.find(state, parentNodeId);
+      if (!parentNode) {
+        throw new Error('Encountered problem trying to find web page root node.');
+      }
+      parentNodeId = parentNode.parentId;
+      ++ancestorCount;
+    }
+    c.l('Ancestors: ' + ancestorCount);
+    // TEST
+  }
 
   return {
     children,
-    isStatic: viewModel.isStatic
+    isStatic,
+    isSelected,
+    ancestorCount
   };
 };
 

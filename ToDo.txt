@@ -36,3 +36,19 @@
 
 	5. If renderable on an dashboard island, add to Island component.
 	6. If renderable in a bodyChild component, add to the bodyChild generator.
+
+
+2/4
+
+1. Continuing to remove the viewModelChildId, etc from toolbar buttons.
+Done.
+
+2. Fixing static can't move during add problem.
+
+
+3. Fix rewind/update problem with Minions.
+Done.
+
+4. Go up one too far (1 past page) causes console error. (id undefined)
+Done.
+

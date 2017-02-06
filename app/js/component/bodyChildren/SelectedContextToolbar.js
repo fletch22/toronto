@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { default as LayoutToolbar } from './layout/Toolbar';
 import { default as BodyToolbar } from './body/Toolbar';
+import { default as LayoutMinionToolbar } from './layoutMinion/Toolbar';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import HierNavButtonToolbar from '../../component/bodyChildren/HierNavButtonToolbar';
 
@@ -9,15 +10,20 @@ class SelectedContextToolbar extends React.Component {
   render() {
     let toolbar = '';
     let description = '';
-    switch (this.props.selectedTypeLabel) {
+    switch (this.props.selectedViewModel.viewModel.typeLabel) {
       case ComponentTypes.WebPage: {
-        toolbar = <BodyToolbar selectedChildViewId={this.props.selectedChildViewId} selectedChildModelId={this.props.selectedChildModelId} />;
+        toolbar = <BodyToolbar selectedViewModel={this.props.selectedViewModel} />;
         description = (<span>This element is the root of your page. There can be only <a href="https://media.giphy.com/media/sqtSOp8DOsIa4/giphy.gif">one.</a></span>);
         break;
       }
       case ComponentTypes.Layout: {
-        toolbar = <LayoutToolbar selectedChildViewId={this.props.selectedChildViewId} selectedChildModelId={this.props.selectedChildModelId} />;
+        toolbar = <LayoutToolbar selectedViewModel={this.props.selectedViewModel} />;
         description = 'This element helps you form the foundation your page. Want a smaller, nested, layout? Select an element, then click the \'Layout\' button.';
+        break;
+      }
+      case ComponentTypes.LayoutMinion: {
+        toolbar = <LayoutMinionToolbar selectedViewModel={this.props.selectedViewModel} />;
+        description = 'This element is a moveable resizable container for your content.';
         break;
       }
       default:
@@ -28,14 +34,14 @@ class SelectedContextToolbar extends React.Component {
       <div>
         <div className="bc-toolbar-col-1">
           <div className="bc-toolbar-title-label">
-          { this.props.selectedTypeLabel }
+          { this.props.selectedViewModel.viewModel.typeLabel }
           </div>
           <div className="bc-toolbar-description">
             { description }
           </div>
         </div>
         <div className="bc-toolbar-col-2">
-          <HierNavButtonToolbar selectedChildViewId={this.props.selectedChildViewId} />
+          <HierNavButtonToolbar selectedChildViewId={this.props.selectedViewModel.id} />
           { toolbar }
         </div>
       </div>
@@ -44,9 +50,7 @@ class SelectedContextToolbar extends React.Component {
 }
 
 SelectedContextToolbar.propTypes = {
-  selectedChildViewId: PropTypes.any,
-  selectedChildModelId: PropTypes.any,
-  selectedTypeLabel: PropTypes.string
+  selectedViewModel: PropTypes.object
 };
 
 export default SelectedContextToolbar;

@@ -140,7 +140,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.ENSURE_INTIAL_STATE_SAVED: {
       if (!stateNew.hasInitialStateBeenSaved) {
-        console.debug('Saving initial state in reducer ...');
         stateNew.hasInitialStateBeenSaved = true;
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
@@ -202,18 +201,19 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    // TODO: Needs a test.
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
       const intendedSelectedViewModelId = action.payload.viewModelId;
 
       return actionBodyChildSelector.process(stateNew, intendedSelectedViewModelId);
     }
-    // TODO: Needs a test.
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {
       const childViewModelId = action.payload.viewModelId;
-
       const intendedSelectedViewModel = graphTraversal.findParent(stateNew, childViewModelId);
-      return actionBodyChildSelector.process(stateNew, intendedSelectedViewModel.id);
+
+      if (intendedSelectedViewModel) {
+        return actionBodyChildSelector.process(stateNew, intendedSelectedViewModel.id);
+      }
+      return state;
     }
     case ACTIONS.types.TOGGLE_MINION_STATIC_LOCK: {
       const selectedViewModelId = action.payload.selectedViewModelId;
@@ -221,12 +221,18 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const layoutViewModel = graphTraversal.find(stateNew, selectedViewModelId);
       layoutViewModel.isStatic = !layoutViewModel.isStatic;
 
-      c.l(action.payload.selectedViewModelId);
-      c.l('layout is static: ' + layoutViewModel.isStatic);
-
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
+    }
+    // Deprecated
+    case ACTIONS.types.TOGGLE_BORDER: {
+      c.l('ViewId: ' + action.payload.viewId);
+
+      // const layoutViewModel = graphTraversal.find(stateNew, selectedViewModelId);
+      // model
+
+      return state;
     }
     default: {
       return state;

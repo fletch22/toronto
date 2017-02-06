@@ -20,6 +20,7 @@ class ActionBodyChildSelectorHandler {
     }
 
     if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== intendedSelectedViewModel.id) {
+      c.l('Deselecting current.');
       const currentlySelectedViewModel = graphTraversal.find(state, pageViewNode.selectedChildViewId);
       currentlySelectedViewModel.isSelected = false;
     }

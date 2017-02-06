@@ -8,32 +8,37 @@ import { actionToggleMinionStaticLock } from '../../../actions/bodyChildrenEdito
 class Toolbar extends React.Component {
 
   render() {
-    const faClass = 'fa-unlock';
+    const staticLockCssClass = (this.props.selectedViewModel.isStatic) ? 'fa-lock' : 'fa-unlock';
+    let minionCssClass = 'fa-reddit-square';
+    let minionClick = this.props.createLayoutMinion;
+    if (this.props.selectedViewModel.isStatic) {
+      minionCssClass += ' disabled';
+      minionClick = undefined;
+    }
 
     return (
       <div>
-        <Button faClass="fa-reddit-square" onClick={this.props.createLayoutMinion} />
-        <Button faClass={faClass} onClick={this.props.toggleMinionStaticLock} />
+        <Button faClass={minionCssClass} onClick={minionClick} />
+        <Button faClass={staticLockCssClass} onClick={this.props.toggleMinionStaticLock} />
       </div>
     );
   }
 }
 
 Toolbar.propTypes = {
-  selectedChildViewId: PropTypes.any,
-  selectedChildModelId: PropTypes.any,
   createLayoutMinion: PropTypes.func,
+  selectedViewModel: PropTypes.object,
   toggleMinionStaticLock: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     createLayoutMinion: () => {
-      const model = layoutMinionModelFactory.createInstance(ownProps.selectedChildModelId, `${new Date().getTime()}`, '1', '1', '0', '0');
-      viewModelCreator.create(dispatch, model, ownProps.selectedChildViewId);
+      const model = layoutMinionModelFactory.createInstance(ownProps.selectedViewModel.viewModel.id, `${new Date().getTime()}`, '1', '1', '0', '0', '');
+      viewModelCreator.create(dispatch, model, ownProps.selectedViewModel.id);
     },
     toggleMinionStaticLock: () => {
-      dispatch(actionToggleMinionStaticLock(ownProps.selectedChildViewId));
+      dispatch(actionToggleMinionStaticLock(ownProps.selectedViewModel.id));
     }
   };
 };

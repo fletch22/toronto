@@ -4,7 +4,7 @@ import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class LayoutMinionFactory extends ModelFactory {
 
-  createInstance(parentId, key, height, width, x, y) {
+  createInstance(parentId, key, height, width, x, y, style) {
     const id = f22Uuid.generate();
 
     const instance = {
@@ -16,6 +16,7 @@ class LayoutMinionFactory extends ModelFactory {
       width,
       x,
       y,
+      style,
       children: []
     };
 

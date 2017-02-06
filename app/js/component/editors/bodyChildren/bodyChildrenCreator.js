@@ -5,6 +5,7 @@ import graphTraversal from '../../../state/graphTraversal';
 import stateSyncService from '../../../service/stateSyncService';
 import StatePackager from '../../../service/StatePackager';
 import actionComponentCreator from '../../../reducers/actionComponentCreatorHandler';
+import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class BodyChildrenCreator {
 
@@ -30,17 +31,18 @@ class BodyChildrenCreator {
             if (stateViewModel) {
               Object.assign(stateViewModel, viewModel);
             } else {
-              this.clearViewModelTopRow(stateParentViewModel.viewModel.children);
+              this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
               stateParentViewModel.viewModel.children.push(viewModel);
             }
 
             const model = actionComponentCreator.extractModelFromViewModel(viewModel);
+
             const parentModel = graphTraversal.find(stateNew.model, model.parentId);
             const stateModel = _.find(parentModel.children, { id: model.id });
             if (stateModel) {
               Object.assign(stateModel, model);
             } else {
-              this.clearModelTopRow(parentModel.children);
+              this.ensureModelSiblingsPrepped(parentModel.children, parentModel.typeLabel);
               parentModel.children.push(model);
             }
           });
@@ -68,14 +70,34 @@ class BodyChildrenCreator {
     dispatch(dispatchHelper());
   }
 
-  clearViewModelTopRow(viewModels) {
+  ensureViewModelSiblingsPrepped(children, parentTypeLabel) {
+    switch (parentTypeLabel) {
+      case ComponentTypes.Layout: {
+        this.shiftViewModelTopRowDown(children);
+        break;
+      }
+      default:
+    }
+  }
+
+  ensureModelSiblingsPrepped(children, parentTypeLabel) {
+    switch (parentTypeLabel) {
+      case ComponentTypes.Layout: {
+        this.shiftModelTopRowDown(children);
+        break;
+      }
+      default:
+    }
+  }
+
+  shiftViewModelTopRowDown(viewModels) {
     viewModels.forEach((vm) => {
       /* eslint-disable no-param-reassign */
       vm.viewModel.y += 1;
     });
   }
 
-  clearModelTopRow(models) {
+  shiftModelTopRowDown(models) {
     models.forEach((model) => {
       /* eslint-disable no-param-reassign */
       model.y += 1;

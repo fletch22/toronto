@@ -177,7 +177,10 @@ Begin Dashboard
 }
 
 .body-child-selected {
-  outline: thick solid red;
+  position: relative;
+  outline: 10px solid gray;
+  outline-offset: -7px;
+  z-index: 30000;
 }
 
 .bc-toolbar-col-1 {
@@ -219,6 +222,12 @@ Begin Dashboard
   height: 24px;
   margin: 2px;
   display: inline-block;
+}
+
+.grid-layout {
+  outline: 1px blue dashed;
+  position: relative;
+  z-index: 3000;
 }
 
 /**

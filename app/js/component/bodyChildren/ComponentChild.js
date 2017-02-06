@@ -31,7 +31,7 @@ class ComponentChild extends React.Component {
 ComponentChild.propTypes = {
   id: PropTypes.any,
   isSelected: PropTypes.bool,
-  viewModel: PropTypes.object,
+  viewModel: PropTypes.object
 };
 
 export default ComponentChild;

@@ -13,11 +13,11 @@ class Body extends React.Component {
 
     return (
       <div>
-        <table style={{ width: '100%' }}>
+        <table style={{ width: '100%', height: '100%' }}>
           <tbody>
             <tr>
               <td className="body-children-toolbar-col">
-                <SelectedContextToolbar selectedTypeLabel={this.props.selectedTypeLabel} selectedChildViewId={this.props.selectedChildViewId} selectedChildModelId={this.props.selectedChildModelId} />
+                <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
               </td>
               <td className={wrapperClass} style={{ minWidth: '1300px', maxWidth: '1300px' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
                 {
@@ -37,9 +37,7 @@ class Body extends React.Component {
 Body.propTypes = {
   id: PropTypes.any,
   viewModel: PropTypes.object,
-  selectedChildViewId: PropTypes.any,
-  selectedChildModelId: PropTypes.any,
-  selectedTypeLabel: PropTypes.string,
+  selectedViewModel: PropTypes.object,
   selectChild: PropTypes.func,
   isSelected: PropTypes.bool,
   children: PropTypes.array
@@ -54,21 +52,15 @@ const mapStateToProps = (state, ownProps) => {
   // rendered. If the array lengths are different, then will use [].concat to force update.
   const children = [].concat(stateChildren);
 
-  let selectedTypeLabel;
-  let selectedChildModelId;
+  let selectedViewModel;
   const selectedChildViewId = (parent.selectedChildViewId) ? parent.selectedChildViewId : parent.id;
   if (selectedChildViewId) {
-    const viewModel = graphTraversal.find(state, selectedChildViewId);
-
-    selectedChildModelId = viewModel.viewModel.id;
-    selectedTypeLabel = viewModel.viewModel.typeLabel;
+    selectedViewModel = Object.assign({}, graphTraversal.find(state, selectedChildViewId));
   }
 
   return {
     children,
-    selectedChildViewId,
-    selectedChildModelId,
-    selectedTypeLabel,
+    selectedViewModel,
     isSelected: selectedChildViewId === ownProps.id
   };
 };
