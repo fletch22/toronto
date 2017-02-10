@@ -8,11 +8,11 @@ class LayoutMinion extends React.Component {
   render() {
     const children = (this.props.viewModel.viewModel.children) ? this.props.viewModel.viewModel.children : [];
 
-    let style;
-    if (this.props.viewModel.viewModel.style === '') {
-      style = { padding: '0', margin: '0', width: '100%' };
-    } else {
+    let style = {};
+    if (this.props.viewModel.viewModel.style) {
       style = JSON.parse(this.props.viewModel.viewModel.style);
+      style.padding = '0px';
+      style.margin = '0px';
     }
 
     return (
@@ -32,7 +32,10 @@ LayoutMinion.propTypes = {
   viewModel: PropTypes.object,
   onClick: PropTypes.func,
   isSelected: PropTypes.bool,
-  foo: PropTypes.any
+  areBordersVisible: PropTypes.bool,
+  vm: PropTypes.any,
+  children: PropTypes.array,
+  style: PropTypes.string
 };
 
 const mapDispatchToProps = (dispatch) => {

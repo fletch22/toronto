@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
 import viewModelCreator from '../../utils/viewModelCreator';
 import layoutMinionModelFactory from '../../../domain/component/layoutMinionModelFactory';
-import { actionToggleMinionStaticLock } from '../../../actions/bodyChildrenEditor/index';
+import { actionToggleMinionStaticLock, actionToggleLayoutMinionBorders } from '../../../actions/bodyChildrenEditor/index';
 
 class Toolbar extends React.Component {
 
@@ -20,6 +20,7 @@ class Toolbar extends React.Component {
       <div>
         <Button faClass={minionCssClass} onClick={minionClick} />
         <Button faClass={staticLockCssClass} onClick={this.props.toggleMinionStaticLock} />
+        <Button faClass="fa-pencil-square-o" onClick={this.props.toggleMinionBorders} />
       </div>
     );
   }
@@ -28,7 +29,8 @@ class Toolbar extends React.Component {
 Toolbar.propTypes = {
   createLayoutMinion: PropTypes.func,
   selectedViewModel: PropTypes.object,
-  toggleMinionStaticLock: PropTypes.func
+  toggleMinionStaticLock: PropTypes.func,
+  toggleMinionBorders: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -39,6 +41,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     toggleMinionStaticLock: () => {
       dispatch(actionToggleMinionStaticLock(ownProps.selectedViewModel.id));
+    },
+    toggleMinionBorders: () => {
+      dispatch(actionToggleLayoutMinionBorders(ownProps.selectedViewModel.id));
     }
   };
 };

@@ -4,7 +4,9 @@ import actionComponentCreator from './actionComponentCreatorHandler';
 class ActionBodyChildSelectorHandler {
 
   process(state, targetViewModelId) {
-    const intendedSelectedViewModel = graphTraversal.find(state, targetViewModelId);
+    const parentOfIntended = graphTraversal.findParent(state, targetViewModelId);
+    const intendedSelectedViewModel = graphTraversal.find(parentOfIntended.viewModel.children, targetViewModelId);
+    parentOfIntended.viewModel.children = [].concat(parentOfIntended.viewModel.children);
 
     intendedSelectedViewModel.isSelected = true;
 
@@ -20,9 +22,10 @@ class ActionBodyChildSelectorHandler {
     }
 
     if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== intendedSelectedViewModel.id) {
-      c.l('Deselecting current.');
-      const currentlySelectedViewModel = graphTraversal.find(state, pageViewNode.selectedChildViewId);
+      const parentOfExisting = graphTraversal.findParent(state, pageViewNode.selectedChildViewId);
+      const currentlySelectedViewModel = graphTraversal.find(parentOfExisting.viewModel.children, pageViewNode.selectedChildViewId);
       currentlySelectedViewModel.isSelected = false;
+      parentOfExisting.viewModel.children = [].concat(parentOfExisting.viewModel.children);
     }
     pageViewNode.selectedChildViewId = targetViewModelId;
 

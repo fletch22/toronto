@@ -14,7 +14,8 @@ class ViewFactory {
     return {
       id: f22Uuid.generate(),
       isSelected: false,
-      isStatic: false
+      isStatic: false,
+      areMinionBordersVisible: false
     };
   }
 

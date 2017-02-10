@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import reducer from '../reducers/index';
-import DevTools from '../containers/DevTools';
+import DevTools from '../component/DevTools';
 import currentStateRetriever from '../domain/stateRetriever';
 import thunk from 'redux-thunk';
 

@@ -2,7 +2,7 @@ export const ACTIONS = {
   SET_CURRENT_BODY_CHILD_TOOL: 'SET_CURRENT_BODY_CHILD_TOOL',
   SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: 'SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL',
   TOGGLE_MINION_STATIC_LOCK: 'TOGGLE_MINION_STATIC_LOCK',
-  TOGGLE_BORDER: 'TOGGLE_BORDER'
+  TOGGLE_LAYOUT_MINION_BORDERS: 'TOGGLE_LAYOUT_MINION_BORDERS'
 };
 
 export const actionSetCurrentBodyTool = (viewModelId) => ({
@@ -26,9 +26,8 @@ export const actionToggleMinionStaticLock = (selectedViewModelId) => ({
   }
 });
 
-// Deprecated
-export const actionToggleBorder = (viewId) => ({
-  type: ACTIONS.TOGGLE_BORDER,
+export const actionToggleLayoutMinionBorders = (viewId) => ({
+  type: ACTIONS.TOGGLE_LAYOUT_MINION_BORDERS,
   payload: {
     viewId
   }

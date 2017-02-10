@@ -10,7 +10,8 @@ import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
 import actionComponentCreator from './actionComponentCreatorHandler';
-import actionBodyChildSelector from './actionBodyChildSelectorHandler';
+import actionBodyChildSelectorHandler from './actionBodyChildSelectorHandler';
+import actionBodyChildSetPropertyHandler from './actionBodyChildSetPropertyHandler';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
@@ -204,14 +205,14 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
       const intendedSelectedViewModelId = action.payload.viewModelId;
 
-      return actionBodyChildSelector.process(stateNew, intendedSelectedViewModelId);
+      return actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId);
     }
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {
       const childViewModelId = action.payload.viewModelId;
       const intendedSelectedViewModel = graphTraversal.findParent(stateNew, childViewModelId);
 
       if (intendedSelectedViewModel) {
-        return actionBodyChildSelector.process(stateNew, intendedSelectedViewModel.id);
+        return actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModel.id);
       }
       return state;
     }
@@ -226,13 +227,22 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     // Deprecated
-    case ACTIONS.types.TOGGLE_BORDER: {
-      c.l('ViewId: ' + action.payload.viewId);
+    case ACTIONS.types.TOGGLE_LAYOUT_MINION_BORDERS: {
+      const selectedViewId = action.payload.viewId;
+      const parent = graphTraversal.findParent(stateNew, selectedViewId);
+      const layoutViewModel = graphTraversal.find(parent, selectedViewId);
+      layoutViewModel.areMinionBordersVisible = !layoutViewModel.areMinionBordersVisible;
 
-      // const layoutViewModel = graphTraversal.find(stateNew, selectedViewModelId);
-      // model
+      let borderStyle = '';
+      if (layoutViewModel.areMinionBordersVisible) {
+        borderStyle = '1px dashed red';
+      }
 
-      return state;
+      actionBodyChildSetPropertyHandler.setStyleOnAllChildren(layoutViewModel, 'outline', borderStyle);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
     }
     default: {
       return state;

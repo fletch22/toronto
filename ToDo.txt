@@ -38,17 +38,11 @@
 	6. If renderable in a bodyChild component, add to the bodyChild generator.
 
 
-2/4
-
-1. Continuing to remove the viewModelChildId, etc from toolbar buttons.
-Done.
-
-2. Fixing static can't move during add problem.
-
-
-3. Fix rewind/update problem with Minions.
-Done.
-
-4. Go up one too far (1 past page) causes console error. (id undefined)
-Done.
+2/7:
+1. Change border to transparent from red.
+2. Remove drag handle when hidden.
+3. Make border visible when item added.
+4. Clean up reducer around add layoutminion border.
+5. Change border to be outline to avoid re-rendering.
+6. Remove minionhasborders boolean.
 
