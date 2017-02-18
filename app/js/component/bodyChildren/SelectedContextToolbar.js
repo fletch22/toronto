@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { default as LayoutToolbar } from './layout/Toolbar';
 import { default as BodyToolbar } from './body/Toolbar';
 import { default as LayoutMinionToolbar } from './layoutMinion/Toolbar';
+import { default as DivToolbar } from './div/Toolbar';
+import { default as DropDownListboxToolbar } from './dropDownListbox/Toolbar';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import HierNavButtonToolbar from '../../component/bodyChildren/HierNavButtonToolbar';
 
@@ -24,6 +26,16 @@ class SelectedContextToolbar extends React.Component {
       case ComponentTypes.LayoutMinion: {
         toolbar = <LayoutMinionToolbar selectedViewModel={this.props.selectedViewModel} />;
         description = 'This element is a moveable resizable container for your content.';
+        break;
+      }
+      case ComponentTypes.Div: {
+        toolbar = <DivToolbar selectedViewModel={this.props.selectedViewModel} />;
+        description = 'This is basic building block of your site.';
+        break;
+      }
+      case ComponentTypes.DropDownListbox: {
+        toolbar = <DropDownListboxToolbar selectedViewModel={this.props.selectedViewModel} />;
+        description = 'This is a select box.';
         break;
       }
       default:

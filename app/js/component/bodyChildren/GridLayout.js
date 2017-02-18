@@ -39,6 +39,7 @@ class GridLayout extends React.Component {
 
     const generate = () => {
       const layoutMinionViewModels = this.props.children;
+      // const layoutMinionViewModels = this.props.viewModel.viewModel.children;
       const isStatic = this.props.viewModel.isStatic;
 
       return _.map(layoutMinionViewModels, (layoutMinViewModel) => {
@@ -84,22 +85,11 @@ const mapStateToProps = (state, ownProps) => {
   // NOTE: Attempt to avoid misrendering.
   GridLayout.refreshGrid();
 
-  const viewModel = graphTraversal.find(state, ownProps.id);
-
-
-  let children = ownProps.children;
-  let isStatic = false;
-  let isSelected = false;
-  if (viewModel) {
-    children = [].concat(viewModel.viewModel.children);
-    isStatic = viewModel.isStatic;
-    isSelected = viewModel.isSelected;
-  }
-
   return {
-    children,
-    isStatic,
-    isSelected
+    viewModel: ownProps.viewModel,
+    children: ownProps.viewModel.viewModel.children,
+    isStatic: ownProps.viewModel.isStatic,
+    isSelected: ownProps.viewModel.isSelected
   };
 };
 

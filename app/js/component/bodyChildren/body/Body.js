@@ -50,7 +50,7 @@ const mapStateToProps = (state, ownProps) => {
   // NOTE: I'm assuming this will update all descendents. The alternative is to detect differences in the
   // arrays. If arrays are diff, then update. If this is not performant, will need to implement a comparison at each node where children are
   // rendered. If the array lengths are different, then will use [].concat to force update.
-  const children = [].concat(stateChildren);
+  const children = parent.viewModel.children; //[].concat(stateChildren);
 
   let selectedViewModel;
   const selectedChildViewId = (parent.selectedChildViewId) ? parent.selectedChildViewId : parent.id;

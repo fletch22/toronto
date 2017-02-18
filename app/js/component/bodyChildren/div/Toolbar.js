@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import CreateLayout from '../buttons/CreateLayout';
+import AddDropDownListbox from '../buttons/AddDropDownListBox';
 import AddDiv from '../buttons/AddDiv';
 
 class Toolbar extends React.Component {
@@ -7,7 +7,7 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div>
-        <CreateLayout viewModel={this.props.selectedViewModel} />
+        <AddDropDownListbox viewModel={this.props.selectedViewModel} />
         <AddDiv viewModel={this.props.selectedViewModel} />
       </div>
     );

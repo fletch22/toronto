@@ -76,6 +76,14 @@ class ActionComponentCreatorHandler {
         view = viewFactory.createLayoutMinionView();
         break;
       }
+      case ComponentTypes.Div: {
+        view = viewFactory.createDivView();
+        break;
+      }
+      case ComponentTypes.DropDownListbox: {
+        view = viewFactory.createDdlView();
+        break;
+      }
       default: {
         throw new Error('Encountered error trying to determine view to create.');
       }
@@ -85,16 +93,20 @@ class ActionComponentCreatorHandler {
 
   generateChildrensViewModels(viewModelParentId, modelParent) {
     const viewModelParent = Object.assign({}, modelParent);
-    viewModelParent.children.forEach((model, index) => {
-      viewModelParent.children[index] = this.generateViewModel(viewModelParentId, model);
-    });
+    if (viewModelParent.children) {
+      viewModelParent.children.forEach((model, index) => {
+        viewModelParent.children[index] = this.generateViewModel(viewModelParentId, model);
+      });
+    }
 
     return viewModelParent;
   }
 
   extractModelFromViewModel(viewModel) {
     const clone = _.cloneDeep(viewModel.viewModel);
-    clone.children = this.extractChildrenFromViewModel(clone.children);
+    if (clone.children) {
+      clone.children = this.extractChildrenFromViewModel(clone.children);
+    }
     return clone;
   }
 

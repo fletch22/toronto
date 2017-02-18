@@ -5,6 +5,7 @@ import webFolderModelFactory from './webFolderModelFactory';
 import webPageModelFactory from './webPageModelFactory';
 import layoutModelFactory from './layoutModelFactory';
 import ComponentTypes from '../component/ComponentTypes';
+import divModelFactory from '../component/divModelFactory';
 
 class ModelGenerator {
 
@@ -40,6 +41,9 @@ class ModelGenerator {
       }
       case ComponentTypes.Layout: {
         return layoutModelFactory.createInstance(parentId);
+      }
+      case ComponentTypes.Div: {
+        return divModelFactory.createInstance(parentId);
       }
       default: {
         throw new Error(`Could not determine component type from model's type label \'${protoModel.typeLabel}\'`);

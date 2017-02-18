@@ -2,7 +2,7 @@ import f22Uuid from '../../../util/f22Uuid';
 
 class ViewFactory {
 
-  createPageView()  {
+  createPageView() {
     return {
       id: f22Uuid.generate(),
       selectedChildViewId: null,
@@ -20,6 +20,20 @@ class ViewFactory {
   }
 
   createLayoutMinionView() {
+    return {
+      id: f22Uuid.generate(),
+      isSelected: false
+    };
+  }
+
+  createDivView() {
+    return {
+      id: f22Uuid.generate(),
+      isSelected: false
+    };
+  }
+
+  createDdlView() {
     return {
       id: f22Uuid.generate(),
       isSelected: false

@@ -19,7 +19,7 @@ class ViewModelCreator {
 
   persistArrayOfChildren(dispatch, viewModelChildren, parentViewId) {
     const successCallback = () => {
-      dispatch(actionSetCurrentBodyTool(parentViewId.id));
+      dispatch(actionSetCurrentBodyTool(parentViewId));
     };
 
     bodyChildrenCreator.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback);

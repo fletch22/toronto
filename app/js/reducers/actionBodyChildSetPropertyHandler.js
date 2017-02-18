@@ -16,7 +16,6 @@ class ActionBodyChildSetPropertyHandler {
     const jsonStyle = vm.style;
     /* eslint-disable no-param-reassign */
     vm.style = styleTranslator.setStyleAttribute(jsonStyle, styleName, styleValue);
-    c.lo(vm);
   }
 }
 

@@ -87,8 +87,6 @@ describe('GraphTraversal', () => {
 
     c.l(`Elapsed: ${end-start}`);
 
-    // object = graphTraversal.findNew(state, 'foo');
-
     expect(object).is.not.equal(null);
     expect(typeof object).is.equal('object');
     expect(object.id).to.equal('section0');

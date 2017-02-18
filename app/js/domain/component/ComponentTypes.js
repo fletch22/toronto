@@ -6,7 +6,8 @@ const ComponentTypes = {
   WebPage: 'Page',
   Layout: 'Layout',
   LayoutMinion: 'LayoutMinion',
-  Div: 'Div'
+  Div: 'Div',
+  DropDownListbox: 'DropDownListbox'
 };
 
 export default ComponentTypes;

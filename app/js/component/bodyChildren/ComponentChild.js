@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import GridLayout from './GridLayout';
 import LayoutMinion from './LayoutMinion';
+import Div from './div/Div';
+import DropDownListbox from './dropDownListbox/DropDownListbox';
 
 class ComponentChild extends React.Component {
 
@@ -14,6 +16,14 @@ class ComponentChild extends React.Component {
       }
       case ComponentTypes.LayoutMinion: {
         component = <LayoutMinion id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
+        break;
+      }
+      case ComponentTypes.Div: {
+        component = <Div id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
+        break;
+      }
+      case ComponentTypes.DropDownListbox: {
+        component = <DropDownListbox id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
         break;
       }
       default: {

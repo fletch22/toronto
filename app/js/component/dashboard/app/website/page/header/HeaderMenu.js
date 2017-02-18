@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Menu, { MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
-import '../../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
+import '../../../../../../../css/modules/container.scss';
 import { actionAppToggleMenu } from '../../../../../../actions/dashboard/app/index';
 import { actionCreatePseudoModalComponent } from '../../../../../../actions/index';
 import ComponentTypes from '../../../../../../domain/component/ComponentTypes';
@@ -23,7 +23,6 @@ class HeaderMenu extends React.Component {
     if (this.props.isShowingHeaderMenu) {
       menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
         <MenuItem key={HeaderMenu.menuKeys().EDIT} className="menu-item">Edit</MenuItem>
-        <MenuItem key={HeaderMenu.menuKeys().ADD_FOLDER} className="menu-item">Add Div</MenuItem>
         <Divider />
         <MenuItem key={HeaderMenu.menuKeys().REMOVE} className="menu-item">Remove Page</MenuItem>
       </Menu>);
@@ -56,11 +55,6 @@ const remove = (dispatch, id) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
-      case HeaderMenu.menuKeys().ADD_DIV: {
-        dispatch(actionCreatePseudoModalComponent(ComponentTypes.Div, { parentModelId: ownProps.modelNodeId }));
-        dispatch(actionAppToggleMenu(ownProps.modelNodeId));
-        break;
-      }
       case HeaderMenu.menuKeys().EDIT: {
         dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebPage, { modelNodeId: ownProps.modelNodeId }));
         dispatch(actionAppToggleMenu(ownProps.modelNodeId));

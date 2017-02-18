@@ -5,27 +5,35 @@ class ActionBodyChildSelectorHandler {
 
   process(state, targetViewModelId) {
     const parentOfIntended = graphTraversal.findParent(state, targetViewModelId);
-    const intendedSelectedViewModel = graphTraversal.find(parentOfIntended.viewModel.children, targetViewModelId);
-    parentOfIntended.viewModel.children = [].concat(parentOfIntended.viewModel.children);
+    let pageViewNode;
 
-    intendedSelectedViewModel.isSelected = true;
+    if (parentOfIntended) {
+      const intendedSelectedViewModel = graphTraversal.find(parentOfIntended.viewModel, targetViewModelId);
+      intendedSelectedViewModel.isSelected = true;
+      parentOfIntended.viewModel.children = [].concat(parentOfIntended.viewModel.children);
 
-    let pageViewNode = intendedSelectedViewModel;
-    let parentNodeId = intendedSelectedViewModel.parentId;
-    while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
-      const parentNode = graphTraversal.find(state, parentNodeId);
-      if (!parentNode) {
-        throw new Error('Encountered problem trying to find web page root node.');
+      pageViewNode = intendedSelectedViewModel;
+      let parentNodeId = intendedSelectedViewModel.parentId;
+      while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
+        const parentNode = graphTraversal.find(state, parentNodeId);
+        if (!parentNode) {
+          throw new Error('Encountered problem trying to find web page root node.');
+        }
+        parentNodeId = parentNode.parentId;
+        pageViewNode = parentNode;
       }
-      parentNodeId = parentNode.parentId;
-      pageViewNode = parentNode;
+    } else {
+      pageViewNode = graphTraversal.find(state, targetViewModelId);
+      pageViewNode.isSelected = true;
     }
 
-    if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== intendedSelectedViewModel.id) {
+    if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== targetViewModelId) {
       const parentOfExisting = graphTraversal.findParent(state, pageViewNode.selectedChildViewId);
-      const currentlySelectedViewModel = graphTraversal.find(parentOfExisting.viewModel.children, pageViewNode.selectedChildViewId);
-      currentlySelectedViewModel.isSelected = false;
-      parentOfExisting.viewModel.children = [].concat(parentOfExisting.viewModel.children);
+      if (parentOfExisting) {
+        const currentlySelectedViewModel = graphTraversal.find(parentOfExisting.viewModel, pageViewNode.selectedChildViewId);
+        currentlySelectedViewModel.isSelected = false;
+        parentOfExisting.viewModel.children = [].concat(parentOfExisting.viewModel.children);
+      }
     }
     pageViewNode.selectedChildViewId = targetViewModelId;
 

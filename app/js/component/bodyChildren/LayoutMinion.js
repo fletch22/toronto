@@ -6,7 +6,7 @@ import ComponentChild from '../../component/bodyChildren/ComponentChild';
 class LayoutMinion extends React.Component {
 
   render() {
-    const children = (this.props.viewModel.viewModel.children) ? this.props.viewModel.viewModel.children : [];
+    const children = (this.props.children) ? this.props.children : [];
 
     let style = {};
     if (this.props.viewModel.viewModel.style) {
@@ -32,10 +32,16 @@ LayoutMinion.propTypes = {
   viewModel: PropTypes.object,
   onClick: PropTypes.func,
   isSelected: PropTypes.bool,
-  areBordersVisible: PropTypes.bool,
-  vm: PropTypes.any,
   children: PropTypes.array,
   style: PropTypes.string
+};
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    children: ownProps.viewModel.viewModel.children,
+    isSelected: ownProps.viewModel.isSelected,
+    style: ownProps.viewModel.viewModel.style
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -48,7 +54,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 LayoutMinion = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(LayoutMinion);
 

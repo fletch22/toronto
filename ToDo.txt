@@ -1,7 +1,8 @@
 1. Modify website label uniqueness test for only those with the same parent ID (app)
 
+2. Add background border to test rendering. Better layering?
 
-3. Add New Component Steps: 
+3. Add New Dashboard Component Steps: 
 
 	Adding New Component to Dashboard Tree
 
@@ -14,14 +15,22 @@
 
 	3. Goto PseudoModal add handler to component handler.
 
-	4. Go to Vancouver Project
 
-		ServiceJunction
-		ServiceFactory
-		DaoJunction
-		AppDesignerDao
-		AppDesignerModule
-		ReferenceResolverService
+4. How to Add a new Body Child
+
+	a. Add the item to ComponentTypes.js.
+	b. Add the item to SelectedContextToolbar.js.
+	c. Create the <Component> Toolbar class.
+	d. Add button to create <Component>.
+	e. Add case to modelGenerator.js
+	f. Add <Component> model factory class.
+	g. Add view creator to case section in actionComponentCreatorHandler.js.
+	h. Add view creator in viewFactory.js.
+
+
+Adding New Domain Component to Vancouver
+
+	4. Go to Vancouver Project
 
 		i. Add Child, Domain model, Dao, Service and Transformer
 		ii. Add the following in order:
@@ -31,18 +40,7 @@
 			AppDesignerDao
 			AppDesignerModule
 			ReferenceResolverService // Code works without until you add a second sibling to 	//parent's children.
-		
-
 
 	5. If renderable on an dashboard island, add to Island component.
 	6. If renderable in a bodyChild component, add to the bodyChild generator.
-
-
-2/7:
-1. Change border to transparent from red.
-2. Remove drag handle when hidden.
-3. Make border visible when item added.
-4. Clean up reducer around add layoutminion border.
-5. Change border to be outline to avoid re-rendering.
-6. Remove minionhasborders boolean.
 
