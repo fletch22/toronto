@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import 'css/modules/time-travel-toolbar';
-import stateGetAndDispatch from '../../domain/stateGetAndDispatch';
+import stateGetAndDispatch from '../../../domain/stateGetAndDispatch';
 import 'font-awesome/scss/font-awesome.scss';
 
 class TimeTravelNavBar extends React.Component {

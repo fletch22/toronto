@@ -1,6 +1,6 @@
 import actionComponentCreatorHandler from '../../reducers/actionComponentCreatorHandler';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
-import bodyChildrenCreator from '../../component/editors/bodyChildren/bodyChildrenCreator';
+import bodyChildrenCreatorService from '../../service/bodyChildrenCreatorService';
 
 class ViewModelCreator {
   create(dispatch, model, parentViewId) {
@@ -22,7 +22,7 @@ class ViewModelCreator {
       dispatch(actionSetCurrentBodyTool(parentViewId));
     };
 
-    bodyChildrenCreator.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback);
+    bodyChildrenCreatorService.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback);
   }
 }
 

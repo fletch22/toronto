@@ -12,6 +12,7 @@ export const ACTIONS = {
     SET_STATE_AND_PERSIST: 'SET_STATE_AND_PERSIST',
     TIME_TRAVEL_TO_PREVIOUS_STATE: 'TIME_TRAVEL_TO_PREVIOUS_STATE',
     MODAL_ERROR_SHOW: 'MODAL_ERROR_SHOW',
+    MODAL_STANDARD_SHOW: 'MODAL_STANDARD_SHOW',
     MODAL_HIDE_CURRENT: 'MODAL_HIDE_CURRENT',
     MODAL_HIDE: 'MODAL_HIDE',
     MODAL_STATE_ROLLBACK_SHOW: 'MODAL_STATE_ROLLBACK_SHOW',
@@ -65,6 +66,16 @@ export const actionShowErrorModal = (headerText, bodyText, okAction) => {
     okAction
   };
 };
+
+export const actionShowStandardModal = (headerText, bodyText, okAction) => {
+  return {
+    type: ACTIONS.types.MODAL_STANDARD_SHOW,
+    headerText,
+    bodyText,
+    okAction
+  };
+};
+
 
 export const actionHideCurrentModal = () => {
   return {

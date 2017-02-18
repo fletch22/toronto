@@ -1,4 +1,4 @@
-import { actionShowErrorModal, actionHideCurrentModal } from '../../actions/index';
+import { actionShowErrorModal, actionHideCurrentModal, actionShowStandardModal } from '../../actions/index';
 import { actionShowConfirm } from '../../actions/modal/index';
 
 class ModalDispatcher {
@@ -20,6 +20,10 @@ class ModalDispatcher {
 
   dispatchConfirmModal(dispatch, headerText, bodyText, yesAction, noAction, cancelAction) {
     dispatch(actionShowConfirm(headerText, bodyText, yesAction(), noAction(), cancelAction()));
+  }
+
+  dispatchStandardModal(dispatch, headerText, bodyText, okAction) {
+    dispatch(actionShowStandardModal(headerText, bodyText, okAction()));
   }
 }
 

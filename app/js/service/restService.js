@@ -21,6 +21,10 @@ class RestService extends Service {
   nukeAndPave() {
     return this.fetch(`${this.url}/component/nukeAndPave`, 'POST');
   }
+
+  persistToDisk() {
+    return this.fetch(`${this.url}/component/persistToDisk`, 'POST');
+  }
 }
 
 export default new RestService();

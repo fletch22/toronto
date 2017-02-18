@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AppContainerToolbar from '../component/utils/AppContainerToolbar';
+import AppContainerToolbar from '../component/dashboard/appContainer/AppContainerToolbar';
 import update from 'react-addons-update';
 import Island from '../component/dashboard/Island';
 import PseudoModalWrangler from '../component/modals/PseudoModalWrangler';

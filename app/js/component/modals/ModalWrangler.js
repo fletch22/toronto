@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ErrorModal from './ErrorModal';
 import ConfirmModal from './ConfirmModal';
+import StandardModal from './StandardModal';
 import ModalTypes from './ModalTypes';
 
 class ModalWrangler extends React.Component {
   render() {
     let modal = null;
-    if (this.props.showErrorModal) {
-      modal = <ErrorModal { ...this.props.passThroughProps } />;
-    }
-    if (this.props.showConfirmModal) {
-      modal = <ConfirmModal showModal { ...this.props.passThroughProps } />;
+
+    c.lo(this.props.modal);
+
+    if (this.props.modal) {
+      switch (this.props.modal.modalType) {
+        case ModalTypes.ErrorModal: {
+          modal = <ErrorModal { ...this.props.modal } />;
+          break;
+        }
+        case ModalTypes.ConfirmModal: {
+          modal = <ConfirmModal showModal { ...this.props.modal } />;
+          break;
+        }
+        case ModalTypes.StandardModal: {
+          modal = <StandardModal showModal { ...this.props.modal } />;
+          break;
+        }
+        default: {
+          throw new Error(`Encountered problem deciphering which modal type to create. Did not recognize modal type '${this.props.modal.modalType}'.`);
+        }
+      }
     }
 
     return (
@@ -23,39 +40,17 @@ class ModalWrangler extends React.Component {
 }
 
 ModalWrangler.propTypes = {
-  showErrorModal: React.PropTypes.bool,
-  showConfirmModal: React.PropTypes.bool,
-  passThroughProps: React.PropTypes.object
+  modal: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
-  let showErrorModal = false;
-  let showConfirmModal = false;
-  let passThroughProps = {};
-
+  let modal;
   if (state.dom.modal.length > 0) {
-    const modal = state.dom.modal[0];
-    switch (modal.modalType) {
-      case ModalTypes.ErrorModal: {
-        showErrorModal = true;
-        passThroughProps = modal;
-        break;
-      }
-      case ModalTypes.ConfirmModal: {
-        showConfirmModal = true;
-        passThroughProps = modal;
-        break;
-      }
-      default: {
-        throw new Error(`Encountered problem deciphering which modal type to create. Did not recognize modal type '${modal.type}'.`);
-      }
-    }
+    modal = state.dom.modal[0];
   }
 
   return {
-    showErrorModal,
-    showConfirmModal,
-    passThroughProps
+    modal
   };
 };
 

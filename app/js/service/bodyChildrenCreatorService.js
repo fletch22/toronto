@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import modalDispatcher from '../../modals/ModalDispatcher';
-import crudActionCreator from '../../../actions/crudActionCreator';
-import graphTraversal from '../../../state/graphTraversal';
-import stateSyncService from '../../../service/stateSyncService';
-import StatePackager from '../../../service/StatePackager';
-import actionComponentCreator from '../../../reducers/actionComponentCreatorHandler';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
+import modalDispatcher from '../component/modals/ModalDispatcher';
+import crudActionCreator from '../actions/crudActionCreator';
+import graphTraversal from '../state/graphTraversal';
+import stateSyncService from '../service/stateSyncService';
+import StatePackager from '../service/StatePackager';
+import actionComponentCreator from '../reducers/actionComponentCreatorHandler';
+import ComponentTypes from '../domain/component/ComponentTypes';
 
-class BodyChildrenCreator {
+class BodyChildrenCreatorService {
 
   constructor() {
     this.statePackager = new StatePackager();
@@ -105,4 +105,4 @@ class BodyChildrenCreator {
   }
 }
 
-export default new BodyChildrenCreator();
+export default new BodyChildrenCreatorService();

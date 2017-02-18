@@ -28,13 +28,17 @@ StandardModal.propTypes = {
   onCloseModal: React.PropTypes.func.isRequired,
   onOk: React.PropTypes.func,
   bodyText: React.PropTypes.string,
-  headerText: React.PropTypes.string
+  headerText: React.PropTypes.string,
+  okAction: React.PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCloseModal: () => {
       dispatch(actionHideCurrentModal());
+    },
+    onOk: () => {
+      dispatch(ownProps.okAction);
     }
   };
 };

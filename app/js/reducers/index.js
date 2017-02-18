@@ -4,6 +4,7 @@ import stateFixer from '../domain/stateFixer';
 import defaultState from '../state/defaultState';
 import appContainerService from '../service/component/appContainerService';
 import ErrorModalDtoFactory from '../component/modals/ErrorModalDtoFactory';
+import standardModalDtoFactory from '../component/modals/StandardModalDtoFactory';
 import modalDtoFactory from '../component/modals/ModalDtoFactory';
 import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
@@ -116,6 +117,13 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.MODAL_HIDE_CURRENT: {
       stateNew.dom.modal.shift();
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.MODAL_STANDARD_SHOW: {
+      const modal = standardModalDtoFactory.getInstance(action.headerText, action.bodyText, action.okAction);
+
+      stateNew.dom.modal.push(modal);
 
       return stateNew;
     }
