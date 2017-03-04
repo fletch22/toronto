@@ -1,14 +1,19 @@
-
 import React from 'react';
 import { connect } from 'react-redux';
-import { actionChangeAppLabelInput, actionShowErrorModal, actionSetStateAndPersist, actionHideCurrentModal, actionShowTimeTravelNavBar, actionNukeAndPave } from '../../../actions';
+import { actionChangeAppLabelInput,
+  actionShowErrorModal,
+  actionSetStateAndPersist,
+  actionHideCurrentModal,
+  actionShowTimeTravelNavBar,
+  actionNukeAndPave,
+  processRestoreFromDiskClick } from '../../../actions';
 import appContainerService from '../../../service/component/appContainerService';
 import crudActionCreator from '../../../actions/crudActionCreator';
 import ModalWrangler from '../../../component/modals/ModalWrangler';
 import TimeTravelNavBar from './TimeTravelNavBar';
 import modalDispatch from '../../../component/modals/ModalDispatcher';
 import 'css/modules/time-travel-toolbar';
-import persistAppService from '../../../service/persistAppService';
+import persistAppService from '../../../service/appPersistenceService';
 
 class AppContainerToolbar extends React.Component {
 
@@ -31,6 +36,7 @@ class AppContainerToolbar extends React.Component {
             <button id="police-box" onClick={this.props.onShowTimeTravelOverlay} className="btn btn-default button-pentultimate"></button>
             <button id="nuke-and-pave" onClick={this.props.onNukeAndPaveClick} className="btn btn-default button-pentultimate"></button>
             <button id="save-system-to-disk" onClick={this.props.onSaveSystemToDiskClick} className="btn btn-default button-pentultimate"></button>
+            <button id="restore-system-from-disk" onClick={this.props.onRestoreSystemFromDiskClick} className="btn btn-default button-pentultimate"></button>
             <TimeTravelNavBar />
           </div>
         </div>
@@ -65,7 +71,8 @@ AppContainerToolbar.propTypes = {
   onShowError: React.PropTypes.func.isRequired,
   onShowTimeTravelOverlay: React.PropTypes.func,
   onNukeAndPaveClick: React.PropTypes.func,
-  onSaveSystemToDiskClick: React.PropTypes.func
+  onSaveSystemToDiskClick: React.PropTypes.func,
+  onRestoreSystemFromDiskClick: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -93,15 +100,6 @@ const processNukeAndPaveClick = () => (dispatch) => {
   modalDispatch.dispatchConfirmModal(dispatch, headerText, bodyText, actionNukeAndPave, actionHideCurrentModal, actionHideCurrentModal);
 };
 
-function processSaveToDiskClick() {
-  return (dispatch, getState) => {
-    // NOTE: Necessary to avoid circular references.
-
-    // persistAppService.persist(dispatch);
-    modalDispatch.dispatchStandardModal(dispatch, 'Foo', 'Bar', actionHideCurrentModal);
-  };
-}
-
 const mapDispatchToProps = (dispatch) => ({
   onClick: () => {
     dispatch(addAppLocal());
@@ -120,6 +118,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onSaveSystemToDiskClick: () => {
     persistAppService.persist(dispatch);
+  },
+  onRestoreSystemFromDiskClick: () => {
+    dispatch(processRestoreFromDiskClick());
   }
 });
 

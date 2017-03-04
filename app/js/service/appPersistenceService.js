@@ -2,7 +2,7 @@ import modalDispatcher from '../component/modals/ModalDispatcher';
 import restService from '../service/restService';
 import { actionHideCurrentModal } from '../actions/index';
 
-class PersistAppService {
+class AppPersistenceService {
 
   persist(dispatch) {
     restService.persistToDisk()
@@ -19,4 +19,4 @@ class PersistAppService {
   }
 }
 
-export default new PersistAppService();
+export default new AppPersistenceService();

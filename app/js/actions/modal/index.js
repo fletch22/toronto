@@ -1,7 +1,6 @@
 export const ActionTypes = {
   MODAL: {
     MODAL_CONFIRM_SHOW: 'MODAL_CONFIRM_SHOW',
-    MODAL_PSEUDO_SHOW: 'MODAL_PSEUDO_SHOW',
     MODAL_PSEUDO_FORGET: 'MODAL_PSEUDO_FORGET'
   }
 };
@@ -23,18 +22,6 @@ export const actionShowConfirm = (headerText, bodyText, yesAction, noAction, can
     cancelAction
   };
 };
-
-export const actionModalFormShow = (modalFormType, data) => ({
-  type: ActionTypes.MODAL.MODAL_FORM_SHOW,
-  modalFormType,
-  payload: data
-});
-
-export const actionModalPseudoShow = (componentViewName, data) => ({
-  type: ActionTypes.MODAL.MODAL_PSEUDO_SHOW,
-  componentViewName,
-  payload: data
-});
 
 export const actionModalPseudoForget = (id) => ({
   type: ActionTypes.MODAL.MODAL_PSEUDO_FORGET,

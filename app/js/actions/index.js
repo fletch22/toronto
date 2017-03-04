@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import dashboard from './dashboard';
 import { ActionTypes as ModalActionTypes } from './modal';
+import { ActionTypes as WizardActionTypes } from './wizard';
 import { ACTIONS as bodyChildrenEditorActions } from './bodyChildrenEditor/index';
 
 export const ACTIONS = {
@@ -22,13 +23,16 @@ export const ACTIONS = {
     UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST',
     REFRESH_PAGE: 'REFRESH_PAGE',
     NUKE_AND_PAVE: 'NUKE_AND_PAVE',
+    RESTORE_FROM_DISK: 'RESTORE_FROM_DISK',
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
-    CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT'
+    CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT',
+    CREATE_PSEUDO_MODAL: 'CREATE_PSEUDO_MODAL'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
 _.extend(ACTIONS.types, ModalActionTypes);
 _.extend(ACTIONS.types, bodyChildrenEditorActions);
+_.extend(ACTIONS.types, WizardActionTypes);
 
 export const actionChangeAppLabelInput = (appLabel) => {
   return {
@@ -76,17 +80,11 @@ export const actionShowStandardModal = (headerText, bodyText, okAction) => {
   };
 };
 
-
 export const actionHideCurrentModal = () => {
   return {
     type: ACTIONS.types.MODAL_HIDE_CURRENT
   };
 };
-
-export const actionHideModal = (id) => ({
-  type: ACTIONS.types.MODAL_HIDE,
-  id
-});
 
 export const actionRollbackToStateId = (rollbackPayload) => {
   return {
@@ -130,14 +128,12 @@ export const actionUpdateViewPropertyValue = (viewId, path, propertyValue, needs
   }
 });
 
-export const actionRefreshPage = () => {
-  return {
-    type: ACTIONS.types.REFRESH_PAGE
-  };
-};
-
 export const actionNukeAndPave = () => ({
   type: ACTIONS.types.NUKE_AND_PAVE
+});
+
+export const processRestoreFromDiskClick = () => ({
+  type: ACTIONS.types.RESTORE_FROM_DISK
 });
 
 export const actionCreatePseudoModalComponent = (componentType, options) => ({
@@ -147,3 +143,12 @@ export const actionCreatePseudoModalComponent = (componentType, options) => ({
     options
   }
 });
+
+export const actionCreatePseudoModal = (pseudoModalTypes, modelNodeId) => ({
+  type: ACTIONS.types.CREATE_PSEUDO_MODAL,
+  payload: {
+    pseudoModalTypes,
+    modelNodeId
+  }
+});
+

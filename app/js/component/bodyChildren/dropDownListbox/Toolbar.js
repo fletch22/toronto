@@ -1,30 +1,30 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Button from '../toolbar/Button';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
-import viewModelCreator from '../../utils/viewModelCreator';
-import modelGenerator from '../../../domain/component/modelGenerator';
+import ConfigureDdl from './ConfigureDdl';
+import { actionCreatePseudoModal } from '../../../actions/index';
+import PseudoModalTypes from '../../../component/modals/PseudoModalTypes';
+import actionComponentCreator from '../../../reducers/actionComponentCreatorHandler';
 
 class Toolbar extends React.Component {
 
   render() {
     return (
       <div>
-
+        <ConfigureDdl viewModel={this.props.selectedViewModel} onClick={this.props.onConfigDdlClick} />
       </div>
     );
   }
 }
 
 Toolbar.propTypes = {
-  onClick: PropTypes.func
+  selectedViewModel: PropTypes.object,
+  onConfigDdlClick: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClick: () => {
-      // const model = modelGenerator.generate(ownProps.viewModel.viewModel.parentId, ComponentTypes.DropDownListbox);
-      // viewModelCreator.create(dispatch, model, ownProps.viewModel.id);
+    onConfigDdlClick: () => {
+      dispatch(actionCreatePseudoModal(PseudoModalTypes.WizardTypes.ConfigureDdl, ownProps.selectedViewModel.viewModel.id));
     }
   };
 };

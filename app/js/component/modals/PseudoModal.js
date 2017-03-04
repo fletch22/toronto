@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { actionModalPseudoForget } from '../../../js/actions/modal/index';
@@ -5,6 +6,7 @@ import ComponentModalNames from '../editors/EditorNames';
 import WebsiteEditor from '../editors/appContainer/app/WebsiteEditor';
 import FolderEditor from '../editors/appContainer/app/FolderEditor';
 import PageEditor from '../editors/appContainer/app/PageEditor';
+import ConfigureDdlWizard from '../../component/bodyChildren/dropDownListbox/ConfigureDdlWizard';
 
 class PseudoModal extends React.Component {
 
@@ -26,8 +28,13 @@ class PseudoModal extends React.Component {
         width = (this.props.data && this.props.data.width) ? this.props.data.width : '1500px';
         break;
       }
+      case ComponentModalNames.Wizards.CONFIGURE_DDL: {
+        component = <ConfigureDdlWizard { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
+        width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
+        break;
+      }
       default: {
-        console.error('Encountered problem while trying to determine view name for pseudo modal.');
+        console.error('Encountered problem trying to determine view name for pseudo modal.');
         break;
       }
     }
@@ -59,6 +66,16 @@ PseudoModal.propTypes = {
   viewName: PropTypes.string
 };
 
+const mapStateToProps = (state, ownProps) => {
+
+  let data = ownProps.data;
+  // data = _.cloneDeep(data);
+
+  return {
+    data
+  };
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCloseModal: () => {
@@ -68,7 +85,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 PseudoModal = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(PseudoModal);
 

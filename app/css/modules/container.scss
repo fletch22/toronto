@@ -255,3 +255,60 @@ End Dashboard
 .hidden {
   visibility: hidden;
 }
+
+// Bootstrap Carousel Begin
+
+#main .carousel-control.left {
+  background-image: none;
+}
+
+#main .carousel-control.right {
+  background-image: none;
+}
+
+$carousel-transition: 0.2s ease-in-out;
+#main .carousel-inner > .item {
+  -webkit-transition: -webkit-transform $carousel-transition;
+  -moz-transition: -moz-transform $carousel-transition;
+  -o-transition: -o-transform $carousel-transition;
+  transition: transform $carousel-transition;
+}
+
+// Bootstrap Carousel Ends
+
+// Wizards Begin
+
+.wizard-config-ddl {
+  height: 500px;
+}
+
+.wizard-config-ddl .row {
+  height: 90%;
+}
+
+.wizard-config-ddl.sel_view_coll-flex {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px red solid;
+}
+
+.sel_view_row_main {
+  border: solid 1px blue;
+  flex-grow: 9;
+  flex-shrink: 1;
+}
+
+.sel_view_row_toolbar {
+  border: solid 1px blue;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.sel_view_row_foot_nav {
+  border: solid 1px blue;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+// Wizards End

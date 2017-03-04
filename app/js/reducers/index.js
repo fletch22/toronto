@@ -65,18 +65,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.MODAL.MODAL_PSEUDO_SHOW: {
-      const viewData = modalDtoFactory.getPseudoModalInstance({
-        componentViewName: action.componentViewName,
-        data: action.payload
-      });
-
-      stateNew.dom.pseudoModals.push(viewData);
-
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-
-      return stateNew;
-    }
     case ACTIONS.types.MODAL.MODAL_PSEUDO_FORGET: {
       _.remove(stateNew.dom.pseudoModals, _.matches({ id: action.payload.id }));
 
@@ -168,6 +156,16 @@ const reducer = (state = defaultState.getInstance(), action) => {
         });
       break;
     }
+    case ACTIONS.types.RESTORE_FROM_DISK: {
+      restService.restoreFromDisk()
+        .then(() => {
+          window.document.location.href = window.document.location.href;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      break;
+    }
     case ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST: {
       const appContainerModel = stateNew.model.appContainer;
       const object = graphTraversal.find(appContainerModel, action.payload.id);
@@ -203,6 +201,19 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const component = actionComponentCreator.createComponentEditorData(stateNew, action);
 
       const viewData = modalDtoFactory.getPseudoModalInstance(component);
+
+      stateNew.dom.pseudoModals.push(viewData);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.CREATE_PSEUDO_MODAL: {
+      const payload = action.payload;
+
+      const viewModel = actionComponentCreator.getPseudoModalData(payload.pseudoModalTypes, state, payload.modelNodeId);
+
+      const viewData = modalDtoFactory.getPseudoModalInstance(viewModel);
 
       stateNew.dom.pseudoModals.push(viewData);
 
@@ -247,6 +258,43 @@ const reducer = (state = defaultState.getInstance(), action) => {
       }
 
       actionBodyChildSetPropertyHandler.setStyleOnAllChildren(layoutViewModel, 'outline', borderStyle);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.SLIDE_RIGHT: {
+      const id = action.payload.id;
+
+      const carousel = graphTraversal.find(stateNew, id);
+      c.lo(carousel, 'carousel right before setting: ');
+      carousel.activeIndex += 1;
+      c.lo(carousel, 'carousel right: ');
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.SLIDE_LEFT: {
+      const id = action.payload.id;
+
+      const carousel = graphTraversal.find(stateNew, id);
+
+      if (carousel.activeIndex > 0) {
+        carousel.activeIndex -= 1;
+      }
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.SLIDE_TO_INDEX: {
+      const payload = action.payload;
+      const id = payload.id;
+      const index = payload.activeIndex;
+
+      const carousel = graphTraversal.find(stateNew, id);
+      carousel.activeIndex = index;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

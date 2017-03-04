@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import ComponentTypes from '../domain/component/ComponentTypes';
+import PseudoModalTypes from '../component/modals/PseudoModalTypes';
 import EditorNames from '../component/editors/EditorNames';
 import graphTraversal from '../state/graphTraversal';
 import f22Uuid from '../util/f22Uuid';
 import viewFactory from '../domain/component/view/viewFactory';
-import modelGenerator from '../../js/domain/component/modelGenerator';
+import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
 
 class ActionComponentCreatorHandler {
 
@@ -14,29 +15,8 @@ class ActionComponentCreatorHandler {
 
   createComponentEditorData(state, action) {
     const type = action.payload.componentType;
-    let componentViewName;
+    let viewName;
     let viewModel;
-    switch (type) {
-      case ComponentTypes.Website: {
-        componentViewName = EditorNames.EDIT_WEBSITE_DETAILS;
-        break;
-      }
-      case ComponentTypes.WebFolder: {
-        componentViewName = EditorNames.EDIT_WEBSITE_FOLDER_DETAILS;
-        break;
-      }
-      case ComponentTypes.WebPage: {
-        componentViewName = EditorNames.EDIT_WEBSITE_PAGE_DETAILS;
-        break;
-      }
-      case ComponentTypes.Layout: {
-        componentViewName = EditorNames.EDIT_LAYOUT_DETAILS;
-        break;
-      }
-      default: {
-        throw new Error(`Action not yet configured to handle ${type}.`);
-      }
-    }
 
     const options = _.cloneDeep(action.payload.options);
     const modelNodeId = options.modelNodeId;
@@ -49,16 +29,63 @@ class ActionComponentCreatorHandler {
 
     if (!model.children) model.children = [];
 
-    if (type === ComponentTypes.WebPage) {
-      viewModel = this.generateViewModel(this.WEB_PAGE_ROOT, model);
+    switch (type) {
+      case PseudoModalTypes.ComponentTypes.Website: {
+        viewName = EditorNames.EDIT_WEBSITE_DETAILS;
+        break;
+      }
+      case PseudoModalTypes.ComponentTypes.WebFolder: {
+        viewName = EditorNames.EDIT_WEBSITE_FOLDER_DETAILS;
+        break;
+      }
+      case PseudoModalTypes.ComponentTypes.WebPage: {
+        viewName = EditorNames.EDIT_WEBSITE_PAGE_DETAILS;
+        viewModel = this.generateViewModel(this.WEB_PAGE_ROOT, model);
+        break;
+      }
+      case PseudoModalTypes.WizardTypes.ConfigureDdl: {
+        viewName = EditorNames.Wizards.CONFIGURE_DDL;
+        break;
+      }
+      default: {
+        throw new Error(`Action not yet configured to handle ${type}.`);
+      }
     }
 
     const data = Object.assign({}, options, { id: f22Uuid.generate() }, { model }, { viewModel });
 
     return {
-      componentViewName,
+      viewName,
       data
     };
+  }
+
+  getPseudoModalData(type, state, modelNodeId) {
+    // Note: This should be changed to just 'viewName'
+    let viewName;
+    let data;
+
+    const model = _.cloneDeep(graphTraversal.find(state.model, modelNodeId));
+
+    switch (type) {
+      case PseudoModalTypes.WizardTypes.ConfigureDdl: {
+        data = configureDdlWizardViewFactory.createInstance(model, this.getApplicationDatastores(state));
+        viewName = EditorNames.Wizards.CONFIGURE_DDL;
+        break;
+      }
+      default: {
+        throw new Error(`Action not yet configured to handle ${type}.`);
+      }
+    }
+
+    return {
+      viewName,
+      data
+    };
+  }
+
+  getApplicationDatastores(state) {
+    return _.filter(state.model.appContainer.children, (child) => (child.typeLabel === ComponentTypes.Datastore));
   }
 
   generateViewModel(viewModelParentId, model) {
@@ -88,6 +115,7 @@ class ActionComponentCreatorHandler {
         throw new Error('Encountered error trying to determine view to create.');
       }
     }
+
     return Object.assign(view, { parentId: viewModelParentId }, { viewModel: this.generateChildrensViewModels(view.id, model) });
   }
 

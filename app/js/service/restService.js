@@ -25,6 +25,10 @@ class RestService extends Service {
   persistToDisk() {
     return this.fetch(`${this.url}/component/persistToDisk`, 'POST');
   }
+
+  restoreFromDisk() {
+    return this.fetch(`${this.url}/component/restoreFromDisk`, 'POST');
+  }
 }
 
 export default new RestService();

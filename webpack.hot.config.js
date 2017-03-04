@@ -2,11 +2,13 @@ const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const PATHS = {
+  app: path.join(__dirname, 'app/'),
   images: path.join(__dirname, 'app/images'),
   build: path.join(__dirname, 'build'),
-  worker: path.join(__dirname, 'app/js/worker')
+  worker: path.join(__dirname, 'app/js/worker'),
 };
 
 const common = {
@@ -15,7 +17,8 @@ const common = {
     bundle: ['./app/index.js', 'bootstrap-loader']
   },
   output: {
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: '/'
   },
   module: {
     loaders: [
@@ -63,7 +66,10 @@ module.exports = merge(common, {
     port: 8888 // process.env.PORT
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new CopyWebpackPlugin([
+      { from: 'app/images', to: 'images' }
+    ])
   ],
   postcss: [
     autoprefixer({

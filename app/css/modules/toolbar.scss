@@ -51,6 +51,17 @@
   display: inline-block;
 }
 
+#restore-system-from-disk {
+  background-image: url('../../images/cloud-download.svg');
+  background-size: 18px 16px;
+  background-position: bottom 2px right 3px;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px 2px 2px 2px;
+  display: inline-block;
+}
+
 .toolbar-label {
   color: $darkText;
   line-height: 25px;

@@ -5,7 +5,7 @@ import ComponentTypes from '../../../domain/component/ComponentTypes';
 import viewModelCreator from '../../utils/viewModelCreator';
 import modelGenerator from '../../../domain/component/modelGenerator';
 
-class ButtonDiv extends React.Component {
+class AddDiv extends React.Component {
   render() {
     return (
       <div>
@@ -15,7 +15,7 @@ class ButtonDiv extends React.Component {
   }
 }
 
-ButtonDiv.propTypes = {
+AddDiv.propTypes = {
   viewModel: PropTypes.object,
   addDiv: PropTypes.func
 };
@@ -30,9 +30,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 
-ButtonDiv = connect(
+AddDiv = connect(
   null,
   mapDispatchToProps
-)(ButtonDiv);
+)(AddDiv);
 
-export default ButtonDiv;
+export default AddDiv;

@@ -3,6 +3,7 @@ import appModelFactory from './appModelFactory';
 import websiteModelFactory from './websiteModelFactory';
 import webFolderModelFactory from './webFolderModelFactory';
 import webPageModelFactory from './webPageModelFactory';
+import datastoreModelFactory from './datastoreModelFactory';
 import DomFactory from './DomFactory';
 import ComponentTypes from '../component/ComponentTypes';
 
@@ -21,6 +22,14 @@ class ComponentGenerator {
     return {
       model: modelChild,
       dom: DomFactory.createApp(modelChild)
+    };
+  }
+
+  createDatastore(model) {
+    const modelChild = datastoreModelFactory.createInstance(model);
+    return {
+      model: modelChild,
+      dom: null
     };
   }
 
@@ -52,6 +61,9 @@ class ComponentGenerator {
     switch (model.typeLabel) {
       case ComponentTypes.AppContainer: {
         return this.createAppContainer(model);
+      }
+      case ComponentTypes.Datastore: {
+        return this.createDatastore(model);
       }
       case ComponentTypes.App: {
         return this.createApp(model);
