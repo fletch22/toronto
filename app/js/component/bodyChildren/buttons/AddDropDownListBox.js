@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
-import viewModelCreator from '../../utils/viewModelCreator';
+import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
 import ddlModelFactory from '../../../domain/component/ddlModelFactory';
 
 class AddDropDownListbox extends React.Component {
@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
       const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, 'Foo', 'Bar');
-      viewModelCreator.create(dispatch, model, ownProps.viewModel.id);
+      bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
     }
   };
 };

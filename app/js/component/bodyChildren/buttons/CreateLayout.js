@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
-import viewModelCreator from '../../utils/viewModelCreator';
+import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
 import modelGenerator from '../../../domain/component/modelGenerator';
 
 class ButtonCreateLayout extends React.Component {
@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     createLayout: () => {
       const model = modelGenerator.generate(ownProps.viewModel.viewModel.id, ComponentTypes.Layout);
-      viewModelCreator.create(dispatch, model, ownProps.viewModel.id);
+      bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
     }
   };
 };

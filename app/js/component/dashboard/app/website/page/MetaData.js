@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import graphTraversal from '../../../../../state/graphTraversal';
-import TextInput from '../../../../editors/TextInput';
+import PropPathTextInput from '../../../../editors/PropPathTextInput';
 import EditorIdDisplay from '../../../../editors/EditorIdDisplay';
 import EditorButtons from '../../../../editors/EditorButtons';
 import containerService from '../../../../../service/component/containerService';
@@ -15,7 +15,7 @@ class MetaData extends ViewModelCopyEditor {
         <div className="row">
           <div className="col-lg-2 editor-label-container"><label>Page Name:</label></div>
           <div className="col-lg-10">
-            <TextInput id={this.props.id} path={'model.pageName'} value={this.props.pageName} />
+            <PropPathTextInput id={this.props.id} path={'model.pageName'} value={this.props.pageName} />
           </div>
         </div>
         <EditorButtons onSaveClick={this.props.onSaveClick} onCancelClick={this.props.onCancelClick} />

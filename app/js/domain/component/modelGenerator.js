@@ -6,6 +6,7 @@ import webPageModelFactory from './webPageModelFactory';
 import layoutModelFactory from './layoutModelFactory';
 import ComponentTypes from '../component/ComponentTypes';
 import divModelFactory from '../component/divModelFactory';
+import dataModelModelFactory from '../component/dataModelModelFactory';
 
 class ModelGenerator {
 

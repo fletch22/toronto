@@ -13,6 +13,7 @@ import restService from '../service/restService';
 import actionComponentCreator from './actionComponentCreatorHandler';
 import actionBodyChildSelectorHandler from './actionBodyChildSelectorHandler';
 import actionBodyChildSetPropertyHandler from './actionBodyChildSetPropertyHandler';
+import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
@@ -174,6 +175,22 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.UPDATE_PROPERTY_NO_PERSIST: {
+      const object = graphTraversal.find(stateNew, action.payload.uuid);
+
+      object[action.payload.propertyName] = action.payload.value;
+
+      return stateNew;
+    }
+    case ACTIONS.types.UPDATE_PROPERTY_WITH_PERSIST: {
+      const object = graphTraversal.find(stateNew, action.payload.uuid);
+
+      object[action.payload.propertyName] = action.payload.value;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
     case ACTIONS.types.UPDATE_VIEW_PROPERTY_VALUE: {
       const payload = action.payload;
       let node = graphTraversal.find(stateNew, payload.viewId);
@@ -198,7 +215,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.CREATE_PSEUDO_MODAL_COMPONENT: {
-      const component = actionComponentCreator.createComponentEditorData(stateNew, action);
+      const component = actionPseudoModalEditorCreator.create(stateNew, action);
 
       const viewData = modalDtoFactory.getPseudoModalInstance(component);
 
@@ -213,7 +230,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const viewModel = actionComponentCreator.getPseudoModalData(payload.pseudoModalTypes, state, payload.modelNodeId);
 
-      const viewData = modalDtoFactory.getPseudoModalInstance(viewModel);
+      let viewData = modalDtoFactory.getPseudoModalInstance(viewModel);
+
+      viewData = JSON.parse(JSON.stringify(viewData));
 
       stateNew.dom.pseudoModals.push(viewData);
 
@@ -297,6 +316,14 @@ const reducer = (state = defaultState.getInstance(), action) => {
       carousel.activeIndex = index;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.CONFIGURE_DDL.SELECT_COLLECTION.TOGGLE_NEW_COLLECTION_NAME_INPUT: {
+      const payload = action.payload;
+
+      const input = graphTraversal.find(stateNew, payload.uuid);
+      input.visible = !input.visible;
 
       return stateNew;
     }

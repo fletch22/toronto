@@ -1,28 +1,23 @@
 import actionComponentCreatorHandler from '../../reducers/actionComponentCreatorHandler';
-import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
-import bodyChildrenCreatorService from '../../service/bodyChildrenCreatorService';
+import viewModelCreatorService from '../../service/viewModelCreatorService';
 
 class ViewModelCreator {
-  create(dispatch, model, parentViewId) {
+  create(dispatch, model, parentViewId, successCallback) {
     const viewModel = actionComponentCreatorHandler.generateViewModel(parentViewId, model);
 
-    this.persistArrayOfChildren(dispatch, [viewModel], parentViewId);
+    this.persistArrayOfChildren(dispatch, [viewModel], parentViewId, successCallback);
   }
 
-  update(dispatch, viewModel, parentViewId) {
-    this.updateChildren(dispatch, [viewModel], parentViewId);
+  update(dispatch, viewModel, parentViewId, successCallback) {
+    this.updateChildren(dispatch, [viewModel], parentViewId, successCallback);
   }
 
-  updateChildren(dispatch, viewModelChildren, parentViewId) {
-    this.persistArrayOfChildren(dispatch, viewModelChildren, parentViewId);
+  updateChildren(dispatch, viewModelChildren, parentViewId, successCallback) {
+    this.persistArrayOfChildren(dispatch, viewModelChildren, parentViewId, successCallback);
   }
 
-  persistArrayOfChildren(dispatch, viewModelChildren, parentViewId) {
-    const successCallback = () => {
-      dispatch(actionSetCurrentBodyTool(parentViewId));
-    };
-
-    bodyChildrenCreatorService.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback);
+  persistArrayOfChildren(dispatch, viewModelChildren, parentViewId, successCallback) {
+    viewModelCreatorService.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback);
   }
 }
 

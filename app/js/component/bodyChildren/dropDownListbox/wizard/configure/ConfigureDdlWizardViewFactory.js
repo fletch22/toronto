@@ -2,16 +2,21 @@ import f22Uuid from '../../../../../util/f22Uuid';
 import PseudoModalTypes from '../../../../../component/modals/PseudoModalTypes';
 
 class ConfigureDdlWizardViewFactory {
-  createInstance(ddlModel, datastores) {
+  createInstance(ddlModel) {
     return {
       id: f22Uuid.generate(),
       type: PseudoModalTypes.WizardTypes.ConfigureDdl,
       model: ddlModel,
-      datastores,
       activeIndex: 0,
-      views: {
+      slides: {
         selectCollection: {
-
+          id: f22Uuid.generate(),
+          newCollectionNameInput: {
+            id: f22Uuid.generate(),
+            value: null,
+            visible: false
+          },
+          buttonNextDisabled: false
         }
       }
     };

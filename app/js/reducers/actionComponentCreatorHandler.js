@@ -3,61 +3,14 @@ import ComponentTypes from '../domain/component/ComponentTypes';
 import PseudoModalTypes from '../component/modals/PseudoModalTypes';
 import EditorNames from '../component/editors/EditorNames';
 import graphTraversal from '../state/graphTraversal';
-import f22Uuid from '../util/f22Uuid';
 import viewFactory from '../domain/component/view/viewFactory';
 import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
+import { DatastoreModelConstants } from '../domain/component/datastoreModelFactory';
 
 class ActionComponentCreatorHandler {
 
   constructor() {
     this.WEB_PAGE_ROOT = 'WEB_PAGE_ROOT';
-  }
-
-  createComponentEditorData(state, action) {
-    const type = action.payload.componentType;
-    let viewName;
-    let viewModel;
-
-    const options = _.cloneDeep(action.payload.options);
-    const modelNodeId = options.modelNodeId;
-    let model;
-    if (modelNodeId) {
-      model = _.cloneDeep(graphTraversal.find(state.model, modelNodeId));
-    } else {
-      model = { parentId: action.payload.options.parentModelId, typeLabel: type };
-    }
-
-    if (!model.children) model.children = [];
-
-    switch (type) {
-      case PseudoModalTypes.ComponentTypes.Website: {
-        viewName = EditorNames.EDIT_WEBSITE_DETAILS;
-        break;
-      }
-      case PseudoModalTypes.ComponentTypes.WebFolder: {
-        viewName = EditorNames.EDIT_WEBSITE_FOLDER_DETAILS;
-        break;
-      }
-      case PseudoModalTypes.ComponentTypes.WebPage: {
-        viewName = EditorNames.EDIT_WEBSITE_PAGE_DETAILS;
-        viewModel = this.generateViewModel(this.WEB_PAGE_ROOT, model);
-        break;
-      }
-      case PseudoModalTypes.WizardTypes.ConfigureDdl: {
-        viewName = EditorNames.Wizards.CONFIGURE_DDL;
-        break;
-      }
-      default: {
-        throw new Error(`Action not yet configured to handle ${type}.`);
-      }
-    }
-
-    const data = Object.assign({}, options, { id: f22Uuid.generate() }, { model }, { viewModel });
-
-    return {
-      viewName,
-      data
-    };
   }
 
   getPseudoModalData(type, state, modelNodeId) {
@@ -69,7 +22,15 @@ class ActionComponentCreatorHandler {
 
     switch (type) {
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
-        data = configureDdlWizardViewFactory.createInstance(model, this.getApplicationDatastores(state));
+        // TODO: Needs to pull out unneeded data here after viewModel pattern is implemented.
+        data = configureDdlWizardViewFactory.createInstance(model);
+
+        let defaultDatastore = _.find(this.getApplicationDatastores(state), (datastore) => (datastore.label === DatastoreModelConstants.DEFAULT_DATASTORE_LABEL));
+        defaultDatastore = _.cloneDeep(defaultDatastore);
+        const viewModel = this.generateViewModel(data.id, defaultDatastore);
+
+        Object.assign(data, { viewModel });
+
         viewName = EditorNames.Wizards.CONFIGURE_DDL;
         break;
       }
@@ -111,8 +72,16 @@ class ActionComponentCreatorHandler {
         view = viewFactory.createDdlView();
         break;
       }
+      case ComponentTypes.Datastore: {
+        view = viewFactory.createDatastoreView();
+        break;
+      }
+      case ComponentTypes.DataModel: {
+        view = viewFactory.createDataModelView();
+        break;
+      }
       default: {
-        throw new Error('Encountered error trying to determine view to create.');
+        throw new Error(`Encountered error trying to determine view to create for model typelabel \'${model.typeLabel}\'.`);
       }
     }
 

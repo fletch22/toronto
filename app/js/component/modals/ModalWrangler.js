@@ -9,8 +9,6 @@ class ModalWrangler extends React.Component {
   render() {
     let modal = null;
 
-    c.lo(this.props.modal);
-
     if (this.props.modal) {
       switch (this.props.modal.modalType) {
         case ModalTypes.ErrorModal: {

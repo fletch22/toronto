@@ -1,108 +1,32 @@
-import _ from 'lodash';
-import modalDispatcher from '../component/modals/ModalDispatcher';
-import crudActionCreator from '../actions/crudActionCreator';
-import graphTraversal from '../state/graphTraversal';
-import stateSyncService from '../service/stateSyncService';
-import StatePackager from '../service/StatePackager';
-import actionComponentCreator from '../reducers/actionComponentCreatorHandler';
-import ComponentTypes from '../domain/component/ComponentTypes';
+import actionComponentCreatorHandler from '../reducers/actionComponentCreatorHandler';
+import { actionSetCurrentBodyTool } from '../actions/bodyChildrenEditor/index';
+import viewModelCreatorService from './viewModelCreatorService';
 
 class BodyChildrenCreatorService {
 
-  constructor() {
-    this.statePackager = new StatePackager();
+  create(dispatch, model, parentViewId) {
+    const viewModel = actionComponentCreatorHandler.generateViewModel(parentViewId, model);
+
+    this.persistArrayOfChildren(dispatch, [viewModel], parentViewId);
   }
 
-  createUpdateChild(dispatch, parentViewModelId, viewModel, successCallback) {
-    return this.createUpdateChildren(dispatch, parentViewModelId, [viewModel], successCallback);
+  update(dispatch, viewModel, parentViewId) {
+    this.updateChildren(dispatch, [viewModel], parentViewId);
   }
 
-  createUpdateChildren(dispatch, parentViewModelId, viewModelChildren, successCallback) {
-    const dispatchHelper = () => {
-      const createUpdate = (cuDispatch, state) => {
-        try {
-          const jsonStateOld = JSON.stringify(state);
-          const stateNew = JSON.parse(jsonStateOld);
+  updateChildren(dispatch, viewModelChildren, parentViewId) {
+    this.persistArrayOfChildren(dispatch, viewModelChildren, parentViewId);
+  }
 
-          const stateParentViewModel = graphTraversal.find(stateNew, parentViewModelId);
-
-          viewModelChildren.forEach((viewModel) => {
-            const stateViewModel = _.find(stateParentViewModel.viewModel.children, { id: viewModel.id });
-            if (stateViewModel) {
-              Object.assign(stateViewModel, viewModel);
-            } else {
-              this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
-              stateParentViewModel.viewModel.children.push(viewModel);
-            }
-
-            const model = actionComponentCreator.extractModelFromViewModel(viewModel);
-
-            const parentModel = graphTraversal.find(stateNew.model, model.parentId);
-            const stateModel = _.find(parentModel.children, { id: model.id });
-            if (stateModel) {
-              Object.assign(stateModel, model);
-            } else {
-              this.ensureModelSiblingsPrepped(parentModel.children, parentModel.typeLabel);
-              parentModel.children.push(model);
-            }
-          });
-
-          const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
-          return stateSyncService.saveState(statePackage)
-            .then((result) => {
-              console.debug('Success Callback.');
-              return Promise.resolve(result);
-            })
-            .catch((error) => {
-              console.debug('Failure Callback.');
-              modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to create/update component.', cuDispatch);
-              return Promise.reject(error);
-            });
-        } catch (error) {
-          console.error(error);
-          return Promise.reject(error);
-        }
-      };
-
-      return crudActionCreator.invoke(createUpdate, successCallback);
+  persistArrayOfChildren(dispatch, viewModelChildren, parentViewId) {
+    const successCallback = () => {
+      c.l('Calling successCallback!!!');
+      dispatch(actionSetCurrentBodyTool(parentViewId));
     };
 
-    dispatch(dispatchHelper());
-  }
-
-  ensureViewModelSiblingsPrepped(children, parentTypeLabel) {
-    switch (parentTypeLabel) {
-      case ComponentTypes.Layout: {
-        this.shiftViewModelTopRowDown(children);
-        break;
-      }
-      default:
-    }
-  }
-
-  ensureModelSiblingsPrepped(children, parentTypeLabel) {
-    switch (parentTypeLabel) {
-      case ComponentTypes.Layout: {
-        this.shiftModelTopRowDown(children);
-        break;
-      }
-      default:
-    }
-  }
-
-  shiftViewModelTopRowDown(viewModels) {
-    viewModels.forEach((vm) => {
-      /* eslint-disable no-param-reassign */
-      vm.viewModel.y += 1;
-    });
-  }
-
-  shiftModelTopRowDown(models) {
-    models.forEach((model) => {
-      /* eslint-disable no-param-reassign */
-      model.y += 1;
-    });
+    viewModelCreatorService.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback);
   }
 }
+
 
 export default new BodyChildrenCreatorService();

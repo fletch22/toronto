@@ -10,8 +10,6 @@ describe('GridLayout', () => {
   it('difference between identical objects should show correct number of differences', () => {
     const diff = _.isEqual({ a: 2 }, { a: 1 });
 
-    c.l(diff);
-
     expect(diff).to.equal(false);
   });
 });

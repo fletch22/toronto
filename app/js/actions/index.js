@@ -21,6 +21,8 @@ export const ACTIONS = {
     SHOW_TIME_TRAVEL_NAV_BAR: 'SHOW_TIME_TRAVEL_NAV_BAR',
     HIDE_TIME_TRAVEL_NAV_BAR: 'HIDE_TIME_TRAVEL_NAV_BAR',
     UPDATE_ORB_PROPERTY_NO_PERSIST: 'UPDATE_ORB_PROPERTY_NO_PERSIST',
+    UPDATE_PROPERTY_NO_PERSIST: 'UPDATE_PROPERTY_NO_PERSIST',
+    UPDATE_PROPERTY_WITH_PERSIST: 'UPDATE_PROPERTY_WITH_PERSIST',
     REFRESH_PAGE: 'REFRESH_PAGE',
     NUKE_AND_PAVE: 'NUKE_AND_PAVE',
     RESTORE_FROM_DISK: 'RESTORE_FROM_DISK',
@@ -115,6 +117,20 @@ export const actionUpdateOrbPropertyNoPersist = (id, propertyName, value) => {
   return {
     type: ACTIONS.types.UPDATE_ORB_PROPERTY_NO_PERSIST,
     payload: { id, propertyName, value }
+  };
+};
+
+export const actionUpdatePropertyNoPersist = (uuid, propertyName, value) => {
+  return {
+    type: ACTIONS.types.UPDATE_PROPERTY_NO_PERSIST,
+    payload: { uuid, propertyName, value }
+  };
+};
+
+export const actionUpdatePropertyWithPersist = (uuid, propertyName, value) => {
+  return {
+    type: ACTIONS.types.UPDATE_PROPERTY_WITH_PERSIST,
+    payload: { uuid, propertyName, value }
   };
 };
 

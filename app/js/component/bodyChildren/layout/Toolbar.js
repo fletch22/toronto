@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
-import viewModelCreator from '../../utils/viewModelCreator';
+import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
 import layoutMinionModelFactory from '../../../domain/component/layoutMinionModelFactory';
 import { actionToggleMinionStaticLock, actionToggleLayoutMinionBorders } from '../../../actions/bodyChildrenEditor/index';
 
@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     createLayoutMinion: () => {
       const model = layoutMinionModelFactory.createInstance(ownProps.selectedViewModel.viewModel.id, `${new Date().getTime()}`, '1', '1', '0', '0', '');
-      viewModelCreator.create(dispatch, model, ownProps.selectedViewModel.id);
+      bodyChildrenCreatorService.create(dispatch, model, ownProps.selectedViewModel.id);
     },
     toggleMinionStaticLock: () => {
       dispatch(actionToggleMinionStaticLock(ownProps.selectedViewModel.id));

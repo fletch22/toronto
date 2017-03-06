@@ -6,7 +6,8 @@ const pseudoModalTypes = {
   ComponentTypes: {
     App: ComponentTypes.App,
     WebFolder: ComponentTypes.WebFolder,
-    WebPage: ComponentTypes.WebPage
+    WebPage: ComponentTypes.WebPage,
+    Website: ComponentTypes.Website
   },
   WizardTypes
 };

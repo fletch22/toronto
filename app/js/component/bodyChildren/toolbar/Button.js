@@ -3,7 +3,8 @@ import React, { PropTypes } from 'react';
 class Button extends React.Component {
 
   render() {
-    const className = `btn-f22-sys btn btn-default fa ${this.props.faClass}`;
+    let className = `btn-f22-sys btn btn-default fa ${this.props.faClass}`;
+    className = this.props.disabled ? className += ' disabled' : className;
 
     return (
       <div>
@@ -16,7 +17,8 @@ class Button extends React.Component {
 Button.propTypes = {
   faClass: PropTypes.string,
   tooltipText: PropTypes.string,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool
 };
 
 export default Button;

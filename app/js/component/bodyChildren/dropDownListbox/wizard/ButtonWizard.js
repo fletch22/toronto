@@ -13,7 +13,7 @@ class ButtonWizard extends React.Component {
 
 ButtonWizard.propTypes = {
   onClick: PropTypes.func,
-  viewId: PropTypes.string,
+  wizardId: PropTypes.string,
   jumpToView: PropTypes.number,
   label: PropTypes.string,
   disabled: PropTypes.bool
@@ -22,7 +22,7 @@ ButtonWizard.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      dispatch(actionCarouselSlideToIndex(ownProps.viewId, ownProps.jumpToView));
+      dispatch(actionCarouselSlideToIndex(ownProps.wizardId, ownProps.jumpToView));
     }
   };
 };

@@ -3,6 +3,7 @@ import StatePackager from '../StatePackager';
 import stateSyncService from '../stateSyncService';
 import componentGenerator from '../../domain/component/componentGenerator';
 
+// NOTE: Deprecated. Do not use parallel dom anymore.
 class AppContainerService extends ComponentService {
 
   constructor() {

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import viewModelCreator from '../../component/utils/viewModelCreator';
+import bodyChildrenCreatorService from '../bodyChildrenCreatorService';
 
 class LayoutChangeService {
 
@@ -21,7 +21,7 @@ class LayoutChangeService {
       }
     });
     if (updatedViewModels.length > 0) {
-      viewModelCreator.updateChildren(dispatch, updatedViewModels, parentViewModel.id);
+      bodyChildrenCreatorService.updateChildren(dispatch, updatedViewModels, parentViewModel.id);
     }
   }
 

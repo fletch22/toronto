@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import containerService from '../../../../service/component/containerService';
 import graphTraversal from '../../../../state/graphTraversal';
 import ViewModelCopyEditor from '../../ViewModelCopyEditor';
-import TextInput from '../../TextInput';
+import PropPathTextInput from '../../PropPathTextInput';
 import EditorIdDisplay from '../../EditorIdDisplay';
 import EditorButtons from '../../EditorButtons';
 
@@ -16,7 +16,7 @@ class WebsiteEditor extends ViewModelCopyEditor {
         <div className="row">
           <div className="col-lg-2 editor-label-container"><label>Label:</label></div>
           <div className="col-lg-10">
-            <TextInput id={this.props.id} path={'model.label'} value={this.props.label} />
+            <PropPathTextInput id={this.props.id} path={'model.label'} value={this.props.label} />
           </div>
         </div>
         <EditorButtons onSaveClick={this.props.onSaveClick} onCancelClick={this.props.onCancelClick} />

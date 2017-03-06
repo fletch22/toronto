@@ -3,7 +3,7 @@ import '../../../css/modules/container.scss';
 import { connect } from 'react-redux';
 import { actionUpdateViewPropertyValue } from '../../actions/index';
 
-class TextInput extends React.Component {
+class PropPathTextInput extends React.Component {
 
   constructor(props) {
     super(props);
@@ -26,7 +26,7 @@ class TextInput extends React.Component {
   }
 }
 
-TextInput.propTypes = {
+PropPathTextInput.propTypes = {
   id: PropTypes.any,
   propertyPath: PropTypes.string,
   persistState: PropTypes.bool,
@@ -45,12 +45,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-TextInput = connect(
+PropPathTextInput = connect(
   null,
   mapDispatchToProps
-)(TextInput);
+)(PropPathTextInput);
 
-export default TextInput;
+export default PropPathTextInput;
 
 
 

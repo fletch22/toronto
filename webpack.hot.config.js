@@ -8,7 +8,7 @@ const PATHS = {
   app: path.join(__dirname, 'app/'),
   images: path.join(__dirname, 'app/images'),
   build: path.join(__dirname, 'build'),
-  worker: path.join(__dirname, 'app/js/worker'),
+  worker: path.join(__dirname, 'app/js/worker')
 };
 
 const common = {
@@ -39,8 +39,7 @@ const common = {
       },
       {
         test: /\.(scss|css)$/,
-        loader: `style-loader!css-loader!postcss-loader!sass-loader?includePaths[]=${path.resolve(__dirname, './app')}`,
-        include: PATHS.app
+        loader: `style-loader!css-loader!postcss-loader!sass-loader?includePaths[]=${PATHS.app}`
       },
       {
         test: /bootstrap-sass\/assets\/javascripts\//,

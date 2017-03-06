@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import WizardPages from './WizardViews';
 import ButtonWizard from '../ButtonWizard';
-import F22Input from '../../../../../component/editors/F22Input';
+import ModelPropTextInput from '../../../../editors/ModelPropTextInput';
 
 class CreateCollectionView extends React.Component {
 
@@ -10,7 +10,7 @@ class CreateCollectionView extends React.Component {
       <div className="wizard-config-ddl">
         <div className="wizard-config-ddl col-md-12">
           <div className="row" style={{ height: '90%' }}>
-            <F22Input />
+            <ModelPropTextInput />
           </div>
           <div className="row text-right">
             <ButtonWizard viewId={this.props.viewId} jumpToView={WizardPages.SELECT_COLLECTION_VIEW} label="Back" />

@@ -299,16 +299,33 @@ $carousel-transition: 0.2s ease-in-out;
   flex-shrink: 1;
 }
 
-.sel_view_row_toolbar {
+.sel_view_row_edit_controls {
   border: solid 1px blue;
   flex-grow: 1;
   flex-shrink: 1;
+}
+
+.sel_view_toolbar {
+  display: flex;
 }
 
 .sel_view_row_foot_nav {
   border: solid 1px blue;
   flex-grow: 1;
   flex-shrink: 1;
+}
+
+.create-collection {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  transition: opacity 350ms;
+  opacity: 0;
+}
+
+.create-collection-visible {
+  opacity: 100;
+  transition: opacity 350ms;
 }
 
 // Wizards End

@@ -5,38 +5,20 @@ import WizardPages from './WizardViews';
 import ButtonWizard from '../ButtonWizard';
 import { DatastoreModelConstants } from '../../../../../domain/component/datastoreModelFactory';
 import SelectCollectionToolbar from './selectCollection/toolbar/SelectCollectionToolbar';
+import PropTextInput from '../../../../../component/editors/PropTextInput';
+import { actionToggleNewCollectionNameInput } from '../../../../../actions/wizard/configureDdl/index';
+import CreateCollection from './selectCollection/CreateCollection';
 
-class SelectCollectionView extends React.Component {
+class SelectCollectionSlide extends React.Component {
 
   render() {
-    // Get AppContainer's Default
-
-    let choices = [
-      {},
-      {},{},
-      {},{},
-      {},{},
-      {},{},
-      {},{},
-      {},{},
-      {},{},
-      {},{},
-      {},
-    ];
-
-    // const defaultDatastore = _.filter(this.props.datastores, (datastore) => (datastore.label === DatastoreModelConstants.DEFAULT_DATASTORE_LABEL));
-    //
-    // c.lo(defaultDatastore);
-    //
-    // let choicess = defaultDatastore[0].children;
-
-    c.lo(choices);
+    let choices = this.props.datastore.viewModel.children;
 
     if (choices.length > 0) {
       choices = choices.map((choice, index) => {
         const classes = 'list-group-item list-group-item-action';
         return (<a href="#" key={index} className={classes} data-value={index}>
-          {index}
+          {choice.viewModel.label}
         </a>);
       });
     } else {
@@ -54,38 +36,82 @@ class SelectCollectionView extends React.Component {
               choices
             }
           </div>
-          <div className="sel_view_row_toolbar" style={{ minHeight: '90px' }}>
+          <div className="sel_view_row_edit_controls" style={{ minHeight: '90px' }}>
             <div style={{ height: '50x' }}>
-              <SelectCollectionToolbar onClickAddCollection={this.props.onClickAddCollection} />
+              <SelectCollectionToolbar onClickAddCollection={this.props.onClickAddCollection}
+                onClickRemoveCollection={this.props.onClickRemoveCollection}
+                disableCollectionButtons={this.props.disableCollectionButtons}
+              />
+              <CreateCollection datastore={this.props.datastore} newCollectionNameInput={this.props.newCollectionNameInput} visible={this.props.newCollectionNameInputVisible} />
             </div>
           </div>
         </div>
         <div className="sel_view_row_foot_name">
-          <ButtonWizard viewId={this.props.viewId} jumpToView={WizardPages.SELECT_DDL_FIELDS} disabled={this.props.buttonNextDisabled} label="Next" />
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
       </div>
     );
   }
 }
 
-SelectCollectionView.propTypes = {
-  viewId: PropTypes.string,
-  buttonNextDisabled: PropTypes.bool,
+SelectCollectionSlide.propTypes = {
+  wizardData: PropTypes.object,
+  onClickAddCollection: PropTypes.func,
+  onClickRemoveCollection: PropTypes.func,
+  onBlurNewCollectionName: PropTypes.func,
   datastores: PropTypes.array,
-  onClickAddCollection: PropTypes.func
+  datastore: PropTypes.object,
+  selectCollectionSlide: PropTypes.object,
+  buttonNextDisabled: PropTypes.bool,
+  selectCollection: PropTypes.object,
+  newCollectionNameInput: PropTypes.object,
+  newCollectionNameInputVisible: PropTypes.bool,
+  disableCollectionButtons: PropTypes.bool
+};
+
+const partialFlatten = (ownProps) => {
+  const data = ownProps.wizardData;
+  const slide = data.slides.selectCollection;
+  const newCollectionNameInput = slide.newCollectionNameInput;
+
+  return {
+    datastores: data.datastores,
+    datastore: data.viewModel,
+    buttonNextDisabled: slide.buttonNextDisabled,
+    selectCollection: slide,
+    newCollectionNameInput,
+    newCollectionNameInputVisible: newCollectionNameInput.visible,
+    disableCollectionButtons: newCollectionNameInput.visible
+  };
+};
+
+const mapStateToProps = (state, ownProps) => {
+  return partialFlatten(ownProps);
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickAddCollection: () => {
-      c.l('Clicked add collection...');
+      const flatProps = Object.assign({}, ownProps, partialFlatten(ownProps));
+      if (!flatProps.disableCollectionButtons) {
+        dispatch(actionToggleNewCollectionNameInput(flatProps.newCollectionNameInput.id));
+      }
+    },
+    onClickRemoveCollection: () => {
+      const flatProps = Object.assign({}, ownProps, partialFlatten(ownProps));
+      if (!flatProps.disableCollectionButtons) {
+        // dispatch(actionToggleNewCollectionNameInput(flatProps.newCollectionNameInput.id));
+      }
+    },
+    onBlurNewCollectionName: () => {
+      c.l('Clicked onBlurNewCollectionName...');
     }
   };
 };
 
-SelectCollectionView = connect(
-  null,
+SelectCollectionSlide = connect(
+  mapStateToProps,
   mapDispatchToProps
-)(SelectCollectionView);
+)(SelectCollectionSlide);
 
-export default SelectCollectionView;
+export default SelectCollectionSlide;

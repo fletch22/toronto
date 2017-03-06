@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import 'rc-menu/assets/index.css';
 import '../../../../../css/modules/container.scss';
-import F22Input from '../../../editors/F22Input';
+import ModelPropTextInput from '../../../editors/ModelPropTextInput';
 import HeaderMenu from './HeaderMenu';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app';
 import graphTraversal from '../../../../state/graphTraversal';
@@ -13,7 +13,7 @@ class Header extends React.Component {
       <div className="container-orb">
         <div className="header-left">
           <div>
-            <F22Input modelNodeId={this.props.modelNodeId} propertyName="label" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue} />
+            <ModelPropTextInput modelNodeId={this.props.modelNodeId} propertyName="label" onBlur={this.props.onChangeLabel} value={this.props.headerTextValue} />
           </div>
         </div>
         <div className="header-right">

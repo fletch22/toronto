@@ -39,6 +39,18 @@ class ViewFactory {
       isSelected: false
     };
   }
+
+  createDatastoreView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
+
+  createDataModelView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
 }
 
 export default new ViewFactory();

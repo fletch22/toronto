@@ -2,6 +2,8 @@ const ComponentTypes = {
   AppContainer: 'AppContainer',
   App: 'App',
   Datastore: 'Datastore',
+  DataModel: 'DataModel',
+  DataField: 'DataField',
   Website: 'Website',
   WebFolder: 'WebFolder',
   WebPage: 'Page',

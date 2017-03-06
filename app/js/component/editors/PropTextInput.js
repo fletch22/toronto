@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import '../../../css/modules/container.scss';
 import { connect } from 'react-redux';
-import { actionUpdateOrbPropertyNoPersist } from '../../actions/index';
+import { actionUpdatePropertyNoPersist } from '../../actions/index';
 
-class F22Input extends React.Component {
+class PropTextInput extends React.Component {
 
   constructor(props) {
     super(props);
@@ -19,14 +19,14 @@ class F22Input extends React.Component {
   render() {
     return (
       <div>
-        <input type="text" ref="input" value={this.props.value} onChange={this.props.onChange} onBlur={this.props.onBlur} className="darkTextbox" onKeyUp={this.handleKeyPress} />
+        <input type="text" ref="input" value={this.props.value} onChange={this.props.onChange} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress} />
       </div>
     );
   }
 }
 
-F22Input.propTypes = {
-  modelNodeId: PropTypes.any,
+PropTextInput.propTypes = {
+  uuid: PropTypes.any,
   value: PropTypes.string,
   propertyName: PropTypes.string,
   onBlur: PropTypes.func,
@@ -36,17 +36,17 @@ F22Input.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onChange: (event) => {
-      dispatch(actionUpdateOrbPropertyNoPersist(ownProps.modelNodeId, ownProps.propertyName, event.target.value));
+      dispatch(actionUpdatePropertyNoPersist(ownProps.uuid, ownProps.propertyName, event.target.value));
     }
   };
 };
 
-F22Input = connect(
+PropTextInput = connect(
   null,
   mapDispatchToProps
-)(F22Input);
+)(PropTextInput);
 
-export default F22Input;
+export default PropTextInput;
 
 
 

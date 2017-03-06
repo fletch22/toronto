@@ -1,3 +1,5 @@
+import { ActionTypes as ConfigDllActionTypes } from './configureDdl/index';
+
 export const ActionTypes = {
   WIZARD: {
     SLIDE_RIGHT: 'SLIDE_RIGHT',
@@ -5,6 +7,8 @@ export const ActionTypes = {
     SLIDE_TO_INDEX: 'SLIDE_TO_INDEX'
   }
 };
+
+Object.assign(ActionTypes.WIZARD, ConfigDllActionTypes);
 
 export const actionCarouselSlideRight = (id) => ({
   type: ActionTypes.WIZARD.SLIDE_RIGHT,

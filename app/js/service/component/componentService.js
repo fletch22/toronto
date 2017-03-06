@@ -2,6 +2,8 @@ import stateSyncService from '../stateSyncService';
 import graphTraversal from '../../state/graphTraversal';
 import _ from 'lodash';
 import StatePackager from '../../service/StatePackager';
+
+// NOTE: Deprecated. Do not use parallel dom anymore.
 class ComponentService {
 
   constructor() {
