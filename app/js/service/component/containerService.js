@@ -3,6 +3,7 @@ import StatePackager from '../StatePackager';
 import stateSyncService from '../stateSyncService';
 import componentGenerator from '../../domain/component/componentGenerator';
 import graphTraversal from '../../../js/state/graphTraversal';
+import dancePartnerSynchronizer from '../../views/dancePartnerSynchronizer';
 
 class ContainerService extends ComponentService {
 
@@ -40,6 +41,8 @@ class ContainerService extends ComponentService {
     } else {
       this.addModel(stateNew, model);
     }
+
+    dancePartnerSynchronizer.update(stateNew);
 
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveState(statePackage);

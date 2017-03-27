@@ -2,53 +2,53 @@ import React, { PropTypes } from 'react';
 import Island from '../Island';
 import { connect } from 'react-redux';
 import Header from './header/Header';
-import crudComponentOperations from '../../CrudOperations';
-import graphTraversal from '../../../state/graphTraversal';
+import viewModelCreator from '../../../component/utils/viewModelCreator';
 
 class App extends React.Component {
 
   render() {
-    const children = (this.props.children) ? this.props.children : [];
+    const children = (this.props.viewModel.viewModel.children) ? this.props.viewModel.viewModel.children : [];
+
+    // c.lo(children.length, 'App children length: ');
+
     return (
       <div className="container-app col-lg-2 dashboard-app">
-        <div>
-          <Header headerTextValue={this.props.label} modelNodeId={this.props.id} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+          <Header viewModel={this.props.viewModel}
+            onClickClose={this.props.onClickRemoveApp}
+            onChangeLabel={this.props.onChangeLabel}
+          />
+          <div style={{ paddingLeft: '10px' }}>
           {
-            children.map((child) =>
-              <Island key={child.id} child={child} />
-            )
+             children.map((child) =>
+               <Island key={child.id} child={child} />
+             )
           }
-        </div>
+          </div>
       </div>
     );
   }
 }
 
 App.propTypes = {
-  id: PropTypes.any.isRequired,
-  label: PropTypes.string.isRequired,
-  children: PropTypes.arrayOf(React.PropTypes.object),
+  viewModel: PropTypes.object,
   onClickRemoveApp: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
 
-function changeLabel(component, newLabelValue) {
-  return crudComponentOperations.updateProperty(component, 'label', newLabelValue);
+function changeLabel(dispatch, ownProps) {
+  viewModelCreator.update(dispatch, ownProps.viewModel);
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const appContainerModel = state.model.appContainer;
-  const object = graphTraversal.find(appContainerModel, ownProps.id);
-
   return {
-    label: object.label
+    label: ownProps.viewModel.label
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onChangeLabel: (event) => {
-      dispatch(changeLabel(ownProps, event.target.value));
+    onChangeLabel: () => {
+      changeLabel(dispatch, ownProps);
     }
   };
 };

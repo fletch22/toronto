@@ -6,7 +6,7 @@ export const ActionTypes = {
   }
 };
 
-export const actionToggleNewCollectionNameInput = (uuid) => ({
+export const actionToggleNewItemNameInput = (uuid) => ({
   type: ActionTypes.CONFIGURE_DDL.SELECT_COLLECTION.TOGGLE_NEW_COLLECTION_NAME_INPUT,
   payload: {
     uuid

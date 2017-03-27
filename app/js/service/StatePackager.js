@@ -7,6 +7,8 @@ class StatePackager {
     const stateNew = JSON.parse(jsonStateNew);
     const difference = deepDiff(JSON.parse(jsonStateOld).model, stateNew.model);
 
+    c.lo(difference);
+
     // 'Package' is a reserved word and cannot be used.
     const packageTmp = {
       state: jsonStateNew,

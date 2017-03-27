@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import WizardTypes from '../../component/wizards/WizardTypes';
 

@@ -1,15 +1,15 @@
-import actionComponentCreatorHandler from '../../reducers/actionComponentCreatorHandler';
+import viewModelFactory from '../../reducers/viewModelFactory';
 import viewModelCreatorService from '../../service/viewModelCreatorService';
 
 class ViewModelCreator {
   create(dispatch, model, parentViewId, successCallback) {
-    const viewModel = actionComponentCreatorHandler.generateViewModel(parentViewId, model);
+    const viewModel = viewModelFactory.generateViewModel(parentViewId, model);
 
     this.persistArrayOfChildren(dispatch, [viewModel], parentViewId, successCallback);
   }
 
-  update(dispatch, viewModel, parentViewId, successCallback) {
-    this.updateChildren(dispatch, [viewModel], parentViewId, successCallback);
+  update(dispatch, viewModel, successCallback) {
+    this.updateChildren(dispatch, [viewModel], viewModel.parentId, successCallback);
   }
 
   updateChildren(dispatch, viewModelChildren, parentViewId, successCallback) {

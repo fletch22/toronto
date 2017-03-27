@@ -10,10 +10,13 @@ import stateSyncService from '../service/stateSyncService';
 import graphTraversal from '../state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
-import actionComponentCreator from './actionComponentCreatorHandler';
+import actionComponentCreator from './viewModelFactory';
 import actionBodyChildSelectorHandler from './actionBodyChildSelectorHandler';
 import actionBodyChildSetPropertyHandler from './actionBodyChildSetPropertyHandler';
 import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
+import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
+import viewUtils from '../views/viewUtils';
+import ViewTypes from '../views/ViewTypes';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
@@ -25,7 +28,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const node = graphTraversal.find(appContainerDom, action.modelId);
 
       if (!node) {
-        console.log(`State:  ${JSON.stringify(state)}`);
         console.error('Could not find node to toggle header menu.');
         return state;
       }
@@ -136,11 +138,18 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.ENSURE_INTIAL_STATE_SAVED: {
+    case ACTIONS.types.INITIALIZE_F22_APP: {
       if (!stateNew.hasInitialStateBeenSaved) {
         stateNew.hasInitialStateBeenSaved = true;
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
+
+      if (stateNew.model.appContainer.id !== -1) {
+        viewUtils.removeAllViewsByType(ViewTypes.Dashboard.Island, stateNew);
+        const islandView = dashboardIslandViewFactory.createInstance(stateNew.model.appContainer);
+        stateNew.views.push(islandView);
+      }
+
       return stateNew;
     }
     case ACTIONS.types.REFRESH_PAGE: {

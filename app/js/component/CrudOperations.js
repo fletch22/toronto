@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import crudActionCreator from '../actions/crudActionCreator';
 import ComponentService from '../service/component/componentService';
 import modalDispatcher from './modals/ModalDispatcher';
@@ -11,11 +12,11 @@ class CrudOperations {
 
       console.debug(`Model for delete: ${JSON.stringify(model)}`);
 
-      const jsonStateOld = JSON.stringify(state);
-      const stateNew = JSON.parse(jsonStateOld);
+      const stateNew = _.cloneDeep(state);
 
       const componentService = new ComponentService();
-      const promise = componentService.delete(stateNew, jsonStateOld, model.parentId, model.id);
+      c.l('Calling delete');
+      const promise = componentService.delete(stateNew, state, model.parentId, model.id);
 
       promise.then((obj) => {
         successCallback();

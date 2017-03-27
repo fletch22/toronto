@@ -1,13 +1,14 @@
 import _ from 'lodash';
 import ComponentTypes from '../domain/component/ComponentTypes';
 import PseudoModalTypes from '../component/modals/PseudoModalTypes';
+import ViewTypes from '../views/ViewTypes';
 import EditorNames from '../component/editors/EditorNames';
 import graphTraversal from '../state/graphTraversal';
 import viewFactory from '../domain/component/view/viewFactory';
 import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
 import { DatastoreModelConstants } from '../domain/component/datastoreModelFactory';
 
-class ActionComponentCreatorHandler {
+class ViewModelFactory {
 
   constructor() {
     this.WEB_PAGE_ROOT = 'WEB_PAGE_ROOT';
@@ -32,6 +33,30 @@ class ActionComponentCreatorHandler {
         Object.assign(data, { viewModel });
 
         viewName = EditorNames.Wizards.CONFIGURE_DDL;
+        break;
+      }
+      default: {
+        throw new Error(`Action not yet configured to handle ${type}.`);
+      }
+    }
+
+    return {
+      viewName,
+      data
+    };
+  }
+
+  getViewModelData(type, state, modelNodeId) {
+    let viewName;
+    let data;
+
+    // const model = _.cloneDeep(graphTraversal.find(state.model, modelNodeId));
+
+    switch (type) {
+      case ViewTypes.Dashboard.Island: {
+        // data = generateViewModel
+
+        viewName = ViewTypes.Dashboard.Island;
         break;
       }
       default: {
@@ -116,4 +141,4 @@ class ActionComponentCreatorHandler {
   }
 }
 
-export default new ActionComponentCreatorHandler();
+export default new ViewModelFactory();

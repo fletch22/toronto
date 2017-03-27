@@ -8,9 +8,9 @@ export const ACTIONS = {
   types: {
     ADD_APP: 'ADD_APP',
     APP_LABEL_INPUT_CHANGE: 'APP_LABEL_INPUT_CHANGE',
-    ENSURE_INTIAL_STATE_SAVED: 'ENSURE_INTIAL_STATE_SAVED',
     SET_STATE: 'SET_STATE',
     SET_STATE_AND_PERSIST: 'SET_STATE_AND_PERSIST',
+    INITIALIZE_F22_APP: 'INITIALIZE_F22_APP',
     TIME_TRAVEL_TO_PREVIOUS_STATE: 'TIME_TRAVEL_TO_PREVIOUS_STATE',
     MODAL_ERROR_SHOW: 'MODAL_ERROR_SHOW',
     MODAL_STANDARD_SHOW: 'MODAL_STANDARD_SHOW',
@@ -107,9 +107,9 @@ export const actionHideTimeTravelNavBar = () => {
   };
 };
 
-export const actionEnsureInitialStateSaved = () => {
+export const actionInitializeApp = () => {
   return {
-    type: ACTIONS.types.ENSURE_INTIAL_STATE_SAVED
+    type: ACTIONS.types.INITIALIZE_F22_APP
   };
 };
 

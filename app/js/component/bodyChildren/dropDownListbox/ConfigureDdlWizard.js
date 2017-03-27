@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Carousel } from 'react-bootstrap';
 import { actionCarouselSlideRight, actionCarouselSlideLeft, actionCarouselSlideToIndex } from '../../../actions/wizard/index.js';
-import SelectCollectionSlide from './wizard/configure/SelectCollectionView';
+import SelectItemOrContainerSlide from './wizard/configure/SelectItemOrContainerSlide';
 import SelectDdlFieldsView from './wizard/configure/SelectDdlFieldsView';
 import CreateCollectionView from './wizard/configure/CreateCollectionView';
 import WizardViews from './wizard/configure/WizardViews';
@@ -16,7 +16,7 @@ class ConfigureDdlWizard extends React.Component {
         <div style={{ width: '650px' }}>
           <Carousel activeIndex={activeIndex} direction={null} onSelect={this.props.handleSelect} indicators={false} interval={0} controls={false}>
             <Carousel.Item key={WizardViews.SELECT_COLLECTION_VIEW}>
-              <SelectCollectionSlide wizardData={this.props.data} />
+              <SelectItemOrContainerSlide wizardData={this.props.data} />
             </Carousel.Item>
             <Carousel.Item key={WizardViews.SELECT_DDL_FIELDS}>
               <SelectDdlFieldsView viewId={this.props.id} />

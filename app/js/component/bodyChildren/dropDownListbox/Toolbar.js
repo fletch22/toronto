@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ConfigureDdl from './ConfigureDdl';
 import { actionCreatePseudoModal } from '../../../actions/index';
 import PseudoModalTypes from '../../../component/modals/PseudoModalTypes';
-import actionComponentCreator from '../../../reducers/actionComponentCreatorHandler';
+import actionComponentCreator from '../../../reducers/viewModelFactory';
 
 class Toolbar extends React.Component {
 

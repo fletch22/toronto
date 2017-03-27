@@ -1,4 +1,4 @@
-import ModelToStateGenerator from '../stores/modelToStateGenerator';
+import ModelToStateGenerator from '../stores/ModelToStateGenerator';
 import RestService from '../service/restService';
 import stateSyncService from '../service/stateSyncService';
 import defaultState from '../state/defaultState';

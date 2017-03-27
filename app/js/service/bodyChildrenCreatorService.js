@@ -1,11 +1,11 @@
-import actionComponentCreatorHandler from '../reducers/actionComponentCreatorHandler';
+import viewModelFactory from '../reducers/viewModelFactory';
 import { actionSetCurrentBodyTool } from '../actions/bodyChildrenEditor/index';
 import viewModelCreatorService from './viewModelCreatorService';
 
 class BodyChildrenCreatorService {
 
   create(dispatch, model, parentViewId) {
-    const viewModel = actionComponentCreatorHandler.generateViewModel(parentViewId, model);
+    const viewModel = viewModelFactory.generateViewModel(parentViewId, model);
 
     this.persistArrayOfChildren(dispatch, [viewModel], parentViewId);
   }
@@ -20,7 +20,6 @@ class BodyChildrenCreatorService {
 
   persistArrayOfChildren(dispatch, viewModelChildren, parentViewId) {
     const successCallback = () => {
-      c.l('Calling successCallback!!!');
       dispatch(actionSetCurrentBodyTool(parentViewId));
     };
 

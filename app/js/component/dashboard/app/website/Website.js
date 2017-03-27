@@ -3,16 +3,19 @@ import Island from '../../Island';
 import { connect } from 'react-redux';
 import Header from './header/Header';
 import crudComponentOperations from '../../../CrudOperations';
-import graphTraversal from '../../../../state/graphTraversal';
+import viewModelCreator from '../../../../component/utils/viewModelCreator';
 
 class Website extends React.Component {
 
   render() {
-    const children = (this.props.children) ? this.props.children : [];
+    const children = (this.props.viewModel.children) ? this.props.viewModel.children : [];
 
     return (
-      <div className="dashboard-item dashboard-website col-sm-12">
-        <Header headerTextValue={this.props.label} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemoveApp} onChangeLabel={this.props.onChangeLabel} />
+      <div className="dashboard-item dashboard-website col-lg-12">
+        <Header viewModel={this.props.viewModel}
+          onClickClose={this.props.onClickRemoveApp}
+          onChangeLabel={this.props.onChangeLabel}
+        />
         {
           children.map((child) =>
             <Island key={child.id} child={child} />
@@ -24,10 +27,7 @@ class Website extends React.Component {
 }
 
 Website.propTypes = {
-  id: PropTypes.any.isRequired,
-  parentId: PropTypes.number.isRequired,
-  label: PropTypes.string.isRequired,
-  children: PropTypes.arrayOf(React.PropTypes.object),
+  viewModel: PropTypes.object,
   onClickRemoveApp: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
@@ -36,26 +36,21 @@ function remove(component) {
   return crudComponentOperations.removeNode(component);
 }
 
-function changeLabel(component, newLabelValue) {
-  return crudComponentOperations.updateProperty(component, 'label', newLabelValue);
+function changeLabel(dispatch, ownProps) {
+  viewModelCreator.update(dispatch, ownProps.viewModel);
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const appContainerModel = state.model.appContainer;
-  const object = graphTraversal.find(appContainerModel, ownProps.id);
-
-  return {
-    label: object.label
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  label: ownProps.viewModel.label
+});
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickRemoveApp: () => {
       dispatch(remove(ownProps));
     },
-    onChangeLabel: (event) => {
-      dispatch(changeLabel(ownProps, event.target.value));
+    onChangeLabel: () => {
+      changeLabel(dispatch, ownProps);
     }
   };
 };

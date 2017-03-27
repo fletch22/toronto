@@ -2,6 +2,7 @@ class DefaultState {
 
   getInstance() {
     return {
+      views: [],
       dom: {
         hasInitialStateBeenSaved: false,
         modal: [],

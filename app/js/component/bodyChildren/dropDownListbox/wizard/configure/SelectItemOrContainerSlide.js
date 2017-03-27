@@ -1,18 +1,15 @@
 import React, { PropTypes } from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import WizardPages from './WizardViews';
 import ButtonWizard from '../ButtonWizard';
-import { DatastoreModelConstants } from '../../../../../domain/component/datastoreModelFactory';
-import SelectCollectionToolbar from './selectCollection/toolbar/SelectCollectionToolbar';
-import PropTextInput from '../../../../../component/editors/PropTextInput';
-import { actionToggleNewCollectionNameInput } from '../../../../../actions/wizard/configureDdl/index';
-import CreateCollection from './selectCollection/CreateCollection';
+import SelectItemOrContainerToolbar from './selectCollection/toolbar/SelectItemOrContainerToolbar';
+import { actionToggleNewItemNameInput } from '../../../../../actions/wizard/configureDdl/index';
+import CreateItemForContainer from './selectCollection/CreateItemForContainer';
 
-class SelectCollectionSlide extends React.Component {
+class SelectItemOrContainerSlide extends React.Component {
 
   render() {
-    let choices = this.props.datastore.viewModel.children;
+    let choices = this.props.viewModel.viewModel.children;
 
     if (choices.length > 0) {
       choices = choices.map((choice, index) => {
@@ -38,15 +35,15 @@ class SelectCollectionSlide extends React.Component {
           </div>
           <div className="sel_view_row_edit_controls" style={{ minHeight: '90px' }}>
             <div style={{ height: '50x' }}>
-              <SelectCollectionToolbar onClickAddCollection={this.props.onClickAddCollection}
-                onClickRemoveCollection={this.props.onClickRemoveCollection}
-                disableCollectionButtons={this.props.disableCollectionButtons}
+              <SelectItemOrContainerToolbar onClickAdd={this.props.onClickAddCollection}
+                onClickRemove={this.props.onClickRemoveCollection}
+                disableButtons={this.props.disableToolbarButtons}
               />
-              <CreateCollection datastore={this.props.datastore} newCollectionNameInput={this.props.newCollectionNameInput} visible={this.props.newCollectionNameInputVisible} />
+              <CreateItemForContainer viewModel={this.props.viewModel} newItemNameInput={this.props.newItemNameInput} visible={this.props.newCollectionNameInputVisible} />
             </div>
           </div>
         </div>
-        <div className="sel_view_row_foot_name">
+        <div className="sel_view_row_foot_name text-right">
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
       </div>
@@ -54,34 +51,32 @@ class SelectCollectionSlide extends React.Component {
   }
 }
 
-SelectCollectionSlide.propTypes = {
+SelectItemOrContainerSlide.propTypes = {
   wizardData: PropTypes.object,
   onClickAddCollection: PropTypes.func,
   onClickRemoveCollection: PropTypes.func,
   onBlurNewCollectionName: PropTypes.func,
-  datastores: PropTypes.array,
-  datastore: PropTypes.object,
+  viewModel: PropTypes.object,
   selectCollectionSlide: PropTypes.object,
   buttonNextDisabled: PropTypes.bool,
   selectCollection: PropTypes.object,
-  newCollectionNameInput: PropTypes.object,
+  newItemNameInput: PropTypes.object,
   newCollectionNameInputVisible: PropTypes.bool,
-  disableCollectionButtons: PropTypes.bool
+  disableToolbarButtons: PropTypes.bool
 };
 
 const partialFlatten = (ownProps) => {
   const data = ownProps.wizardData;
   const slide = data.slides.selectCollection;
-  const newCollectionNameInput = slide.newCollectionNameInput;
+  const newItemNameInput = slide.newItemNameInput;
 
   return {
-    datastores: data.datastores,
-    datastore: data.viewModel,
+    viewModel: data.viewModel,
     buttonNextDisabled: slide.buttonNextDisabled,
     selectCollection: slide,
-    newCollectionNameInput,
-    newCollectionNameInputVisible: newCollectionNameInput.visible,
-    disableCollectionButtons: newCollectionNameInput.visible
+    newItemNameInput,
+    newCollectionNameInputVisible: newItemNameInput.visible,
+    disableToolbarButtons: newItemNameInput.visible
   };
 };
 
@@ -93,14 +88,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickAddCollection: () => {
       const flatProps = Object.assign({}, ownProps, partialFlatten(ownProps));
-      if (!flatProps.disableCollectionButtons) {
-        dispatch(actionToggleNewCollectionNameInput(flatProps.newCollectionNameInput.id));
+      if (!flatProps.disableToolbarButtons) {
+        dispatch(actionToggleNewItemNameInput(flatProps.newItemNameInput.id));
       }
     },
     onClickRemoveCollection: () => {
       const flatProps = Object.assign({}, ownProps, partialFlatten(ownProps));
-      if (!flatProps.disableCollectionButtons) {
-        // dispatch(actionToggleNewCollectionNameInput(flatProps.newCollectionNameInput.id));
+      if (!flatProps.disableToolbarButtons) {
+        alert('not yet implemented.');
       }
     },
     onBlurNewCollectionName: () => {
@@ -109,9 +104,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-SelectCollectionSlide = connect(
+SelectItemOrContainerSlide = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SelectCollectionSlide);
+)(SelectItemOrContainerSlide);
 
-export default SelectCollectionSlide;
+export default SelectItemOrContainerSlide;

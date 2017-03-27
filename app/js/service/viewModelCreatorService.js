@@ -4,8 +4,9 @@ import crudActionCreator from '../actions/crudActionCreator';
 import graphTraversal from '../state/graphTraversal';
 import stateSyncService from '../service/stateSyncService';
 import StatePackager from '../service/StatePackager';
-import actionComponentCreator from '../reducers/actionComponentCreatorHandler';
+import actionComponentCreator from '../reducers/viewModelFactory';
 import ComponentTypes from '../domain/component/ComponentTypes';
+import dancePartnerSynchronizer from '../views/dancePartnerSynchronizer';
 
 class ViewModelCreatorService {
 
@@ -34,17 +35,21 @@ class ViewModelCreatorService {
               this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
               stateParentViewModel.viewModel.children.push(viewModel);
             }
-            const model = actionComponentCreator.extractModelFromViewModel(viewModel);
+            let model = actionComponentCreator.extractModelFromViewModel(viewModel);
             const parentModel = graphTraversal.find(stateNew.model, model.parentId);
 
             const stateModel = _.find(parentModel.children, { id: model.id });
             if (stateModel) {
+              model = Object.assign({}, model);
+              delete model.children;
               Object.assign(stateModel, model);
             } else {
               this.ensureModelSiblingsPrepped(parentModel.children, parentModel.typeLabel);
               parentModel.children.push(model);
             }
           });
+
+          dancePartnerSynchronizer.update(stateNew);
 
           const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
           return stateSyncService.saveState(statePackage)

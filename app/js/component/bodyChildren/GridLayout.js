@@ -10,7 +10,7 @@ import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index
 import ComponentChild from './ComponentChild';
 import LayoutService from '../../service/component/LayoutChangeService';
 import graphTraversal from '../../state/graphTraversal';
-import actionComponentCreator from '../../reducers/actionComponentCreatorHandler';
+import actionComponentCreator from '../../reducers/viewModelFactory';
 
 class GridLayout extends React.Component {
 

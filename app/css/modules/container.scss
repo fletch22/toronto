@@ -23,7 +23,7 @@
   margin: 2px 0 0 0;
 }
 
-.container-app {
+#main .container-app {
 	background-color: $gray;
 	margin: 10px;
 	border-radius: 5px;
@@ -43,23 +43,29 @@
   top: 0;
 }
 
-.container-orb {
-  background-color: lightgrey;
+#main .container-orb {
   border-radius: 5px;
-  padding: 0 0 0 0;
+  padding: 0 5px 0 5px;
+  margin: 0;
 }
 
 .container-orb > .header-left {
-  float:left
+  float:left;
+  padding: 0;
+  margin: 0;
 }
 
 .container-orb > .header-right {
-  float:right
+  float:right;
+  padding: 0;
+  margin: 0;
+  text-align: right;
 }
 
 .darkTextbox {
 	border: none;
     background: transparent;
+    width: 95%;
 }
 
 .darkTextbox:focus {
@@ -98,9 +104,9 @@ Begin Dashboard
   padding-right: 0;
 }
 
-.dashboard-item.dashboard-website:hover  {
-  background-color: $gray1;
-  color: #000;
+#main .dashboard-item.dashboard-website {
+  padding: 0;
+  margin: 0;
 }
 
 .dashboard-item.dashboard-webfolder:hover  {
@@ -315,7 +321,7 @@ $carousel-transition: 0.2s ease-in-out;
   flex-shrink: 1;
 }
 
-.create-collection {
+.create-item-for-collection {
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -323,9 +329,13 @@ $carousel-transition: 0.2s ease-in-out;
   opacity: 0;
 }
 
-.create-collection-visible {
+.create-item-for-collection-visible {
   opacity: 100;
   transition: opacity 350ms;
 }
 
 // Wizards End
+
+#main .no-padding {
+  padding: 0;
+}

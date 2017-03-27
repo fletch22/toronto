@@ -1,5 +1,5 @@
 import graphTraversal from '../state/graphTraversal';
-import actionComponentCreator from './actionComponentCreatorHandler';
+import actionComponentCreator from './viewModelFactory';
 
 class ActionBodyChildSelectorHandler {
 
@@ -32,6 +32,7 @@ class ActionBodyChildSelectorHandler {
       if (parentOfExisting) {
         const currentlySelectedViewModel = graphTraversal.find(parentOfExisting.viewModel, pageViewNode.selectedChildViewId);
         currentlySelectedViewModel.isSelected = false;
+
         parentOfExisting.viewModel.children = [].concat(parentOfExisting.viewModel.children);
       }
     }

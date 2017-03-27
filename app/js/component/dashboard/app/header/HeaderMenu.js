@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Menu, { MenuItem, Divider } from 'rc-menu';
+import { default as RcMenu, MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import '../../../../../css/modules/container.scss';
 import { actionCreatePseudoModalComponent } from '../../../../actions/index';
@@ -8,6 +8,7 @@ import ComponentTypes from '../../../../domain/component/ComponentTypes';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app/index';
 import 'css/modules/menu';
 import crudComponentOperations from '../../../CrudOperations';
+import { actionUpdateViewPropertyValue } from '../../../../actions/index';
 
 class HeaderMenu extends React.Component {
   static menuKeys() {
@@ -20,11 +21,11 @@ class HeaderMenu extends React.Component {
   render() {
     let menu;
     if (this.props.isShowingHeaderMenu) {
-      menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
+      menu = (<RcMenu onClick={this.props.onMenuClick} className="f22-menu">
         <MenuItem key={HeaderMenu.menuKeys().CREATE_WEBSITE} className="menu-item">Add New Website</MenuItem>
         <Divider />
         <MenuItem key={HeaderMenu.menuKeys().REMOVE} className="menu-item">Remove App</MenuItem>
-      </Menu>);
+      </RcMenu>);
     }
 
     return (
@@ -36,6 +37,8 @@ class HeaderMenu extends React.Component {
 }
 
 HeaderMenu.propTypes = {
+  viewModelId: PropTypes.string,
+  modelId: PropTypes.any,
   isShowingHeaderMenu: PropTypes.bool,
   onMenuClick: PropTypes.func,
   modelNodeId: PropTypes.any,
@@ -43,27 +46,27 @@ HeaderMenu.propTypes = {
 };
 
 function removeApp(id) {
-   return crudComponentOperations.removeNode(id);
+  return crudComponentOperations.removeNode(id);
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
       case HeaderMenu.menuKeys().CREATE_WEBSITE: {
-        dispatch(actionCreatePseudoModalComponent(ComponentTypes.Website, { parentModelId: ownProps.modelNodeId }));
-        dispatch(actionAppToggleMenu(ownProps.modelNodeId));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.Website, { parentModelId: ownProps.modelId }));
+        dispatch(actionAppToggleMenu(ownProps.modelId));
         break;
       }
       case HeaderMenu.menuKeys().REMOVE: {
-        dispatch(removeApp(ownProps.modelNodeId));
-        dispatch(actionAppToggleMenu(ownProps.modelNodeId));
+        dispatch(removeApp(ownProps.modelId));
+        dispatch(actionAppToggleMenu(ownProps.modelId));
         break;
       }
       default:
     }
   },
   onMouseLeave: () => {
-    dispatch(actionAppToggleMenu(ownProps.modelNodeId));
+    dispatch(actionUpdateViewPropertyValue(ownProps.viewModelId, 'isShowingHeaderMenu', !ownProps.isShowingHeaderMenu, true));
   }
 });
 

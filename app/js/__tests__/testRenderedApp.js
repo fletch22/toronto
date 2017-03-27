@@ -5,20 +5,15 @@ import { expect } from 'chai';
 import App from 'js/component/AppRoot';
 import { Provider } from 'react-redux';
 import defaultState from '../state/defaultState';
-import { createStore } from 'redux';
-import apps from '../reducers';
-import DevTools from '../containers/DevTools';
 import AllStore from '../stores/allStore';
 
 class TestRenderedApp {
 
   setup(sandbox) {
-    const state = Object.assign({}, defaultState.getInstance());
-    state.model.appContainer.id = 123;
-    //defaultState.model.appContainer.children = [{ label: 'HelloWorldApp', id: 1040, parentId: 1039 }, { parentId: 1039, id: 1, label: 'asdf' }];
+    const stateFromServer = Object.assign({}, defaultState.getInstance());
 
     return new Promise((resolve, reject) => {
-      const currentStateRetriever = sandbox.stub(CurrentStateRetriever, 'getCurrent').returns(Promise.resolve(state));
+      const currentStateRetriever = sandbox.stub(CurrentStateRetriever, 'getCurrent').returns(Promise.resolve(stateFromServer));
 
       const allStore = new AllStore();
       const promise = allStore.getStore();

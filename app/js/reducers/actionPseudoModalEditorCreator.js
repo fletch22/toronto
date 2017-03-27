@@ -3,7 +3,7 @@ import PseudoModalTypes from '../component/modals/PseudoModalTypes';
 import EditorNames from '../component/editors/EditorNames';
 import graphTraversal from '../state/graphTraversal';
 import f22Uuid from '../util/f22Uuid';
-import actionComponentCreatorHandler from './actionComponentCreatorHandler';
+import viewModelFactory from './viewModelFactory';
 
 class ActionPseudoModalEditorCreator {
 
@@ -38,7 +38,7 @@ class ActionPseudoModalEditorCreator {
       }
       case PseudoModalTypes.ComponentTypes.WebPage: {
         viewName = EditorNames.EDIT_WEBSITE_PAGE_DETAILS;
-        viewModel = actionComponentCreatorHandler.generateViewModel(this.WEB_PAGE_ROOT, model);
+        viewModel = viewModelFactory.generateViewModel(this.WEB_PAGE_ROOT, model);
         break;
       }
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {

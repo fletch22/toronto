@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import AppContainerToolbar from '../component/dashboard/appContainer/AppContainerToolbar';
-import update from 'react-addons-update';
 import Island from '../component/dashboard/Island';
 import PseudoModalWrangler from '../component/modals/PseudoModalWrangler';
+import ViewTypes from '../views/ViewTypes';
+import _ from 'lodash';
 
 class AppContainer extends React.Component {
   render() {
@@ -13,7 +14,7 @@ class AppContainer extends React.Component {
         <div className="container-fluid app-container">
           {
             this.props.children.map((child) =>
-              <Island key={child.id} child={child} />
+              <Island key={child.id} child={child} model="" />
             )
           }
         </div>
@@ -24,17 +25,22 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.propTypes = {
-  children: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+  children: PropTypes.arrayOf(PropTypes.object).isRequired,
+  appContainerChildren: PropTypes.arrayOf(PropTypes.object)
 };
 
-const mapStateToProps = (state, props) => {
-  let children = state.model.appContainer.children;
-  const oldChildren = JSON.stringify(props.children);
-  const newChildren = JSON.stringify(state.model.appContainer.children);
+const mapStateToProps = (state) => {
+  let children = [];
 
-  if ((props.children && children && props.children.length !== children.length)
-  || oldChildren !== newChildren) {
-    children = update(state.model.appContainer.children, { $push: [] });
+  if (state.views) {
+    const dashboardIslandView = _.find(state.views, (view) => {
+      return view.viewType === ViewTypes.Dashboard.Island;
+    });
+    if (dashboardIslandView) {
+      children = [].concat(dashboardIslandView.viewModel.children[0].viewModel.children);
+      // c.lo(state.views, 'state.views: ');
+      // c.lo(children, 'children: ');
+    }
   }
 
   return {
