@@ -6,7 +6,6 @@ import { ACTIONS as bodyChildrenEditorActions } from './bodyChildrenEditor/index
 
 export const ACTIONS = {
   types: {
-    ADD_APP: 'ADD_APP',
     APP_LABEL_INPUT_CHANGE: 'APP_LABEL_INPUT_CHANGE',
     SET_STATE: 'SET_STATE',
     SET_STATE_AND_PERSIST: 'SET_STATE_AND_PERSIST',

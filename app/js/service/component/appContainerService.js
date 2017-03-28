@@ -2,6 +2,7 @@ import ComponentService from './componentService';
 import StatePackager from '../StatePackager';
 import stateSyncService from '../stateSyncService';
 import componentGenerator from '../../domain/component/componentGenerator';
+import dancePartnerSynchronizer from '../../views/dancePartnerSynchronizer';
 
 // NOTE: Deprecated. Do not use parallel dom anymore.
 class AppContainerService extends ComponentService {
@@ -25,15 +26,10 @@ class AppContainerService extends ComponentService {
     this.stateInjector(modelAppContainer, domAppContainer, component);
   }
 
-  addApp(stateNew, jsonStateOld, label) {
-    this.addAppToState(stateNew, label);
-
-    const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
-    return stateSyncService.saveStateSynchronous(statePackage);
-  }
-
   addAppAsync(stateNew, jsonStateOld, label) {
     this.addAppToState(stateNew, label);
+
+    dancePartnerSynchronizer.update(stateNew);
 
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveState(statePackage);

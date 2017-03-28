@@ -10,16 +10,13 @@ class CrudOperations {
     const removeAppCallback = (dispatch, state) => {
       const model = graphTraversal.find(state.model, id);
 
-      console.debug(`Model for delete: ${JSON.stringify(model)}`);
-
       const stateNew = _.cloneDeep(state);
 
       const componentService = new ComponentService();
-      c.l('Calling delete');
       const promise = componentService.delete(stateNew, state, model.parentId, model.id);
 
       promise.then((obj) => {
-        successCallback();
+        if (successCallback) successCallback();
         Promise.resolve(obj);
       }).catch((error) => {
         modalDispatcher.dispatchErrorModal(error, `There was an error removing the ${model.typeLabel}.`, dispatch);

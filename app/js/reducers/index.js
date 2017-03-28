@@ -37,9 +37,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       return stateNew;
     }
-    case ACTIONS.types.ADD_APP: {
-      return appContainerService.addApp(state, jsonStateOld, appContainerDom.section.addNew.appLabel);
-    }
     case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
       appContainerDom.section.addNew.appLabel = action.appLabel;
 
@@ -121,6 +118,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.MODAL_ERROR_SHOW: {
       const errorModalDtoFactory = new ErrorModalDtoFactory();
       const errorModal = errorModalDtoFactory.getInstance(action.headerText, action.bodyText, action.okAction);
+
+      c.lo(errorModal, 'red errorModal: ');
 
       stateNew.dom.modal.push(errorModal);
 

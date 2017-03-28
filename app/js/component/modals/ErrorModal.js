@@ -5,39 +5,29 @@ import { connect } from 'react-redux';
 class ErrorModal extends React.Component {
   render() {
     return (
-      <StandardModal showModal onOk={this.props.onOk} headerText={this.props.headerText} bodyText={this.props.bodyText} />
+      <StandardModal showModal okAction={this.props.okAction} headerText={this.props.headerText} bodyText={this.props.bodyText} />
     );
   }
-}
-
-function onOkDispatch() {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    const errorModal = state.dom.modal[0];
-
-    dispatch(errorModal.okAction);
-  };
 }
 
 ErrorModal.propTypes = {
   showModal: React.PropTypes.bool,
   headerText: React.PropTypes.string,
   bodyText: React.PropTypes.string,
-  onOk: React.PropTypes.func
+  okAction: React.PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
+  const errorModal = state.dom.modal[0];
+
   return {
-    onOk: () => {
-      dispatch(onOkDispatch());
-    }
+    okAction: errorModal.okAction
   };
 };
 
 ErrorModal = connect(
-  null,
-  mapDispatchToProps
+  mapStateToProps,
+  null
 )(ErrorModal);
 
 export default ErrorModal;
