@@ -8,8 +8,7 @@ import viewModelCreator from '../../../../component/utils/viewModelCreator';
 class Website extends React.Component {
 
   render() {
-    const children = (this.props.viewModel.children) ? this.props.viewModel.children : [];
-
+    const children = (this.props.children) ? this.props.children : [];
     return (
       <div className="dashboard-item dashboard-website col-lg-12">
         <Header viewModel={this.props.viewModel}
@@ -28,6 +27,7 @@ class Website extends React.Component {
 
 Website.propTypes = {
   viewModel: PropTypes.object,
+  children: PropTypes.array,
   onClickRemoveApp: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
@@ -40,9 +40,12 @@ function changeLabel(dispatch, ownProps) {
   viewModelCreator.update(dispatch, ownProps.viewModel);
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  label: ownProps.viewModel.label
-});
+const mapStateToProps = (state, ownProps) => {
+  return {
+    label: ownProps.viewModel.label,
+    children: ownProps.viewModel.viewModel.children
+  };
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {

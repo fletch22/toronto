@@ -119,8 +119,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const errorModalDtoFactory = new ErrorModalDtoFactory();
       const errorModal = errorModalDtoFactory.getInstance(action.headerText, action.bodyText, action.okAction);
 
-      c.lo(errorModal, 'red errorModal: ');
-
       stateNew.dom.modal.push(errorModal);
 
       return stateNew;
@@ -294,9 +292,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const id = action.payload.id;
 
       const carousel = graphTraversal.find(stateNew, id);
-      c.lo(carousel, 'carousel right before setting: ');
       carousel.activeIndex += 1;
-      c.lo(carousel, 'carousel right: ');
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

@@ -51,6 +51,7 @@ class DashboardIslandViewModelFactory {
     if (modelParentClone.children) {
       const newChildren = [];
       modelParentClone.children.forEach((model) => {
+
         if (this.supportedTypes.includes(model.typeLabel)) {
           newChildren.push(this.generateViewModel(viewModelParentId, model));
         }

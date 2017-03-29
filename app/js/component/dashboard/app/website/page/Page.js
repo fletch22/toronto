@@ -3,17 +3,22 @@ import Island from '../../../Island';
 import { connect } from 'react-redux';
 import Header from './header/Header';
 import crudComponentOperations from '../../../../CrudOperations';
-import graphTraversal from '../../../../../state/graphTraversal';
+import viewModelCreator from '../../../../../component/utils/viewModelCreator';
 
 class Page extends React.Component {
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
 
+    // <Header headerTextValue={this.props.pageName} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemove} onChangeLabel={this.props.onChangeLabel} />
+
     return (
       <div>
         <div className="dashboard-item dashboard-webpage col-sm-12">
-          <Header headerTextValue={this.props.pageName} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemove} onChangeLabel={this.props.onChangeLabel} />
+          <Header viewModel={this.props.viewModel}
+            onClickClose={this.props.onClickRemove}
+            onChangeLabel={this.props.onChangeLabel}
+          />
           {
             children.map((child) =>
               <Island key={child.id} child={child} />
@@ -27,8 +32,9 @@ class Page extends React.Component {
 
 Page.propTypes = {
   id: PropTypes.any.isRequired,
-  parentId: PropTypes.number.isRequired,
-  pageName: PropTypes.string.isRequired,
+  viewModel: PropTypes.object,
+  parentId: PropTypes.string,
+  pageName: PropTypes.string,
   children: PropTypes.arrayOf(React.PropTypes.object),
   onClickRemove: PropTypes.func,
   onChangeLabel: PropTypes.func
@@ -38,16 +44,13 @@ function remove(component) {
   return crudComponentOperations.removeNode(component);
 }
 
-function changePageName(component, newLabelValue) {
-  return crudComponentOperations.updateProperty(component, 'pageName', newLabelValue);
+function changePageName(dispatch, ownProps) {
+  viewModelCreator.update(dispatch, ownProps.viewModel);
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const appContainerModel = state.model.appContainer;
-  const object = graphTraversal.find(appContainerModel, ownProps.id);
-
   return {
-    pageName: object.pageName
+    pageName: ownProps.viewModel.pageName
   };
 };
 
@@ -56,8 +59,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onClickRemove: () => {
       dispatch(remove(ownProps));
     },
-    onChangeLabel: (event) => {
-      dispatch(changePageName(ownProps, event.target.value));
+    onChangeLabel: () => {
+      changePageName(dispatch, ownProps);
     }
   };
 };

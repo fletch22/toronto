@@ -21,7 +21,11 @@ class Header extends React.Component {
         </div>
         <div className="header-right col-md-1">
           <button type="button" className="fa fa-ellipsis-v button-ellipses-v" aria-label="Close" onClick={this.props.onClickOpenMenu} />
-          <HeaderMenu isShowingHeaderMenu={this.props.isShowingHeaderMenu} viewModelId={this.props.viewModel.id} modelId={this.props.viewModel.viewModel.id} parentModelNodeId={this.props.viewModel.viewModel.parentId} />
+          <HeaderMenu isShowingHeaderMenu={this.props.isShowingHeaderMenu}
+            viewModelId={this.props.viewModel.id}
+            modelId={this.props.viewModel.viewModel.id}
+            parentModelNodeId={this.props.viewModel.viewModel.parentId}
+          />
         </div>
       </div>
     );

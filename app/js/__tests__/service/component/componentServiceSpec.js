@@ -16,8 +16,6 @@ describe('ComponentService', () => {
 
     componentService.removeChildFromParent(parent, '345');
 
-    c.lo(parent);
-
     expect(parent.children.length).to.equal(2);
   });
 });

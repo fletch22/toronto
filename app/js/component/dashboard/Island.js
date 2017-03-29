@@ -17,14 +17,14 @@ class Island extends React.Component {
         component = <Website key={this.props.child.id} viewModel={this.props.child} />;
         break;
       }
-      // case ComponentTypes.WebFolder: {
-      //   component = <WebFolder {...this.props.child} />;
-      //   break;
-      // }
-      // case ComponentTypes.WebPage: {
-      //   component = <Page {...this.props.child} />;
-      //   break;
-      // }
+      case ComponentTypes.WebFolder: {
+        component = <WebFolder {...this.props.child} viewModel={this.props.child} />;
+        break;
+      }
+      case ComponentTypes.WebPage: {
+        component = <Page {...this.props.child} viewModel={this.props.child} />;
+        break;
+      }
       default:
         component = null;
     }

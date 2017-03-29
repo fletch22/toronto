@@ -38,8 +38,6 @@ const mapStateToProps = (state) => {
     });
     if (dashboardIslandView) {
       children = [].concat(dashboardIslandView.viewModel.children[0].viewModel.children);
-      // c.lo(state.views, 'state.views: ');
-      // c.lo(children, 'children: ');
     }
   }
 

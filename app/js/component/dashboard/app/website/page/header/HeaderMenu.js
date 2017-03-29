@@ -4,7 +4,7 @@ import Menu, { MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import '../../../../../../../css/modules/container.scss';
 import { actionAppToggleMenu } from '../../../../../../actions/dashboard/app/index';
-import { actionCreatePseudoModalComponent } from '../../../../../../actions/index';
+import { actionCreatePseudoModalComponent, actionUpdateViewPropertyValue } from '../../../../../../actions/index';
 import ComponentTypes from '../../../../../../domain/component/ComponentTypes';
 import 'css/modules/menu';
 import crudComponentOperations from '../../../../../CrudOperations';
@@ -37,7 +37,8 @@ class HeaderMenu extends React.Component {
 }
 
 HeaderMenu.propTypes = {
-  modelNodeId: PropTypes.any,
+  modelId: PropTypes.any,
+  viewModelId: PropTypes.string,
   parentModelNodeId: PropTypes.number,
   isShowingHeaderMenu: PropTypes.bool,
   onMenuClick: PropTypes.func,
@@ -52,23 +53,28 @@ const remove = (dispatch, id) => {
   return crudComponentOperations.removeNode(id, successCallback);
 };
 
+const toggleMenu = (dispatch, ownProps) => {
+  dispatch(actionUpdateViewPropertyValue(ownProps.viewModelId, 'isShowingHeaderMenu', !ownProps.isShowingHeaderMenu, true));
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
       case HeaderMenu.menuKeys().EDIT: {
-        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebPage, { modelNodeId: ownProps.modelNodeId }));
-        dispatch(actionAppToggleMenu(ownProps.modelNodeId));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebPage, { modelNodeId: ownProps.modelId, parentModelNodeId: ownProps.parentModelNodeId }));
+        toggleMenu(dispatch, ownProps);
         break;
       }
       case HeaderMenu.menuKeys().REMOVE: {
-        dispatch(remove(dispatch, ownProps.modelNodeId));
+        dispatch(remove(dispatch, ownProps.modelId));
+        toggleMenu(dispatch, ownProps);
         break;
       }
       default:
     }
   },
   onMouseLeave: () => {
-    dispatch(actionAppToggleMenu(ownProps.modelNodeId));
+    toggleMenu(dispatch, ownProps);
   }
 });
 
