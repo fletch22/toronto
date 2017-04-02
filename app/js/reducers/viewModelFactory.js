@@ -32,7 +32,7 @@ class ViewModelFactory {
 
         Object.assign(data, { viewModel });
 
-        viewName = EditorNames.Wizards.CONFIGURE_DDL;
+        viewName = EditorNames.Wizards.ConfigureDdl;
         break;
       }
       default: {
@@ -50,12 +50,8 @@ class ViewModelFactory {
     let viewName;
     let data;
 
-    // const model = _.cloneDeep(graphTraversal.find(state.model, modelNodeId));
-
     switch (type) {
       case ViewTypes.Dashboard.Island: {
-        // data = generateViewModel
-
         viewName = ViewTypes.Dashboard.Island;
         break;
       }

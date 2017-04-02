@@ -42,7 +42,7 @@ class ActionPseudoModalEditorCreator {
         break;
       }
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
-        viewName = EditorNames.Wizards.CONFIGURE_DDL;
+        viewName = EditorNames.Wizards.ConfigureDdl;
         break;
       }
       default: {

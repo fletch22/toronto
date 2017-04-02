@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import WizardPages from './WizardViews';
 import ButtonWizard from '../ButtonWizard';
 import SelectItemOrContainerToolbar from './selectCollection/toolbar/SelectItemOrContainerToolbar';
-import { actionToggleNewItemNameInput } from '../../../../../actions/wizard/configureDdl/index';
+import { actionToggleNewItemNameInput, actionSelectCollection } from '../../../../../actions/wizard/configureDdl/index';
 import CreateItemForContainer from './selectCollection/CreateItemForContainer';
 
 class SelectItemOrContainerSlide extends React.Component {
@@ -13,14 +13,19 @@ class SelectItemOrContainerSlide extends React.Component {
 
     if (choices.length > 0) {
       choices = choices.map((choice, index) => {
-        const classes = 'list-group-item list-group-item-action';
-        return (<a href="#" key={index} className={classes} data-value={index}>
+        let classes = 'list-group-item list-group-item-action';
+
+        if (choice.viewModel.id === this.props.selectedCollectionId) {
+          classes += ' wiz-sel-coll-selected-collection';
+        }
+
+        return (<a href="#" key={index} className={classes} data-value={choice.viewModel.id} onFocus={this.props.onCollectionFocus}>
           {choice.viewModel.label}
         </a>);
       });
     } else {
       choices = (
-        <div style={{ padding: '10px 0 0 30px' }}>(no collections)</div>
+        <div className="wiz-sel-coll-no-sel-coll">(no collections)</div>
       );
     }
 
@@ -28,7 +33,7 @@ class SelectItemOrContainerSlide extends React.Component {
       <div className="wizard-config-ddl sel_view_coll-flex">
         <div className="sel_view_row_main">
           <label>Select collection:</label>
-          <div className="list-group" style={{ overflowY: 'scroll', maxWidth: '98%', minHeight: '200px', maxHeight: '300px' }}>
+          <div className="list-group wiz-sel-coll">
             {
               choices
             }
@@ -58,11 +63,13 @@ SelectItemOrContainerSlide.propTypes = {
   onBlurNewCollectionName: PropTypes.func,
   viewModel: PropTypes.object,
   selectCollectionSlide: PropTypes.object,
+  selectedCollectionId: PropTypes.number,
   buttonNextDisabled: PropTypes.bool,
   selectCollection: PropTypes.object,
   newItemNameInput: PropTypes.object,
   newCollectionNameInputVisible: PropTypes.bool,
-  disableToolbarButtons: PropTypes.bool
+  disableToolbarButtons: PropTypes.bool,
+  onCollectionFocus: PropTypes.func
 };
 
 const partialFlatten = (ownProps) => {
@@ -76,7 +83,8 @@ const partialFlatten = (ownProps) => {
     selectCollection: slide,
     newItemNameInput,
     newCollectionNameInputVisible: newItemNameInput.visible,
-    disableToolbarButtons: newItemNameInput.visible
+    disableToolbarButtons: newItemNameInput.visible,
+    selectedCollectionId: slide.selectedCollectionId
   };
 };
 
@@ -87,9 +95,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickAddCollection: () => {
-      const flatProps = Object.assign({}, ownProps, partialFlatten(ownProps));
-      if (!flatProps.disableToolbarButtons) {
-        dispatch(actionToggleNewItemNameInput(flatProps.newItemNameInput.id));
+      const props = Object.assign({}, ownProps, partialFlatten(ownProps));
+      if (!props.disableToolbarButtons) {
+        dispatch(actionToggleNewItemNameInput(props.newItemNameInput.id));
       }
     },
     onClickRemoveCollection: () => {
@@ -100,6 +108,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onBlurNewCollectionName: () => {
       c.l('Clicked onBlurNewCollectionName...');
+    },
+    onCollectionFocus: (event) => {
+      c.l(event.target.dataset.value);
+      const props = partialFlatten(ownProps);
+
+      const selectedCollectionId = parseInt(event.target.dataset.value, 10);
+      dispatch(actionSelectCollection(props.selectCollection.id, selectedCollectionId));
     }
   };
 };

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { actionModalPseudoForget } from '../../../js/actions/modal/index';
@@ -7,6 +6,7 @@ import WebsiteEditor from '../editors/appContainer/app/WebsiteEditor';
 import FolderEditor from '../editors/appContainer/app/FolderEditor';
 import PageEditor from '../editors/appContainer/app/PageEditor';
 import ConfigureDdlWizard from '../../component/bodyChildren/dropDownListbox/ConfigureDdlWizard';
+import Button from '../../component/Button';
 
 class PseudoModal extends React.Component {
 
@@ -28,7 +28,7 @@ class PseudoModal extends React.Component {
         width = (this.props.data && this.props.data.width) ? this.props.data.width : '1500px';
         break;
       }
-      case ComponentModalNames.Wizards.CONFIGURE_DDL: {
+      case ComponentModalNames.Wizards.ConfigureDdl: {
         component = <ConfigureDdlWizard { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
         width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
         break;
@@ -45,7 +45,9 @@ class PseudoModal extends React.Component {
           <div className="container pseudo-modal-content" style={{ width }}>
             <div className="row">
               <div className="col-sm-12 cell">
-                <button type="button" className="btn btn-default close" onClick={this.props.onCloseModal}>close</button>
+                <div style={{ textAlign: 'right' }}>
+                  <Button faClass="fa-close" onClick={this.props.onCloseModal} tooltipText="Close" />
+                </div>
                 { component }
               </div>
             </div>

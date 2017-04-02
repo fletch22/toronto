@@ -172,7 +172,7 @@ Begin Dashboard
   width: 26px;
   height: 26px;
   margin: 2px;
-  padding: 4px 4px 4px;
+  padding: 3px 4px 4px;
 }
 
 .layout-minion {
@@ -296,17 +296,15 @@ $carousel-transition: 0.2s ease-in-out;
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: 1px red solid;
+  padding: 0 20px 20px 25px;
 }
 
 .sel_view_row_main {
-  border: solid 1px blue;
   flex-grow: 9;
   flex-shrink: 1;
 }
 
 .sel_view_row_edit_controls {
-  border: solid 1px blue;
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -332,6 +330,23 @@ $carousel-transition: 0.2s ease-in-out;
 .create-item-for-collection-visible {
   opacity: 100;
   transition: opacity 350ms;
+}
+
+#main .wiz-sel-coll-no-sel-coll {
+  padding: 10px 0 0 30px;
+}
+
+#main .wiz-sel-coll-selected-collection {
+  border: 2px solid blue;
+}
+
+#main .list-group.wiz-sel-coll {
+  border: 1px solid $gray1;
+  overflow-y: scroll;
+  max-width: 98%;
+  min-height: 200px;
+  max-height: 300px;
+  margin: 0 0 1px 0;
 }
 
 // Wizards End

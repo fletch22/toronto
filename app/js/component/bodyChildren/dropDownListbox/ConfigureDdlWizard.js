@@ -13,7 +13,7 @@ class ConfigureDdlWizard extends React.Component {
     const activeIndex = this.props.activeIndex;
 
     return (
-        <div style={{ width: '650px' }}>
+        <div style={{ width: '100%' }}>
           <Carousel activeIndex={activeIndex} direction={null} onSelect={this.props.handleSelect} indicators={false} interval={0} controls={false}>
             <Carousel.Item key={WizardViews.SELECT_COLLECTION_VIEW}>
               <SelectItemOrContainerSlide wizardData={this.props.data} />

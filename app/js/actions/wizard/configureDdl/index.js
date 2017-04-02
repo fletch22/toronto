@@ -1,14 +1,23 @@
 export const ActionTypes = {
-  CONFIGURE_DDL: {
-    SELECT_COLLECTION: {
-      TOGGLE_NEW_COLLECTION_NAME_INPUT: 'WIZ_CFGDDL_SEL_COLL_TOGGLE_NEW_COLLECTION_NAME_INPUT'
+  ConfigureDdl: {
+    SelectCollectionSlide: {
+      TOGGLE_NEW_COLLECTION_NAME_INPUT: 'WIZ_CFGDDL_SEL_COLL_TOGGLE_NEW_COLLECTION_NAME_INPUT',
+      SELECT_COLLECTION: 'SELECT_COLLECTION'
     }
   }
 };
 
 export const actionToggleNewItemNameInput = (uuid) => ({
-  type: ActionTypes.CONFIGURE_DDL.SELECT_COLLECTION.TOGGLE_NEW_COLLECTION_NAME_INPUT,
+  type: ActionTypes.ConfigureDdl.SelectCollectionSlide.TOGGLE_NEW_COLLECTION_NAME_INPUT,
   payload: {
     uuid
+  }
+});
+
+export const actionSelectCollection = (slideViewId, selectedCollectionId) => ({
+  type: ActionTypes.ConfigureDdl.SelectCollectionSlide.SELECT_COLLECTION,
+  payload: {
+    selectCollectionViewId: slideViewId,
+    selectedCollectionId
   }
 });

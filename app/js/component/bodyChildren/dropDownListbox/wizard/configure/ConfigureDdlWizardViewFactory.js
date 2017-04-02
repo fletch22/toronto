@@ -11,12 +11,13 @@ class ConfigureDdlWizardViewFactory {
       slides: {
         selectCollection: {
           id: f22Uuid.generate(),
+          selectedCollection: null,
           newItemNameInput: {
             id: f22Uuid.generate(),
             value: null,
             visible: false
           },
-          buttonNextDisabled: false
+          buttonNextDisabled: true
         },
         selectContainerFields: {
           id: f22Uuid.generate(),

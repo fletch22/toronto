@@ -323,11 +323,29 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.WIZARD.CONFIGURE_DDL.SELECT_COLLECTION.TOGGLE_NEW_COLLECTION_NAME_INPUT: {
+    case ACTIONS.types.WIZARD.ConfigureDdl.SelectCollectionSlide.TOGGLE_NEW_COLLECTION_NAME_INPUT: {
       const payload = action.payload;
 
       const input = graphTraversal.find(stateNew, payload.uuid);
       input.visible = !input.visible;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.ConfigureDdl.SelectCollectionSlide.SELECT_COLLECTION: {
+      const payload = action.payload;
+
+      const slideSelectCollection = graphTraversal.find(stateNew, payload.selectCollectionViewId);
+      slideSelectCollection.selectedCollectionId = payload.selectedCollectionId;
+
+      if (slideSelectCollection.selectedCollectionId) {
+        slideSelectCollection.buttonNextDisabled = false;
+      }
+
+      c.lo(slideSelectCollection, 'slideSelectCollection');
+
+      // input.visible = !input.visible;
 
       return stateNew;
     }
