@@ -5,11 +5,13 @@ import PseudoModal from '../../component/modals/PseudoModal';
 
 class PseudoModalWrangler extends React.Component {
   render() {
+
+
     return (
       <div>
       {
         this.props.pseudoModals.map((pseudoModal, index) => {
-          return <PseudoModal id={pseudoModal.id} key={pseudoModal.id} zIndex={1000 + index} data={pseudoModal.data} viewName={pseudoModal.viewName} />;
+          return <PseudoModal id={pseudoModal.id} key={pseudoModal.id} zIndex={index + 1000} data={pseudoModal.data} viewName={pseudoModal.viewName} />;
         })
       }
       </div>

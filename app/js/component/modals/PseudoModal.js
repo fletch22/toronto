@@ -40,8 +40,8 @@ class PseudoModal extends React.Component {
     }
 
     return (
-      <div style={{ zIndex: this.props.zIndex }}>
-        <div className="dashboard-canvas">
+      <div>
+        <div className="dashboard-canvas" style={{ zIndex: this.props.zIndex }}>
           <div className="container pseudo-modal-content" style={{ width }}>
             <div className="row">
               <div className="col-sm-12 cell">
@@ -53,7 +53,7 @@ class PseudoModal extends React.Component {
             </div>
           </div>
         </div>
-        <div className="scrim" />
+        <div className="scrim" style={{ zIndex: this.props.zIndex - 1 }} />
       </div>
     );
   }
@@ -71,7 +71,6 @@ PseudoModal.propTypes = {
 const mapStateToProps = (state, ownProps) => {
 
   let data = ownProps.data;
-  // data = _.cloneDeep(data);
 
   return {
     data
