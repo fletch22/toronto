@@ -23,7 +23,8 @@ class CreateCollectionView extends React.Component {
 }
 
 CreateCollectionView.propTypes = {
-  viewId: PropTypes.string
+  viewId: PropTypes.string,
+  isSlideActive: PropTypes.bool
 };
 
 export default CreateCollectionView;

@@ -69,7 +69,6 @@ PseudoModal.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-
   let data = ownProps.data;
 
   return {

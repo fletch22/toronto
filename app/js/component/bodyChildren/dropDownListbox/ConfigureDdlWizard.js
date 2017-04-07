@@ -16,13 +16,13 @@ class ConfigureDdlWizard extends React.Component {
         <div style={{ width: '100%' }}>
           <Carousel activeIndex={activeIndex} direction={null} onSelect={this.props.handleSelect} indicators={false} interval={0} controls={false}>
             <Carousel.Item key={WizardViews.SELECT_COLLECTION_VIEW}>
-              <SelectItemOrContainerSlide wizardData={this.props.data} />
+              <SelectItemOrContainerSlide isSlideActive={activeIndex === WizardViews.SELECT_COLLECTION_VIEW} wizardData={this.props.data} />
             </Carousel.Item>
             <Carousel.Item key={WizardViews.SELECT_DDL_FIELDS}>
-              <SelectDdlFieldsView viewId={this.props.id} />
+              <SelectDdlFieldsView isSlideActive={activeIndex === WizardViews.SELECT_DDL_FIELDS} wizardData={this.props.data} />
             </Carousel.Item>
             <Carousel.Item key={WizardViews.CREATE_COLLECTION}>
-              <CreateCollectionView viewId={this.props.id} />
+              <CreateCollectionView isSlideActive={activeIndex === WizardViews.CREATE_COLLECTION} viewId={this.props.id} />
             </Carousel.Item>
           </Carousel>
         </div>

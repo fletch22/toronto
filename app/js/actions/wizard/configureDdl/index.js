@@ -14,10 +14,10 @@ export const actionToggleNewItemNameInput = (uuid) => ({
   }
 });
 
-export const actionSelectCollection = (slideViewId, selectedCollectionId) => ({
+export const actionSelectCollection = (wizardId, selectedCollectionId) => ({
   type: ActionTypes.ConfigureDdl.SelectCollectionSlide.SELECT_COLLECTION,
   payload: {
-    selectCollectionViewId: slideViewId,
+    wizardId,
     selectedCollectionId
   }
 });

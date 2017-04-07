@@ -8,10 +8,10 @@ class ConfigureDdlWizardViewFactory {
       type: PseudoModalTypes.WizardTypes.ConfigureDdl,
       model: ddlModel,
       activeIndex: 0,
+      selectedCollectionId: null,
       slides: {
         selectCollection: {
           id: f22Uuid.generate(),
-          selectedCollection: null,
           newItemNameInput: {
             id: f22Uuid.generate(),
             value: null,
@@ -26,7 +26,9 @@ class ConfigureDdlWizardViewFactory {
             value: null,
             visible: false
           },
-          buttonNextDisabled: false
+          buttonNextDisabled: false,
+          selectedValueFieldId: null,
+          selectedTextFieldId: null
         }
       }
     };

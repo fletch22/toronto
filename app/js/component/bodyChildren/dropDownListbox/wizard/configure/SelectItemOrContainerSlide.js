@@ -69,7 +69,8 @@ SelectItemOrContainerSlide.propTypes = {
   newItemNameInput: PropTypes.object,
   newCollectionNameInputVisible: PropTypes.bool,
   disableToolbarButtons: PropTypes.bool,
-  onCollectionFocus: PropTypes.func
+  onCollectionFocus: PropTypes.func,
+  isSlideActive: PropTypes.bool
 };
 
 const partialFlatten = (ownProps) => {
@@ -78,13 +79,14 @@ const partialFlatten = (ownProps) => {
   const newItemNameInput = slide.newItemNameInput;
 
   return {
+    wizardData: ownProps.wizardData,
     viewModel: data.viewModel,
     buttonNextDisabled: slide.buttonNextDisabled,
     selectCollection: slide,
     newItemNameInput,
     newCollectionNameInputVisible: newItemNameInput.visible,
     disableToolbarButtons: newItemNameInput.visible,
-    selectedCollectionId: slide.selectedCollectionId
+    selectedCollectionId: data.selectedCollectionId
   };
 };
 
@@ -110,11 +112,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       c.l('Clicked onBlurNewCollectionName...');
     },
     onCollectionFocus: (event) => {
-      c.l(event.target.dataset.value);
       const props = partialFlatten(ownProps);
-
       const selectedCollectionId = parseInt(event.target.dataset.value, 10);
-      dispatch(actionSelectCollection(props.selectCollection.id, selectedCollectionId));
+      dispatch(actionSelectCollection(props.wizardData.id, selectedCollectionId));
     }
   };
 };

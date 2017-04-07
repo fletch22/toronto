@@ -150,13 +150,13 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.REFRESH_PAGE: {
-      document.location.href = document.location.href;
+      window.document.location.reload();
       break;
     }
     case ACTIONS.types.NUKE_AND_PAVE: {
       restService.nukeAndPave()
         .then(() => {
-          window.document.location.href = window.document.location.href;
+          window.document.location.reload();
         })
         .catch((error) => {
           console.error(error);
@@ -164,9 +164,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
       break;
     }
     case ACTIONS.types.RESTORE_FROM_DISK: {
+      c.l('Got signal to restore from disk.');
       restService.restoreFromDisk()
         .then(() => {
-          window.document.location.href = window.document.location.href;
+          c.l('Returned from promise.');
+          c.l(window.document.location.href);
+          window.document.location.reload();
         })
         .catch((error) => {
           console.error(error);
@@ -336,16 +339,15 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.WIZARD.ConfigureDdl.SelectCollectionSlide.SELECT_COLLECTION: {
       const payload = action.payload;
 
-      const slideSelectCollection = graphTraversal.find(stateNew, payload.selectCollectionViewId);
-      slideSelectCollection.selectedCollectionId = payload.selectedCollectionId;
+      const viewModelWizard = graphTraversal.find(stateNew, payload.wizardId);
 
-      if (slideSelectCollection.selectedCollectionId) {
-        slideSelectCollection.buttonNextDisabled = false;
+      viewModelWizard.selectedCollectionId = payload.selectedCollectionId;
+
+      if (viewModelWizard.selectedCollectionId) {
+        viewModelWizard.slides.selectCollection.buttonNextDisabled = false;
       }
 
-      c.lo(slideSelectCollection, 'slideSelectCollection');
-
-      // input.visible = !input.visible;
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
     }
