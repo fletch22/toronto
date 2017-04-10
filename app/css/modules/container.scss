@@ -310,6 +310,7 @@ $carousel-transition: 0.2s ease-in-out;
 
 .sel_view_toolbar {
   display: flex;
+  float: left;
 }
 
 .sel_view_row_foot_nav {
@@ -337,6 +338,11 @@ $carousel-transition: 0.2s ease-in-out;
 
 #main .wiz-sel-coll-selected-collection {
   border: 2px solid blue;
+}
+
+#main .wiz-config-ddl-sel-field {
+  text-align: right;
+  padding: 0 10px 0 0;
 }
 
 #main .list-group.wiz-sel-coll {

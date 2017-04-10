@@ -2,7 +2,7 @@ import ModelFactory from './ModelFactory';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import f22Uuid from '../../util/f22Uuid';
 
-class DataModelFieldFactory extends ModelFactory {
+class DataModelModelFactory extends ModelFactory {
 
   createInstance(parentId, label) {
     this.validateNotBlank(label, 'label');
@@ -13,7 +13,7 @@ class DataModelFieldFactory extends ModelFactory {
       parentId,
       id,
       label,
-      typeLabel: ComponentTypes.DataModel,
+      typeLabel: ComponentTypes.DataField,
       children: []
     };
 
@@ -21,4 +21,4 @@ class DataModelFieldFactory extends ModelFactory {
   }
 }
 
-export default new DataModelFieldFactory();
+export default new DataModelModelFactory();

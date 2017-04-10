@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 import PropTextInput from '../../../../../../component/editors/PropTextInput';
 import Button from '../../../../../bodyChildren/toolbar/Button';
 import { actionToggleNewItemNameInput } from '../../../../../../actions/wizard/configureDdl/index';
-import dataModelModelFactory from '../../../../../../domain/component/dataModelModelFactory';
-import viewModelCreator from '../../../../../utils/viewModelCreator';
-import { actionUpdatePropertyWithPersist } from '../../../../../../actions/index';
 
 class CreateItemForContainer extends React.Component {
   render() {
@@ -49,16 +46,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickCancel: () => {
       dispatch(actionToggleNewItemNameInput(ownProps.newItemNameInput.id));
-    },
-    onClickSave: () => {
-      const model = dataModelModelFactory.createInstance(ownProps.viewModel.viewModel.id, ownProps.newItemNameInput.value);
-
-      const successCallback = () => {
-        dispatch(actionUpdatePropertyWithPersist(ownProps.newItemNameInput.id, 'value', ''));
-        dispatch(actionToggleNewItemNameInput(ownProps.newItemNameInput.id));
-      };
-
-      viewModelCreator.create(dispatch, model, ownProps.viewModel.id, successCallback);
     }
   };
 };

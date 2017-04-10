@@ -7,14 +7,14 @@
 }
 
 .time-travel-toolbar .modal-backdrop {
-  z-index: ($zIndexMax - 2);
+  z-index: $zIndexTimeTravelToolbarScrim;
   opacity: 0.3;
 }
 
 .time-travel-toolbar-body {
   color: black;
   padding: 10px 0 10px 15px;
-  z-index: $zIndexMax;
+  z-index: $zIndexTimeTravelToolbar;
   position: relative;
   background-color: whitesmoke;
   width: 230px;
@@ -30,6 +30,6 @@
 
 .toolbar-buttons {
   display: inline-block;
-  z-index: ($zIndexMax - 3);
+  z-index: $zIndexTimeTravelToolbar;
   margin: 0 3px 0 3px;
 }

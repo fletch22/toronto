@@ -9,6 +9,8 @@ class ConfigureDdlWizardViewFactory {
       model: ddlModel,
       activeIndex: 0,
       selectedCollectionId: null,
+      selectedValueFieldId: null,
+      selectedTextFieldId: null,
       slides: {
         selectCollection: {
           id: f22Uuid.generate(),
@@ -26,9 +28,12 @@ class ConfigureDdlWizardViewFactory {
             value: null,
             visible: false
           },
-          buttonNextDisabled: false,
-          selectedValueFieldId: null,
-          selectedTextFieldId: null
+          buttonNextDisabled: true,
+          selectedFieldId: null
+        },
+        createCollection: {
+          id: f22Uuid.generate(),
+          buttonNextDisabled: true
         }
       }
     };

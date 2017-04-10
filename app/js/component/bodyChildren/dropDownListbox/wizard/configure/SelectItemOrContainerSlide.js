@@ -2,9 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import WizardPages from './WizardViews';
 import ButtonWizard from '../ButtonWizard';
-import SelectItemOrContainerToolbar from './selectCollection/toolbar/SelectItemOrContainerToolbar';
+import SelectItemOrContainerToolbar from './SelectItemOrContainerToolbar';
 import { actionToggleNewItemNameInput, actionSelectCollection } from '../../../../../actions/wizard/configureDdl/index';
 import CreateItemForContainer from './selectCollection/CreateItemForContainer';
+import dataModelModelFactory from '../../../../../domain/component/dataModelModelFactory';
+import viewModelCreator from '../../../../utils/viewModelCreator';
+import { actionUpdatePropertyWithPersist } from '../../../../../actions/index';
 
 class SelectItemOrContainerSlide extends React.Component {
 
@@ -38,13 +41,18 @@ class SelectItemOrContainerSlide extends React.Component {
               choices
             }
           </div>
-          <div className="sel_view_row_edit_controls" style={{ minHeight: '90px' }}>
-            <div style={{ height: '50x' }}>
-              <SelectItemOrContainerToolbar onClickAdd={this.props.onClickAddCollection}
-                onClickRemove={this.props.onClickRemoveCollection}
-                disableButtons={this.props.disableToolbarButtons}
+          <div className="sel_view_row_edit_controls">
+            <SelectItemOrContainerToolbar onClickAdd={this.props.onClickAddCollection}
+              onClickRemove={this.props.onClickRemoveCollection}
+              disableButtons={this.props.disableToolbarButtons}
+            />
+            <div style={{ clear: 'both' }}>
+              <CreateItemForContainer
+                viewModel={this.props.viewModel}
+                newItemNameInput={this.props.newItemNameInput}
+                visible={this.props.newCollectionNameInputVisible}
+                onClickSave={this.props.onClickSaveCollection}
               />
-              <CreateItemForContainer viewModel={this.props.viewModel} newItemNameInput={this.props.newItemNameInput} visible={this.props.newCollectionNameInputVisible} />
             </div>
           </div>
         </div>
@@ -60,9 +68,7 @@ SelectItemOrContainerSlide.propTypes = {
   wizardData: PropTypes.object,
   onClickAddCollection: PropTypes.func,
   onClickRemoveCollection: PropTypes.func,
-  onBlurNewCollectionName: PropTypes.func,
   viewModel: PropTypes.object,
-  selectCollectionSlide: PropTypes.object,
   selectedCollectionId: PropTypes.number,
   buttonNextDisabled: PropTypes.bool,
   selectCollection: PropTypes.object,
@@ -70,7 +76,8 @@ SelectItemOrContainerSlide.propTypes = {
   newCollectionNameInputVisible: PropTypes.bool,
   disableToolbarButtons: PropTypes.bool,
   onCollectionFocus: PropTypes.func,
-  isSlideActive: PropTypes.bool
+  isSlideActive: PropTypes.bool,
+  onClickSaveCollection: PropTypes.func
 };
 
 const partialFlatten = (ownProps) => {
@@ -108,13 +115,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         alert('not yet implemented.');
       }
     },
-    onBlurNewCollectionName: () => {
-      c.l('Clicked onBlurNewCollectionName...');
-    },
     onCollectionFocus: (event) => {
       const props = partialFlatten(ownProps);
       const selectedCollectionId = parseInt(event.target.dataset.value, 10);
       dispatch(actionSelectCollection(props.wizardData.id, selectedCollectionId));
+    },
+    onClickSaveCollection: () => {
+      const props = partialFlatten(ownProps);
+      const model = dataModelModelFactory.createInstance(props.viewModel.viewModel.id, props.newItemNameInput.value);
+
+      const successCallback = () => {
+        dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
+        dispatch(actionToggleNewItemNameInput(props.newItemNameInput.id));
+      };
+
+      viewModelCreator.create(dispatch, model, props.viewModel.id, successCallback);
     }
   };
 };

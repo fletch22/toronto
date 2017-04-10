@@ -22,7 +22,7 @@ class ConfigureDdlWizard extends React.Component {
               <SelectDdlFieldsView isSlideActive={activeIndex === WizardViews.SELECT_DDL_FIELDS} wizardData={this.props.data} />
             </Carousel.Item>
             <Carousel.Item key={WizardViews.CREATE_COLLECTION}>
-              <CreateCollectionView isSlideActive={activeIndex === WizardViews.CREATE_COLLECTION} viewId={this.props.id} />
+              <CreateCollectionView isSlideActive={activeIndex === WizardViews.CREATE_COLLECTION} wizardData={this.props.data} />
             </Carousel.Item>
           </Carousel>
         </div>

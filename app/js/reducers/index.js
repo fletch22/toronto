@@ -347,6 +347,65 @@ const reducer = (state = defaultState.getInstance(), action) => {
         viewModelWizard.slides.selectCollection.buttonNextDisabled = false;
       }
 
+      const collections = viewModelWizard.viewModel.viewModel.children;
+      const collection = _.find(collections, (coll) => {
+        return coll.viewModel.id === viewModelWizard.selectedCollectionId;
+      });
+
+      // When a collection is selected, reset some dependent values if necessary
+      const fields = collection.viewModel.children;
+      if (!fields.includes(viewModelWizard.selectedValueFieldId)) {
+        viewModelWizard.selectedValueFieldId = null;
+      }
+      if (!fields.includes(viewModelWizard.selectedTextFieldId)) {
+        viewModelWizard.selectedValueFieldId = null;
+      }
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.ConfigureDdl.SelectFieldSlide.SELECT_FIELD: {
+      const payload = action.payload;
+
+      const wizardViewModel = graphTraversal.find(stateNew, payload.wizardViewId);
+
+      wizardViewModel.selectedFieldId = payload.selectedFieldId;
+
+      if (wizardViewModel.selectedValueFieldId && wizardViewModel.selectedTextFieldId) {
+        wizardViewModel.slides.selectContainerFields.buttonNextDisabled = false;
+      }
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.ConfigureDdl.SelectFieldSlide.SELECT_VALUE_FIELD: {
+      const payload = action.payload;
+
+      const viewModelWizard = graphTraversal.find(stateNew, payload.wizardViewId);
+
+      viewModelWizard.selectedValueFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
+
+      if (viewModelWizard.selectedValueFieldId && viewModelWizard.selectedTextFieldId) {
+        viewModelWizard.slides.selectContainerFields.buttonNextDisabled = false;
+      }
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.ConfigureDdl.SelectFieldSlide.SELECT_DISPLAY_FIELD: {
+      const payload = action.payload;
+
+      const viewModelWizard = graphTraversal.find(stateNew, payload.wizardViewId);
+
+      viewModelWizard.selectedTextFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
+
+      if (viewModelWizard.selectedValueFieldId && viewModelWizard.selectedTextFieldId) {
+        viewModelWizard.slides.selectContainerFields.buttonNextDisabled = false;
+      }
+
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;

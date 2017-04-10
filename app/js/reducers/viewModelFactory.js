@@ -101,6 +101,10 @@ class ViewModelFactory {
         view = viewFactory.createDataModelView();
         break;
       }
+      case ComponentTypes.DataField: {
+        view = viewFactory.createDataFieldView();
+        break;
+      }
       default: {
         throw new Error(`Encountered error trying to determine view to create for model typelabel \'${model.typeLabel}\'.`);
       }

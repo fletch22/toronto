@@ -3,128 +3,197 @@ import _ from 'lodash';
 import WizardPages from './WizardViews';
 import ButtonWizard from '../ButtonWizard';
 import { connect } from 'react-redux';
-import SelectItemOrContainerToolbar from './selectCollection/toolbar/SelectItemOrContainerToolbar';
+import SelectItemOrContainerToolbar from './SelectItemOrContainerToolbar';
+import SelectFieldsToolbar from './SelectFieldsToolbar';
 import CreateItemForContainer from './selectCollection/CreateItemForContainer';
+import { actionToggleNewItemNameInput, actionSelectField } from '../../../../../actions/wizard/configureDdl/index';
+import dataModelFieldFactory from '../../../../../domain/component/dataModelFieldFactory';
+import viewModelCreator from '../../../../utils/viewModelCreator';
+import { actionUpdatePropertyWithPersist } from '../../../../../actions/index';
 
-class SelectCollectionView extends React.Component {
-
-  // render() {
-  //   return (
-  //     <div className="wizard-config-ddl">
-  //       <div className="wizard-config-ddl col-md-12">
-  //         <div className="row" style={{ height: '90%' }}>
-  //
-  //         </div>
-  //         <div className="row text-right">
-  //           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_COLLECTION_VIEW} label="Back" />
-  //         </div>
-  //       </div>
-  //     </div>
-  //
-  //   );
-  // }
+class SelectDdlFieldsView extends React.Component {
 
   render() {
-    c.l('scid: ' + this.props.wizardData.selectedCollectionId);
-
-    let collection = _.find(this.props.viewModel.viewModel.children, (coll) => {
-      c.l('cid: ' + coll.viewModel.id);
-      return coll.viewModel.id === this.props.wizardData.selectedCollectionId;
-    });
-    c.lo(collection, 'colls: ');
-
-    let choices = [];
+    let choices = this.props.collectionFields;
 
     if (choices.length > 0) {
       choices = choices.map((choice, index) => {
         let classes = 'list-group-item list-group-item-action';
 
-        // if (choice.viewModel.id === this.props.selectedCollectionId) {
-        //   classes += ' wiz-sel-coll-selected-collection';
-        // }
+        if (choice.viewModel.id === this.props.selectedFieldId) {
+          classes += ' wiz-sel-coll-selected-collection';
+        }
 
-        return (<a href="#" key={index} className={classes} data-value={choice.viewModel.id} onFocus={this.props.onCollectionFocus}>
-          {choice.viewModel.label}
+        let selValueAttribute;
+        if (choice.viewModel.id === this.props.selectedValueFieldId) {
+          selValueAttribute = (
+            <div className="wiz-config-ddl-sel-field">
+              <div className="fa fa-id-card-o" />
+            </div>
+          );
+        }
+
+        let selDisplayAttribute;
+        if (choice.viewModel.id === this.props.selectedTextFieldId) {
+          selDisplayAttribute = (
+            <div className="wiz-config-ddl-sel-field">
+              <div className="fa fa-text-width" />
+            </div>
+          );
+        }
+
+        return (<a href="#" key={index} className={classes} data-value={choice.viewModel.id} onFocus={this.props.onFieldFocus}>
+          <div style={{ display: 'flex' }}>
+            <div style={{ flex: '2 0 0' }}>{choice.viewModel.label}</div>
+            {
+              selValueAttribute
+            }
+            {
+              selDisplayAttribute
+            }
+          </div>
         </a>);
       });
     } else {
       choices = (
-        <div className="wiz-sel-coll-no-sel-coll">(no collections)</div>
+        <div className="wiz-sel-coll-no-sel-coll">(no fields)</div>
       );
     }
 
     return (
       <div className="wizard-config-ddl sel_view_coll-flex">
         <div className="sel_view_row_main">
-          <label>Select collection:</label>
+          <label>Select Fields:</label>
           <div className="list-group wiz-sel-coll">
             {
               choices
             }
           </div>
-          <div className="sel_view_row_edit_controls" style={{ minHeight: '90px' }}>
-            <div style={{ height: '50x' }}>
-              <SelectItemOrContainerToolbar onClickAdd={this.props.onClickAddCollection}
-                onClickRemove={this.props.onClickRemoveCollection}
+          <div className="sel_view_row_edit_controls">
+            <div>
+              <SelectItemOrContainerToolbar onClickAdd={this.props.onClickAddField}
+                onClickRemove={this.props.onClickRemoveField}
                 disableButtons={this.props.disableToolbarButtons}
               />
-              <CreateItemForContainer viewModel={this.props.viewModel} newItemNameInput={this.props.newItemNameInput} visible={this.props.newItemNameInputVisible} />
+              <SelectFieldsToolbar wizardViewId={this.props.wizardData.id} disableButtons={this.props.disableToolbarButtons} />
             </div>
           </div>
+          <div style={{ clear: 'both' }}>
+            <CreateItemForContainer
+              viewModel={this.props.viewModel}
+              newItemNameInput={this.props.newItemNameInput}
+              visible={this.props.newItemNameInputVisible}
+              onClickSave={this.props.onClickSaveField}
+            />
+          </div>
         </div>
+
         <div className="sel_view_row_foot_name text-right">
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_COLLECTION_VIEW} label="Back" />
-          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} disabled={this.props.buttonNextDisabled} label="Next" />
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.CREATE_COLLECTION} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
       </div>
     );
   }
 }
 
-SelectCollectionView.propTypes = {
+SelectDdlFieldsView.propTypes = {
   wizardData: PropTypes.object,
-  onClickAddCollection: PropTypes.func,
-  onClickRemoveCollection: PropTypes.func,
-  onBlurNewCollectionName: PropTypes.func,
+  onClickAddField: PropTypes.func,
+  onClickRemoveField: PropTypes.func,
   viewModel: PropTypes.object,
   selectContainerFields: PropTypes.object,
-  selectedValueFieldId: PropTypes.string,
-  selectedTextFieldId: PropTypes.string,
+  selectedValueFieldId: PropTypes.number,
+  selectedTextFieldId: PropTypes.number,
   buttonNextDisabled: PropTypes.bool,
-  selectCollection: PropTypes.object,
   newItemNameInput: PropTypes.object,
   newItemNameInputVisible: PropTypes.bool,
   disableToolbarButtons: PropTypes.bool,
-  onCollectionFocus: PropTypes.func,
-  isSlideActive: PropTypes.bool
+  onFieldFocus: PropTypes.func,
+  isSlideActive: PropTypes.bool,
+  selectedFieldId: PropTypes.number,
+  onClickSaveField: PropTypes.func,
+  collectionFields: PropTypes.array
 };
 
 const partialFlatten = (ownProps) => {
-  const data = ownProps.wizardData;
-  const slide = data.slides.selectContainerFields;
+  const wizardData = ownProps.wizardData;
+  const slide = wizardData.slides.selectContainerFields;
   const newItemNameInput = slide.newItemNameInput;
 
+  const collections = wizardData.viewModel.viewModel.children;
+  const collection = _.find(collections, (coll) => {
+    return coll.viewModel.id === wizardData.selectedCollectionId;
+  });
+
+  let collectionFields = [];
+  if (collection) {
+    collectionFields = collection.viewModel.children;
+  }
+
   return {
-    wizardData: ownProps.wizardData,
-    viewModel: data.viewModel,
+    wizardData,
+    viewModel: wizardData.viewModel,
     buttonNextDisabled: slide.buttonNextDisabled,
     selectContainerFields: slide,
     newItemNameInput,
     newItemNameInputVisible: newItemNameInput.visible,
     disableToolbarButtons: newItemNameInput.visible,
-    selectedValueFieldId: slide.selectedValueFieldId,
-    selectedTexttFieldId: slide.selectedTexttFieldId
+    selectedCollectionId: wizardData.selectedCollectionId,
+    selectedValueFieldId: wizardData.selectedValueFieldId,
+    selectedTextFieldId: wizardData.selectedTextFieldId,
+    selectedFieldId: slide.selectedFieldId,
+    collectionFields
   };
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const props = partialFlatten(ownProps);
-  return props;
+  return partialFlatten(ownProps);
 };
 
-SelectCollectionView = connect(
-  mapStateToProps,
-  null
-)(SelectCollectionView);
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    onClickAddField: () => {
+      const props = Object.assign({}, ownProps, partialFlatten(ownProps));
+      if (!props.disableToolbarButtons) {
+        dispatch(actionToggleNewItemNameInput(props.newItemNameInput.id));
+      }
+    },
+    onClickRemoveField: () => {
+      const flatProps = Object.assign({}, ownProps, partialFlatten(ownProps));
+      if (!flatProps.disableToolbarButtons) {
+        alert('not yet implemented.');
+      }
+    },
+    onFieldFocus: (event) => {
+      const props = partialFlatten(ownProps);
+      const selectedFieldId = parseInt(event.target.dataset.value, 10);
+      dispatch(actionSelectField(props.selectContainerFields.id, selectedFieldId));
+    },
+    onClickSaveField: () => {
+      const props = partialFlatten(ownProps);
 
-export default SelectCollectionView;
+      const model = dataModelFieldFactory.createInstance(props.selectedCollectionId, props.newItemNameInput.value);
+
+      const successCallback = () => {
+        dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
+        dispatch(actionToggleNewItemNameInput(props.newItemNameInput.id));
+      };
+
+      const collections = props.wizardData.viewModel.viewModel.children;
+      const collection = _.find(collections, (coll) => {
+        return coll.viewModel.id === props.wizardData.selectedCollectionId;
+      });
+
+      viewModelCreator.create(dispatch, model, collection.id, successCallback);
+    }
+  };
+};
+
+
+SelectDdlFieldsView = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectDdlFieldsView);
+
+export default SelectDdlFieldsView;

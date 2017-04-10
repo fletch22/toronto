@@ -56,7 +56,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClickRemove: () => {
+    onClickMarkAsDisplayField: () => {
       dispatch(remove(ownProps));
     },
     onChangeLabel: () => {
