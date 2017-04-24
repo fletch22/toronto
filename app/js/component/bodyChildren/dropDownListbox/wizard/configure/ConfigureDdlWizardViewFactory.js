@@ -33,7 +33,12 @@ class ConfigureDdlWizardViewFactory {
         },
         createCollection: {
           id: f22Uuid.generate(),
-          buttonNextDisabled: true
+          buttonNextDisabled: true,
+          needsToMakeDataRequest: true,
+          gridView: {
+            id: f22Uuid.generate(),
+            pageData: null
+          }
         }
       }
     };

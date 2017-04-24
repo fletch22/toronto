@@ -91,6 +91,8 @@
     "react": "^0.14.8",
     "react-addons-update": "^0.14.7",
     "react-bootstrap": "^0.30.7",
+    "react-data-grid": "^2.0.31",
+    "react-data-grid-addons": "^2.0.31",
     "react-dom": "^0.14.8",
     "react-grid-layout": "^0.13.9",
     "react-redux": "^4.1.2",

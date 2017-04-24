@@ -139,6 +139,11 @@
       "from": "array-flatten@1.1.1",
       "resolved": "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz"
     },
+    "array-from": {
+      "version": "2.1.1",
+      "from": "array-from@>=2.1.1 <3.0.0",
+      "resolved": "https://registry.npmjs.org/array-from/-/array-from-2.1.1.tgz"
+    },
     "array-map": {
       "version": "0.0.0",
       "from": "array-map@>=0.0.0 <0.1.0",
@@ -1182,6 +1187,17 @@
       "from": "create-hmac@>=1.1.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/create-hmac/-/create-hmac-1.1.4.tgz"
     },
+    "create-react-class": {
+      "version": "15.5.2",
+      "from": "create-react-class@>=15.5.1 <16.0.0",
+      "resolved": "https://registry.npmjs.org/create-react-class/-/create-react-class-15.5.2.tgz",
+      "dependencies": {
+        "fbjs": {
+          "version": "0.8.12",
+          "from": "fbjs@>=0.8.9 <0.9.0"
+        }
+      }
+    },
     "cross-spawn": {
       "version": "3.0.1",
       "from": "cross-spawn@>=3.0.0 <4.0.0",
@@ -1320,6 +1336,11 @@
         }
       }
     },
+    "deep-equal": {
+      "version": "1.0.1",
+      "from": "deep-equal@>=1.0.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/deep-equal/-/deep-equal-1.0.1.tgz"
+    },
     "deep-is": {
       "version": "0.1.3",
       "from": "deep-is@>=0.1.2 <0.2.0",
@@ -1399,6 +1420,16 @@
       "version": "5.0.2",
       "from": "diffie-hellman@>=5.0.0 <6.0.0",
       "resolved": "https://registry.npmjs.org/diffie-hellman/-/diffie-hellman-5.0.2.tgz"
+    },
+    "disposables": {
+      "version": "1.0.1",
+      "from": "disposables@>=1.0.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/disposables/-/disposables-1.0.1.tgz"
+    },
+    "dnd-core": {
+      "version": "2.3.0",
+      "from": "dnd-core@>=2.3.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/dnd-core/-/dnd-core-2.3.0.tgz"
     },
     "dom-helpers": {
       "version": "2.4.0",
@@ -4120,6 +4151,17 @@
       "from": "promise@>=7.1.1 <8.0.0",
       "resolved": "https://registry.npmjs.org/promise/-/promise-7.1.1.tgz"
     },
+    "prop-types": {
+      "version": "15.5.8",
+      "from": "prop-types@>=15.5.7 <16.0.0",
+      "resolved": "https://registry.npmjs.org/prop-types/-/prop-types-15.5.8.tgz",
+      "dependencies": {
+        "fbjs": {
+          "version": "0.8.12",
+          "from": "fbjs@>=0.8.9 <0.9.0"
+        }
+      }
+    },
     "proxy-addr": {
       "version": "1.1.3",
       "from": "proxy-addr@>=1.1.3 <1.2.0",
@@ -4252,6 +4294,16 @@
       "from": "react-deep-force-update@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz"
     },
+    "react-dnd": {
+      "version": "2.3.0",
+      "from": "react-dnd@>=2.2.4 <3.0.0",
+      "resolved": "https://registry.npmjs.org/react-dnd/-/react-dnd-2.3.0.tgz"
+    },
+    "react-dnd-html5-backend": {
+      "version": "2.3.0",
+      "from": "react-dnd-html5-backend@>=2.1.2 <3.0.0",
+      "resolved": "https://registry.npmjs.org/react-dnd-html5-backend/-/react-dnd-html5-backend-2.3.0.tgz"
+    },
     "react-dock": {
       "version": "0.2.3",
       "from": "react-dock@>=0.2.1 <0.3.0",
@@ -4308,6 +4360,33 @@
       "version": "4.4.6",
       "from": "react-redux@>=4.1.2 <5.0.0",
       "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-4.4.6.tgz"
+    },
+    "react-redux-grid": {
+      "version": "5.1.14",
+      "from": "react-redux-grid@latest",
+      "resolved": "https://registry.npmjs.org/react-redux-grid/-/react-redux-grid-5.1.14.tgz",
+      "dependencies": {
+        "fbjs": {
+          "version": "0.8.12",
+          "from": "fbjs@>=0.8.9 <0.9.0",
+          "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.8.12.tgz"
+        },
+        "react": {
+          "version": "15.5.4",
+          "from": "react@>=15.4.2 <16.0.0",
+          "resolved": "https://registry.npmjs.org/react/-/react-15.5.4.tgz"
+        },
+        "react-dom": {
+          "version": "15.5.4",
+          "from": "react-dom@>=15.4.1 <16.0.0",
+          "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.5.4.tgz"
+        },
+        "react-redux": {
+          "version": "5.0.4",
+          "from": "react-redux@>=5.0.3 <6.0.0",
+          "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-5.0.4.tgz"
+        }
+      }
     },
     "react-resizable": {
       "version": "1.6.0",
@@ -4417,6 +4496,11 @@
       "version": "1.0.0",
       "from": "redux-devtools-themes@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/redux-devtools-themes/-/redux-devtools-themes-1.0.0.tgz"
+    },
+    "redux-logger": {
+      "version": "3.0.1",
+      "from": "redux-logger@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/redux-logger/-/redux-logger-3.0.1.tgz"
     },
     "redux-thunk": {
       "version": "2.2.0",

@@ -410,6 +410,35 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.WIZARD.ConfigureDdl.CreateCollectionSlide.SHOW_MODEL_DATA: {  // ADD_NEW_ROW_COLLECTION
+      const payload = action.payload;
+      const wizardViewId = payload.wizardViewId;
+      const pageData = payload.pageData;
+
+      const viewModelWizard = graphTraversal.find(stateNew, wizardViewId);
+
+      const slide = viewModelWizard.slides.createCollection;
+      slide.pageData = pageData;
+      slide.needsToMakeDataRequest = false;
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.GRID.ADD_NEW_ROW_TO_COLLECTION: {
+      c.l('Received signal to add new row to collection.');
+      // const payload = action.payload;
+      // const wizardViewId = payload.wizardViewId;
+      // const pageData = payload.pageData;
+      //
+      // const viewModelWizard = graphTraversal.find(stateNew, wizardViewId);
+      //
+      // const slide = viewModelWizard.slides.createCollection;
+      // slide.pageData = pageData;
+      // slide.needsToMakeDataRequest = false;
+      // stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
     default: {
       return state;
     }

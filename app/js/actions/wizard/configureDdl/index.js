@@ -8,6 +8,10 @@ export const ActionTypes = {
       SELECT_FIELD: 'SELECT_FIELD',
       SELECT_VALUE_FIELD: 'SELECT_VALUE_FIELD',
       SELECT_DISPLAY_FIELD: 'SELECT_DISPLAY_FIELD'
+    },
+    CreateCollectionSlide: {
+      SHOW_MODEL_DATA: 'SHOW_MODEL_DATA',
+      ADD_NEW_ROW_COLLECTION: 'ADD_NEW_ROW_COLLECTION'
     }
   }
 };
@@ -46,5 +50,20 @@ export const actionSetSelectDisplayField = (wizardViewId) => ({
   type: ActionTypes.ConfigureDdl.SelectFieldSlide.SELECT_DISPLAY_FIELD,
   payload: {
     wizardViewId
+  }
+});
+
+export const actionShowModelData = (wizardViewId, pageData) => ({
+  type: ActionTypes.ConfigureDdl.CreateCollectionSlide.SHOW_MODEL_DATA,
+  payload: {
+    wizardViewId,
+    pageData
+  }
+});
+
+export const actionAddEmptyRowToGrid = (viewId) => ({
+  type: ActionTypes.ConfigureDdl.CreateCollectionSlide.ADD_NEW_ROW_COLLECTION,
+  payload: {
+    viewId
   }
 });

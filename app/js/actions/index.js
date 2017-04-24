@@ -2,6 +2,7 @@ import _ from 'lodash';
 import dashboard from './dashboard';
 import { ActionTypes as ModalActionTypes } from './modal';
 import { ActionTypes as WizardActionTypes } from './wizard';
+import { ActionTypes as GridActionTypes } from './grid';
 import { ACTIONS as bodyChildrenEditorActions } from './bodyChildrenEditor/index';
 
 export const ACTIONS = {
@@ -34,6 +35,7 @@ _.extend(ACTIONS.types, dashboard.ActionTypes);
 _.extend(ACTIONS.types, ModalActionTypes);
 _.extend(ACTIONS.types, bodyChildrenEditorActions);
 _.extend(ACTIONS.types, WizardActionTypes);
+_.extend(ACTIONS.types, GridActionTypes);
 
 export const actionChangeAppLabelInput = (appLabel) => {
   return {

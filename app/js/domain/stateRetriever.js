@@ -45,6 +45,16 @@ class StateRetriever {
             reject(error);
           });
         } else {
+          c.l(data.startupTimestamp, 'startupTimestamp: ');
+          c.l(state.serverStartupTimestamp, 'state.serverStartupTimestamp: ');
+
+          const startupTimestamp = data.startupTimestamp;
+          if (state.serverStartupTimestamp !== startupTimestamp) {
+            console.debug('It appears that the server timestamp and the state timestamp are out of sync. This can happen if the state has been restored from backup.' +
+              'To fix this, the system will set the current startup timestamp to the server timestamp.');
+            state.serverStartupTimestamp = startupTimestamp;
+          }
+
           resolve(state);
         }
       });

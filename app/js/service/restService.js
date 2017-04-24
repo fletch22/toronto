@@ -29,6 +29,10 @@ class RestService extends Service {
   restoreFromDisk() {
     return this.fetch(`${this.url}/component/restoreFromDisk`, 'POST');
   }
+
+  getCollection(id) {
+    return this.fetch(`${this.url}/userData/collections/${id}`, 'GET');
+  }
 }
 
 export default new RestService();
