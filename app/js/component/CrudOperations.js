@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import crudActionCreator from '../actions/crudActionCreator';
 import ComponentService from '../service/component/componentService';
-import modalDispatcher from './modals/ModalDispatcher';
+import modalDispatcher from './modals/modalDispatcher';
 import graphTraversal from '../state/graphTraversal';
 
 class CrudOperations {

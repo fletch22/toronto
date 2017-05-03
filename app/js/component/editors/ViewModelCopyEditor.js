@@ -1,6 +1,6 @@
 import React from 'react';
 import graphTraversal from '../../state/graphTraversal';
-import modalDispatcher from '../modals/ModalDispatcher';
+import modalDispatcher from '../modals/modalDispatcher';
 import crudActionCreator from '../../actions/crudActionCreator';
 
 class ViewModelCopyEditor extends React.Component {

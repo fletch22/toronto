@@ -17,6 +17,7 @@ import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
 import viewUtils from '../views/viewUtils';
 import ViewTypes from '../views/ViewTypes';
+import grid from '../domain/collection/grid';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
@@ -413,29 +414,62 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.WIZARD.ConfigureDdl.CreateCollectionSlide.SHOW_MODEL_DATA: {  // ADD_NEW_ROW_COLLECTION
       const payload = action.payload;
       const wizardViewId = payload.wizardViewId;
-      const pageData = payload.pageData;
+      const pageData = payload.data;
 
       const viewModelWizard = graphTraversal.find(stateNew, wizardViewId);
 
       const slide = viewModelWizard.slides.createCollection;
-      slide.pageData = pageData;
-      slide.needsToMakeDataRequest = false;
+      slide.gridView.data.rows = pageData.rows;
+      slide.gridView.data.columns = pageData.columns;
+      slide.gridView.needsToMakeDataRequest = false;
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
     }
     case ACTIONS.types.GRID.ADD_NEW_ROW_TO_COLLECTION: {
-      c.l('Received signal to add new row to collection.');
-      // const payload = action.payload;
-      // const wizardViewId = payload.wizardViewId;
-      // const pageData = payload.pageData;
-      //
-      // const viewModelWizard = graphTraversal.find(stateNew, wizardViewId);
-      //
-      // const slide = viewModelWizard.slides.createCollection;
-      // slide.pageData = pageData;
-      // slide.needsToMakeDataRequest = false;
-      // stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const gridView = graphTraversal.find(stateNew, viewId);
+
+      const columns = gridView.data.columns;
+      grid.addNewRow(columns, gridView.data.rows);
+
+      gridView.data.rows = [].concat(gridView.data.rows);
+      gridView.needsToMakeDataRequest = false;
+      gridView.selectedIndexes = [0];
+      gridView.toolbar.addButtonDisabled = true;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.GRID.SELECT_ROWS: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const gridView = graphTraversal.find(stateNew, viewId);
+
+      gridView.selectedIndexes = payload.selectedIndexes;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.GRID.DESELECT_ROWS: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const gridView = graphTraversal.find(stateNew, viewId);
+
+      payload.selectedIndexes = _.remove(payload.selectedIndexes, (deselectedRow) => {
+        const index = deselectedRow.rowIdx;
+        return _.indexOf(gridView.selectedIndexes, index) !== -1;
+      });
+
+      gridView.selectedIndexes = payload.selectedIndexes;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
     }

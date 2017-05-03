@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import modalDispatcher from '../component/modals/ModalDispatcher';
+import modalDispatcher from '../component/modals/modalDispatcher';
 import crudActionCreator from '../actions/crudActionCreator';
 import graphTraversal from '../state/graphTraversal';
 import stateSyncService from '../service/stateSyncService';

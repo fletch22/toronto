@@ -9,13 +9,15 @@ class CreateItemForContainer extends React.Component {
     let classes = 'create-item-for-collection';
     classes += this.props.visible ? ' create-item-for-collection-visible' : '';
 
+    const newItemNameInputValue = this.props.newItemNameInputValue === null ? '' : this.props.newItemNameInputValue;
+
     return (
       <div className={classes}>
         <span>New Item Name:</span>
         <PropTextInput uuid={this.props.newItemNameInput.id}
           propertyName="value"
           onBlur={this.props.onBlurNewItemName}
-          value={this.props.newItemNameInputValue}
+          value={newItemNameInputValue }
         />
         <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" />
         <Button faClass="fa-close" onClick={this.props.onClickCancel} tooltipText="Cancel" />

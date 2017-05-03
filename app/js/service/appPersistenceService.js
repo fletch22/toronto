@@ -1,4 +1,4 @@
-import modalDispatcher from '../component/modals/ModalDispatcher';
+import modalDispatcher from '../component/modals/modalDispatcher';
 import restService from '../service/restService';
 import { actionHideCurrentModal } from '../actions/index';
 

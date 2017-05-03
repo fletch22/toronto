@@ -53,11 +53,11 @@ export const actionSetSelectDisplayField = (wizardViewId) => ({
   }
 });
 
-export const actionShowModelData = (wizardViewId, pageData) => ({
+export const actionShowModelData = (wizardViewId, data) => ({
   type: ActionTypes.ConfigureDdl.CreateCollectionSlide.SHOW_MODEL_DATA,
   payload: {
     wizardViewId,
-    pageData
+    data
   }
 });
 

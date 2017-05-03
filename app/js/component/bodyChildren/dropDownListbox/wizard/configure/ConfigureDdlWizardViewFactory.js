@@ -1,5 +1,6 @@
 import f22Uuid from '../../../../../util/f22Uuid';
 import PseudoModalTypes from '../../../../../component/modals/PseudoModalTypes';
+import gridViewModelFactory from '../../../../../domain/collection/gridViewModelFactory';
 
 class ConfigureDdlWizardViewFactory {
   createInstance(ddlModel) {
@@ -34,11 +35,7 @@ class ConfigureDdlWizardViewFactory {
         createCollection: {
           id: f22Uuid.generate(),
           buttonNextDisabled: true,
-          needsToMakeDataRequest: true,
-          gridView: {
-            id: f22Uuid.generate(),
-            pageData: null
-          }
+          gridView: gridViewModelFactory.createInstance()
         }
       }
     };

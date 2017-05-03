@@ -11,7 +11,7 @@ import appContainerService from '../../../service/component/appContainerService'
 import crudActionCreator from '../../../actions/crudActionCreator';
 import ModalWrangler from '../../../component/modals/ModalWrangler';
 import TimeTravelNavBar from './TimeTravelNavBar';
-import modalDispatch from '../../../component/modals/ModalDispatcher';
+import modalDispatch from '../../modals/modalDispatcher';
 import 'css/modules/time-travel-toolbar';
 import persistAppService from '../../../service/appPersistenceService';
 

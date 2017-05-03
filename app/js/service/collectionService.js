@@ -7,6 +7,11 @@ class CollectionService {
       return result;
     });
   }
+
+  persist(orbInternalTypeId, orb) {
+    c.l('XXX');
+    return Promise.reject();
+  }
 }
 
 export default new CollectionService();
