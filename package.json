@@ -72,6 +72,8 @@
     "worker-loader": "^0.7.0"
   },
   "dependencies": {
+    "ag-grid": "^9.1.0",
+    "ag-grid-react": "^9.1.0",
     "alt": "^0.18.2",
     "bootstrap-loader": "^1.0.7",
     "bootstrap-sass": "^3.3.6",
@@ -88,7 +90,7 @@
     "jquery": "^2.2.0",
     "node-uuid": "^1.4.7",
     "rc-menu": "^5.0.1",
-    "react": "^15.5.4",
+    "react": "15.5.4",
     "react-addons-update": "^0.14.7",
     "react-bootstrap": "^0.30.7",
     "react-data-grid": "^2.0.31",

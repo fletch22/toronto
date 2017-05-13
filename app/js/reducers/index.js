@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { ACTIONS, actionRollbackToStateId } from '../actions/index.js';
 import stateFixer from '../domain/stateFixer';
 import defaultState from '../state/defaultState';
-import appContainerService from '../service/component/appContainerService';
 import ErrorModalDtoFactory from '../component/modals/ErrorModalDtoFactory';
 import standardModalDtoFactory from '../component/modals/StandardModalDtoFactory';
 import modalDtoFactory from '../component/modals/ModalDtoFactory';
@@ -17,7 +16,7 @@ import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
 import viewUtils from '../views/viewUtils';
 import ViewTypes from '../views/ViewTypes';
-import grid from '../domain/collection/grid';
+import gridHelper from '../domain/collection/gridHelper';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
@@ -337,20 +336,20 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.WIZARD.ConfigureDdl.SelectCollectionSlide.SELECT_COLLECTION: {
+    case ACTIONS.types.WIZARD.ConfigureDdl.SelectCollectionSlide.SELECT_DATA_MODEL: {
       const payload = action.payload;
 
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardId);
 
-      viewModelWizard.selectedCollectionId = payload.selectedCollectionId;
+      viewModelWizard.selectedDataModelId = payload.selectedDataModelId;
 
-      if (viewModelWizard.selectedCollectionId) {
+      if (viewModelWizard.selectedDataModelId) {
         viewModelWizard.slides.selectCollection.buttonNextDisabled = false;
       }
 
       const collections = viewModelWizard.viewModel.viewModel.children;
       const collection = _.find(collections, (coll) => {
-        return coll.viewModel.id === viewModelWizard.selectedCollectionId;
+        return coll.viewModel.id === viewModelWizard.selectedDataModelId;
       });
 
       // When a collection is selected, reset some dependent values if necessary
@@ -433,7 +432,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const gridView = graphTraversal.find(stateNew, viewId);
 
       const columns = gridView.data.columns;
-      grid.addNewRow(columns, gridView.data.rows);
+      gridHelper.addNewRow(columns, gridView.data.rows);
 
       gridView.data.rows = [].concat(gridView.data.rows);
       gridView.needsToMakeDataRequest = false;
@@ -468,6 +467,34 @@ const reducer = (state = defaultState.getInstance(), action) => {
       });
 
       gridView.selectedIndexes = payload.selectedIndexes;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.GRID.UPDATE_ROW: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const gridView = graphTraversal.find(stateNew, viewId);
+
+      const rowData = payload.rowData;
+      const updatedCells = rowData.updatedCells;
+
+      const row = gridView.data.rows[0];
+      gridView.data.rows[0] = Object.assign(row, updatedCells);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.GRID.SET_COLLECTION_ID: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const gridView = graphTraversal.find(stateNew, viewId);
+
+      gridView.data.collectionId = payload.collectionId;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

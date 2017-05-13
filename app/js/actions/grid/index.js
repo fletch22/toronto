@@ -2,7 +2,9 @@ export const ActionTypes = {
   GRID: {
     ADD_NEW_ROW_TO_COLLECTION: 'ADD_NEW_ROW_TO_COLLECTION',
     SELECT_ROWS: 'SELECT_ROWS',
-    DESELECT_ROWS: 'DESELECT_ROWS'
+    DESELECT_ROWS: 'DESELECT_ROWS',
+    UPDATE_ROW: 'UPDATE_ROW',
+    SET_COLLECTION_ID: 'SET_COLLECTION_ID'
   }
 };
 
@@ -26,5 +28,21 @@ export const actionDeselectRows = (viewId, selectedIndexes) => ({
   payload: {
     viewId,
     selectedIndexes
+  }
+});
+
+export const actionUpdateRow = (viewId, rowData) => ({
+  type: ActionTypes.GRID.UPDATE_ROW,
+  payload: {
+    viewId,
+    rowData
+  }
+});
+
+export const actionSetCollectionId = (viewId, collectionId) => ({
+  type: ActionTypes.GRID.SET_COLLECTION_ID,
+  payload: {
+    viewId,
+    collectionId
   }
 });

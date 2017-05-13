@@ -123,7 +123,7 @@ const partialFlatten = (ownProps) => {
 
   const collections = wizardData.viewModel.viewModel.children;
   const collection = _.find(collections, (coll) => {
-    return coll.viewModel.id === wizardData.selectedCollectionId;
+    return coll.viewModel.id === wizardData.selectedDataModelId;
   });
 
   let collectionFields = [];
@@ -139,7 +139,7 @@ const partialFlatten = (ownProps) => {
     newItemNameInput,
     newItemNameInputVisible: newItemNameInput.visible,
     disableToolbarButtons: newItemNameInput.visible,
-    selectedCollectionId: wizardData.selectedCollectionId,
+    selectedDataModelId: wizardData.selectedDataModelId,
     selectedValueFieldId: wizardData.selectedValueFieldId,
     selectedTextFieldId: wizardData.selectedTextFieldId,
     selectedFieldId: slide.selectedFieldId,
@@ -173,7 +173,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onClickSaveField: () => {
       const props = partialFlatten(ownProps);
 
-      const model = dataModelFieldFactory.createInstance(props.selectedCollectionId, props.newItemNameInput.value);
+      const model = dataModelFieldFactory.createInstance(props.selectedDataModelId, props.newItemNameInput.value);
 
       const successCallback = () => {
         dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
@@ -187,7 +187,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
       const collections = props.wizardData.viewModel.viewModel.children;
       const collection = _.find(collections, (coll) => {
-        return coll.viewModel.id === props.wizardData.selectedCollectionId;
+        return coll.viewModel.id === props.wizardData.selectedDataModelId;
       });
 
       viewModelCreator.create(dispatch, model, collection.id, successCallback);

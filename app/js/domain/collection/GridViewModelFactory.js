@@ -1,8 +1,10 @@
 import f22uuid from '../../util/f22Uuid';
+import _ from 'lodash';
 
 export const GridViewModel = {
   id: null,
   data: {
+    collectionId: -1,
     rows: [],
     columns: []
   },

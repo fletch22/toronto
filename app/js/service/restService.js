@@ -1,4 +1,4 @@
-import Service from './service';
+import Service from './Service';
 
 class RestService extends Service {
 
@@ -32,6 +32,10 @@ class RestService extends Service {
 
   getCollection(id) {
     return this.fetch(`${this.url}/userData/collections/${id}`, 'GET');
+  }
+
+  saveOrb(object) {
+    return this.fetch(`${this.url}/userData/collections/`, 'POST', object);
   }
 }
 

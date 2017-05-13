@@ -9,7 +9,7 @@ class ConfigureDdlWizardViewFactory {
       type: PseudoModalTypes.WizardTypes.ConfigureDdl,
       model: ddlModel,
       activeIndex: 0,
-      selectedCollectionId: null,
+      selectedDataModelId: null,
       selectedValueFieldId: null,
       selectedTextFieldId: null,
       slides: {

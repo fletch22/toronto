@@ -2,7 +2,7 @@ export const ActionTypes = {
   ConfigureDdl: {
     SelectCollectionSlide: {
       TOGGLE_NEW_COLLECTION_NAME_INPUT: 'WIZ_CFGDDL_SEL_COLL_TOGGLE_NEW_COLLECTION_NAME_INPUT',
-      SELECT_COLLECTION: 'SELECT_COLLECTION'
+      SELECT_DATA_MODEL: 'SELECT_DATA_MODEL'
     },
     SelectFieldSlide: {
       SELECT_FIELD: 'SELECT_FIELD',
@@ -23,11 +23,11 @@ export const actionToggleNewItemNameInput = (uuid) => ({
   }
 });
 
-export const actionSelectCollection = (wizardId, selectedCollectionId) => ({
-  type: ActionTypes.ConfigureDdl.SelectCollectionSlide.SELECT_COLLECTION,
+export const actionSelectDataModel = (wizardId, selectedDataModelId) => ({
+  type: ActionTypes.ConfigureDdl.SelectCollectionSlide.SELECT_DATA_MODEL,
   payload: {
     wizardId,
-    selectedCollectionId
+    selectedDataModelId
   }
 });
 

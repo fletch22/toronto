@@ -1,5 +1,6 @@
+import _ from 'lodash';
 
-class Grid {
+class GridHelper {
 
   constructor() {
     this.CONSTANTS = {
@@ -32,16 +33,36 @@ class Grid {
     return { key: this.constructColumnName(rawColumnName), name, editable: isEditable };
   }
 
-  constructColumnUsingRawName(rawColumnName, name, isEditable) {
-    return { key: rawColumnName, name, editable: isEditable };
+  constructKeyColumn(rawColumnName, name) {
+    return { key: rawColumnName, name };
   }
 
   constructColumnName(rawColumnName) {
     return `${this.CONSTANTS.COLUMN_SAFETY_PREFIX}${rawColumnName}`;
   }
+
+  convertRowToPersist(row) {
+    return {
+      id: row.id,
+      attributes: this.getAttributesForPersist(row)
+    };
+  }
+
+  getAttributesForPersist(row) {
+    const clone = _.cloneDeep(row);
+    delete clone[this.CONSTANTS.IDENTITY_KEY_NAME];
+
+    const keys = Object.keys(clone);
+    const attributes = {};
+    keys.forEach((key) => {
+      const unprefixed = _.replace(key, new RegExp(this.CONSTANTS.COLUMN_SAFETY_PREFIX, 'g'), '');
+      attributes[unprefixed] = clone[key];
+    });
+    return attributes;
+  }
 }
 
-export default new Grid();
+export default new GridHelper();
 
 
 

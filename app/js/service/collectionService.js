@@ -8,9 +8,11 @@ class CollectionService {
     });
   }
 
-  persist(orbInternalTypeId, orb) {
-    c.l('XXX');
-    return Promise.reject();
+  saveOrb(object) {
+    return restService.saveOrb(object)
+      .then((result) => {
+        return result;
+      });
   }
 }
 

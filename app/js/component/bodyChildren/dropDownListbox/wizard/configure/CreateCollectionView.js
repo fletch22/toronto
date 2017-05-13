@@ -6,15 +6,19 @@ import { actionShowModelData } from '../../../../../actions/wizard/configureDdl/
 import Grid from '../../../../editors/grid/Grid';
 import collectionService from '../../../../../service/collectionService';
 import collectionToGridDataTransformer from '../../../../../domain/collection/CollectionToGridDataTransformer';
+import DataModelGrid from '../../../../editors/grid/DataModelGrid';
 
 class CreateCollectionView extends React.Component {
 
   componentDidUpdate() {
-    const collectionId = this.props.wizardData.selectedCollectionId;
+    const selectedDataModelId = this.props.wizardData.selectedDataModelId;
+
+    c.l('this.props.wizardData.selectedDataModelId: ' +  this.props.wizardData.selectedDataModelId);
+
     const self = this;
 
     if (this.props.isSlideActive && this.props.needsToMakeDataRequest) {
-      collectionService.get(collectionId).then((result) => {
+      collectionService.get(selectedDataModelId).then((result) => {
         const data = collectionToGridDataTransformer.transform(result);
 
         const props = self.props;
@@ -29,7 +33,7 @@ class CreateCollectionView extends React.Component {
       <div className="wizard-config-ddl">
         <div className="wizard-config-ddl col-md-12">
           <div className="row" style={{ height: '90%' }}>
-            <Grid gridViewModel={this.props.gridViewModel} />
+            <DataModelGrid dataModelId={this.props.selectedDataModelId} gridViewModel={this.props.gridViewModel} />
           </div>
           <div className="sel_view_row_foot_name text-right">
             <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} label="Back" />
@@ -47,7 +51,8 @@ CreateCollectionView.propTypes = {
   buttonNextDisabled: PropTypes.bool,
   createCollection: PropTypes.object,
   needsToMakeDataRequest: PropTypes.bool,
-  gridViewModel: PropTypes.object
+  gridViewModel: PropTypes.object,
+  selectedDataModelId: PropTypes.any
 };
 
 const partialFlatten = (ownProps) => {
@@ -61,7 +66,8 @@ const partialFlatten = (ownProps) => {
     createCollection: slide,
     isSlideActive: ownProps.isSlideActive,
     needsToMakeDataRequest: slide.gridView.needsToMakeDataRequest,
-    gridViewModel: slide.gridView
+    gridViewModel: slide.gridView,
+    selectedDataModelId: wizardData.selectedDataModelId
   };
 };
 

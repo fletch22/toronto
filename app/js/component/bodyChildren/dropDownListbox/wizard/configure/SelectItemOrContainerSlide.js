@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import WizardPages from './WizardViews';
 import ButtonWizard from '../ButtonWizard';
 import SelectItemOrContainerToolbar from './SelectItemOrContainerToolbar';
-import { actionToggleNewItemNameInput, actionSelectCollection } from '../../../../../actions/wizard/configureDdl/index';
+import { actionToggleNewItemNameInput, actionSelectDataModel } from '../../../../../actions/wizard/configureDdl/index';
 import CreateItemForContainer from './selectCollection/CreateItemForContainer';
 import dataModelModelFactory from '../../../../../domain/component/dataModelModelFactory';
 import viewModelCreator from '../../../../utils/viewModelCreator';
@@ -18,7 +18,7 @@ class SelectItemOrContainerSlide extends React.Component {
       choices = choices.map((choice, index) => {
         let classes = 'list-group-item list-group-item-action';
 
-        if (choice.viewModel.id === this.props.selectedCollectionId) {
+        if (choice.viewModel.id === this.props.selectedDataModelId) {
           classes += ' wiz-sel-coll-selected-collection';
         }
 
@@ -69,7 +69,7 @@ SelectItemOrContainerSlide.propTypes = {
   onClickAddCollection: PropTypes.func,
   onClickRemoveCollection: PropTypes.func,
   viewModel: PropTypes.object,
-  selectedCollectionId: PropTypes.number,
+  selectedDataModelId: PropTypes.number,
   buttonNextDisabled: PropTypes.bool,
   selectCollection: PropTypes.object,
   newItemNameInput: PropTypes.object,
@@ -93,7 +93,7 @@ const partialFlatten = (ownProps) => {
     newItemNameInput,
     newCollectionNameInputVisible: newItemNameInput.visible,
     disableToolbarButtons: newItemNameInput.visible,
-    selectedCollectionId: data.selectedCollectionId
+    selectedDataModelId: data.selectedDataModelId
   };
 };
 
@@ -117,8 +117,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onCollectionFocus: (event) => {
       const props = partialFlatten(ownProps);
-      const selectedCollectionId = parseInt(event.target.dataset.value, 10);
-      dispatch(actionSelectCollection(props.wizardData.id, selectedCollectionId));
+      const selectedDataModelId = parseInt(event.target.dataset.value, 10);
+
+      c.l(`selectedDataModelId: ${selectedDataModelId}`);
+
+      dispatch(actionSelectDataModel(props.wizardData.id, selectedDataModelId));
     },
     onClickSaveCollection: () => {
       const props = partialFlatten(ownProps);
