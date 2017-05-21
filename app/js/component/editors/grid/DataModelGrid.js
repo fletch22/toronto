@@ -1,14 +1,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Grid from './Grid';
+import OrbGrid from './OrbGrid';
 import { actionSetCollectionId } from '../../../actions/grid/index';
 import gridService from '../../../service/gridService';
+import { GridViewModelConstants } from '../../../domain/collection/gridViewModelFactory';
 
 class DataModelGrid extends React.Component {
 
   componentDidUpdate() {
-    // Async fetch to get dataModel's associated UserData table
-    c.l('about to call lookup');
     if (this.props.dataModelId !== null) {
       gridService.lookupCollectionIdFromDataModelId(this.props.dataModelId)
         .then((result) => {
@@ -20,8 +19,8 @@ class DataModelGrid extends React.Component {
 
   render() {
     let grid = null;
-    if (this.props.collectionId !== -1) {
-      grid = (<Grid collectionId={this.props.collectionId} gridViewModel={this.props.gridViewModel} />);
+    if (this.props.collectionId !== GridViewModelConstants.COLLECTION_ID_UNSET) {
+      grid = (<OrbGrid collectionId={this.props.collectionId} gridViewModel={this.props.gridViewModel} />);
     }
 
     return (

@@ -1,41 +1,26 @@
 export const ActionTypes = {
   GRID: {
-    ADD_NEW_ROW_TO_COLLECTION: 'ADD_NEW_ROW_TO_COLLECTION',
-    SELECT_ROWS: 'SELECT_ROWS',
-    DESELECT_ROWS: 'DESELECT_ROWS',
-    UPDATE_ROW: 'UPDATE_ROW',
-    SET_COLLECTION_ID: 'SET_COLLECTION_ID'
+    SELECT_ROW: 'SELECT_ROW',
+    DESELECT_ROW: 'DESELECT_ROWS',
+    SET_COLLECTION_ID: 'SET_COLLECTION_ID',
+    SHOW_GRID_DATA: 'SHOW_GRID_DATA',
+    ROW_SAVED: 'ROW_SAVED'
   }
 };
 
-export const actionAddNewEmptyRowToGrid = (viewId) => ({
-  type: ActionTypes.GRID.ADD_NEW_ROW_TO_COLLECTION,
-  payload: {
-    viewId
-  }
-});
-
-export const actionSelectRows = (viewId, selectedIndexes) => ({
-  type: ActionTypes.GRID.SELECT_ROWS,
+export const actionSelectRow = (viewId, selectedIndexes) => ({
+  type: ActionTypes.GRID.SELECT_ROW,
   payload: {
     viewId,
     selectedIndexes
   }
 });
 
-export const actionDeselectRows = (viewId, selectedIndexes) => ({
-  type: ActionTypes.GRID.DESELECT_ROWS,
+export const actionDeselectRow = (viewId, deselectedIndexes) => ({
+  type: ActionTypes.GRID.DESELECT_ROW,
   payload: {
     viewId,
-    selectedIndexes
-  }
-});
-
-export const actionUpdateRow = (viewId, rowData) => ({
-  type: ActionTypes.GRID.UPDATE_ROW,
-  payload: {
-    viewId,
-    rowData
+    deselectedIndexes
   }
 });
 
@@ -44,5 +29,21 @@ export const actionSetCollectionId = (viewId, collectionId) => ({
   payload: {
     viewId,
     collectionId
+  }
+});
+
+export const actionShowModelData = (viewId, data) => ({
+  type: ActionTypes.GRID.SHOW_GRID_DATA,
+  payload: {
+    viewId,
+    data
+  }
+});
+
+export const actionGridRowSaved = (viewId, rowSaved) => ({
+  type: ActionTypes.GRID.ROW_SAVED,
+  payload: {
+    viewId,
+    rowSaved
   }
 });

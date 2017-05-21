@@ -2,28 +2,28 @@ import React, { PropTypes } from 'react';
 import WizardPages from './WizardViews';
 import ButtonWizard from '../ButtonWizard';
 import { connect } from 'react-redux';
-import { actionShowModelData } from '../../../../../actions/wizard/configureDdl/';
+import { actionShowModelData } from '../../../../../actions/grid/index';
 import Grid from '../../../../editors/grid/Grid';
 import collectionService from '../../../../../service/collectionService';
-import collectionToGridDataTransformer from '../../../../../domain/collection/CollectionToGridDataTransformer';
+import collectionToGridDataTransformer from '../../../../../domain/collection/collectionToGridDataTransformer';
 import DataModelGrid from '../../../../editors/grid/DataModelGrid';
 
 class CreateCollectionView extends React.Component {
 
   componentDidUpdate() {
-    const selectedDataModelId = this.props.wizardData.selectedDataModelId;
-
-    c.l('this.props.wizardData.selectedDataModelId: ' +  this.props.wizardData.selectedDataModelId);
+    // const selectedDataModelId = this.props.wizardData.selectedDataModelId;
+    // c.l('this.props.wizardData.selectedDataModelId: ' +  this.props.wizardData.selectedDataModelId);
+    // c.lo(this.props.gridViewModel.data.collectionId, 'this.props.gridViewModel.data.collectionId: ');
 
     const self = this;
 
     if (this.props.isSlideActive && this.props.needsToMakeDataRequest) {
-      collectionService.get(selectedDataModelId).then((result) => {
+      collectionService.get(self.props.gridViewModel.data.collectionId).then((result) => {
         const data = collectionToGridDataTransformer.transform(result);
 
         const props = self.props;
         const dispatch = props.dispatch;
-        dispatch(actionShowModelData(props.wizardData.id, data));
+        dispatch(actionShowModelData(props.gridViewModel.id, data));
       });
     }
   }

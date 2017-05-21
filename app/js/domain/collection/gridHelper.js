@@ -18,11 +18,18 @@ class GridHelper {
     });
     this.addPropAndValueToRow(newRow, this.CONSTANTS.IDENTITY_KEY_NAME, this.CONSTANTS.NEW_ID_VALUE);
     rows.unshift(newRow);
+    return rows;
+  }
+
+  setId(row, id) {
+    this.addPropAndValueToRow(row, this.CONSTANTS.IDENTITY_KEY_NAME, id);
   }
 
   addPropAndValueToRow(row, columnName, value) {
     /* eslint-disable no-param-reassign */
     row[columnName] = value;
+
+    return row;
   }
 
   addColumn(columns, newColumn) {

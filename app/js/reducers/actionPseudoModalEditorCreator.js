@@ -52,8 +52,6 @@ class ActionPseudoModalEditorCreator {
 
     const data = Object.assign({}, options, { id: f22Uuid.generate() }, { model }, { viewModel });
 
-    c.lo(data, 'data: ');
-
     return {
       viewName,
       data

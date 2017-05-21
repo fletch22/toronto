@@ -167,8 +167,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       c.l('Got signal to restore from disk.');
       restService.restoreFromDisk()
         .then(() => {
-          c.l('Returned from promise.');
-          c.l(window.document.location.href);
           window.document.location.reload();
         })
         .catch((error) => {
@@ -410,79 +408,71 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.WIZARD.ConfigureDdl.CreateCollectionSlide.SHOW_MODEL_DATA: {  // ADD_NEW_ROW_COLLECTION
+    case ACTIONS.types.GRID.SHOW_GRID_DATA: {
       const payload = action.payload;
-      const wizardViewId = payload.wizardViewId;
-      const pageData = payload.data;
+      const viewId = payload.viewId;
+      const data = payload.data;
 
-      const viewModelWizard = graphTraversal.find(stateNew, wizardViewId);
+      const gridViewModel = graphTraversal.find(stateNew, viewId);
 
-      const slide = viewModelWizard.slides.createCollection;
-      slide.gridView.data.rows = pageData.rows;
-      slide.gridView.data.columns = pageData.columns;
-      slide.gridView.needsToMakeDataRequest = false;
+      gridViewModel.data.rows = data.rows;
+      gridViewModel.data.columns = data.columns;
+      gridViewModel.needsToMakeDataRequest = false;
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
     }
-    case ACTIONS.types.GRID.ADD_NEW_ROW_TO_COLLECTION: {
+    case ACTIONS.types.GRID.ROW_SAVED: {
       const payload = action.payload;
       const viewId = payload.viewId;
+      const rowSaved = payload.rowSaved;
 
-      const gridView = graphTraversal.find(stateNew, viewId);
+      const gridViewModel = graphTraversal.find(stateNew, viewId);
+      c.lo(gridViewModel, 'gridViewModel: ');
 
-      const columns = gridView.data.columns;
-      gridHelper.addNewRow(columns, gridView.data.rows);
+      gridViewModel.toolbar.addButtonDisabled = false;
+      gridViewModel.selectedIndexes = [];
+      gridViewModel.data.rows = [].concat(gridViewModel.data.rows);
 
-      gridView.data.rows = [].concat(gridView.data.rows);
-      gridView.needsToMakeDataRequest = false;
-      gridView.selectedIndexes = [0];
-      gridView.toolbar.addButtonDisabled = true;
-
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-
-      return stateNew;
-    }
-    case ACTIONS.types.GRID.SELECT_ROWS: {
-      const payload = action.payload;
-      const viewId = payload.viewId;
-
-      const gridView = graphTraversal.find(stateNew, viewId);
-
-      gridView.selectedIndexes = payload.selectedIndexes;
-
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-
-      return stateNew;
-    }
-    case ACTIONS.types.GRID.DESELECT_ROWS: {
-      const payload = action.payload;
-      const viewId = payload.viewId;
-
-      const gridView = graphTraversal.find(stateNew, viewId);
-
-      payload.selectedIndexes = _.remove(payload.selectedIndexes, (deselectedRow) => {
-        const index = deselectedRow.rowIdx;
-        return _.indexOf(gridView.selectedIndexes, index) !== -1;
+      const index = _.findIndex(gridViewModel.data.rows, (row) => {
+        return row.id === rowSaved.id;
       });
 
-      gridView.selectedIndexes = payload.selectedIndexes;
+      c.l('omfrc: ' + index);
+
+      if (index > -1) {
+        gridViewModel.data.rows[index] = rowSaved;
+      } else {
+        gridViewModel.data.rows.unshift(rowSaved);
+      }
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
     }
-    case ACTIONS.types.GRID.UPDATE_ROW: {
+    case ACTIONS.types.GRID.SELECT_ROW: {
       const payload = action.payload;
       const viewId = payload.viewId;
+      const selectedIndexes = payload.selectedIndexes;
 
       const gridView = graphTraversal.find(stateNew, viewId);
 
-      const rowData = payload.rowData;
-      const updatedCells = rowData.updatedCells;
+      gridView.selectedIndexes = _.uniq(gridView.selectedIndexes.concat(selectedIndexes));
 
-      const row = gridView.data.rows[0];
-      gridView.data.rows[0] = Object.assign(row, updatedCells);
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.GRID.DESELECT_ROW: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+      const deselectedIndexes = payload.deselectedIndexes;
+
+      const gridView = graphTraversal.find(stateNew, viewId);
+
+      gridView.selectedIndexes = _.filter(gridView.selectedIndexes, (selectedIndex) => {
+        return !deselectedIndexes.includes(selectedIndex);
+      });
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

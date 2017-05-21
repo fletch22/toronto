@@ -22,11 +22,13 @@ class CollectionToGridDataTransformer {
     const orbList = richOrbResult.orbList;
     if (orbList !== null) {
       orbList.forEach((orb) => {
-        const row = {};
-        richOrbResult.fields.forEach((value, index) => {
-          gridHelper.addPropAndValueToRow(row, richOrbResult.fields[index], value);
-        });
-        gridHelper.addPropAndValueToRow(row, gridHelper.CONSTANTS.IDENTITY_KEY_NAME, orb.id);
+        let row = {};
+        /* eslint-disable guard-for-in */
+        for (const property in orb.userDefinedProperties) {
+          const value = orb.userDefinedProperties[property];
+          row = gridHelper.addPropAndValueToRow(row, gridHelper.constructColumnName(property), value);
+        }
+        gridHelper.addPropAndValueToRow(row, gridHelper.CONSTANTS.IDENTITY_KEY_NAME, orb.orbInternalId);
         allRows.push(row);
       });
     }
