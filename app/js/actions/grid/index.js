@@ -40,10 +40,10 @@ export const actionShowModelData = (viewId, data) => ({
   }
 });
 
-export const actionGridRowSaved = (viewId, rowSaved) => ({
+export const actionGridRowSaved = (viewId, rowsSaved) => ({
   type: ActionTypes.GRID.ROW_SAVED,
   payload: {
     viewId,
-    rowSaved
+    rowsSaved
   }
 });

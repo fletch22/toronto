@@ -425,26 +425,23 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.GRID.ROW_SAVED: {
       const payload = action.payload;
       const viewId = payload.viewId;
-      const rowSaved = payload.rowSaved;
+      const allRowsSaved = payload.rowsSaved;
 
       const gridViewModel = graphTraversal.find(stateNew, viewId);
-      c.lo(gridViewModel, 'gridViewModel: ');
 
       gridViewModel.toolbar.addButtonDisabled = false;
       gridViewModel.selectedIndexes = [];
       gridViewModel.data.rows = [].concat(gridViewModel.data.rows);
 
-      const index = _.findIndex(gridViewModel.data.rows, (row) => {
-        return row.id === rowSaved.id;
+      allRowsSaved.forEach((rowSaved) => {
+        const index = _.findIndex(gridViewModel.data.rows, (row) => (row.id === rowSaved.id));
+
+        if (index > -1) {
+          gridViewModel.data.rows[index] = rowSaved;
+        } else {
+          gridViewModel.data.rows.unshift(rowSaved);
+        }
       });
-
-      c.l('omfrc: ' + index);
-
-      if (index > -1) {
-        gridViewModel.data.rows[index] = rowSaved;
-      } else {
-        gridViewModel.data.rows.unshift(rowSaved);
-      }
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

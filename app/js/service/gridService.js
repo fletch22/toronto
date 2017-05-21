@@ -4,6 +4,7 @@ import collectionService from '../service/collectionService';
 import modalDispatcher from '../component/modals/modalDispatcher';
 import gridHelper from '../domain/collection/gridHelper';
 import { actionGridRowSaved } from '../actions/grid';
+import _ from 'lodash';
 
 class GridService extends Service {
 
@@ -14,44 +15,47 @@ class GridService extends Service {
   persist(dispatch, ownProps, rowIdsUpdated, updatePropAndVals) {
     const grid = ownProps.gridViewModel;
 
-    let row = null;
-    const numberToUpdate = rowIdsUpdated.length;
-    if (numberToUpdate === 1) {
-      const rowId = rowIdsUpdated[0];
-      const rows = grid.data.rows;
-      row = _.find(rows, (rowThing) => rowThing.id === rowId);
-      row = Object.assign(row, updatePropAndVals);
-    } else if (numberToUpdate > 1) {
-      c.l('Multi-row update not supported.');
-    } else {
+    c.lo(rowIdsUpdated, 'rowIdsUpdated: ');
+
+    let rawRows = null;
+    if (rowIdsUpdated.length === 0) {
       const rows = gridHelper.addNewRow(grid.data.columns, []);
-      row = rows[0];
+      rawRows = [rows[0]];
+    } else {
+      rawRows = rowIdsUpdated.map((id) => {
+        const rawSingleRow = _.find(grid.data.rows, (gridRow) => gridRow.id === id);
+        return Object.assign(rawSingleRow, updatePropAndVals);
+      });
     }
 
+    if (!rawRows) {
+      const error = {
+        name: 'Save Error',
+        message: 'Encountered error while trying to save/update grid row. Don\'t know which row to persist.'
+      };
+      modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to save/update grid row.', dispatch);
+      return;
+    }
+
+    const rowsToPersist = rawRows.map((rawRow) => {
+      return gridHelper.convertRowToPersist(rawRow);
+    });
+
+    const persistObject = {
+      collectionId: grid.data.collectionId,
+      rows: rowsToPersist
+    };
+
     const successCallback = (result) => {
-      gridHelper.setId(row, result.orbInternalId);
-      dispatch(actionGridRowSaved(ownProps.gridViewModel.id, row));
+      result.persistedIds.forEach((id, index) => {
+        gridHelper.setId(rawRows[index], id);
+      });
+      dispatch(actionGridRowSaved(ownProps.gridViewModel.id, rawRows));
     };
 
     const dispatchHelper = () => {
       const createUpdate = (cuDispatch) => {
         try {
-          if (!row) {
-            const error = {
-              name: 'Save Error',
-              message: 'Encountered error while trying to save/update grid row. Don\'t know which row to persist.'
-            };
-            modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to save/update grid row.', cuDispatch);
-            return Promise.reject(error);
-          }
-
-          const rowPersist = gridHelper.convertRowToPersist(row);
-
-          const persistObject = {
-            collectionId: grid.data.collectionId,
-            row: rowPersist
-          };
-
           return collectionService.saveOrb(persistObject)
             .then((result) => {
               console.debug('Success Callback.');

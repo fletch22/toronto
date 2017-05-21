@@ -51,7 +51,6 @@ Grid.propTypes = {
   rows: PropTypes.array,
   onClickAddRow: PropTypes.func,
   onGridRowsUpdated: PropTypes.func,
-  onClickSave: PropTypes.func,
   toolbar: PropTypes.object,
   onRowsSelected: PropTypes.func,
   onRowsDeselected: PropTypes.func,
@@ -90,13 +89,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       const updatedPropAndVals = null;
       gridService.persist(dispatch, ownProps, [], updatedPropAndVals);
     },
-    onClickSave: () => {
-      // persist(dispatch, ownProps);
-      c.l('onClickSave temporarily disabled.');
-    },
     onGridRowsUpdated: (rows) => {
       const action = rows.action;
-      if (action === 'CELL_UPDATE') {
+      if (action === 'CELL_UPDATE' || action === 'CELL_DRAG') {
         gridService.persist(dispatch, ownProps, rows.rowIds, rows.updated);
       } else {
         console.error(`Encountered grid cell update action '${action}'. Code to handle this action is not yet implemented.`);
@@ -106,10 +101,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(actionSelectRow(ownProps.gridViewModel.id, getSelectedIndexes(selectedRows)));
     },
     onRowsDeselected: (selectedRows) => {
-      c.lo(selectedRows, 'deselected rows: ');
-      c.lo(getSelectedIndexes(selectedRows), 'getSelectedIndexes(selectedRows): ');
-
-
       dispatch(actionDeselectRow(ownProps.gridViewModel.id, getSelectedIndexes(selectedRows)));
     }
   };
