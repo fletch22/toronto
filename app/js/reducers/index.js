@@ -430,7 +430,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const gridViewModel = graphTraversal.find(stateNew, viewId);
 
       gridViewModel.toolbar.addButtonDisabled = false;
-      gridViewModel.selectedIndexes = [];
       gridViewModel.data.rows = [].concat(gridViewModel.data.rows);
 
       allRowsSaved.forEach((rowSaved) => {
@@ -440,7 +439,31 @@ const reducer = (state = defaultState.getInstance(), action) => {
           gridViewModel.data.rows[index] = rowSaved;
         } else {
           gridViewModel.data.rows.unshift(rowSaved);
+          gridViewModel.selectedIndexes = gridViewModel.selectedIndexes.map((value) => {
+            return value + 1;
+          });
         }
+      });
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.GRID.ROWS_DELETE: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+      const idsToDelete = payload.ids;
+
+      const gridViewModel = graphTraversal.find(stateNew, viewId);
+
+      gridViewModel.data.rows.forEach((row, index) => {
+        if (idsToDelete.includes(row.id)) {
+          gridViewModel.selectedIndexes = gridViewModel.selectedIndexes.slice(index, 1);
+        }
+      });
+
+      gridViewModel.data.rows = _.filter(gridViewModel.data.rows, (row) => {
+        return !idsToDelete.includes(row.id);
       });
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));

@@ -14,6 +14,10 @@ class CollectionService {
         return result;
       });
   }
+
+  delete(array) {
+    return restService.deleteOrbs(array);
+  }
 }
 
 export default new CollectionService();

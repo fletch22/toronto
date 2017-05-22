@@ -37,6 +37,10 @@ class RestService extends Service {
   saveOrb(object) {
     return this.fetch(`${this.url}/userData/collections/`, 'POST', object);
   }
+
+  deleteOrbs(object) {
+    return this.fetch(`${this.url}/userData/collections/deleteSome`, 'POST', object);
+  }
 }
 
 export default new RestService();

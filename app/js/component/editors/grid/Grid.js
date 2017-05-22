@@ -102,7 +102,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onRowsDeselected: (selectedRows) => {
       dispatch(actionDeselectRow(ownProps.gridViewModel.id, getSelectedIndexes(selectedRows)));
+    },
+    onClickRemove: () => {
+      gridService.delete(dispatch, ownProps, ownProps.gridViewModel.selectedIndexes);
     }
+
   };
 };
 

@@ -4,7 +4,8 @@ export const ActionTypes = {
     DESELECT_ROW: 'DESELECT_ROWS',
     SET_COLLECTION_ID: 'SET_COLLECTION_ID',
     SHOW_GRID_DATA: 'SHOW_GRID_DATA',
-    ROW_SAVED: 'ROW_SAVED'
+    ROW_SAVED: 'ROW_SAVED',
+    ROWS_DELETE: 'ROWS_DELETE'
   }
 };
 
@@ -45,5 +46,13 @@ export const actionGridRowSaved = (viewId, rowsSaved) => ({
   payload: {
     viewId,
     rowsSaved
+  }
+});
+
+export const actionGridRowDelete = (viewId, ids) => ({
+  type: ActionTypes.GRID.ROWS_DELETE,
+  payload: {
+    viewId,
+    ids
   }
 });
