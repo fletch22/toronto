@@ -16,7 +16,7 @@ import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
 import viewUtils from '../views/viewUtils';
 import ViewTypes from '../views/ViewTypes';
-import gridHelper from '../domain/collection/gridHelper';
+import ConfigureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);

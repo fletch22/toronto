@@ -19,7 +19,6 @@ class GridToolbar extends React.Component {
       <div className="sel_view_toolbar">
         <Button faClass="fa-plus" disabled={this.props.disableAddButton} onClick={this.onClickAdd} tooltipText="Add" />
         <Button faClass="fa-minus" disabled={this.props.disableDeleteButton} onClick={this.props.onClickRemove} tooltipText="Delete" />
-        <Button faClass="fa-refresh" disabled={this.props.disableRefreshButton} onClick={this.props.onClickRefresh} tooltipText="Refresh" />
       </div>
     );
   }

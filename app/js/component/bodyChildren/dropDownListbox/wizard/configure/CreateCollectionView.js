@@ -11,10 +11,6 @@ import DataModelGrid from '../../../../editors/grid/DataModelGrid';
 class CreateCollectionView extends React.Component {
 
   componentDidUpdate() {
-    // const selectedDataModelId = this.props.wizardData.selectedDataModelId;
-    // c.l('this.props.wizardData.selectedDataModelId: ' +  this.props.wizardData.selectedDataModelId);
-    // c.lo(this.props.gridViewModel.data.collectionId, 'this.props.gridViewModel.data.collectionId: ');
-
     const self = this;
 
     if (this.props.isSlideActive && this.props.needsToMakeDataRequest) {

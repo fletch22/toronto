@@ -1,5 +1,8 @@
 export const ActionTypes = {
   ConfigureDdl: {
+    SelectDataSourceType: {
+      COLLECTION: 'COLLECTION'
+    },
     SelectCollectionSlide: {
       TOGGLE_NEW_COLLECTION_NAME_INPUT: 'WIZ_CFGDDL_SEL_COLL_TOGGLE_NEW_COLLECTION_NAME_INPUT',
       SELECT_DATA_MODEL: 'SELECT_DATA_MODEL'
@@ -52,9 +55,3 @@ export const actionSetSelectDisplayField = (wizardViewId) => ({
   }
 });
 
-export const actionAddEmptyRowToGrid = (viewId) => ({
-  type: ActionTypes.ConfigureDdl.CreateCollectionSlide.ADD_NEW_ROW_COLLECTION,
-  payload: {
-    viewId
-  }
-});

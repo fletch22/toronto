@@ -3,16 +3,32 @@ import PseudoModalTypes from '../../../../../component/modals/PseudoModalTypes';
 import gridViewModelFactory from '../../../../../domain/collection/gridViewModelFactory';
 
 class ConfigureDdlWizardViewFactory {
+
+  constructor() {
+    this.Constants = {
+      DataSourceType: {
+        Collection: 'Collection',
+        Query: 'Query',
+        External: 'External'
+      }
+    };
+  }
+
   createInstance(ddlModel) {
     return {
       id: f22Uuid.generate(),
       type: PseudoModalTypes.WizardTypes.ConfigureDdl,
       model: ddlModel,
       activeIndex: 0,
+      dataSourceType: null,
       selectedDataModelId: null,
       selectedValueFieldId: null,
       selectedTextFieldId: null,
       slides: {
+        selectDataSourceType: {
+          id: f22Uuid.generate(),
+          buttonNextDisabled: true
+        },
         selectCollection: {
           id: f22Uuid.generate(),
           newItemNameInput: {

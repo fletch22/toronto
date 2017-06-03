@@ -283,6 +283,14 @@ $carousel-transition: 0.2s ease-in-out;
 
 // Wizards Begin
 
+#main .wizard-data-source-buttons {
+  margin: 20px 0 0 0;
+}
+
+#main .wizard-data-source-buttons > .btn {
+  margin: 20px 0;
+}
+
 .wizard-config-ddl {
   height: 500px;
 }

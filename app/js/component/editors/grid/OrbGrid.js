@@ -9,9 +9,7 @@ class OrbGrid extends React.Component {
 
   componentDidUpdate() {
     const self = this;
-    // c.l("component did UPDATE.");
-    if (this.props.collectionId !== undefined) {
-      // c.l('About to call get collection ...');
+    if (this.props.collectionId !== undefined && this.props.collectionId !== -1) {
       collectionService.get(this.props.collectionId).then((result) => {
         const data = collectionToGridDataTransformer.transform(result);
 

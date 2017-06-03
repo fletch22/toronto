@@ -14,7 +14,6 @@ class GridService extends Service {
 
   delete(dispatch, ownProps, rowIndexes) {
     const grid = ownProps.gridViewModel;
-    c.lo(rowIndexes, 'rows to delete: ');
 
     const rowIds = rowIndexes.map((index) => {
       return grid.data.rows[index].id;
@@ -60,8 +59,6 @@ class GridService extends Service {
 
   persist(dispatch, ownProps, rowIdsUpdated, updatePropAndVals) {
     const grid = ownProps.gridViewModel;
-
-    c.lo(rowIdsUpdated, 'rowIdsUpdated: ');
 
     let rawRows = null;
     if (rowIdsUpdated.length === 0) {

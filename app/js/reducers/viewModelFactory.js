@@ -23,6 +23,9 @@ class ViewModelFactory {
 
     switch (type) {
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
+
+        c.lo(model, 'model: ');
+
         // TODO: Needs to pull out unneeded data here after viewModel pattern is implemented.
         data = configureDdlWizardViewFactory.createInstance(model);
 

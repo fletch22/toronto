@@ -57,6 +57,7 @@ class SelectItemOrContainerSlide extends React.Component {
           </div>
         </div>
         <div className="sel_view_row_foot_name text-right">
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DATASOURCE_TYPE} label="Back" />
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
       </div>
