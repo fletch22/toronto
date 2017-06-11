@@ -7,14 +7,12 @@ import SelectDdlFieldsView from './wizard/configure/SelectDdlFieldsView';
 import SelectDataSourceType from './wizard/configure/SelectDataSourceType';
 import CreateCollectionView from './wizard/configure/CreateCollectionView';
 import WizardViews from './wizard/configure/WizardViews';
+import SaveDdlInfo from './wizard/configure/SaveDdlInfo';
 
 class ConfigureDdlWizard extends React.Component {
 
   render() {
     const activeIndex = this.props.activeIndex;
-
-    /* <SelectDataSourceType isSlideActive={activeIndex === WizardViews.CREATE_COLLECTION} wizardData={this.props.data} />
-    */
 
     return (
         <div style={{ width: '100%' }}>
@@ -30,6 +28,9 @@ class ConfigureDdlWizard extends React.Component {
             </Carousel.Item>
             <Carousel.Item key={WizardViews.CREATE_COLLECTION}>
               <CreateCollectionView isSlideActive={activeIndex === WizardViews.CREATE_COLLECTION} wizardData={this.props.data} />
+            </Carousel.Item>
+            <Carousel.Item key={WizardViews.SAVE_DDL_INFO}>
+              <SaveDdlInfo isSlideActive={activeIndex === WizardViews.SAVE_DDL_INFO} wizardData={this.props.data} />
             </Carousel.Item>
           </Carousel>
         </div>

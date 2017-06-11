@@ -319,6 +319,7 @@ $carousel-transition: 0.2s ease-in-out;
 .sel_view_toolbar {
   display: flex;
   float: left;
+  margin: 0 0 0 -2px;
 }
 
 .sel_view_row_foot_nav {
@@ -362,6 +363,39 @@ $carousel-transition: 0.2s ease-in-out;
   margin: 0 0 1px 0;
 }
 
+#main .sel-view-row-foot-name BUTTON {
+  margin: 0 10px 0 0;
+}
+
+#main .sel-view-row-foot-name BUTTON:last-child {
+  margin: 0 10px 0 0;
+}
+
+#main .save-ddl-field-info {
+  margin: 10px;
+  display: flex;
+  flex-direction: row
+}
+
+#main .save-ddl-info-form-label {
+  width: 150px;
+}
+
+#main .save-ddl-field-info LABEL {
+  font-weight: normal;
+}
+
+#main .save-ddl-field-id {
+  font-style: italic;
+  font-size: 8pt;
+}
+
+#main .save-ddl-field-value {
+  font-size: 12pt;
+  font-weight: bold;
+  padding: 0 5px 0 0;
+}
+
 // Wizards End
 
 #main .no-padding {
@@ -369,7 +403,6 @@ $carousel-transition: 0.2s ease-in-out;
 }
 
 #main .f22-grid {
-  height: 90%;
-  width: 95%;
-  padding: 0 0 0 30px;
+  padding: 0 0 0 1px;
+  margin: 0 10px 0 0;
 }

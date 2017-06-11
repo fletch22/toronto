@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import PropTextInput from '../../../../../../component/editors/PropTextInput';
+import PropPathTextInput from '../../../../../../component/editors/PropPathTextInput';
 import Button from '../../../../../bodyChildren/toolbar/Button';
 import { actionToggleNewItemNameInput } from '../../../../../../actions/wizard/configureDdl/index';
+import { actionUpdateViewPropertyValue } from '../../../../../../actions/';
 
 class CreateItemForContainer extends React.Component {
   render() {
@@ -14,11 +15,7 @@ class CreateItemForContainer extends React.Component {
     return (
       <div className={classes}>
         <span>New Item Name:</span>
-        <PropTextInput uuid={this.props.newItemNameInput.id}
-          propertyName="value"
-          onBlur={this.props.onBlurNewItemName}
-          value={newItemNameInputValue }
-        />
+        <PropPathTextInput id={this.props.newItemNameInput.id} path="value" onBlur={this.props.onBlurNewItemName} value={newItemNameInputValue } persistState={false} />
         <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" />
         <Button faClass="fa-close" onClick={this.props.onClickCancel} tooltipText="Cancel" />
       </div>
@@ -48,6 +45,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickCancel: () => {
       dispatch(actionToggleNewItemNameInput(ownProps.newItemNameInput.id));
+      dispatch(actionUpdateViewPropertyValue(ownProps.newItemNameInput.id, 'value', '', false));
     }
   };
 };

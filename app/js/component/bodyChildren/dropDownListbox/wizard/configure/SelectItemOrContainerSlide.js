@@ -22,7 +22,7 @@ class SelectItemOrContainerSlide extends React.Component {
           classes += ' wiz-sel-coll-selected-collection';
         }
 
-        return (<a href="#" key={index} className={classes} data-value={choice.viewModel.id} onFocus={this.props.onCollectionFocus}>
+        return (<a href="#" key={index} className={classes} data-value={choice.viewModel.id} data-label={choice.viewModel.label} onFocus={this.props.onCollectionFocus}>
           {choice.viewModel.label}
         </a>);
       });
@@ -56,7 +56,7 @@ class SelectItemOrContainerSlide extends React.Component {
             </div>
           </div>
         </div>
-        <div className="sel_view_row_foot_name text-right">
+        <div className="sel-view-row-foot-name text-right">
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DATASOURCE_TYPE} label="Back" />
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
@@ -119,10 +119,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onCollectionFocus: (event) => {
       const props = partialFlatten(ownProps);
       const selectedDataModelId = parseInt(event.target.dataset.value, 10);
+      const selectedDataModelLabel = event.target.dataset.label;
 
-      c.l(`selectedDataModelId: ${selectedDataModelId}`);
-
-      dispatch(actionSelectDataModel(props.wizardData.id, selectedDataModelId));
+      dispatch(actionSelectDataModel(props.wizardData.id, selectedDataModelId, selectedDataModelLabel));
     },
     onClickSaveCollection: () => {
       const props = partialFlatten(ownProps);

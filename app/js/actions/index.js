@@ -161,11 +161,11 @@ export const actionCreatePseudoModalComponent = (componentType, options) => ({
   }
 });
 
-export const actionCreatePseudoModal = (pseudoModalTypes, modelNodeId) => ({
+export const actionCreatePseudoModal = (pseudoModalTypes, viewId) => ({
   type: ACTIONS.types.CREATE_PSEUDO_MODAL,
   payload: {
     pseudoModalTypes,
-    modelNodeId
+    viewId
   }
 });
 

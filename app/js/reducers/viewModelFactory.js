@@ -14,10 +14,14 @@ class ViewModelFactory {
     this.WEB_PAGE_ROOT = 'WEB_PAGE_ROOT';
   }
 
-  getPseudoModalData(type, state, modelNodeId) {
+  getPseudoModalData(type, state, viewId) {
     // Note: This should be changed to just 'viewName'
     let viewName;
     let data;
+
+    const outerViewModel = graphTraversal.find(state, viewId);
+
+    const modelNodeId = outerViewModel.viewModel.id;
 
     const model = _.cloneDeep(graphTraversal.find(state.model, modelNodeId));
 
@@ -27,7 +31,7 @@ class ViewModelFactory {
         c.lo(model, 'model: ');
 
         // TODO: Needs to pull out unneeded data here after viewModel pattern is implemented.
-        data = configureDdlWizardViewFactory.createInstance(model);
+        data = configureDdlWizardViewFactory.createInstance(viewId, model);
 
         let defaultDatastore = _.find(this.getApplicationDatastores(state), (datastore) => (datastore.label === DatastoreModelConstants.DEFAULT_DATASTORE_LABEL));
         defaultDatastore = _.cloneDeep(defaultDatastore);
@@ -36,26 +40,6 @@ class ViewModelFactory {
         Object.assign(data, { viewModel });
 
         viewName = EditorNames.Wizards.ConfigureDdl;
-        break;
-      }
-      default: {
-        throw new Error(`Action not yet configured to handle ${type}.`);
-      }
-    }
-
-    return {
-      viewName,
-      data
-    };
-  }
-
-  getViewModelData(type, state, modelNodeId) {
-    let viewName;
-    let data;
-
-    switch (type) {
-      case ViewTypes.Dashboard.Island: {
-        viewName = ViewTypes.Dashboard.Island;
         break;
       }
       default: {

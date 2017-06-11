@@ -14,16 +14,21 @@ class ConfigureDdlWizardViewFactory {
     };
   }
 
-  createInstance(ddlModel) {
+  createInstance(parentComponentViewId, ddlModel) {
     return {
       id: f22Uuid.generate(),
+      parentComponentViewId,
       type: PseudoModalTypes.WizardTypes.ConfigureDdl,
       model: ddlModel,
       activeIndex: 0,
+      dataSourceName: null,
       dataSourceType: null,
       selectedDataModelId: null,
+      selectedDataModelLabel: null,
       selectedValueFieldId: null,
+      selectedValueFieldName: null,
       selectedTextFieldId: null,
+      selectedTextFieldName: null,
       slides: {
         selectDataSourceType: {
           id: f22Uuid.generate(),
@@ -52,6 +57,9 @@ class ConfigureDdlWizardViewFactory {
           id: f22Uuid.generate(),
           buttonNextDisabled: true,
           gridView: gridViewModelFactory.createInstance()
+        },
+        saveDdlInfo: {
+          id: f22Uuid.generate()
         }
       }
     };

@@ -42,7 +42,9 @@ class SelectDdlFieldsView extends React.Component {
           );
         }
 
-        return (<a href="#" key={index} className={classes} data-value={choice.viewModel.id} onFocus={this.props.onFieldFocus}>
+        // c.lo()
+
+        return (<a href="#" key={index} className={classes} data-value={choice.viewModel.id} data-label={choice.viewModel.label} onFocus={this.props.onFieldFocus}>
           <div style={{ display: 'flex' }}>
             <div style={{ flex: '2 0 0' }}>{choice.viewModel.label}</div>
             {
@@ -88,7 +90,7 @@ class SelectDdlFieldsView extends React.Component {
           </div>
         </div>
 
-        <div className="sel_view_row_foot_name text-right">
+        <div className="sel-view-row-foot-name text-right">
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_COLLECTION_VIEW} label="Back" />
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.CREATE_COLLECTION} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
@@ -168,7 +170,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onFieldFocus: (event) => {
       const props = partialFlatten(ownProps);
       const selectedFieldId = parseInt(event.target.dataset.value, 10);
-      dispatch(actionSelectField(props.selectContainerFields.id, selectedFieldId));
+      const selectedFieldLabel = event.target.dataset.label;
+
+      c.l(selectedFieldLabel);
+
+      dispatch(actionSelectField(props.selectContainerFields.id, selectedFieldId, selectedFieldLabel));
     },
     onClickSaveField: () => {
       const props = partialFlatten(ownProps);
@@ -178,10 +184,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       const successCallback = () => {
         dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
 
-        c.l('gv: ' + props.wizardData.slides.createCollection.gridView.id);
-
         dispatch(actionUpdatePropertyWithPersist(props.wizardData.slides.createCollection.gridView.id, 'needsToMakeDataRequest', true));
-        c.l('needsToMakeDataRequest: ' + props.wizardData.slides.createCollection.gridView.needsToMakeDataRequest);
         dispatch(actionToggleNewItemNameInput(props.newItemNameInput.id));
       };
 

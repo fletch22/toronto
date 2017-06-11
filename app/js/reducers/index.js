@@ -235,11 +235,10 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.CREATE_PSEUDO_MODAL: {
       const payload = action.payload;
 
-      const viewModel = actionComponentCreator.getPseudoModalData(payload.pseudoModalTypes, state, payload.modelNodeId);
+      const viewModel = actionComponentCreator.getPseudoModalData(payload.pseudoModalTypes, state, payload.viewId);
 
       let viewData = modalDtoFactory.getPseudoModalInstance(viewModel);
-
-      viewData = JSON.parse(JSON.stringify(viewData));
+      viewData = _.cloneDeep(viewData);
 
       stateNew.dom.pseudoModals.push(viewData);
 
@@ -340,6 +339,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardId);
 
       viewModelWizard.selectedDataModelId = payload.selectedDataModelId;
+      viewModelWizard.selectedDataModelLabel = payload.selectedDataModelLabel;
 
       if (viewModelWizard.selectedDataModelId) {
         viewModelWizard.slides.selectCollection.buttonNextDisabled = false;
@@ -369,6 +369,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const wizardViewModel = graphTraversal.find(stateNew, payload.wizardViewId);
 
       wizardViewModel.selectedFieldId = payload.selectedFieldId;
+      wizardViewModel.selectedFieldLabel = payload.selectedFieldLabel;
 
       if (wizardViewModel.selectedValueFieldId && wizardViewModel.selectedTextFieldId) {
         wizardViewModel.slides.selectContainerFields.buttonNextDisabled = false;
@@ -384,6 +385,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardViewId);
 
       viewModelWizard.selectedValueFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
+      viewModelWizard.selectedValueFieldName = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
 
       if (viewModelWizard.selectedValueFieldId && viewModelWizard.selectedTextFieldId) {
         viewModelWizard.slides.selectContainerFields.buttonNextDisabled = false;
@@ -399,10 +401,34 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardViewId);
 
       viewModelWizard.selectedTextFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
+      viewModelWizard.selectedTextFieldName = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
 
       if (viewModelWizard.selectedValueFieldId && viewModelWizard.selectedTextFieldId) {
         viewModelWizard.slides.selectContainerFields.buttonNextDisabled = false;
       }
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.ConfigureDdl.SaveDdlInfo.SAVE_DDL_INFO: {
+      const payload = action.payload;
+      const dataSourceType = payload.dataSourceType;
+      const selectedDataModelId = payload.selectedDataModelId;
+      const selectedTextFieldId = payload.selectedTextFieldId;
+      const selectedValueFieldId = payload.selectedValueFieldId;
+      const dataSourceName = payload.dataSourceName;
+
+      const parentComponentView = graphTraversal.find(stateNew, payload.parentComponentViewId);
+
+      c.lo(parentComponentView, 'parentComponentViewId: ');
+
+      // viewModelWizard.selectedTextFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
+      // viewModelWizard.selectedTextFieldName = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
+      //
+      // if (viewModelWizard.selectedValueFieldId && viewModelWizard.selectedTextFieldId) {
+      //   viewModelWizard.slides.selectContainerFields.buttonNextDisabled = false;
+      // }
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

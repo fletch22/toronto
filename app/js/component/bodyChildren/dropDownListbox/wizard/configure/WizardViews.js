@@ -2,7 +2,8 @@ const WizardViews = {
   SELECT_DATASOURCE_TYPE: 0,
   SELECT_COLLECTION_VIEW: 1,
   SELECT_DDL_FIELDS: 2,
-  CREATE_COLLECTION: 3
+  CREATE_COLLECTION: 3,
+  SAVE_DDL_INFO: 4
 };
 
 export default WizardViews;

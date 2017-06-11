@@ -26,15 +26,13 @@ class CreateCollectionView extends React.Component {
 
   render() {
     return (
-      <div className="wizard-config-ddl">
-        <div className="wizard-config-ddl col-md-12">
-          <div className="row" style={{ height: '90%' }}>
-            <DataModelGrid dataModelId={this.props.selectedDataModelId} gridViewModel={this.props.gridViewModel} />
-          </div>
-          <div className="sel_view_row_foot_name text-right">
-            <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} label="Back" />
-            <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.CREATE_COLLECTION} disabled={this.props.buttonNextDisabled} label="Next" />
-          </div>
+      <div className="wizard-config-ddl sel_view_coll-flex">
+        <div className="sel_view_row_main">
+          <DataModelGrid dataModelId={this.props.selectedDataModelId} gridViewModel={this.props.gridViewModel} />
+        </div>
+        <div className="sel-view-row-foot-name text-right">
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} label="Back" />
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SAVE_DDL_INFO} label="Next" />
         </div>
       </div>
     );

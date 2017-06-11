@@ -8,27 +8,24 @@ import ConfigureDdlWizardViewFactory from '../../../../../component/bodyChildren
 class SelectDataSourceType extends React.Component {
 
   render() {
+    let classNameCollButton = 'btn btn-default btn-lg';
+    classNameCollButton = (this.props.collectionsButtonsActive) ? `${classNameCollButton} active` : classNameCollButton;
+
     return (
-      <div className="wizard-config-ddl">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-12 text-center">
-                <h4>Choose A Data Source Type</h4>
+      <div className="wizard-config-ddl sel_view_coll-flex">
+        <div className="sel_view_row_main">
+            <div className="text-center">
+              <h4>Choose A Data Source Type</h4>
+            </div>
+            <div className="col-md-12 text-center">
+              <div className="row btn-group-vertical wizard-data-source-buttons" role="group">
+                <button className={classNameCollButton} onClick={this.props.onCollectionClick}aria-pressed="true">Collections</button>
+                <button className="btn btn-default btn-lg disabled" onClick={this.props.onQueriesClick} aria-pressed="true">Queries</button>
+                <button className="btn btn-default btn-lg disabled" onClick={this.props.onExternalClick} aria-pressed="true">External</button>
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-12 text-center">
-                <div className="row btn-group-vertical wizard-data-source-buttons" role="group">
-                  <button className="btn btn-default btn-lg" onClick={this.props.onCollectionClick}>Collections</button>
-                  <button className="btn btn-default btn-lg disabled" onClick={this.props.onQueriesClick}>Queries</button>
-                  <button className="btn btn-default btn-lg disabled" onClick={this.props.onExternalClick}>External</button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <div className="sel_view_row_foot_name text-right">
+        <div className="sel-view-row-foot-name text-right">
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_COLLECTION_VIEW} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
       </div>
@@ -47,16 +44,19 @@ SelectDataSourceType.propTypes = {
   onCollectionClick: PropTypes.func,
   onQueriesClick: PropTypes.func,
   onExternalClick: PropTypes.func,
-  dataSourceType: PropTypes.string
+  dataSourceType: PropTypes.string,
+  collectionsButtonsActive: PropTypes.bool
 };
 
 const mapStateToProps = (state, ownProps) => {
   const dataSourceType = ownProps.wizardData.dataSourceType;
-  const buttonNextDisabled = (dataSourceType !== ConfigureDdlWizardViewFactory.Constants.DataSourceType.Collection);
+  const collectionsButtonsActive = (dataSourceType === ConfigureDdlWizardViewFactory.Constants.DataSourceType.Collection);
+  const buttonNextDisabled = !collectionsButtonsActive;
 
   return {
     buttonNextDisabled,
-    dataSourceType
+    dataSourceType,
+    collectionsButtonsActive
   };
 };
 

@@ -28,7 +28,7 @@ class PropPathTextInput extends React.Component {
 
 PropPathTextInput.propTypes = {
   id: PropTypes.any,
-  propertyPath: PropTypes.string,
+  path: PropTypes.string,
   persistState: PropTypes.bool,
   value: PropTypes.string,
   onBlur: PropTypes.func,

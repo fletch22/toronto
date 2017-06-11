@@ -14,6 +14,9 @@ export const ActionTypes = {
     },
     CreateCollectionSlide: {
       ADD_NEW_ROW_COLLECTION: 'ADD_NEW_ROW_COLLECTION'
+    },
+    SaveDdlInfo: {
+      SAVE_DDL_INFO: 'SAVE_DDL_INFO'
     }
   }
 };
@@ -25,19 +28,21 @@ export const actionToggleNewItemNameInput = (uuid) => ({
   }
 });
 
-export const actionSelectDataModel = (wizardId, selectedDataModelId) => ({
+export const actionSelectDataModel = (wizardId, selectedDataModelId, selectedDataModelLabel) => ({
   type: ActionTypes.ConfigureDdl.SelectCollectionSlide.SELECT_DATA_MODEL,
   payload: {
     wizardId,
-    selectedDataModelId
+    selectedDataModelId,
+    selectedDataModelLabel
   }
 });
 
-export const actionSelectField = (wizardViewId, selectedFieldId) => ({
+export const actionSelectField = (wizardViewId, selectedFieldId, selectedFieldLabel) => ({
   type: ActionTypes.ConfigureDdl.SelectFieldSlide.SELECT_FIELD,
   payload: {
     wizardViewId,
-    selectedFieldId
+    selectedFieldId,
+    selectedFieldLabel
   }
 });
 
@@ -55,3 +60,14 @@ export const actionSetSelectDisplayField = (wizardViewId) => ({
   }
 });
 
+export const actionSaveDdlInfo = (parentComponentViewId, dataSourceName, dataSourceType, selectedDataModelId, selectedTextFieldId, selectedValueFieldId) => ({
+  type: ActionTypes.ConfigureDdl.SaveDdlInfo.SAVE_DDL_INFO,
+  payload: {
+    parentComponentViewId,
+    dataSourceType,
+    dataSourceName,
+    selectedDataModelId,
+    selectedTextFieldId,
+    selectedValueFieldId
+  }
+});

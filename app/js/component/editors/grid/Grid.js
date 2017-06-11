@@ -12,13 +12,17 @@ class Grid extends React.Component {
     this.rowGetter = this.rowGetter.bind(this);
   }
 
+  componentDidUpdate() {
+    window.dispatchEvent(new Event('resize'));
+  }
+
   rowGetter(i) {
     return this.props.rows[i];
   }
 
   render() {
     return (
-      <div className="row f22-grid ag-fresh">
+      <div className="f22-grid ag-fresh">
         <GridToolbar
           disableAddButton={this.props.toolbar.addButtonDisabled}
           onClickAdd={this.props.onClickAddRow}
