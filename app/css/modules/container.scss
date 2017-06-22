@@ -151,8 +151,6 @@ Begin Dashboard
 }
 
 .body-children-toolbar-col {
-  min-width: 185px;
-  max-width: 185px;
   vertical-align: top;
 }
 
@@ -188,11 +186,13 @@ Begin Dashboard
   z-index: 300000;
 }
 
+.bc-toolbar-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
 .bc-toolbar-col-1 {
-  float: left;
-  display: inline-block;
-  width: 80%;
-  padding: 0 0 0 3px;
+  width: 100%;
 }
 
 .bc-toolbar-title-label {
@@ -210,12 +210,23 @@ Begin Dashboard
 }
 
 .bc-toolbar-col-2 {
-  float: right;
-  display: inline-block;
-  width: 20%;
+}
+
+#main .full-toolbar-datasources {
+  margin: 30px 0 0 0;
+}
+
+#main .full-toolbar-datasources LABEL {
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+}
+
+#main .full-toolbar-datasources SELECT {
+  max-width: 150px;
+  font-size: 12px;
   padding: 0;
   margin: 0;
-  text-align: center;
 }
 
 #main .move-minion {

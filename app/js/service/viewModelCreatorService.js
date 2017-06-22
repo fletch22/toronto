@@ -27,6 +27,8 @@ class ViewModelCreatorService {
 
           const stateParentViewModel = graphTraversal.find(stateNew, parentViewModelId);
 
+          // NOTE: 06-17-2017: This method synchronizes changes to the cloned viewModel with the original viewModel. Warning: There is no order of operations here -- multiple changes
+          // might be synced without regard to ordinal impacts. Before finishing syncing a particular viewModel, it syncs with the global state model.
           viewModelChildren.forEach((viewModel) => {
             const stateViewModel = _.find(stateParentViewModel.viewModel.children, { id: viewModel.id });
             if (stateViewModel) {
@@ -35,9 +37,12 @@ class ViewModelCreatorService {
               this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
               stateParentViewModel.viewModel.children.push(viewModel);
             }
+
+            // NOTE: 06-17-2017: Converts back to model.
             let model = actionComponentCreator.extractModelFromViewModel(viewModel);
             const parentModel = graphTraversal.find(stateNew.model, model.parentId);
 
+            // NOTE: 06-17-2017: Syncs with model.
             const stateModel = _.find(parentModel.children, { id: model.id });
             if (stateModel) {
               model = Object.assign({}, model);
@@ -49,6 +54,7 @@ class ViewModelCreatorService {
             }
           });
 
+          // NOTE: 06-17-2017: This method is meant to help synchronize the dashboard island view with changes to the state elsewhere.
           dancePartnerSynchronizer.update(stateNew);
 
           const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));

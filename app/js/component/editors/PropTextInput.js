@@ -19,7 +19,7 @@ class PropTextInput extends React.Component {
   render() {
     return (
       <div>
-        <input type="text" ref="input" value={this.props.value} onChange={this.props.onChange} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress} />
+        <input type="text" ref="input" value={this.props.value} onChange={this.props.onChangeDataStore} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress} />
       </div>
     );
   }
@@ -30,12 +30,12 @@ PropTextInput.propTypes = {
   value: PropTypes.string,
   propertyName: PropTypes.string,
   onBlur: PropTypes.func,
-  onChange: PropTypes.func
+  onChangeDataStore: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onChange: (event) => {
+    onChangeDataStore: (event) => {
       dispatch(actionUpdatePropertyNoPersist(ownProps.uuid, ownProps.propertyName, event.target.value));
     }
   };

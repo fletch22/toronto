@@ -44,5 +44,10 @@ Adding New Domain Component to Vancouver
 	5. If renderable on an dashboard island, add to Island component.
 	6. If renderable in a bodyChild component, add to the bodyChild generator.
 
+Adding a New Domain Component to Toronto
+
+	1. Add to componentGenerator.js.
+	2. Add <Foo>ModelFactory.js
+
 5. Remove ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU
 

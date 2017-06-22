@@ -3,12 +3,11 @@ import { default as LayoutToolbar } from './layout/Toolbar';
 import { default as BodyToolbar } from './body/Toolbar';
 import { default as LayoutMinionToolbar } from './layoutMinion/Toolbar';
 import { default as DivToolbar } from './div/Toolbar';
-import { default as DropDownListboxToolbar } from './dropDownListbox/FullToolbar';
+import { default as DropDownListboxToolbar } from './dropDownListbox/Toolbar';
 import ComponentTypes from '../../domain/component/ComponentTypes';
-import FlagSelContextToolbar from './FlagSelContextToolbar';
+import HierNavButtonToolbar from '../../component/bodyChildren/HierNavButtonToolbar';
 
-class SelectedContextToolbar extends React.Component {
-
+class FlagSelContextToolbar extends React.Component {
   render() {
     let toolbar = '';
     let description = '';
@@ -42,25 +41,29 @@ class SelectedContextToolbar extends React.Component {
         break;
     }
 
-    let contextToolbar = null;
-
-    if (ComponentTypes.DropDownListbox === this.props.selectedViewModel.viewModel.typeLabel) {
-      contextToolbar = (<DropDownListboxToolbar selectedViewModel={this.props.selectedViewModel} />);
-    } else {
-      contextToolbar = (<FlagSelContextToolbar selectedViewModel={this.props.selectedViewModel} />);
-    }
-
     return (
-      <div>
-        { contextToolbar }
+      <div className="bc-toolbar-container">
+        <div className="bc-toolbar-col-1">
+          <div className="bc-toolbar-title-label">
+            { this.props.selectedViewModel.viewModel.typeLabel }
+          </div>
+          <div className="bc-toolbar-description">
+            { description }
+          </div>
+        </div>
+        <div className="bc-toolbar-col-2">
+          <div className="bc-toolbar-col-2">
+            <HierNavButtonToolbar selectedChildViewId={this.props.selectedViewModel.id} />
+            { toolbar }
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-SelectedContextToolbar.propTypes = {
+FlagSelContextToolbar.propTypes = {
   selectedViewModel: PropTypes.object
 };
 
-export default SelectedContextToolbar;
-
+export default FlagSelContextToolbar;

@@ -22,7 +22,7 @@ class AppContainerToolbar extends React.Component {
       <div className="container-fluid toolbar-container">
         <div className="row-fluid">
           <div className="col-lg-1">
-            <input type="text" value={this.props.appLabel} onChange={this.props.onChange} />
+            <input type="text" value={this.props.appLabel} onChange={this.props.onChangeDataStore} />
           </div>
           <div className="col-lg-1">
           </div>
@@ -66,7 +66,7 @@ function addAppLocal() {
 AppContainerToolbar.propTypes = {
   appLabel: React.PropTypes.string.isRequired,
   onClick: React.PropTypes.func.isRequired,
-  onChange: React.PropTypes.func.isRequired,
+  onChangeDataStore: React.PropTypes.func.isRequired,
   numberApps: React.PropTypes.number.isRequired,
   onShowError: React.PropTypes.func.isRequired,
   onShowTimeTravelOverlay: React.PropTypes.func,
@@ -104,7 +104,7 @@ const mapDispatchToProps = (dispatch) => ({
   onClick: () => {
     dispatch(addAppLocal());
   },
-  onChange: (event) => {
+  onChangeDataStore: (event) => {
     dispatch(actionChangeAppLabelInput(event.target.value));
   },
   onShowError: () => {

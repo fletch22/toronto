@@ -19,7 +19,7 @@ class Body extends React.Component {
               <td className="body-children-toolbar-col">
                 <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
               </td>
-              <td className={wrapperClass} style={{ minWidth: '1300px', maxWidth: '1300px' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
+              <td className={wrapperClass} style={{ width: '1300px', minWidth: '1300px', maxWidth: '1300px' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
                 {
                   children.map((child) =>
                     <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />

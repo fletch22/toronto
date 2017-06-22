@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import ComponentTypes from '../domain/component/ComponentTypes';
 import PseudoModalTypes from '../component/modals/PseudoModalTypes';
-import ViewTypes from '../views/ViewTypes';
 import EditorNames from '../component/editors/EditorNames';
 import graphTraversal from '../state/graphTraversal';
 import viewFactory from '../domain/component/view/viewFactory';
 import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
 import { DatastoreModelConstants } from '../domain/component/datastoreModelFactory';
+import dataUniverseUtils from '../domain/component/DataUniverseModelUtils';
 
 class ViewModelFactory {
 
@@ -27,13 +27,13 @@ class ViewModelFactory {
 
     switch (type) {
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
-
-        c.lo(model, 'model: ');
-
         // TODO: Needs to pull out unneeded data here after viewModel pattern is implemented.
         data = configureDdlWizardViewFactory.createInstance(viewId, model);
 
-        let defaultDatastore = _.find(this.getApplicationDatastores(state), (datastore) => (datastore.label === DatastoreModelConstants.DEFAULT_DATASTORE_LABEL));
+        const dataUniverse = dataUniverseUtils.getDataUniverse(state);
+        const dataStores = this.getApplicationDatastores(dataUniverse);
+
+        let defaultDatastore = _.find(dataStores, (datastore) => (datastore.label === DatastoreModelConstants.DEFAULT_DATASTORE_LABEL));
         defaultDatastore = _.cloneDeep(defaultDatastore);
         const viewModel = this.generateViewModel(data.id, defaultDatastore);
 
@@ -53,8 +53,10 @@ class ViewModelFactory {
     };
   }
 
-  getApplicationDatastores(state) {
-    return _.filter(state.model.appContainer.children, (child) => (child.typeLabel === ComponentTypes.Datastore));
+  getApplicationDatastores(dataUniverse) {
+    return _.filter(dataUniverse.children, (child) => {
+      return child.typeLabel === ComponentTypes.Datastore;
+    });
   }
 
   generateViewModel(viewModelParentId, model) {

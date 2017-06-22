@@ -421,7 +421,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const parentComponentView = graphTraversal.find(stateNew, payload.parentComponentViewId);
 
-      c.lo(parentComponentView, 'parentComponentViewId: ');
+      // c.lo(parentComponentView, 'parentComponentViewId: ');
 
       // viewModelWizard.selectedTextFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
       // viewModelWizard.selectedTextFieldName = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;

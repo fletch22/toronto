@@ -43,7 +43,7 @@ class ModelPropTextInput extends React.Component {
             type="text"
             ref={this.focusInput}
             value={this.props.value}
-            onChange={this.props.onChange}
+            onChange={this.props.onChangeDataStore}
             className="darkTextbox"
             onBlur={this.props.onInitialBlur}
             onKeyPress={this.handleKeyPress}
@@ -71,14 +71,14 @@ ModelPropTextInput.propTypes = {
   propertyName: PropTypes.string,
   isTextInputFieldVisible: PropTypes.bool,
   onBlur: PropTypes.func,
-  onChange: PropTypes.func,
+  onChangeDataStore: PropTypes.func,
   onClickValue: PropTypes.func,
   onInitialBlur: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onChange: (event) => {
+    onChangeDataStore: (event) => {
       event.stopPropagation();
       event.preventDefault();
       dispatch(actionUpdateViewPropertyValue(ownProps.viewModelId, `viewModel.${ownProps.propertyName}`, event.target.value, false));

@@ -53,7 +53,10 @@ class ComponentService {
 
   stateInjector(parentModel, parentDom, component) {
     parentModel.children.push(component.model);
-    parentDom.children.push(component.dom);
+
+    if (component.dom !== null) {
+      parentDom.children.push(component.dom);
+    }
   }
 }
 

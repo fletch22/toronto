@@ -4,6 +4,7 @@ const ComponentTypes = {
   Datastore: 'Datastore',
   DataModel: 'DataModel',
   DataField: 'DataField',
+  DataUniverse: 'DataUniverse',
   Website: 'Website',
   WebFolder: 'WebFolder',
   WebPage: 'Page',
