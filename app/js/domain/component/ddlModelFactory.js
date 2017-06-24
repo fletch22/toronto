@@ -4,14 +4,22 @@ import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class DdlModelFactory extends ModelFactory {
 
-  createInstance(parentId, name, dataStoreId) {
+  createInstance(parentId, name, dataStoreId, dataModelId, dataValueId, dataTextId) {
     const id = f22Uuid.generate();
+
+    let dataStoreIdNumber = null;
+    if (dataStoreId) {
+      dataStoreIdNumber = parseInt(dataStoreId, 10);
+    }
 
     return {
       parentId,
       id,
       name,
-      dataStoreId,
+      dataStoreId: dataStoreIdNumber,
+      dataModelId,
+      dataValueId,
+      dataTextId,
       typeLabel: ComponentTypes.DropDownListbox,
       style: null
     };

@@ -32,10 +32,7 @@ const common = {
       {
         test: /\.js$/,
         exclude: /\.json$|(node_modules|bower_components)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015']
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.(scss|css)$/,

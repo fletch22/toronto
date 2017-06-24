@@ -34,6 +34,7 @@ class ViewModelFactory {
         const dataStores = this.getApplicationDatastores(dataUniverse);
 
         let defaultDatastore = _.find(dataStores, (datastore) => (datastore.label === DatastoreModelConstants.DEFAULT_DATASTORE_LABEL));
+
         defaultDatastore = _.cloneDeep(defaultDatastore);
         const viewModel = this.generateViewModel(data.id, defaultDatastore);
 

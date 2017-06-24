@@ -22,7 +22,7 @@ AddDropDownListbox.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, 'Foo', null);
+      const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, 'Foo', null, null, null, null);
       bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
     }
   };
