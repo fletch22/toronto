@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
-import WizardPages from './WizardViews';
-import ButtonWizard from '../ButtonWizard';
+import WizardSlides from '../WizardSlides';
+import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
-import { actionSaveDdlInfo } from '../../../../../actions/wizard/configureDdl/index';
-import PropPathTextInput from '../../../../editors/PropPathTextInput';
+import { actionSaveDdlInfo } from '../../../../../../actions/wizard/configureDdl/index';
+import PropPathTextInput from '../../../../../editors/PropPathTextInput';
 import _ from 'lodash';
 
-class SaveDdlInfo extends React.Component {
+class SlideSaveDdlInfo extends React.Component {
 
   render() {
     let saveCssNames = 'btn btn-default';
@@ -21,10 +21,10 @@ class SaveDdlInfo extends React.Component {
           <div className="save-ddl-info">
             <div className="save-ddl-field-info">
               <div className="save-ddl-info-form-label">
-                <label>Name: </label>
+                <label>DataStore: </label>
               </div>
               <div className="save-ddl-info-form-field">
-                <PropPathTextInput id={this.props.wizardData.id} value={this.props.dataSourceName} path={'dataSourceName'} />
+                <span className="save-ddl-field-value">{this.props.dataStoreLabel}</span>
               </div>
             </div>
             <div className="save-ddl-field-info">
@@ -41,7 +41,6 @@ class SaveDdlInfo extends React.Component {
               </div>
               <div className="save-ddl-info-form-field">
                 <span className="save-ddl-field-value">{this.props.wizardData.selectedDataModelLabel}</span>
-                &nbsp;<span className="save-ddl-field-id">(ID {this.props.wizardData.selectedDataModelId})</span>
               </div>
             </div>
             <div className="save-ddl-field-info">
@@ -50,7 +49,6 @@ class SaveDdlInfo extends React.Component {
               </div>
               <div className="save-ddl-info-form-field">
                 <span className="save-ddl-field-value">{this.props.wizardData.selectedTextFieldName}</span>
-                <span className="save-ddl-field-id">(ID {this.props.wizardData.selectedTextFieldId})</span>
               </div>
             </div>
             <div className="save-ddl-field-info">
@@ -58,13 +56,13 @@ class SaveDdlInfo extends React.Component {
                 <label>Value Field ID</label>:
               </div>
               <div className="save-ddl-info-form-field">
-                <span className="save-ddl-field-value">{this.props.wizardData.selectedValueFieldName}</span> <span className="save-ddl-field-id">(ID {this.props.wizardData.selectedValueFieldId})</span>
+                <span className="save-ddl-field-value">{this.props.wizardData.selectedValueFieldName}</span>+
               </div>
             </div>
           </div>
         </div>
         <div className="sel-view-row-foot-name text-right">
-          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.CREATE_COLLECTION} label="Back" />
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardSlides.COLLECTION_GRID} label="Back" />
           <button className={saveCssNames} onClick={this.props.onSaveClick} aria-pressed="true">Save</button>
         </div>
       </div>
@@ -72,24 +70,26 @@ class SaveDdlInfo extends React.Component {
   }
 }
 
-SaveDdlInfo.propTypes = {
+SlideSaveDdlInfo.propTypes = {
   wizardData: PropTypes.object,
   isSlideActive: PropTypes.bool,
   onSaveClick: PropTypes.func,
   onNameChange: PropTypes.func,
-  dataSourceName: PropTypes.string,
-  saveEnabled: PropTypes.bool
+  saveEnabled: PropTypes.bool,
+  dataStoreId: PropTypes.any,
+  dataStoreLabel: PropTypes.string
 };
 
 const getComponentProps = (props) => {
   const wizardData = props.wizardData;
-  const dataSourceName = wizardData.dataSourceName;
-  const saveEnabled = (dataSourceName) && _.trim(dataSourceName) !== '';
+  const dataStoreId = wizardData.dataStoreId;
+  const dataStoreLabel = wizardData.dataStoreLabel;
 
   return {
     wizardData,
-    dataSourceName,
-    saveEnabled
+    saveEnabled: true,
+    dataStoreId,
+    dataStoreLabel
   };
 };
 
@@ -110,9 +110,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-SaveDdlInfo = connect(
+SlideSaveDdlInfo = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SaveDdlInfo);
+)(SlideSaveDdlInfo);
 
-export default SaveDdlInfo;
+export default SlideSaveDdlInfo;

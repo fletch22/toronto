@@ -12,7 +12,7 @@ export const GridViewModel = {
     rows: [],
     columns: []
   },
-  needsToMakeDataRequest: true,
+  needsToMakeDataRequest: false,
   selectedIndexes: [],
   toolbar: {
     addButtonDisabled: false

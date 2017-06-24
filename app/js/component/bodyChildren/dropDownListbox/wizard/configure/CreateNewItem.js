@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import PropPathTextInput from '../../../../../../component/editors/PropPathTextInput';
-import Button from '../../../../../bodyChildren/toolbar/Button';
-import { actionToggleNewItemNameInput } from '../../../../../../actions/wizard/configureDdl/index';
-import { actionUpdateViewPropertyValue } from '../../../../../../actions/';
+import PropPathTextInput from '../../../../editors/PropPathTextInput';
+import Button from '../../../toolbar/Button';
+import { actionToggleNewItemNameInput } from '../../../../../actions/wizard/configureDdl/index';
+import { actionUpdateViewPropertyValue } from '../../../../../actions/index';
 
-class CreateItemForContainer extends React.Component {
+class CreateNewItem extends React.Component {
   render() {
     let classes = 'create-item-for-collection';
     classes += this.props.visible ? ' create-item-for-collection-visible' : '';
@@ -23,7 +23,7 @@ class CreateItemForContainer extends React.Component {
   }
 }
 
-CreateItemForContainer.propTypes = {
+CreateNewItem.propTypes = {
   viewModel: PropTypes.any,
   newItemNameInput: PropTypes.object,
   newItemNameInputValue: PropTypes.string,
@@ -50,9 +50,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-CreateItemForContainer = connect(
+CreateNewItem = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateItemForContainer);
+)(CreateNewItem);
 
-export default CreateItemForContainer;
+export default CreateNewItem;

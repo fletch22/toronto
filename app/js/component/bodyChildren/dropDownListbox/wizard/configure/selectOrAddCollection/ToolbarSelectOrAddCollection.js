@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import Button from '../../../toolbar/Button';
+import Button from '../../../../toolbar/Button';
 
 class SelectItemOrContainerToolbar extends React.Component {
   render() {

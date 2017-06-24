@@ -1,4 +1,4 @@
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from './ComponentTypes';
 import _ from 'lodash';
 
 export const DataUniverseModelConstants = {
@@ -12,10 +12,6 @@ class DataUniverseModelUtils {
     return _.find(state.model.appContainer.children, (child) => {
       return child.typeLabel === ComponentTypes.DataUniverse && child.label === DataUniverseModelConstants.DEFAULT_DATAUNIVERSE_LABEL;
     });
-  }
-
-  getDatastoresFromDataUniverse(dataUniverse) {
-    return _.filter(dataUniverse.children, (child) => child.typeLabel === ComponentTypes.Datastore);
   }
 }
 

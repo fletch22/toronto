@@ -6,7 +6,7 @@ import graphTraversal from '../state/graphTraversal';
 import viewFactory from '../domain/component/view/viewFactory';
 import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
 import { DatastoreModelConstants } from '../domain/component/datastoreModelFactory';
-import dataUniverseUtils from '../domain/component/DataUniverseModelUtils';
+import dataUniverseUtils from '../domain/component/dataUniverseModelUtils';
 
 class ViewModelFactory {
 
@@ -28,7 +28,7 @@ class ViewModelFactory {
     switch (type) {
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
         // TODO: Needs to pull out unneeded data here after viewModel pattern is implemented.
-        data = configureDdlWizardViewFactory.createInstance(viewId, model);
+        data = configureDdlWizardViewFactory.createInstance(state, viewId, model);
 
         const dataUniverse = dataUniverseUtils.getDataUniverse(state);
         const dataStores = this.getApplicationDatastores(dataUniverse);
@@ -37,7 +37,6 @@ class ViewModelFactory {
 
         defaultDatastore = _.cloneDeep(defaultDatastore);
         const viewModel = this.generateViewModel(data.id, defaultDatastore);
-
         Object.assign(data, { viewModel });
 
         viewName = EditorNames.Wizards.ConfigureDdl;

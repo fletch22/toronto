@@ -1,14 +1,13 @@
 import React, { PropTypes } from 'react';
-import WizardPages from './WizardViews';
-import ButtonWizard from '../ButtonWizard';
+import WizardPages from '../WizardSlides';
+import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
-import { actionShowModelData } from '../../../../../actions/grid/index';
-import Grid from '../../../../editors/grid/Grid';
-import collectionService from '../../../../../service/collectionService';
-import collectionToGridDataTransformer from '../../../../../domain/collection/collectionToGridDataTransformer';
-import DataModelGrid from '../../../../editors/grid/DataModelGrid';
+import { actionShowModelData } from '../../../../../../actions/grid/index';
+import collectionService from '../../../../../../service/collectionService';
+import collectionToGridDataTransformer from '../../../../../../domain/collection/collectionToGridDataTransformer';
+import DataModelGrid from '../../../../../editors/grid/DataModelGrid';
 
-class CreateCollectionView extends React.Component {
+class SlideCollectionGrid extends React.Component {
 
   componentDidUpdate() {
     const self = this;
@@ -28,10 +27,10 @@ class CreateCollectionView extends React.Component {
     return (
       <div className="wizard-config-ddl sel_view_coll-flex">
         <div className="sel_view_row_main">
-          <DataModelGrid dataModelId={this.props.selectedDataModelId} gridViewModel={this.props.gridViewModel} />
+          <DataModelGrid dataModelId={this.props.dataModelId} gridViewModel={this.props.gridViewModel} />
         </div>
         <div className="sel-view-row-foot-name text-right">
-          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_DDL_FIELDS} label="Back" />
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_FIELDS} label="Back" />
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SAVE_DDL_INFO} label="Next" />
         </div>
       </div>
@@ -39,14 +38,14 @@ class CreateCollectionView extends React.Component {
   }
 }
 
-CreateCollectionView.propTypes = {
+SlideCollectionGrid.propTypes = {
   wizardData: PropTypes.object,
   isSlideActive: PropTypes.bool,
   buttonNextDisabled: PropTypes.bool,
   createCollection: PropTypes.object,
   needsToMakeDataRequest: PropTypes.bool,
   gridViewModel: PropTypes.object,
-  selectedDataModelId: PropTypes.any
+  dataModelId: PropTypes.any
 };
 
 const partialFlatten = (ownProps) => {
@@ -61,7 +60,7 @@ const partialFlatten = (ownProps) => {
     isSlideActive: ownProps.isSlideActive,
     needsToMakeDataRequest: slide.gridView.needsToMakeDataRequest,
     gridViewModel: slide.gridView,
-    selectedDataModelId: wizardData.selectedDataModelId
+    dataModelId: wizardData.dataModelId
   };
 };
 
@@ -69,10 +68,10 @@ const mapStateToProps = (state, ownProps) => {
   return partialFlatten(ownProps);
 };
 
-CreateCollectionView = connect(
+SlideCollectionGrid = connect(
   mapStateToProps,
   null
-)(CreateCollectionView);
+)(SlideCollectionGrid);
 
 
-export default CreateCollectionView;
+export default SlideCollectionGrid;

@@ -1,17 +1,17 @@
 import React, { PropTypes } from 'react';
 import _ from 'lodash';
-import WizardPages from './WizardViews';
-import ButtonWizard from '../ButtonWizard';
+import WizardSlides from '../WizardSlides';
+import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
-import SelectItemOrContainerToolbar from './SelectItemOrContainerToolbar';
-import SelectFieldsToolbar from './SelectFieldsToolbar';
-import CreateItemForContainer from './selectCollection/CreateItemForContainer';
-import { actionToggleNewItemNameInput, actionSelectField } from '../../../../../actions/wizard/configureDdl/index';
-import dataModelFieldFactory from '../../../../../domain/component/dataModelFieldFactory';
-import viewModelCreator from '../../../../utils/viewModelCreator';
-import { actionUpdatePropertyWithPersist } from '../../../../../actions/index';
+import ToolbarSelectOrAddCollection from '../selectOrAddCollection/ToolbarSelectOrAddCollection';
+import ToolbarSelectFields from './ToolbarSelectFields';
+import CreateNewItem from '../CreateNewItem';
+import { actionToggleNewItemNameInput, actionSelectField } from '../../../../../../actions/wizard/configureDdl/index';
+import dataModelFieldFactory from '../../../../../../domain/component/dataModelFieldFactory';
+import viewModelCreator from '../../../../../utils/viewModelCreator';
+import { actionUpdatePropertyWithPersist } from '../../../../../../actions/index';
 
-class SelectDdlFieldsView extends React.Component {
+class SlideSelectFields extends React.Component {
 
   render() {
     let choices = this.props.collectionFields;
@@ -25,7 +25,7 @@ class SelectDdlFieldsView extends React.Component {
         }
 
         let selValueAttribute;
-        if (choice.viewModel.id === this.props.selectedValueFieldId) {
+        if (choice.viewModel.id === this.props.dataValueId) {
           selValueAttribute = (
             <div className="wiz-config-ddl-sel-field">
               <div className="fa fa-id-card-o" />
@@ -34,7 +34,7 @@ class SelectDdlFieldsView extends React.Component {
         }
 
         let selDisplayAttribute;
-        if (choice.viewModel.id === this.props.selectedTextFieldId) {
+        if (choice.viewModel.id === this.props.dataTextId) {
           selDisplayAttribute = (
             <div className="wiz-config-ddl-sel-field">
               <div className="fa fa-text-width" />
@@ -73,15 +73,15 @@ class SelectDdlFieldsView extends React.Component {
           </div>
           <div className="sel_view_row_edit_controls">
             <div>
-              <SelectItemOrContainerToolbar onClickAdd={this.props.onClickAddField}
+              <ToolbarSelectOrAddCollection onClickAdd={this.props.onClickAddField}
                 onClickRemove={this.props.onClickRemoveField}
                 disableButtons={this.props.disableToolbarButtons}
               />
-              <SelectFieldsToolbar wizardViewId={this.props.wizardData.id} disableButtons={this.props.disableToolbarButtons} />
+              <ToolbarSelectFields wizardViewId={this.props.wizardData.id} disableButtons={this.props.disableToolbarButtons} />
             </div>
           </div>
           <div style={{ clear: 'both' }}>
-            <CreateItemForContainer
+            <CreateNewItem
               viewModel={this.props.viewModel}
               newItemNameInput={this.props.newItemNameInput}
               visible={this.props.newItemNameInputVisible}
@@ -91,22 +91,22 @@ class SelectDdlFieldsView extends React.Component {
         </div>
 
         <div className="sel-view-row-foot-name text-right">
-          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_COLLECTION_VIEW} label="Back" />
-          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.CREATE_COLLECTION} disabled={this.props.buttonNextDisabled} label="Next" />
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardSlides.SELECT_OR_ADD_COLLECTION} label="Back" />
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardSlides.COLLECTION_GRID} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
       </div>
     );
   }
 }
 
-SelectDdlFieldsView.propTypes = {
+SlideSelectFields.propTypes = {
   wizardData: PropTypes.object,
   onClickAddField: PropTypes.func,
   onClickRemoveField: PropTypes.func,
   viewModel: PropTypes.object,
   selectContainerFields: PropTypes.object,
-  selectedValueFieldId: PropTypes.number,
-  selectedTextFieldId: PropTypes.number,
+  dataValueId: PropTypes.number,
+  dataTextId: PropTypes.number,
   buttonNextDisabled: PropTypes.bool,
   newItemNameInput: PropTypes.object,
   newItemNameInputVisible: PropTypes.bool,
@@ -124,9 +124,7 @@ const partialFlatten = (ownProps) => {
   const newItemNameInput = slide.newItemNameInput;
 
   const collections = wizardData.viewModel.viewModel.children;
-  const collection = _.find(collections, (coll) => {
-    return coll.viewModel.id === wizardData.selectedDataModelId;
-  });
+  const collection = _.find(collections, (coll) => coll.viewModel.id === wizardData.dataModelId);
 
   let collectionFields = [];
   if (collection) {
@@ -136,16 +134,15 @@ const partialFlatten = (ownProps) => {
   return {
     wizardData,
     viewModel: wizardData.viewModel,
-    buttonNextDisabled: slide.buttonNextDisabled,
+    buttonNextDisabled: (wizardData.dataValueId === null || wizardData.dataTextId === null),
     selectContainerFields: slide,
     newItemNameInput,
     newItemNameInputVisible: newItemNameInput.visible,
     disableToolbarButtons: newItemNameInput.visible,
-    selectedDataModelId: wizardData.selectedDataModelId,
-    selectedValueFieldId: wizardData.selectedValueFieldId,
-    selectedTextFieldId: wizardData.selectedTextFieldId,
-    selectedFieldId: slide.selectedFieldId,
-    collectionFields
+    dataValueId: wizardData.dataValueId,
+    dataTextId: wizardData.dataTextId,
+    collectionFields,
+    selectedFieldId: slide.selectedFieldId
   };
 };
 
@@ -172,14 +169,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       const selectedFieldId = parseInt(event.target.dataset.value, 10);
       const selectedFieldLabel = event.target.dataset.label;
 
-      c.l(selectedFieldLabel);
-
       dispatch(actionSelectField(props.selectContainerFields.id, selectedFieldId, selectedFieldLabel));
     },
     onClickSaveField: () => {
       const props = partialFlatten(ownProps);
 
-      const model = dataModelFieldFactory.createInstance(props.selectedDataModelId, props.newItemNameInput.value);
+      const model = dataModelFieldFactory.createInstance(props.wizardData.dataModelId, props.newItemNameInput.value);
 
       const successCallback = () => {
         dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
@@ -189,9 +184,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       };
 
       const collections = props.wizardData.viewModel.viewModel.children;
-      const collection = _.find(collections, (coll) => {
-        return coll.viewModel.id === props.wizardData.selectedDataModelId;
-      });
+      const collection = _.find(collections, (coll) => coll.viewModel.id === props.wizardData.dataModelId);
 
       viewModelCreator.create(dispatch, model, collection.id, successCallback);
     }
@@ -199,9 +192,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 
-SelectDdlFieldsView = connect(
+SlideSelectFields = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SelectDdlFieldsView);
+)(SlideSelectFields);
 
-export default SelectDdlFieldsView;
+export default SlideSelectFields;

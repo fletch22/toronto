@@ -7,7 +7,15 @@ import { GridViewModelConstants } from '../../../domain/collection/gridViewModel
 
 class DataModelGrid extends React.Component {
 
+  componentDidMount() {
+    this.updateGrid();
+  }
+
   componentDidUpdate() {
+    this.updateGrid();
+  }
+
+  updateGrid() {
     if (this.props.dataModelId !== null) {
       gridService.lookupCollectionIdFromDataModelId(this.props.dataModelId)
         .then((result) => {
@@ -41,8 +49,11 @@ DataModelGrid.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  // c.lo(ownProps.gridViewModel, 'ownProps.gridViewModel: ');
+
   return {
     gridViewModel: ownProps.gridViewModel,
+    dataModelId: ownProps.dataModelId,
     collectionId: ownProps.gridViewModel.collectionId
   };
 };

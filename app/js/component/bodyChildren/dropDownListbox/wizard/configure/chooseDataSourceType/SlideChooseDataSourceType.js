@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
-import WizardPages from './WizardViews';
-import ButtonWizard from '../ButtonWizard';
+import WizardSlides from '../WizardSlides';
+import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
-import { actionUpdateViewPropertyValue } from '../../../../../actions/index';
-import ConfigureDdlWizardViewFactory from '../../../../../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
+import { actionUpdateViewPropertyValue } from '../../../../../../actions/index';
+import ConfigureDdlWizardViewFactory from '../ConfigureDdlWizardViewFactory';
 
-class SelectDataSourceType extends React.Component {
+class SlideChooseDataSourceType extends React.Component {
 
   render() {
     let classNameCollButton = 'btn btn-default btn-lg';
@@ -26,14 +26,14 @@ class SelectDataSourceType extends React.Component {
             </div>
         </div>
         <div className="sel-view-row-foot-name text-right">
-          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_COLLECTION_VIEW} disabled={this.props.buttonNextDisabled} label="Next" />
+          <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardSlides.SELECT_OR_ADD_COLLECTION} disabled={this.props.buttonNextDisabled} label="Next" />
         </div>
       </div>
     );
   }
 }
 
-SelectDataSourceType.propTypes = {
+SlideChooseDataSourceType.propTypes = {
   wizardData: PropTypes.object,
   isSlideActive: PropTypes.bool,
   buttonNextDisabled: PropTypes.bool,
@@ -74,9 +74,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-SelectDataSourceType = connect(
+SlideChooseDataSourceType = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SelectDataSourceType);
+)(SlideChooseDataSourceType);
 
-export default SelectDataSourceType;
+export default SlideChooseDataSourceType;

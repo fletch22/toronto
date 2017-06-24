@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import HierNavButtonToolbar from '../../../component/bodyChildren/HierNavButtonToolbar';
 import Toolbar from './Toolbar';
-import dataUniverseModelUtils from '../../../domain/component/DataUniverseModelUtils';
+import dataUniverseModelUtils from '../../../domain/component/dataUniverseModelUtils';
+import dataStoreModelUtils from '../../../domain/component/dataStoreModelUtils';
 import { actionUpdateViewPropertyValue } from '../../../actions/index';
 import _ from 'lodash';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
@@ -104,7 +105,7 @@ FullToolbar.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const UNSET = -1;
   const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
-  const dataStores = dataUniverseModelUtils.getDatastoresFromDataUniverse(dataUniverse);
+  const dataStores = dataStoreModelUtils.getDataStores(dataUniverse);
   let selectedDataStoreId = ownProps.selectedViewModel.viewModel.dataStoreId;
   selectedDataStoreId = (selectedDataStoreId !== null) ? selectedDataStoreId : UNSET;
 
@@ -131,8 +132,6 @@ const mapStateToProps = (state, ownProps) => {
 
     selectedDataTextId = ownProps.selectedViewModel.viewModel.dataTextId;
     selectedDataTextId = (selectedDataTextId !== null) ? selectedDataTextId : UNSET;
-
-    c.lo(dataModel, 'dataModel: ');
   }
 
   return {
@@ -169,6 +168,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
   };
 };
+
 FullToolbar = connect(
   mapStateToProps,
   mapDispatchToProps

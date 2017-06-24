@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Carousel } from 'react-bootstrap';
 import { actionCarouselSlideRight, actionCarouselSlideLeft, actionCarouselSlideToIndex } from '../../../actions/wizard/index.js';
-import SelectItemOrContainerSlide from './wizard/configure/SelectItemOrContainerSlide';
-import SelectDdlFieldsView from './wizard/configure/SelectDdlFieldsView';
-import SelectDataSourceType from './wizard/configure/SelectDataSourceType';
-import CreateCollectionView from './wizard/configure/CreateCollectionView';
-import WizardViews from './wizard/configure/WizardViews';
-import SaveDdlInfo from './wizard/configure/SaveDdlInfo';
+import SlideSelectOrAddCollection from './wizard/configure/selectOrAddCollection/SlideSelectOrAddCollection';
+import SlideSelectFields from './wizard/configure/selectFields/SlideSelectFields';
+import SlideChooseDataSourceType from './wizard/configure/chooseDataSourceType/SlideChooseDataSourceType';
+import SlideCollectionGrid from './wizard/configure/collectionGrid/SlideCollectionGrid';
+import WizardSlides from './wizard/configure/WizardSlides';
+import SlideSaveDdlInfo from './wizard/configure/saveDdlInfo/SlideSaveDdlInfo';
 
 class ConfigureDdlWizard extends React.Component {
 
@@ -17,20 +17,20 @@ class ConfigureDdlWizard extends React.Component {
     return (
         <div style={{ width: '100%' }}>
           <Carousel activeIndex={activeIndex} direction={null} onSelect={this.props.handleSelect} indicators={false} interval={0} controls={false}>
-            <Carousel.Item key={WizardViews.SELECT_DATASOURCE_TYPE}>
-              <SelectDataSourceType isSlideActive={activeIndex === WizardViews.SELECT_DATASOURCE_TYPE} wizardData={this.props.data} />
+            <Carousel.Item key={WizardSlides.CHOOSE_DATASOURCE_TYPE}>
+              <SlideChooseDataSourceType isSlideActive={activeIndex === WizardSlides.CHOOSE_DATASOURCE_TYPE} wizardData={this.props.data} />
             </Carousel.Item>
-            <Carousel.Item key={WizardViews.SELECT_COLLECTION_VIEW}>
-              <SelectItemOrContainerSlide isSlideActive={activeIndex === WizardViews.SELECT_COLLECTION_VIEW} wizardData={this.props.data} />
+            <Carousel.Item key={WizardSlides.SELECT_OR_ADD_COLLECTION}>
+              <SlideSelectOrAddCollection isSlideActive={activeIndex === WizardSlides.SELECT_OR_ADD_COLLECTION} wizardData={this.props.data} />
             </Carousel.Item>
-            <Carousel.Item key={WizardViews.SELECT_DDL_FIELDS}>
-              <SelectDdlFieldsView isSlideActive={activeIndex === WizardViews.SELECT_DDL_FIELDS} wizardData={this.props.data} />
+            <Carousel.Item key={WizardSlides.SELECT_FIELDS}>
+              <SlideSelectFields isSlideActive={activeIndex === WizardSlides.SELECT_FIELDS} wizardData={this.props.data} />
             </Carousel.Item>
-            <Carousel.Item key={WizardViews.CREATE_COLLECTION}>
-              <CreateCollectionView isSlideActive={activeIndex === WizardViews.CREATE_COLLECTION} wizardData={this.props.data} />
+            <Carousel.Item key={WizardSlides.COLLECTION_GRID}>
+              <SlideCollectionGrid isSlideActive={activeIndex === WizardSlides.COLLECTION_GRID} wizardData={this.props.data} />
             </Carousel.Item>
-            <Carousel.Item key={WizardViews.SAVE_DDL_INFO}>
-              <SaveDdlInfo isSlideActive={activeIndex === WizardViews.SAVE_DDL_INFO} wizardData={this.props.data} />
+            <Carousel.Item key={WizardSlides.SAVE_DDL_INFO}>
+              <SlideSaveDdlInfo isSlideActive={activeIndex === WizardSlides.SAVE_DDL_INFO} wizardData={this.props.data} />
             </Carousel.Item>
           </Carousel>
         </div>

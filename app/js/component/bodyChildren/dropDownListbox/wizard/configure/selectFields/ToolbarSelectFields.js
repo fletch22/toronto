@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
-import Button from '../../../toolbar/Button';
+import Button from '../../../../toolbar/Button';
 import { connect } from 'react-redux';
-import { actionSetSelectValueField, actionSetSelectDisplayField } from '../../../../../actions/wizard/configureDdl/index';
+import { actionSetSelectValueField, actionSetSelectDisplayField } from '../../../../../../actions/wizard/configureDdl/index';
 
-class SelectFieldsToolbar extends React.Component {
+class ToolbarSelectFields extends React.Component {
   render() {
     return (
       <div className="sel_view_toolbar">
@@ -14,7 +14,7 @@ class SelectFieldsToolbar extends React.Component {
   }
 }
 
-SelectFieldsToolbar.propTypes = {
+ToolbarSelectFields.propTypes = {
   wizardViewId: PropTypes.string,
   onClickMarkAddAsValueField: PropTypes.func,
   onClickMarkAsDisplayField: PropTypes.func,
@@ -32,9 +32,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-SelectFieldsToolbar = connect(
+ToolbarSelectFields = connect(
   null,
   mapDispatchToProps
-)(SelectFieldsToolbar);
+)(ToolbarSelectFields);
 
-export default SelectFieldsToolbar;
+export default ToolbarSelectFields;

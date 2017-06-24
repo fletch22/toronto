@@ -338,16 +338,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardId);
 
-      viewModelWizard.selectedDataModelId = payload.selectedDataModelId;
-      viewModelWizard.selectedDataModelLabel = payload.selectedDataModelLabel;
-
-      if (viewModelWizard.selectedDataModelId) {
-        viewModelWizard.slides.selectCollection.buttonNextDisabled = false;
-      }
+      viewModelWizard.dataModelId = payload.selectedDataModelId;
+      viewModelWizard.dataModelLabel = payload.selectedDataModelLabel;
 
       const collections = viewModelWizard.viewModel.viewModel.children;
       const collection = _.find(collections, (coll) => {
-        return coll.viewModel.id === viewModelWizard.selectedDataModelId;
+        return coll.viewModel.id === viewModelWizard.dataModelId;
       });
 
       // When a collection is selected, reset some dependent values if necessary
@@ -368,12 +364,10 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const wizardViewModel = graphTraversal.find(stateNew, payload.wizardViewId);
 
+      c.lo(wizardViewModel, 'wizardViewModel: ');
+
       wizardViewModel.selectedFieldId = payload.selectedFieldId;
       wizardViewModel.selectedFieldLabel = payload.selectedFieldLabel;
-
-      if (wizardViewModel.selectedValueFieldId && wizardViewModel.selectedTextFieldId) {
-        wizardViewModel.slides.selectContainerFields.buttonNextDisabled = false;
-      }
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
@@ -384,12 +378,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardViewId);
 
-      viewModelWizard.selectedValueFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
-      viewModelWizard.selectedValueFieldName = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
-
-      if (viewModelWizard.selectedValueFieldId && viewModelWizard.selectedTextFieldId) {
-        viewModelWizard.slides.selectContainerFields.buttonNextDisabled = false;
-      }
+      viewModelWizard.dataValueId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
+      viewModelWizard.dataValueLabel = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
@@ -400,12 +390,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardViewId);
 
-      viewModelWizard.selectedTextFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
-      viewModelWizard.selectedTextFieldName = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
-
-      if (viewModelWizard.selectedValueFieldId && viewModelWizard.selectedTextFieldId) {
-        viewModelWizard.slides.selectContainerFields.buttonNextDisabled = false;
-      }
+      viewModelWizard.dataTextId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
+      viewModelWizard.dataTextLabel = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
@@ -531,6 +517,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const gridView = graphTraversal.find(stateNew, viewId);
 
       gridView.data.collectionId = payload.collectionId;
+      gridView.needsToMakeDataRequest = true;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
