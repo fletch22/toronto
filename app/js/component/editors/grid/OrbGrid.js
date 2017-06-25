@@ -9,7 +9,7 @@ class OrbGrid extends React.Component {
 
   componentDidUpdate() {
     const self = this;
-    if (this.props.collectionId !== undefined && this.props.collectionId !== -1) {
+    if (this.props.needsToMakeDataRequest && !!this.props.collectionId && this.props.collectionId !== -1) {
       collectionService.get(this.props.collectionId).then((result) => {
         const data = collectionToGridDataTransformer.transform(result);
 
@@ -30,17 +30,14 @@ class OrbGrid extends React.Component {
 OrbGrid.propTypes = {
   gridViewModel: PropTypes.object,
   collectionId: PropTypes.any,
-  onReadyToLoadCollection: PropTypes.func
+  needsToMakeDataRequest: PropTypes.boolean
 };
 
 const mapStateToProps = (state, ownProps) => {
-
-  // c.l(`Props updated! ${ownProps.collectionId}`);
-  // c.lo(ownProps.gridViewModel, 'ownProps.gridViewModel: ');
-
   return {
     gridViewModel: ownProps.gridViewModel,
-    collectionId: ownProps.gridViewModel.data.collectionId
+    collectionId: ownProps.gridViewModel.data.collectionId,
+    needsToMakeDataRequest: ownProps.gridViewModel.needsToMakeDataRequest
   };
 };
 

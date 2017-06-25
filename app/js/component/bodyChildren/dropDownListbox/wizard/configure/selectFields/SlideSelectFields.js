@@ -178,7 +178,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
       const successCallback = () => {
         dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
-
         dispatch(actionUpdatePropertyWithPersist(props.wizardData.slides.createCollection.gridView.id, 'needsToMakeDataRequest', true));
         dispatch(actionToggleNewItemNameInput(props.newItemNameInput.id));
       };

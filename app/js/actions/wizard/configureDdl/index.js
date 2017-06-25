@@ -14,9 +14,6 @@ export const ActionTypes = {
     },
     CreateCollectionSlide: {
       ADD_NEW_ROW_COLLECTION: 'ADD_NEW_ROW_COLLECTION'
-    },
-    SaveDdlInfo: {
-      SAVE_DDL_INFO: 'SAVE_DDL_INFO'
     }
   }
 };
@@ -57,17 +54,5 @@ export const actionSetSelectDisplayField = (wizardViewId) => ({
   type: ActionTypes.ConfigureDdl.SelectFieldSlide.SELECT_DISPLAY_FIELD,
   payload: {
     wizardViewId
-  }
-});
-
-export const actionSaveDdlInfo = (parentComponentViewId, dataSourceName, dataSourceType, selectedDataModelId, selectedTextFieldId, selectedValueFieldId) => ({
-  type: ActionTypes.ConfigureDdl.SaveDdlInfo.SAVE_DDL_INFO,
-  payload: {
-    parentComponentViewId,
-    dataSourceType,
-    dataSourceName,
-    selectedDataModelId,
-    selectedTextFieldId,
-    selectedValueFieldId
   }
 });

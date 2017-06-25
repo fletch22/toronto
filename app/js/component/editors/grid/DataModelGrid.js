@@ -11,8 +11,10 @@ class DataModelGrid extends React.Component {
     this.updateGrid();
   }
 
-  componentDidUpdate() {
-    this.updateGrid();
+  componentDidUpdate(prevProps) {
+    if (prevProps.dataModelId !== this.props.dataModelId) {
+      this.updateGrid();
+    }
   }
 
   updateGrid() {
@@ -20,7 +22,7 @@ class DataModelGrid extends React.Component {
       gridService.lookupCollectionIdFromDataModelId(this.props.dataModelId)
         .then((result) => {
           const collectionId = result.collectionId;
-          this.props.onCollectionLookupComplete(collectionId);
+          this.context.store.dispatch(actionSetCollectionId(this.props.gridViewModel.id, collectionId));
         });
     }
   }
@@ -45,12 +47,11 @@ DataModelGrid.propTypes = {
   gridViewModel: PropTypes.object,
   dataModelId: PropTypes.any,
   collectionId: PropTypes.any,
-  onCollectionLookupComplete: PropTypes.func
 };
 
-const mapStateToProps = (state, ownProps) => {
-  // c.lo(ownProps.gridViewModel, 'ownProps.gridViewModel: ');
+DataModelGrid.contextTypes = { store: PropTypes.object };
 
+const mapStateToProps = (state, ownProps) => {
   return {
     gridViewModel: ownProps.gridViewModel,
     dataModelId: ownProps.dataModelId,
@@ -58,17 +59,9 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onCollectionLookupComplete: (collectionId) => {
-      dispatch(actionSetCollectionId(ownProps.gridViewModel.id, collectionId));
-    }
-  };
-};
-
 DataModelGrid = connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(DataModelGrid);
 
 export default DataModelGrid;

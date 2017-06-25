@@ -9,17 +9,21 @@ import DataModelGrid from '../../../../../editors/grid/DataModelGrid';
 
 class SlideCollectionGrid extends React.Component {
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const self = this;
 
-    if (this.props.isSlideActive && this.props.needsToMakeDataRequest) {
-      collectionService.get(self.props.gridViewModel.data.collectionId).then((result) => {
-        const data = collectionToGridDataTransformer.transform(result);
+    if (prevProps.isSlideActive !== this.props.isSlideActive
+      || prevProps.needsToMakeDataRequest !== this.props.needsToMakeDataRequest
+      || prevProps.collectionId !== this.props.collectionId) {
+      if (this.props.isSlideActive && this.props.needsToMakeDataRequest) {
+        collectionService.get(self.props.collectionId).then((result) => {
+          const data = collectionToGridDataTransformer.transform(result);
 
-        const props = self.props;
-        const dispatch = props.dispatch;
-        dispatch(actionShowModelData(props.gridViewModel.id, data));
-      });
+          const props = self.props;
+          const dispatch = props.dispatch;
+          dispatch(actionShowModelData(props.gridViewModel.id, data));
+        });
+      }
     }
   }
 
@@ -27,7 +31,7 @@ class SlideCollectionGrid extends React.Component {
     return (
       <div className="wizard-config-ddl sel_view_coll-flex">
         <div className="sel_view_row_main">
-          <DataModelGrid dataModelId={this.props.dataModelId} gridViewModel={this.props.gridViewModel} />
+          <DataModelGrid dataModelId={this.props.dataModelId} gridViewModel={this.props.wizardData.slides.createCollection.gridView} />
         </div>
         <div className="sel-view-row-foot-name text-right">
           <ButtonWizard wizardId={this.props.wizardData.id} jumpToView={WizardPages.SELECT_FIELDS} label="Back" />
@@ -45,7 +49,8 @@ SlideCollectionGrid.propTypes = {
   createCollection: PropTypes.object,
   needsToMakeDataRequest: PropTypes.bool,
   gridViewModel: PropTypes.object,
-  dataModelId: PropTypes.any
+  dataModelId: PropTypes.any,
+  collectionId: PropTypes.any
 };
 
 const partialFlatten = (ownProps) => {
@@ -60,7 +65,8 @@ const partialFlatten = (ownProps) => {
     isSlideActive: ownProps.isSlideActive,
     needsToMakeDataRequest: slide.gridView.needsToMakeDataRequest,
     gridViewModel: slide.gridView,
-    dataModelId: wizardData.dataModelId
+    dataModelId: wizardData.dataModelId,
+    collectionId: slide.gridView.data.collectionId
   };
 };
 

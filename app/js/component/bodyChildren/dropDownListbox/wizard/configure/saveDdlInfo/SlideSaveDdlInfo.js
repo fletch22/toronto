@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import WizardSlides from '../WizardSlides';
 import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
-import { actionSaveDdlInfo } from '../../../../../../actions/wizard/configureDdl/index';
 import viewModelCreator from '../../../../../../component/utils/viewModelCreator';
 import graphTraversal from '../../../../../../state/graphTraversal';
 
@@ -88,8 +87,6 @@ const getComponentProps = (props) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  c.lo(ownProps.onCloseModal, 'SSDI: ownProps.onCloseModel: ');
-
   return getComponentProps(ownProps);
 };
 
@@ -105,7 +102,6 @@ const doSaveAction = (ownProps) => {
     outerViewModel.viewModel.dataTextId = wizardData.dataTextId;
 
     const successCallback = () => {
-      c.l('Calling callback.');
       ownProps.onCloseModal();
     };
 
@@ -116,10 +112,6 @@ const doSaveAction = (ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSaveClick: () => {
-      // const props = getComponentProps(ownProps);
-      // dispatch(actionSaveDdlInfo(props.wizardData.parentComponentViewId, ownProps.dataSourceName,
-      //   props.wizardData.dataSourceType, props.wizardData.selectedDataModelId, props.wizardData.selectedTextFieldId, props.wizardData.selectedValueFieldId));
-
       dispatch(doSaveAction(ownProps));
     },
     onNameChange: () => {

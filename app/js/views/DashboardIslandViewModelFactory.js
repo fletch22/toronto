@@ -78,15 +78,9 @@ class DashboardIslandViewModelFactory {
         const parentId = child.parentId;
         const modelId = child.id;
 
-        // c.lo(child, 'Model: ');
-
         const parentChildViewModel = this.findParentChildViewModel(viewModel, parentId, modelId);
-        // c.lo(parentChildViewModel, 'parentChildViewModel: ');
         if (!parentChildViewModel.child) {
-          // c.l('Child not found.');
-          // c.l('parentChildViewModel.parent.id: ' + parentChildViewModel.parent.id);
           const newViewModel = this.generateViewModel(parentChildViewModel.parent.id, child);
-          // c.lo(newViewModel, 'newViewModel: ');
           parentChildViewModel.parent.viewModel.children.push(newViewModel);
           // c.lo('created newViewModel');
         }

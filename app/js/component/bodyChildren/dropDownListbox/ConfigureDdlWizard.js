@@ -13,9 +13,6 @@ class ConfigureDdlWizard extends React.Component {
 
   render() {
     const activeIndex = this.props.activeIndex;
-
-    c.lo(this.props.onCancelClick, 'CDW in render: ownProps.onCancelClick: ');
-
     return (
         <div style={{ width: '100%' }}>
           <Carousel activeIndex={activeIndex} direction={null} onSelect={this.props.handleSelect} indicators={false} interval={0} controls={false}>

@@ -9,17 +9,6 @@ import _ from 'lodash';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
 
 class FullToolbar extends React.Component {
-
-  // componentDidUpdate() {
-  //   if (this.props.dataModelId !== null) {
-  //     gridService.lookupCollectionIdFromDataModelId(this.props.dataModelId)
-  //       .then((result) => {
-  //         const collectionId = result.collectionId;
-  //         this.props.onCollectionLookupComplete(collectionId);
-  //       });
-  //   }
-  // }
-
   render() {
     const optionDataSources = this.props.dataStores.map((dataStore) => {
       return <option key={dataStore.id} value={dataStore.id}>{dataStore.label}</option>;

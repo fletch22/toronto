@@ -364,8 +364,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const wizardViewModel = graphTraversal.find(stateNew, payload.wizardViewId);
 
-      c.lo(wizardViewModel, 'wizardViewModel: ');
-
       wizardViewModel.selectedFieldId = payload.selectedFieldId;
       wizardViewModel.selectedFieldLabel = payload.selectedFieldLabel;
 
@@ -392,29 +390,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       viewModelWizard.dataTextId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
       viewModelWizard.dataTextLabel = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
-
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-
-      return stateNew;
-    }
-    case ACTIONS.types.WIZARD.ConfigureDdl.SaveDdlInfo.SAVE_DDL_INFO: {
-      const payload = action.payload;
-      const dataSourceType = payload.dataSourceType;
-      const selectedDataModelId = payload.selectedDataModelId;
-      const selectedTextFieldId = payload.selectedTextFieldId;
-      const selectedValueFieldId = payload.selectedValueFieldId;
-      const dataSourceName = payload.dataSourceName;
-
-      const parentComponentView = graphTraversal.find(stateNew, payload.parentComponentViewId);
-
-      // c.lo(parentComponentView, 'parentComponentViewId: ');
-
-      // viewModelWizard.selectedTextFieldId = viewModelWizard.slides.selectContainerFields.selectedFieldId;
-      // viewModelWizard.selectedTextFieldName = viewModelWizard.slides.selectContainerFields.selectedFieldLabel;
-      //
-      // if (viewModelWizard.selectedValueFieldId && viewModelWizard.selectedTextFieldId) {
-      //   viewModelWizard.slides.selectContainerFields.buttonNextDisabled = false;
-      // }
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
