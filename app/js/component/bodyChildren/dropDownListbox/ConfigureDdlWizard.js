@@ -14,6 +14,8 @@ class ConfigureDdlWizard extends React.Component {
   render() {
     const activeIndex = this.props.activeIndex;
 
+    c.lo(this.props.onCancelClick, 'CDW in render: ownProps.onCancelClick: ');
+
     return (
         <div style={{ width: '100%' }}>
           <Carousel activeIndex={activeIndex} direction={null} onSelect={this.props.handleSelect} indicators={false} interval={0} controls={false}>
@@ -30,7 +32,7 @@ class ConfigureDdlWizard extends React.Component {
               <SlideCollectionGrid isSlideActive={activeIndex === WizardSlides.COLLECTION_GRID} wizardData={this.props.data} />
             </Carousel.Item>
             <Carousel.Item key={WizardSlides.SAVE_DDL_INFO}>
-              <SlideSaveDdlInfo isSlideActive={activeIndex === WizardSlides.SAVE_DDL_INFO} wizardData={this.props.data} />
+              <SlideSaveDdlInfo isSlideActive={activeIndex === WizardSlides.SAVE_DDL_INFO} wizardData={this.props.data} onCloseModal={this.props.onCancelClick} />
             </Carousel.Item>
           </Carousel>
         </div>
@@ -52,7 +54,8 @@ ConfigureDdlWizard.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   return {
     id: ownProps.data.id,
-    activeIndex: ownProps.data.activeIndex
+    activeIndex: ownProps.data.activeIndex,
+    onCancelClick: ownProps.onCancelClick
   };
 };
 

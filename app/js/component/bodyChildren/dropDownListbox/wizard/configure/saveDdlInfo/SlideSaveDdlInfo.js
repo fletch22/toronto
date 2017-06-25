@@ -3,8 +3,8 @@ import WizardSlides from '../WizardSlides';
 import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
 import { actionSaveDdlInfo } from '../../../../../../actions/wizard/configureDdl/index';
-import PropPathTextInput from '../../../../../editors/PropPathTextInput';
-import _ from 'lodash';
+import viewModelCreator from '../../../../../../component/utils/viewModelCreator';
+import graphTraversal from '../../../../../../state/graphTraversal';
 
 class SlideSaveDdlInfo extends React.Component {
 
@@ -24,15 +24,7 @@ class SlideSaveDdlInfo extends React.Component {
                 <label>DataStore: </label>
               </div>
               <div className="save-ddl-info-form-field">
-                <span className="save-ddl-field-value">{this.props.dataStoreLabel}</span>
-              </div>
-            </div>
-            <div className="save-ddl-field-info">
-              <div className="save-ddl-info-form-label">
-                <label>Data Source Type</label>:
-              </div>
-              <div className="save-ddl-info-form-field">
-                <span className="save-ddl-field-value">{this.props.wizardData.dataSourceType}</span>
+                <span className="save-ddl-field-value">{this.props.dataStoreLabel}</span> (<span className="save-ddl-field-paren">{this.props.wizardData.dataSourceType}</span>)
               </div>
             </div>
             <div className="save-ddl-field-info">
@@ -40,15 +32,7 @@ class SlideSaveDdlInfo extends React.Component {
                 <label>Collection</label>:
               </div>
               <div className="save-ddl-info-form-field">
-                <span className="save-ddl-field-value">{this.props.wizardData.selectedDataModelLabel}</span>
-              </div>
-            </div>
-            <div className="save-ddl-field-info">
-              <div className="save-ddl-info-form-label">
-                <label>Displayed Text Field</label>:
-              </div>
-              <div className="save-ddl-info-form-field">
-                <span className="save-ddl-field-value">{this.props.wizardData.selectedTextFieldName}</span>
+                <span className="save-ddl-field-value">{this.props.wizardData.dataModelLabel}</span>
               </div>
             </div>
             <div className="save-ddl-field-info">
@@ -56,7 +40,15 @@ class SlideSaveDdlInfo extends React.Component {
                 <label>Value Field ID</label>:
               </div>
               <div className="save-ddl-info-form-field">
-                <span className="save-ddl-field-value">{this.props.wizardData.selectedValueFieldName}</span>+
+                <span className="save-ddl-field-value">{this.props.wizardData.dataValueLabel}</span>
+              </div>
+            </div>
+            <div className="save-ddl-field-info">
+              <div className="save-ddl-info-form-label">
+                <label>Displayed Text Field</label>:
+              </div>
+              <div className="save-ddl-info-form-field">
+                <span className="save-ddl-field-value">{this.props.wizardData.dataTextLabel}</span>
               </div>
             </div>
           </div>
@@ -77,7 +69,8 @@ SlideSaveDdlInfo.propTypes = {
   onNameChange: PropTypes.func,
   saveEnabled: PropTypes.bool,
   dataStoreId: PropTypes.any,
-  dataStoreLabel: PropTypes.string
+  dataStoreLabel: PropTypes.string,
+  onCloseModal: PropTypes.func
 };
 
 const getComponentProps = (props) => {
@@ -89,20 +82,45 @@ const getComponentProps = (props) => {
     wizardData,
     saveEnabled: true,
     dataStoreId,
-    dataStoreLabel
+    dataStoreLabel,
+    onCloseModal: props.onCloseModal
   };
 };
 
 const mapStateToProps = (state, ownProps) => {
+  c.lo(ownProps.onCloseModal, 'SSDI: ownProps.onCloseModel: ');
+
   return getComponentProps(ownProps);
+};
+
+const doSaveAction = (ownProps) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const wizardData = ownProps.wizardData;
+
+    const outerViewModel = graphTraversal.find(state, ownProps.wizardData.parentComponentViewId);
+    outerViewModel.viewModel.dataModelId = wizardData.dataModelId;
+    outerViewModel.viewModel.dataValueId = wizardData.dataValueId;
+    outerViewModel.viewModel.dataTextId = wizardData.dataTextId;
+
+    const successCallback = () => {
+      c.l('Calling callback.');
+      ownProps.onCloseModal();
+    };
+
+    viewModelCreator.update(dispatch, outerViewModel, successCallback);
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSaveClick: () => {
-      const props = getComponentProps(ownProps);
-      dispatch(actionSaveDdlInfo(props.wizardData.parentComponentViewId, ownProps.dataSourceName,
-        props.wizardData.dataSourceType, props.wizardData.selectedDataModelId, props.wizardData.selectedTextFieldId, props.wizardData.selectedValueFieldId));
+      // const props = getComponentProps(ownProps);
+      // dispatch(actionSaveDdlInfo(props.wizardData.parentComponentViewId, ownProps.dataSourceName,
+      //   props.wizardData.dataSourceType, props.wizardData.selectedDataModelId, props.wizardData.selectedTextFieldId, props.wizardData.selectedValueFieldId));
+
+      dispatch(doSaveAction(ownProps));
     },
     onNameChange: () => {
       console.log('onNameChange...');
