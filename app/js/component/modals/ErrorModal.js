@@ -14,7 +14,7 @@ ErrorModal.propTypes = {
   showModal: React.PropTypes.bool,
   headerText: React.PropTypes.string,
   bodyText: React.PropTypes.string,
-  okAction: React.PropTypes.object
+  okAction: React.PropTypes.any
 };
 
 const mapStateToProps = (state) => {

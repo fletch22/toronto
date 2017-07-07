@@ -67,7 +67,6 @@ class DashboardIslandViewModelFactory {
     /* eslint-disable  no-param-reassign */
     this.updatePropertiesInVmBase(viewModel, appContainer);
 
-    // c.l('app children length: ' + appContainer.children.length);
     this.addNewChildren(appContainer, viewModel);
   }
 
@@ -82,7 +81,6 @@ class DashboardIslandViewModelFactory {
         if (!parentChildViewModel.child) {
           const newViewModel = this.generateViewModel(parentChildViewModel.parent.id, child);
           parentChildViewModel.parent.viewModel.children.push(newViewModel);
-          // c.lo('created newViewModel');
         }
         this.addNewChildren(child, viewModel);
       }

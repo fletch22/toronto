@@ -4,7 +4,7 @@ import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class DdlModelFactory extends ModelFactory {
 
-  createInstance(parentId, name, dataStoreId, dataModelId, dataValueId, dataTextId) {
+  createInstance(parentId, elementId, dataStoreId, dataModelId, dataValueId, dataTextId) {
     const id = f22Uuid.generate();
 
     let dataStoreIdNumber = null;
@@ -15,7 +15,7 @@ class DdlModelFactory extends ModelFactory {
     return {
       parentId,
       id,
-      name,
+      elementId,
       dataStoreId: dataStoreIdNumber,
       dataModelId,
       dataValueId,

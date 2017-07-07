@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import '../../../css/modules/container.scss';
 import { connect } from 'react-redux';
 import { actionUpdateViewPropertyValue } from '../../actions/index';
@@ -11,7 +12,7 @@ class PropPathTextInput extends React.Component {
   }
 
   handleKeyPress(event) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' || event.key === 'Tab') {
       this.refs.input.blur();
     }
   }
@@ -20,7 +21,7 @@ class PropPathTextInput extends React.Component {
     const value = (this.props.value) ? this.props.value : '';
     return (
       <div>
-        <input type="text" ref="input" value={value} onChange={this.props.onChangeDataStore} onBlur={this.props.onBlur} className="" onKeyUp={this.handleKeyPress} />
+        <input className={this.props.classNames} type="text" ref="input" value={value} onChange={this.props.onChangeDataStore} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress} />
       </div>
     );
   }
@@ -32,6 +33,7 @@ PropPathTextInput.propTypes = {
   persistState: PropTypes.bool,
   value: PropTypes.string,
   onBlur: PropTypes.func,
+  classNames: PropTypes.string,
   onChangeDataStore: PropTypes.func
 };
 
@@ -44,6 +46,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
   };
 };
+
+PropPathTextInput.contextTypes = { store: PropTypes.object };
 
 PropPathTextInput = connect(
   null,

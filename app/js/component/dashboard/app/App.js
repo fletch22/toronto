@@ -9,8 +9,6 @@ class App extends React.Component {
   render() {
     const children = (this.props.viewModel.viewModel.children) ? this.props.viewModel.viewModel.children : [];
 
-    // c.lo(children.length, 'App children length: ');
-
     return (
       <div className="container-app col-lg-2 dashboard-app">
           <Header viewModel={this.props.viewModel}

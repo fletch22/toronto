@@ -70,8 +70,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         break;
       }
       case HeaderMenu.menuKeys().EDIT: {
-        c.l('Passing ownProps.parentModelNodeId: ' + ownProps.parentModelNodeId);
-
         dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebFolder, { modelNodeId: ownProps.modelId, parentModelNodeId: ownProps.parentModelNodeId }));
         toggleMenu(dispatch, ownProps);
         break;

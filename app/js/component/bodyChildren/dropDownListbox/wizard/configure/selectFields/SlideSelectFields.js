@@ -42,8 +42,6 @@ class SlideSelectFields extends React.Component {
           );
         }
 
-        // c.lo()
-
         return (<a href="#" key={index} className={classes} data-value={choice.viewModel.id} data-label={choice.viewModel.label} onFocus={this.props.onFieldFocus}>
           <div style={{ display: 'flex' }}>
             <div style={{ flex: '2 0 0' }}>{choice.viewModel.label}</div>

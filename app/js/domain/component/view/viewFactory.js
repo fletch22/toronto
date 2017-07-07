@@ -36,6 +36,8 @@ class ViewFactory {
   createDdlView() {
     return {
       id: f22Uuid.generate(),
+      elementId: null,
+      isSaveNameButtonDisabled: true,
       isSelected: false
     };
   }

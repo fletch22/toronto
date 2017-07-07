@@ -55,22 +55,20 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
   });
+
   if (process.env.EXECUTE_INTEGRATION_TESTS) {
     console.log('Running INTEGRATION tests only ...');
     pattern = 'app/js/__integrationTests__/test-context.js';
-    config.files.push({ pattern, watched: false });
-
-    /* eslint-disable no-param-reassign */
-    config.preprocessors[pattern] = ['webpack'];
   } else {
     console.log('Running UNIT tests only ...');
     config.files.unshift({ pattern: 'node_modules/babel-polyfill/dist/polyfill.js', watched: false }); // Needed for Promise to be recognized. Note 'unshift'. Needs to be first element.
-
     pattern = 'app/js/__tests__/test-context.js';
-    config.files.push({ pattern, watched: false });
-    /* eslint-disable no-param-reassign */
-    config.preprocessors[pattern] = ['webpack'];
   }
+
+  config.files.push({ pattern, watched: false });
+
+  /* eslint-disable no-param-reassign */
+  config.preprocessors[pattern] = ['webpack'];
 };
 
 

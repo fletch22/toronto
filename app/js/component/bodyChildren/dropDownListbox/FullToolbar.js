@@ -4,9 +4,15 @@ import HierNavButtonToolbar from '../../../component/bodyChildren/HierNavButtonT
 import Toolbar from './Toolbar';
 import dataUniverseModelUtils from '../../../domain/component/dataUniverseModelUtils';
 import dataStoreModelUtils from '../../../domain/component/dataStoreModelUtils';
-import { actionUpdateViewPropertyValue } from '../../../actions/index';
 import _ from 'lodash';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
+import PropPathTextInput from '../../editors/PropPathTextInput';
+import { actionShowErrorModal, actionHideCurrentModal } from '../../../actions/index';
+import validationUtils from '../../../util/validationUtil';
+import Button from '../../../component/bodyChildren/toolbar/Button';
+import stateUtil from '../../../util/stateUtil';
+import graphTraversal from '../../../state/graphTraversal';
+import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class FullToolbar extends React.Component {
   render() {
@@ -32,7 +38,18 @@ class FullToolbar extends React.Component {
             { this.props.selectedViewModel.viewModel.typeLabel }
           </div>
           <div className="bc-toolbar-description">
-            This is a drop down listbox.
+            This is a select component.
+          </div>
+          <div className="full-toolbar-data" style={{ display: 'flex' }}>
+            <div>
+              <label>Name:</label>
+            </div>
+            <div>
+              <PropPathTextInput id={this.props.selectedViewModel.id} path="elementId" value={this.props.elementId} persistState={false} />
+            </div>
+            <div>
+              <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" />
+            </div>
           </div>
           <div className="full-toolbar-data">
             <label>DataStore:</label>
@@ -88,8 +105,13 @@ FullToolbar.propTypes = {
   selectedDataValueId: PropTypes.any,
   onChangeDataValue: PropTypes.func,
   selectedDataTextId: PropTypes.any,
-  onChangeDataText: PropTypes.func
+  onChangeDataText: PropTypes.func,
+  onClickSave: PropTypes.func,
+  isSaveNameButtonDisabled: PropTypes.bool,
+  elementId: PropTypes.string
 };
+
+FullToolbar.contextTypes = { store: PropTypes.object };
 
 const mapStateToProps = (state, ownProps) => {
   const UNSET = -1;
@@ -123,6 +145,13 @@ const mapStateToProps = (state, ownProps) => {
     selectedDataTextId = (selectedDataTextId !== null) ? selectedDataTextId : UNSET;
   }
 
+  // c.lo(ownProps.selectedViewModel, 'ownProps.selectedViewModel: ');
+
+  let elementId = ownProps.selectedViewModel.elementId;
+  if (elementId === null) {
+    elementId = ownProps.selectedViewModel.viewModel.elementId;
+  }
+
   return {
     dataStores,
     selectedViewModel: ownProps.selectedViewModel,
@@ -131,29 +160,62 @@ const mapStateToProps = (state, ownProps) => {
     selectedDataModelId,
     fields,
     selectedDataValueId,
-    selectedDataTextId
+    selectedDataTextId,
+    isSaveNameButtonDisabled: ownProps.selectedViewModel.isSaveNameButtonDisabled,
+    elementId
   };
 };
 
-const updateViewModelField = (dispatch, ownProps, event, propertyName) => {
+const updateSelectChange = (dispatch, ownProps, event, propertyName) => {
   const viewModel = ownProps.selectedViewModel.viewModel;
   viewModel[propertyName] = parseInt(event.target.value, 10);
   viewModelCreator.update(dispatch, ownProps.selectedViewModel, null);
 };
 
+const updateNameChange = (ownProps, event) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const viewModel = ownProps.selectedViewModel.viewModel;
+
+    // c.l(`updateNameChange: ${ownProps.selectedViewModel.elementId}`);
+    // c.lo(ownProps.selectedViewModel, 'vm: ');
+
+    // const elementId = event.target.value;
+
+    const model = graphTraversal.find(state.model, viewModel.id);
+
+    const webPage = stateUtil.findAncestorByTypeLabel(state.model, model, ComponentTypes.WebPage);
+
+    // c.l(`viewModel.elementId: ${viewModel.elementId}`);
+    // c.l(`ownProps.selectedViewModel.elementId: ${ownProps.selectedViewModel.elementId}`);
+
+    const isUnique = validationUtils.isUnique(webPage, model, 'elementId', ownProps.selectedViewModel.elementId);
+    if (!isUnique) {
+      dispatch(actionShowErrorModal('Select Field Error', 'Encountered an error trying to save the name value. The value in the \'name\' field is not unique within the webpage.', actionHideCurrentModal()));
+    } else {
+      viewModel.elementId = ownProps.selectedViewModel.elementId;
+      viewModelCreator.update(dispatch, ownProps.selectedViewModel, null);
+    }
+  };
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onChangeDataStore: (event) => {
-      updateViewModelField(dispatch, ownProps, event, 'dataStoreId');
+      updateSelectChange(dispatch, ownProps, event, 'dataStoreId');
     },
     onChangeCollection: (event) => {
-      updateViewModelField(dispatch, ownProps, event, 'dataModelId');
+      updateSelectChange(dispatch, ownProps, event, 'dataModelId');
     },
     onChangeDataValue: (event) => {
-      updateViewModelField(dispatch, ownProps, event, 'dataValueId');
+      updateSelectChange(dispatch, ownProps, event, 'dataValueId');
     },
     onChangeDataText: (event) => {
-      updateViewModelField(dispatch, ownProps, event, 'dataTextId');
+      updateSelectChange(dispatch, ownProps, event, 'dataTextId');
+    },
+    onClickSave: (event) => {
+      dispatch(updateNameChange(ownProps, event));
     }
   };
 };

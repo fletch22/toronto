@@ -29,7 +29,7 @@ StandardModal.propTypes = {
   onOk: React.PropTypes.func,
   bodyText: React.PropTypes.string,
   headerText: React.PropTypes.string,
-  okAction: React.PropTypes.object
+  okAction: React.PropTypes.any
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -38,7 +38,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(actionHideCurrentModal());
     },
     onOk: () => {
-      dispatch(ownProps.okAction);
+      c.l(`Is array: ${Array.isArray(ownProps.okAction)}`);
+      let actions = [ownProps.okAction];
+      if (Array.isArray(ownProps.okAction)) {
+        actions = ownProps.okAction;
+      }
+      actions.forEach((item) => {
+        dispatch(item);
+      });
     }
   };
 };

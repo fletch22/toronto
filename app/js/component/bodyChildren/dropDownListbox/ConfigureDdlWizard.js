@@ -59,9 +59,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     handleSelect: (selectedIndex, e) => {
-      // c.l(selectedIndex);
-      // c.l(e);
-      // dispatch(action(ownProps.id));
     },
     onClickSlideRight: () => {
       dispatch(actionCarouselSlideRight(ownProps.id));

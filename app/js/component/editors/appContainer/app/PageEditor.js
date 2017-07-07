@@ -23,7 +23,7 @@ class PageEditor extends React.Component {
 }
 
 PageEditor.propTypes = {
-  id: PropTypes.string, // NOTE: ID of this editor
+  id: PropTypes.string,
   model: PropTypes.object,
   viewModel: PropTypes.object,
   modelNodeId: PropTypes.any,

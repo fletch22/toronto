@@ -1,6 +1,7 @@
 const ComponentTypes = {
   AppContainer: 'AppContainer',
   App: 'App',
+  ButtonSubmit: 'ButtonSubmit',
   Datastore: 'Datastore',
   DataModel: 'DataModel',
   DataField: 'DataField',

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
 import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
 import ddlModelFactory from '../../../domain/component/ddlModelFactory';
+import ddlModelUtils from '../../../domain/component/ddlModelUtils';
 
 class AddDropDownListbox extends React.Component {
   render() {
@@ -19,11 +20,21 @@ AddDropDownListbox.propTypes = {
   onClick: PropTypes.func
 };
 
+const createDdl = (ownProps) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const nameUnique = ddlModelUtils.getUniqueDdlName(state);
+
+    const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, nameUnique, null, null, null, null);
+    bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
+  };
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, 'Foo', null, null, null, null);
-      bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
+      dispatch(createDdl(ownProps));
     }
   };
 };

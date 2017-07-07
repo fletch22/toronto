@@ -30,7 +30,7 @@ class OrbGrid extends React.Component {
 OrbGrid.propTypes = {
   gridViewModel: PropTypes.object,
   collectionId: PropTypes.any,
-  needsToMakeDataRequest: PropTypes.boolean
+  needsToMakeDataRequest: PropTypes.bool
 };
 
 const mapStateToProps = (state, ownProps) => {

@@ -1,3 +1,4 @@
+import ComponentTypes from '../domain/component/ComponentTypes';
 
 class GraphTraversal {
 
@@ -41,8 +42,51 @@ class GraphTraversal {
     return foundObject;
   }
 
+  traverseAndCollect(o, propertyName, propertyValue) {
+    let foundObjects = [];
+
+    for (const key in o) {
+      const found = this.process(key, o[key], propertyValue, propertyName);
+      if (found) {
+        foundObjects.push(o);
+      } else {
+        if (o[key] !== null && typeof(o[key]) === 'object') {
+          // Going on step down in the object tree!!
+          const foundObjectsFromChildren = this.traverseAndCollect(o[key], propertyName, propertyValue);
+          foundObjects = foundObjects.concat(foundObjectsFromChildren);
+        }
+      }
+    }
+    return foundObjects;
+  }
+
   find(node, propertyValue) {
     return this.traverseIt(node, propertyValue, 'id');
+  }
+
+  collectPropValuesByTypeLabelAndPropertyName(node, typeLabel, propertyName) {
+    const collectedMatches = this.traverseAndCollect(node, 'typeLabel', typeLabel);
+
+    return collectedMatches.map((item) => {
+      return item[propertyName];
+    });
+  }
+
+  findAncestorByTypeLabel(rootishNode, node, typeLabel) {
+    if (node.hasOwnProperty('typeLabel') && node.typeLabel === typeLabel) {
+      return node;
+    } else {
+      if (node.hasOwnProperty('parentId')) {
+        const parentNode = this.find(rootishNode, node.parentId);
+        if (parentNode !== rootishNode) {
+          return this.findAncestorByTypeLabel(rootishNode, parentNode, typeLabel);
+        } else {
+          throw new Error(`Encountered problem trying to find ancestor \'${typeLabel}\' in ${JSON.stringify(node)}. Traversed to root but could not find parent.`);
+        }
+      } else {
+        throw new Error(`Encountered problem trying to find ancestor \'${typeLabel}\' in ${JSON.stringify(node)}`);
+      }
+    }
   }
 }
 
