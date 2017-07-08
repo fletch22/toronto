@@ -38,7 +38,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(actionHideCurrentModal());
     },
     onOk: () => {
-      c.l(`Is array: ${Array.isArray(ownProps.okAction)}`);
       let actions = [ownProps.okAction];
       if (Array.isArray(ownProps.okAction)) {
         actions = ownProps.okAction;

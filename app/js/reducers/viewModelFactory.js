@@ -79,7 +79,7 @@ class ViewModelFactory {
         break;
       }
       case ComponentTypes.DropDownListbox: {
-        view = viewFactory.createDdlView();
+        view = viewFactory.createDdlView(model);
         break;
       }
       case ComponentTypes.Datastore: {

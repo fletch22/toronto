@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import '../../../css/modules/container.scss';
 import { connect } from 'react-redux';
 import { actionUpdateViewPropertyValue } from '../../actions/index';
@@ -46,8 +45,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
   };
 };
-
-PropPathTextInput.contextTypes = { store: PropTypes.object };
 
 PropPathTextInput = connect(
   null,

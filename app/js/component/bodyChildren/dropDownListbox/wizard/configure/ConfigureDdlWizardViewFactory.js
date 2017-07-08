@@ -21,6 +21,7 @@ class ConfigureDdlWizardViewFactory {
   createInstance(state, parentComponentViewId, ddlModel) {
     const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
     const dataStores = dataStoreModelUtils.getDataStores(dataUniverse);
+
     const selectedDataStore = dataStoreModelUtils.findById(dataStores, ddlModel.dataStoreId);
 
     let dataStoreLabel = null;

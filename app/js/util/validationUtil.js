@@ -6,14 +6,14 @@ class ValidationUtil {
 
     const propValue = _.trim(propertyValue);
 
-    const matchedModels = this.findPropInModel(ancestorNode, propertyName);
+    let matchedModels = this.findPropInModel(ancestorNode, propertyName);
 
-    let values = matchedModels.map((item) => {
-      return item[propertyName];
+    matchedModels = _.filter(matchedModels, (item) => {
+      return item.id !== currentOwningNode.id;
     });
 
-    values = _.filter(values, (item) => {
-      return item.id !== currentOwningNode.id;
+    const values = matchedModels.map((item) => {
+      return item[propertyName];
     });
 
     return !values.includes(propValue);
@@ -26,9 +26,9 @@ class ValidationUtil {
       result.push(model);
     }
 
-    if ('children' in model && _.isArray(model.children)) {
+    if ('children' in model && Array.isArray(model.children)) {
       found = this.findAll(propertyName, model.children);
-      if (found.length) {
+      if (found.length > 0) {
         result = result.concat(found);
       }
     }
@@ -42,7 +42,7 @@ class ValidationUtil {
 
     for (let i = 0; i < items.length; i++) {
       found = this.findPropInModel(items[i], propertyName);
-      if (found.length) {
+      if (found.length > 0) {
         result = result.concat(found);
       }
     }

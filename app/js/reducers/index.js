@@ -347,14 +347,40 @@ const reducer = (state = defaultState.getInstance(), action) => {
       });
 
       // When a collection is selected, reset some dependent values if necessary
+      // TODO: 07-08-2017: These are broken. They will always be false.
       const fields = collection.viewModel.children;
       if (!fields.includes(viewModelWizard.selectedValueFieldId)) {
         viewModelWizard.selectedValueFieldId = null;
       }
+      // TODO: 07-08-2017: These are broken. They will always be false.
       if (!fields.includes(viewModelWizard.selectedTextFieldId)) {
         viewModelWizard.selectedValueFieldId = null;
       }
 
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.WIZARD.ConfigureDdl.SelectDataStoreSlide.SELECT_DATA_STORE: {
+      const payload = action.payload;
+
+      const viewModelWizard = graphTraversal.find(stateNew, payload.wizardId);
+
+      let dataStoreChanged = false;
+      if (viewModelWizard.dataStoreId !== payload.selectedDataStoreId) {
+        dataStoreChanged = true;
+      }
+      viewModelWizard.dataStoreId = payload.selectedDataStoreId;
+      viewModelWizard.dataStoreLabel = payload.selectedDataStoreLabel;
+
+      if (dataStoreChanged) {
+        viewModelWizard.dataModelId = null;
+        viewModelWizard.dataModelLabel = null;
+        viewModelWizard.dataTextId = null;
+        viewModelWizard.dataTextLabel = null;
+        viewModelWizard.dataValueId = null;
+        viewModelWizard.dataValueLabel = null;
+      }
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;

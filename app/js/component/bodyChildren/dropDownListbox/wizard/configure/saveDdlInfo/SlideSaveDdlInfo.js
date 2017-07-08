@@ -97,6 +97,12 @@ const doSaveAction = (ownProps) => {
     const wizardData = ownProps.wizardData;
 
     const outerViewModel = graphTraversal.find(state, ownProps.wizardData.parentComponentViewId);
+    outerViewModel.dataStoreId = wizardData.dataStoreId;
+    outerViewModel.dataModelId = wizardData.dataModelId;
+    outerViewModel.dataValueId = wizardData.dataValueId;
+    outerViewModel.dataTextId = wizardData.dataTextId;
+
+    outerViewModel.viewModel.dataStoreId = wizardData.dataStoreId;
     outerViewModel.viewModel.dataModelId = wizardData.dataModelId;
     outerViewModel.viewModel.dataValueId = wizardData.dataValueId;
     outerViewModel.viewModel.dataTextId = wizardData.dataTextId;

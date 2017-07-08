@@ -33,11 +33,15 @@ class ViewFactory {
     };
   }
 
-  createDdlView() {
+  createDdlView(model) {
     return {
       id: f22Uuid.generate(),
-      elementId: null,
-      isSaveNameButtonDisabled: true,
+      elementId: model.elementId,
+      dataStoreId: model.dataStoreId,
+      dataModelId: model.dataModelId,
+      dataValueId: model.dataValueId,
+      dataTextId: model.dataTextId,
+      isSaveButtonDisabled: true,
       isSelected: false
     };
   }

@@ -7,8 +7,8 @@ class DataStoreModelUtils {
     return _.filter(dataUniverse.children, (child) => child.typeLabel === ComponentTypes.Datastore);
   }
 
-  findById(dataStores, id) {
-    return _.find(dataStores, { id });
+  findById(dataStores, idValue) {
+    return _.find(dataStores, { id: idValue });
   }
 }
 

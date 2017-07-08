@@ -1,6 +1,9 @@
 export const ActionTypes = {
   ConfigureDdl: {
-    SelectDataSourceType: {
+    SelectDataStoreSlide: {
+      SELECT_DATA_STORE: 'SELECT_DATA_STORE'
+    },
+    SelectDataSourceTypeSlide: {
       COLLECTION: 'COLLECTION'
     },
     SelectCollectionSlide: {
@@ -22,6 +25,15 @@ export const actionToggleNewItemNameInput = (uuid) => ({
   type: ActionTypes.ConfigureDdl.SelectCollectionSlide.TOGGLE_NEW_COLLECTION_NAME_INPUT,
   payload: {
     uuid
+  }
+});
+
+export const actionSelectDataStore = (wizardId, selectedDataStoreId, selectedDataStoreLabel) => ({
+  type: ActionTypes.ConfigureDdl.SelectDataStoreSlide.SELECT_DATA_STORE,
+  payload: {
+    wizardId,
+    selectedDataStoreId,
+    selectedDataStoreLabel
   }
 });
 

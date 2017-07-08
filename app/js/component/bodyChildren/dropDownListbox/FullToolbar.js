@@ -7,7 +7,7 @@ import dataStoreModelUtils from '../../../domain/component/dataStoreModelUtils';
 import _ from 'lodash';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
 import PropPathTextInput from '../../editors/PropPathTextInput';
-import { actionShowErrorModal, actionHideCurrentModal } from '../../../actions/index';
+import { actionShowErrorModal, actionHideCurrentModal, actionUpdateViewPropertyValue } from '../../../actions/index';
 import validationUtils from '../../../util/validationUtil';
 import Button from '../../../component/bodyChildren/toolbar/Button';
 import stateUtil from '../../../util/stateUtil';
@@ -34,21 +34,24 @@ class FullToolbar extends React.Component {
     return (
       <div className="bc-toolbar-container">
         <div className="bc-toolbar-col-1">
-          <div className="bc-toolbar-title-label">
-            { this.props.selectedViewModel.viewModel.typeLabel }
+          <div>
+            <div className="bc-toolbar-title-label">
+              { this.props.selectedViewModel.viewModel.typeLabel }
+            </div>
+            <div className="bc-toolbar-description">
+              This is a select component.
+            </div>
           </div>
-          <div className="bc-toolbar-description">
-            This is a select component.
+          <div className="full-toolbar-data flex-normal">
+            <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" disabled={this.props.isSaveButtonDisabled} />
+            <Button faClass="fa-undo" onClick={this.props.onClickRevert} tooltipText="Revert" />
           </div>
-          <div className="full-toolbar-data" style={{ display: 'flex' }}>
+          <div className="full-toolbar-data flex-normal">
             <div>
               <label>Name:</label>
             </div>
             <div>
-              <PropPathTextInput id={this.props.selectedViewModel.id} path="elementId" value={this.props.elementId} persistState={false} />
-            </div>
-            <div>
-              <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" />
+              <PropPathTextInput id={this.props.selectedViewModel.id} path="elementId" value={this.props.elementId} persistState={false} onBlur={this.props.onBlurName} />
             </div>
           </div>
           <div className="full-toolbar-data">
@@ -107,8 +110,10 @@ FullToolbar.propTypes = {
   selectedDataTextId: PropTypes.any,
   onChangeDataText: PropTypes.func,
   onClickSave: PropTypes.func,
-  isSaveNameButtonDisabled: PropTypes.bool,
-  elementId: PropTypes.string
+  onClickRevert: PropTypes.func,
+  isSaveButtonDisabled: PropTypes.bool,
+  elementId: PropTypes.string,
+  onBlurName: PropTypes.func
 };
 
 FullToolbar.contextTypes = { store: PropTypes.object };
@@ -117,7 +122,7 @@ const mapStateToProps = (state, ownProps) => {
   const UNSET = -1;
   const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
   const dataStores = dataStoreModelUtils.getDataStores(dataUniverse);
-  let selectedDataStoreId = ownProps.selectedViewModel.viewModel.dataStoreId;
+  let selectedDataStoreId = ownProps.selectedViewModel.dataStoreId;
   selectedDataStoreId = (selectedDataStoreId !== null) ? selectedDataStoreId : UNSET;
 
   let selectedDataStore = UNSET;
@@ -131,21 +136,19 @@ const mapStateToProps = (state, ownProps) => {
     if (selectedDataStore) {
       collections = selectedDataStore.children;
     }
-    selectedDataModelId = ownProps.selectedViewModel.viewModel.dataModelId;
+    selectedDataModelId = ownProps.selectedViewModel.dataModelId;
     selectedDataModelId = (selectedDataModelId !== null) ? selectedDataModelId : UNSET;
 
     const dataModel = _.find(collections, { id: selectedDataModelId });
     if (dataModel) {
       fields = dataModel.children;
     }
-    selectedDataValueId = ownProps.selectedViewModel.viewModel.dataValueId;
+    selectedDataValueId = ownProps.selectedViewModel.dataValueId;
     selectedDataValueId = (selectedDataValueId !== null) ? selectedDataValueId : UNSET;
 
-    selectedDataTextId = ownProps.selectedViewModel.viewModel.dataTextId;
+    selectedDataTextId = ownProps.selectedViewModel.dataTextId;
     selectedDataTextId = (selectedDataTextId !== null) ? selectedDataTextId : UNSET;
   }
-
-  // c.lo(ownProps.selectedViewModel, 'ownProps.selectedViewModel: ');
 
   let elementId = ownProps.selectedViewModel.elementId;
   if (elementId === null) {
@@ -161,15 +164,19 @@ const mapStateToProps = (state, ownProps) => {
     fields,
     selectedDataValueId,
     selectedDataTextId,
-    isSaveNameButtonDisabled: ownProps.selectedViewModel.isSaveNameButtonDisabled,
+    isSaveButtonDisabled: ownProps.selectedViewModel.isSaveButtonDisabled,
     elementId
   };
 };
 
+const isSaveButtonDisabled = (dispatch, ownProps, disabled) => {
+  dispatch(actionUpdateViewPropertyValue(ownProps.selectedViewModel.id, 'isSaveButtonDisabled', disabled, true));
+};
+
 const updateSelectChange = (dispatch, ownProps, event, propertyName) => {
-  const viewModel = ownProps.selectedViewModel.viewModel;
-  viewModel[propertyName] = parseInt(event.target.value, 10);
-  viewModelCreator.update(dispatch, ownProps.selectedViewModel, null);
+  const viewModel = ownProps.selectedViewModel;
+  dispatch(actionUpdateViewPropertyValue(viewModel.id, propertyName, parseInt(event.target.value, 10), true));
+  isSaveButtonDisabled(dispatch, ownProps, false);
 };
 
 const updateNameChange = (ownProps, event) => {
@@ -178,30 +185,54 @@ const updateNameChange = (ownProps, event) => {
 
     const viewModel = ownProps.selectedViewModel.viewModel;
 
-    // c.l(`updateNameChange: ${ownProps.selectedViewModel.elementId}`);
-    // c.lo(ownProps.selectedViewModel, 'vm: ');
-
-    // const elementId = event.target.value;
-
     const model = graphTraversal.find(state.model, viewModel.id);
 
     const webPage = stateUtil.findAncestorByTypeLabel(state.model, model, ComponentTypes.WebPage);
-
-    // c.l(`viewModel.elementId: ${viewModel.elementId}`);
-    // c.l(`ownProps.selectedViewModel.elementId: ${ownProps.selectedViewModel.elementId}`);
 
     const isUnique = validationUtils.isUnique(webPage, model, 'elementId', ownProps.selectedViewModel.elementId);
     if (!isUnique) {
       dispatch(actionShowErrorModal('Select Field Error', 'Encountered an error trying to save the name value. The value in the \'name\' field is not unique within the webpage.', actionHideCurrentModal()));
     } else {
       viewModel.elementId = ownProps.selectedViewModel.elementId;
-      viewModelCreator.update(dispatch, ownProps.selectedViewModel, null);
+      viewModel.dataStoreId = ownProps.selectedViewModel.dataStoreId;
+      viewModel.dataModelId = ownProps.selectedViewModel.dataModelId;
+      viewModel.dataValueId = ownProps.selectedViewModel.dataValueId;
+
+      const successCallback = () => {
+        isSaveButtonDisabled(dispatch, ownProps, true);
+      };
+
+      viewModelCreator.update(dispatch, ownProps.selectedViewModel, successCallback);
     }
+  };
+};
+
+const revertChanges = (ownProps, event) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const selectViewModel = ownProps.selectedViewModel;
+    const viewModel = selectViewModel.viewModel;
+
+    const model = graphTraversal.find(state.model, viewModel.id);
+
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'elementId', model.elementId, true));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataStoreId', model.dataStoreId, true));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataModelId', model.dataModelId, true));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataValueId', model.dataValueId, true));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataTextId', model.dataTextId, true));
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    onBlurName: () => {
+      const viewModel = ownProps.selectedViewModel;
+
+      if (viewModel.elementId !== viewModel.viewModel.elementId) {
+        isSaveButtonDisabled(dispatch, ownProps, false);
+      }
+    },
     onChangeDataStore: (event) => {
       updateSelectChange(dispatch, ownProps, event, 'dataStoreId');
     },
@@ -216,6 +247,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onClickSave: (event) => {
       dispatch(updateNameChange(ownProps, event));
+    },
+    onClickRevert: (event) => {
+      dispatch(revertChanges(ownProps, event));
     }
   };
 };

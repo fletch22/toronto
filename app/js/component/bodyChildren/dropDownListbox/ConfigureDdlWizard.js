@@ -4,6 +4,7 @@ import { Carousel } from 'react-bootstrap';
 import { actionCarouselSlideRight, actionCarouselSlideLeft, actionCarouselSlideToIndex } from '../../../actions/wizard/index.js';
 import SlideSelectOrAddCollection from './wizard/configure/selectOrAddCollection/SlideSelectOrAddCollection';
 import SlideSelectFields from './wizard/configure/selectFields/SlideSelectFields';
+import SlideChooseDataStore from './wizard/configure/chooseDataStore/SlideChooseDataStore';
 import SlideChooseDataSourceType from './wizard/configure/chooseDataSourceType/SlideChooseDataSourceType';
 import SlideCollectionGrid from './wizard/configure/collectionGrid/SlideCollectionGrid';
 import WizardSlides from './wizard/configure/WizardSlides';
@@ -16,6 +17,9 @@ class ConfigureDdlWizard extends React.Component {
     return (
         <div style={{ width: '100%' }}>
           <Carousel activeIndex={activeIndex} direction={null} onSelect={this.props.handleSelect} indicators={false} interval={0} controls={false}>
+            <Carousel.Item key={WizardSlides.CHOOSE_DATASOURCE}>
+              <SlideChooseDataStore isSlideActive={activeIndex === WizardSlides.CHOOSE_DATASOURCE} wizardData={this.props.data} />
+            </Carousel.Item>
             <Carousel.Item key={WizardSlides.CHOOSE_DATASOURCE_TYPE}>
               <SlideChooseDataSourceType isSlideActive={activeIndex === WizardSlides.CHOOSE_DATASOURCE_TYPE} wizardData={this.props.data} />
             </Carousel.Item>
