@@ -1,5 +1,6 @@
 const WizardsTypes = {
-  ConfigureDdl: 'ConfigureDdl'
+  ConfigureDdl: 'ConfigureDdl',
+  ConfigButtonSubmit: 'ConfigButtonSubmit'
 };
 
 export default WizardsTypes;

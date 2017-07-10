@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import ConfigureDdl from './ConfigureDdl';
+import ConfigureSubmitButton from './ConfigureSubmitButton';
 import { actionCreatePseudoModal } from '../../../actions/index';
 import PseudoModalTypes from '../../../component/modals/PseudoModalTypes';
 import actionComponentCreator from '../../../reducers/viewModelFactory';
@@ -10,7 +10,7 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div>
-        <ConfigureDdl viewModel={this.props.selectedViewModel} onClick={this.props.onConfigClick} />
+        <ConfigureSubmitButton viewModel={this.props.selectedViewModel} onClick={this.props.onConfigClick} />
       </div>
     );
   }
@@ -24,7 +24,7 @@ Toolbar.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onConfigClick: () => {
-      dispatch(actionCreatePseudoModal(PseudoModalTypes.WizardTypes.ConfigureDdl, ownProps.selectedViewModel.id));
+      dispatch(actionCreatePseudoModal(PseudoModalTypes.DataNarrativeEditor, ownProps.selectedViewModel.id));
     }
   };
 };

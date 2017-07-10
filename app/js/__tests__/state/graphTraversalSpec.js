@@ -34,7 +34,7 @@ describe('graphTraversal', () => {
   it('should collect the right things.', () => {
     // Arrange
     // Act
-    const matches = graphTraversal.collectPropValuesByTypeLabelAndPropertyName(model, ComponentTypes.ButtonSubmit, 'name');
+    const matches = graphTraversal.collectPropValuesByPropName(model, 'name');
 
     // Assert
     expect(matches.length).to.be.equal(2);

@@ -5,6 +5,7 @@ import EditorNames from '../component/editors/EditorNames';
 import graphTraversal from '../state/graphTraversal';
 import viewFactory from '../domain/component/view/viewFactory';
 import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
+import dataNarrativeViewFactory from '../component/editors/dataNarrative/dataNarrativeViewFactory';
 import { DatastoreModelConstants } from '../domain/component/datastoreModelFactory';
 import dataUniverseUtils from '../domain/component/dataUniverseModelUtils';
 
@@ -18,6 +19,7 @@ class ViewModelFactory {
     // Note: This should be changed to just 'viewName'
     let viewName;
     let data;
+    let pseudoModalType;
 
     const outerViewModel = graphTraversal.find(state, viewId);
 
@@ -33,13 +35,31 @@ class ViewModelFactory {
         const dataUniverse = dataUniverseUtils.getDataUniverse(state);
         const dataStores = this.getApplicationDatastores(dataUniverse);
 
+        // TODO: 07-09-2017: This is not right. Should not choose the default datastore. Should let the already selected datastore dictate.
         let defaultDatastore = _.find(dataStores, (datastore) => (datastore.label === DatastoreModelConstants.DEFAULT_DATASTORE_LABEL));
 
         defaultDatastore = _.cloneDeep(defaultDatastore);
+
+        // TODO: 07-09-2017: This is not right. Should not use datastore for viewModel. Should use special configDdlViewModel.
         const viewModel = this.generateViewModel(data.id, defaultDatastore);
         Object.assign(data, { viewModel });
 
-        viewName = EditorNames.Wizards.ConfigureDdl;
+        viewName = PseudoModalTypes.WizardTypes.ConfigureDdl;
+        pseudoModalType = PseudoModalTypes.WizardTypes.ConfigureDdl;
+        break;
+      }
+      case PseudoModalTypes.DataNarrativeEditor: {
+        // const dataNarrativeThreads = model.children;
+        // if (dataNarrativeThreads.length === 0) {
+        //   dataNarrativeThreads.push(dataNarrativeThreadModelFactory.createInstance());
+        // }
+        data = dataNarrativeViewFactory.createInstance(viewId, []);
+
+        // const viewModel = this.generateViewModel(data.id, { typeLabel: ComponentTypes.DataNarrative });
+        // Object.assign(data, { viewModel });
+
+        viewName = PseudoModalTypes.DataNarrativeEditor;
+        pseudoModalType = PseudoModalTypes.DataNarrativeEditor;
         break;
       }
       default: {
@@ -49,7 +69,8 @@ class ViewModelFactory {
 
     return {
       viewName,
-      data
+      data,
+      pseudoModalType
     };
   }
 
@@ -92,6 +113,14 @@ class ViewModelFactory {
       }
       case ComponentTypes.DataField: {
         view = viewFactory.createDataFieldView();
+        break;
+      }
+      case ComponentTypes.ButtonSubmit: {
+        view = viewFactory.createButtonSubmitView(model);
+        break;
+      }
+      case ComponentTypes.DataNarrative: {
+        view = viewFactory.createDataNarrativeView(model);
         break;
       }
       default: {

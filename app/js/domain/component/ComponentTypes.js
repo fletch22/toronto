@@ -12,7 +12,8 @@ const ComponentTypes = {
   Layout: 'Layout',
   LayoutMinion: 'LayoutMinion',
   Div: 'Div',
-  DropDownListbox: 'DropDownListbox'
+  DropDownListbox: 'DropDownListbox',
+  DataNarrative: 'DataNarratives'
 };
 
 export default ComponentTypes;

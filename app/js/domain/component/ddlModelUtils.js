@@ -8,7 +8,7 @@ class DdlModelUtils {
   }
 
   getUniqueDdlName(state) {
-    return this.stateUtil.getUniquePropertyValueAmongTypes(state, ComponentTypes.DropDownListbox, 'elementId', 'Select');
+    return this.stateUtil.getUniquePropertyValue(state, 'elementId', 'Select');
   }
 }
 

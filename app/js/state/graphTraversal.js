@@ -42,17 +42,16 @@ class GraphTraversal {
     return foundObject;
   }
 
-  traverseAndCollect(o, propertyName, propertyValue) {
+  traverseAndCollect(o, propertyName) {
     let foundObjects = [];
 
     for (const key in o) {
-      const found = this.process(key, o[key], propertyValue, propertyName);
+      const found = o[key].hasOwnProperty(propertyName);
       if (found) {
         foundObjects.push(o);
       } else {
         if (o[key] !== null && typeof(o[key]) === 'object') {
-          // Going on step down in the object tree!!
-          const foundObjectsFromChildren = this.traverseAndCollect(o[key], propertyName, propertyValue);
+          const foundObjectsFromChildren = this.traverseAndCollect(o[key], propertyName);
           foundObjects = foundObjects.concat(foundObjectsFromChildren);
         }
       }
@@ -64,12 +63,10 @@ class GraphTraversal {
     return this.traverseIt(node, propertyValue, 'id');
   }
 
-  collectPropValuesByTypeLabelAndPropertyName(node, typeLabel, propertyName) {
-    const collectedMatches = this.traverseAndCollect(node, 'typeLabel', typeLabel);
+  collectPropValuesByPropName(node, propertyName) {
+    const collectedMatches = this.traverseAndCollect(node, propertyName);
 
-    return collectedMatches.map((item) => {
-      return item[propertyName];
-    });
+    return collectedMatches.map((item) => (item[propertyName]));
   }
 
   findAncestorByTypeLabel(rootishNode, node, typeLabel) {

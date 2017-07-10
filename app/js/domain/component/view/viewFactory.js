@@ -63,6 +63,21 @@ class ViewFactory {
       id: f22Uuid.generate()
     };
   }
+
+  createButtonSubmitView(model) {
+    return {
+      id: f22Uuid.generate(),
+      elementId: model.elementId,
+      label: model.label,
+      isSelected: false
+    };
+  }
+
+  createDataNarrativeView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
 }
 
 export default new ViewFactory();

@@ -4,6 +4,7 @@ import GridLayout from './GridLayout';
 import LayoutMinion from './LayoutMinion';
 import Div from './div/Div';
 import DropDownListbox from './dropDownListbox/DropDownListbox';
+import ButtonSubmit from './buttonSubmit/ButtonSubmit';
 
 class ComponentChild extends React.Component {
 
@@ -24,6 +25,10 @@ class ComponentChild extends React.Component {
       }
       case ComponentTypes.DropDownListbox: {
         component = <DropDownListbox id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
+        break;
+      }
+      case ComponentTypes.ButtonSubmit: {
+        component = <ButtonSubmit id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
         break;
       }
       default: {

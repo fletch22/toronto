@@ -8,7 +8,8 @@ const pseudoModalTypes = {
     WebPage: ComponentTypes.WebPage,
     Website: ComponentTypes.Website
   },
-  WizardTypes
+  WizardTypes,
+  DataNarrativeEditor: 'DataNarrativeEditor'
 };
 
 export default pseudoModalTypes;

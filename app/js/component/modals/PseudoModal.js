@@ -7,11 +7,16 @@ import FolderEditor from '../editors/appContainer/app/FolderEditor';
 import PageEditor from '../editors/appContainer/app/PageEditor';
 import ConfigureDdlWizard from '../../component/bodyChildren/dropDownListbox/ConfigureDdlWizard';
 import Button from '../../component/Button';
+import PseudoModalTypes from '../../component/modals/PseudoModalTypes';
+import DataNarrativeEditor from '../../../js/component/editors/dataNarrative/DataNarrative';
 
 class PseudoModal extends React.Component {
 
   render() {
     let width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
+
+    c.lo(this.props.data, 'this.props.data: ');
+    c.l('Will attempt to render psmod: ' + this.props.data.viewName);
 
     let component;
     switch (this.props.viewName) {
@@ -28,9 +33,14 @@ class PseudoModal extends React.Component {
         width = (this.props.data && this.props.data.width) ? this.props.data.width : '1500px';
         break;
       }
-      case ComponentModalNames.Wizards.ConfigureDdl: {
+      case PseudoModalTypes.WizardTypes.ConfigureDdl: {
         component = <ConfigureDdlWizard { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
         width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
+        break;
+      }
+      case PseudoModalTypes.DataNarrativeEditor: {
+        component = <DataNarrativeEditor { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
+        width = (this.props.data && this.props.data.width) ? this.props.data.width : '900px';
         break;
       }
       default: {
@@ -68,14 +78,6 @@ PseudoModal.propTypes = {
   viewName: PropTypes.string
 };
 
-const mapStateToProps = (state, ownProps) => {
-  let data = ownProps.data;
-
-  return {
-    data
-  };
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCloseModal: () => {
@@ -85,7 +87,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 PseudoModal = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(PseudoModal);
 

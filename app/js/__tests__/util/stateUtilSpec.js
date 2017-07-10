@@ -20,10 +20,10 @@ describe('stateUtils', () => {
 
     // Arrange
     const existingSelects = ['Select-1', 'Select-2'];
-    const collectStub = sandbox.stub(stateUtils.graphTraversal, 'collectPropValuesByTypeLabelAndPropertyName').returns(existingSelects);
+    const collectStub = sandbox.stub(stateUtils.graphTraversal, 'collectPropValuesByPropName').returns(existingSelects);
 
     // Act
-    const nameUnique = stateUtils.getUniquePropertyValueAmongTypes({ model: null }, ComponentTypes.ButtonSubmit, 'name', 'Select');
+    const nameUnique = stateUtils.getUniquePropertyValue({ model: null }, 'name', 'Select');
 
     // // Assert
     expect(nameUnique).to.be.equal('Select-3');

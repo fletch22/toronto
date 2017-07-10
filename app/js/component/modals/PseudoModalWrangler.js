@@ -5,8 +5,6 @@ import PseudoModal from '../../component/modals/PseudoModal';
 
 class PseudoModalWrangler extends React.Component {
   render() {
-
-
     return (
       <div>
       {
@@ -33,6 +31,8 @@ const mapStateToProps = (state, props) => {
     || oldChildren !== newChildren) {
     statePseudoModals = update(state.dom.pseudoModals, { $push: [] });
   }
+
+  c.lo(statePseudoModals, 'statePseudoModals: ');
 
   return {
     pseudoModals: statePseudoModals

@@ -7,8 +7,8 @@ class StateUtil {
     this.graphTraversal = graphTraversal;
   }
 
-  getUniquePropertyValueAmongTypes(state, typeLabel, propertyName, prefix) {
-    const existingNames = this.graphTraversal.collectPropValuesByTypeLabelAndPropertyName(state.model, typeLabel, propertyName);
+  getUniquePropertyValue(state, propertyName, prefix) {
+    const existingNames = this.graphTraversal.collectPropValuesByPropName(state.model, propertyName);
 
     let count = 1;
     let syntheticValue = '';

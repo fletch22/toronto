@@ -1,53 +1,24 @@
 import React, { PropTypes } from 'react';
-import { default as LayoutToolbar } from './layout/Toolbar';
-import { default as BodyToolbar } from './body/Toolbar';
-import { default as LayoutMinionToolbar } from './layoutMinion/Toolbar';
-import { default as DivToolbar } from './div/Toolbar';
 import { default as DropDownListboxToolbar } from './dropDownListbox/FullToolbar';
+import { default as ButtonSubmitToolbar } from './buttonSubmit/FullToolbar';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import FlagSelContextToolbar from './FlagSelContextToolbar';
 
 class SelectedContextToolbar extends React.Component {
 
   render() {
-    let toolbar = '';
-    let description = '';
+    let contextToolbar = null;
+
     switch (this.props.selectedViewModel.viewModel.typeLabel) {
-      case ComponentTypes.WebPage: {
-        toolbar = <BodyToolbar selectedViewModel={this.props.selectedViewModel} />;
-        description = (<span>This element is the root of your page. There can be only <a href="https://media.giphy.com/media/sqtSOp8DOsIa4/giphy.gif">one.</a></span>);
+      case ComponentTypes.DropDownListbox:
+        contextToolbar = (<DropDownListboxToolbar selectedViewModel={this.props.selectedViewModel} />);
         break;
-      }
-      case ComponentTypes.Layout: {
-        toolbar = <LayoutToolbar selectedViewModel={this.props.selectedViewModel} />;
-        description = 'This element helps you form the foundation your page. Want a smaller, nested, layout? Select an element, then click the \'Layout\' button.';
-        break;
-      }
-      case ComponentTypes.LayoutMinion: {
-        toolbar = <LayoutMinionToolbar selectedViewModel={this.props.selectedViewModel} />;
-        description = 'This element is a moveable resizable container for your content.';
-        break;
-      }
-      case ComponentTypes.Div: {
-        toolbar = <DivToolbar selectedViewModel={this.props.selectedViewModel} />;
-        description = 'This is basic building block of your site.';
-        break;
-      }
-      case ComponentTypes.DropDownListbox: {
-        toolbar = <DropDownListboxToolbar selectedViewModel={this.props.selectedViewModel} />;
-        description = 'This is a select box.';
+      case ComponentTypes.ButtonSubmit: {
+        contextToolbar = <ButtonSubmitToolbar selectedViewModel={this.props.selectedViewModel} />;
         break;
       }
       default:
-        break;
-    }
-
-    let contextToolbar = null;
-
-    if (ComponentTypes.DropDownListbox === this.props.selectedViewModel.viewModel.typeLabel) {
-      contextToolbar = (<DropDownListboxToolbar selectedViewModel={this.props.selectedViewModel} />);
-    } else {
-      contextToolbar = (<FlagSelContextToolbar selectedViewModel={this.props.selectedViewModel} />);
+        contextToolbar = (<FlagSelContextToolbar selectedViewModel={this.props.selectedViewModel} />);
     }
 
     return (
