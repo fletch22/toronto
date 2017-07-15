@@ -27,22 +27,32 @@ class ActionPseudoModalEditorCreator {
 
     if (!model.children) model.children = [];
 
+    let title = '';
+    let className = '';
     switch (type) {
       case PseudoModalTypes.ComponentTypes.Website: {
         viewName = EditorNames.EDIT_WEBSITE_DETAILS;
+        title = 'Edit Website';
+        className = 'pseudo-modal-edit-website';
         break;
       }
       case PseudoModalTypes.ComponentTypes.WebFolder: {
         viewName = EditorNames.EDIT_WEBSITE_FOLDER_DETAILS;
+        title = 'Edit Website Folder';
+        className = 'pseudo-modal-edit-website-folder';
         break;
       }
       case PseudoModalTypes.ComponentTypes.WebPage: {
         viewName = EditorNames.EDIT_WEBSITE_PAGE_DETAILS;
+        title = 'Edit Website Page';
         viewModel = viewModelFactory.generateViewModel(this.WEB_PAGE_ROOT, model);
+        className = 'pseudo-modal-edit-website-page';
         break;
       }
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
+        title = 'Edit Select';
         viewName = EditorNames.Wizards.ConfigureDdl;
+        className = 'pseudo-modal-edit-configureddl';
         break;
       }
       default: {
@@ -54,7 +64,9 @@ class ActionPseudoModalEditorCreator {
 
     return {
       viewName,
-      data
+      data,
+      title,
+      className
     };
   }
 }

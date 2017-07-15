@@ -27,6 +27,8 @@ class ViewModelFactory {
 
     const model = _.cloneDeep(graphTraversal.find(state.model, modelNodeId));
 
+    let title = '';
+    let className = '';
     switch (type) {
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
         // TODO: Needs to pull out unneeded data here after viewModel pattern is implemented.
@@ -46,6 +48,8 @@ class ViewModelFactory {
 
         viewName = PseudoModalTypes.WizardTypes.ConfigureDdl;
         pseudoModalType = PseudoModalTypes.WizardTypes.ConfigureDdl;
+        title = 'Configure Select';
+        className = 'pseudo-modal-edit-configureddl';
         break;
       }
       case PseudoModalTypes.DataNarrativeEditor: {
@@ -60,6 +64,8 @@ class ViewModelFactory {
 
         viewName = PseudoModalTypes.DataNarrativeEditor;
         pseudoModalType = PseudoModalTypes.DataNarrativeEditor;
+        title = 'Edit Data Narrative';
+        className = 'pseudo-modal-edit-data-narrative';
         break;
       }
       default: {
@@ -70,7 +76,9 @@ class ViewModelFactory {
     return {
       viewName,
       data,
-      pseudoModalType
+      pseudoModalType,
+      title,
+      className
     };
   }
 

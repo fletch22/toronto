@@ -9,7 +9,7 @@ class PseudoModalWrangler extends React.Component {
       <div>
       {
         this.props.pseudoModals.map((pseudoModal, index) => {
-          return <PseudoModal id={pseudoModal.id} key={pseudoModal.id} zIndex={index + 1000} data={pseudoModal.data} viewName={pseudoModal.viewName} />;
+          return <PseudoModal id={pseudoModal.id} key={pseudoModal.id} zIndex={index + 1000} data={pseudoModal.data} title={pseudoModal.title} viewName={pseudoModal.viewName} className={pseudoModal.className}/>;
         })
       }
       </div>
@@ -31,8 +31,6 @@ const mapStateToProps = (state, props) => {
     || oldChildren !== newChildren) {
     statePseudoModals = update(state.dom.pseudoModals, { $push: [] });
   }
-
-  c.lo(statePseudoModals, 'statePseudoModals: ');
 
   return {
     pseudoModals: statePseudoModals

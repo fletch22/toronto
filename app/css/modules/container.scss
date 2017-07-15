@@ -118,6 +118,8 @@ Begin Dashboard
   position: absolute;
   width: 100%;
   top: 45px;
+  justify-content: center;
+  height: 90%;
 }
 
 .scrim {
@@ -130,7 +132,17 @@ Begin Dashboard
 }
 
 .dashboard-canvas .pseudo-modal-content {
+  background-color: white;
+  padding: 0 0 0 7px;
+}
 
+.dashboard-canvas .pseudo-modal-title {
+  flex: 1 100%;
+}
+
+.dashboard-canvas .pseudo-modal-close {
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .dashboard-canvas .cell {
@@ -139,6 +151,23 @@ Begin Dashboard
   padding: 5px;
   box-shadow: 0 0 30px black;
   background-color: white;
+}
+
+.dashboard-canvas .pseudo-modal-component {
+  width: 100%;
+}
+
+.pseudo-modal-edit-website-page {
+  width: 1500px;
+}
+
+.pseudo-modal-edit-configureddl {
+  width: 700px;
+  height: 530px;
+}
+
+.pseudo-modal-edit-data-narrative {
+  width: 1800px;
 }
 
 .container-table {
@@ -435,4 +464,15 @@ $carousel-transition: 0.2s ease-in-out;
 
 .flex-normal {
   display: flex;
+}
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.data-narrative-button-menu {
+  width: 100%;
 }

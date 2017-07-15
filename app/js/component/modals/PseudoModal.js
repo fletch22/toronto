@@ -15,9 +15,6 @@ class PseudoModal extends React.Component {
   render() {
     let width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
 
-    c.lo(this.props.data, 'this.props.data: ');
-    c.l('Will attempt to render psmod: ' + this.props.data.viewName);
-
     let component;
     switch (this.props.viewName) {
       case ComponentModalNames.EDIT_WEBSITE_DETAILS: {
@@ -30,17 +27,14 @@ class PseudoModal extends React.Component {
       }
       case ComponentModalNames.EDIT_WEBSITE_PAGE_DETAILS: {
         component = <PageEditor { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
-        width = (this.props.data && this.props.data.width) ? this.props.data.width : '1500px';
         break;
       }
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
         component = <ConfigureDdlWizard { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
-        width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
         break;
       }
       case PseudoModalTypes.DataNarrativeEditor: {
         component = <DataNarrativeEditor { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
-        width = (this.props.data && this.props.data.width) ? this.props.data.width : '900px';
         break;
       }
       default: {
@@ -51,13 +45,18 @@ class PseudoModal extends React.Component {
 
     return (
       <div>
-        <div className="dashboard-canvas" style={{ zIndex: this.props.zIndex }}>
-          <div className="container pseudo-modal-content" style={{ width }}>
-            <div className="row">
-              <div className="col-sm-12 cell">
-                <div style={{ textAlign: 'right' }}>
-                  <Button faClass="fa-close" onClick={this.props.onCloseModal} tooltipText="Close" />
-                </div>
+        <div className="flex-normal dashboard-canvas" style={{ zIndex: this.props.zIndex }}>
+          <div className={`pseudo-modal-content ${this.props.className}`}>
+            <div className="flex-normal">
+              <div className="pseudo-modal-title">
+                {this.props.title}
+              </div>
+              <div className="pseudo-modal-close">
+                <Button faClass="fa-close" onClick={this.props.onCloseModal} tooltipText="Close" />
+              </div>
+            </div>
+            <div className="flex-normal">
+              <div className="pseudo-modal-component">
                 { component }
               </div>
             </div>
@@ -75,7 +74,9 @@ PseudoModal.propTypes = {
   zIndex: PropTypes.number,
   width: PropTypes.number,
   onCloseModal: PropTypes.func,
-  viewName: PropTypes.string
+  viewName: PropTypes.string,
+  title: PropTypes.string,
+  className: PropTypes.string
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
