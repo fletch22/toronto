@@ -27,14 +27,17 @@ class PseudoModal extends React.Component {
       }
       case ComponentModalNames.EDIT_WEBSITE_PAGE_DETAILS: {
         component = <PageEditor { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
+        width = (this.props.data && this.props.data.width) ? this.props.data.width : '1500px';
         break;
       }
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
         component = <ConfigureDdlWizard { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
+        width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
         break;
       }
       case PseudoModalTypes.DataNarrativeEditor: {
         component = <DataNarrativeEditor { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
+        width = (this.props.data && this.props.data.width) ? this.props.data.width : '900px';
         break;
       }
       default: {
@@ -47,16 +50,16 @@ class PseudoModal extends React.Component {
       <div>
         <div className="flex-normal dashboard-canvas" style={{ zIndex: this.props.zIndex }}>
           <div className={`pseudo-modal-content ${this.props.className}`}>
-            <div className="flex-normal">
-              <div className="pseudo-modal-title">
-                {this.props.title}
-              </div>
-              <div className="pseudo-modal-close">
-                <Button faClass="fa-close" onClick={this.props.onCloseModal} tooltipText="Close" />
-              </div>
-            </div>
-            <div className="flex-normal">
-              <div className="pseudo-modal-component">
+            <div className="row">
+              <div className="col-sm-12">
+                <div className="row">
+                  <div className="col-sm-11">
+                    {this.props.title}
+                  </div>
+                  <div className="col-sm-1" style={{ textAlign: 'right' }}>
+                    <Button faClass="fa-close" onClick={this.props.onCloseModal} tooltipText="Close" />
+                  </div>
+                </div>
                 { component }
               </div>
             </div>

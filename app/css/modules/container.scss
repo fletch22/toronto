@@ -119,7 +119,6 @@ Begin Dashboard
   width: 100%;
   top: 45px;
   justify-content: center;
-  height: 90%;
 }
 
 .scrim {
@@ -151,6 +150,7 @@ Begin Dashboard
   padding: 5px;
   box-shadow: 0 0 30px black;
   background-color: white;
+  justify-content: center;
 }
 
 .dashboard-canvas .pseudo-modal-component {
@@ -159,6 +159,7 @@ Begin Dashboard
 
 .pseudo-modal-edit-website-page {
   width: 1500px;
+  min-height: 530px;
 }
 
 .pseudo-modal-edit-configureddl {
@@ -167,7 +168,7 @@ Begin Dashboard
 }
 
 .pseudo-modal-edit-data-narrative {
-  width: 1800px;
+  width: 1500px;
 }
 
 .container-table {
