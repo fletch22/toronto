@@ -133,6 +133,7 @@ Begin Dashboard
 .dashboard-canvas .pseudo-modal-content {
   background-color: white;
   padding: 0 0 0 7px;
+  box-shadow: 0 0 30px black;
 }
 
 .dashboard-canvas .pseudo-modal-title {
@@ -142,15 +143,6 @@ Begin Dashboard
 .dashboard-canvas .pseudo-modal-close {
   flex: 1;
   justify-content: flex-end;
-}
-
-.dashboard-canvas .cell {
-  height: 100%;
-  margin: 21px 0 0 0;
-  padding: 5px;
-  box-shadow: 0 0 30px black;
-  background-color: white;
-  justify-content: center;
 }
 
 .dashboard-canvas .pseudo-modal-component {
@@ -169,6 +161,7 @@ Begin Dashboard
 
 .pseudo-modal-edit-data-narrative {
   width: 1500px;
+  height: 600px;
 }
 
 .container-table {

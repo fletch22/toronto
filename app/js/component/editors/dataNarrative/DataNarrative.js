@@ -1,21 +1,22 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import BarChart from './BarChart';
+import SvgContainer from './SvgContainer';
 import Button from '../../bodyChildren/toolbar/Button';
-
+import { actionUpdateViewPropertyValue } from '../../../actions/index';
 
 class DataNarrative extends React.Component {
 
   render() {
     return (
-      <div className="flex-normal">
+      <div className="flex-normal" style={{ height: '100%' }}>
         <div>
           <div className="flex-vertical data-narrative-button-menu">
-            <Button faClass="fa fa-cog " onClick={this.props.onClickCog} tooltipText="Test Button" />
+            <Button faClass="fa fa-plus " onClick={this.props.onClickZoomIn} tooltipText="Zoom In" />
+            <Button faClass="fa fa-minus " onClick={this.props.onClickZoomOut} tooltipText="Zoom Out" />
           </div>
         </div>
-        <div>
-          <BarChart data={this.props.data} size={[500, 500]} />
+        <div style={{ width: '100%', height: '100%' }}>
+          <SvgContainer data={this.props.data} />
         </div>
       </div>
     );
@@ -26,23 +27,34 @@ DataNarrative.propTypes = {
   id: PropTypes.any,
   data: PropTypes.object,
   onCancelClick: PropTypes.func,
-  onClickCog: PropTypes.func
+  onClickZoomIn: PropTypes.func,
+  onClickZoomOut: PropTypes.func,
+  zoom: PropTypes.number
 };
 
-const mapStateToProps = (state, ownProps) => {
-  c.lo(ownProps.data, 'data: ');
+const transformProps = (props) => {
+  c.l(`Zoom: ${props.data.zoom}`);
 
   return {
-    id: ownProps.id,
-    data: ownProps.data
+    id: props.id,
+    data: props.data,
+    zoom: props.data.zoom
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state, ownProps) => {
+  return transformProps(ownProps);
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClickCog: (event) => {
-      c.l('Clicked test');
-      // dispatch(actionUpdateViewPropertyValue(ownProps.id, ownProps.path, event.target.value, persistState));
+    onClickZoomIn: (event) => {
+      const props = transformProps(ownProps);
+      dispatch(actionUpdateViewPropertyValue(props.data.id, 'zoom', props.zoom * 1.1, true));
+    },
+    onClickZoomOut: (event) => {
+      const props = transformProps(ownProps);
+      dispatch(actionUpdateViewPropertyValue(props.data.id, 'zoom', props.zoom * 0.9, true));
     }
   };
 };

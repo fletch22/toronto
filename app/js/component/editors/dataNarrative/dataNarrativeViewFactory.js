@@ -5,6 +5,7 @@ class DataNarrativeViewFactory {
   createInstance(parentComponentViewId, children) {
     return {
       id: f22Uuid.generate(),
+      zoom: 1,
       parentComponentViewId,
       children
     };

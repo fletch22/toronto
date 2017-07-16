@@ -27,17 +27,14 @@ class PseudoModal extends React.Component {
       }
       case ComponentModalNames.EDIT_WEBSITE_PAGE_DETAILS: {
         component = <PageEditor { ...this.props.data } onCancelClick={this.props.onCloseModal} />;
-        width = (this.props.data && this.props.data.width) ? this.props.data.width : '1500px';
         break;
       }
       case PseudoModalTypes.WizardTypes.ConfigureDdl: {
         component = <ConfigureDdlWizard { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
-        width = (this.props.data && this.props.data.width) ? this.props.data.width : '700px';
         break;
       }
       case PseudoModalTypes.DataNarrativeEditor: {
         component = <DataNarrativeEditor { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
-        width = (this.props.data && this.props.data.width) ? this.props.data.width : '900px';
         break;
       }
       default: {
@@ -60,7 +57,9 @@ class PseudoModal extends React.Component {
                     <Button faClass="fa-close" onClick={this.props.onCloseModal} tooltipText="Close" />
                   </div>
                 </div>
-                { component }
+                <div style={{ width: '100%', height: '560px' }}>
+                  { component }
+                </div>
               </div>
             </div>
           </div>
