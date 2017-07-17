@@ -2,7 +2,8 @@ export const ACTIONS = {
   SET_CURRENT_BODY_CHILD_TOOL: 'SET_CURRENT_BODY_CHILD_TOOL',
   SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: 'SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL',
   TOGGLE_MINION_STATIC_LOCK: 'TOGGLE_MINION_STATIC_LOCK',
-  TOGGLE_LAYOUT_MINION_BORDERS: 'TOGGLE_LAYOUT_MINION_BORDERS'
+  TOGGLE_LAYOUT_MINION_BORDERS: 'TOGGLE_LAYOUT_MINION_BORDERS',
+  SET_DATA_NARRATIVE_VIEW_PROPS: 'SET_DATA_NARRATIVE_VIEW_PROPS'
 };
 
 export const actionSetCurrentBodyTool = (viewModelId) => ({
@@ -23,6 +24,17 @@ export const actionToggleMinionStaticLock = (selectedViewModelId) => ({
   type: ACTIONS.TOGGLE_MINION_STATIC_LOCK,
   payload: {
     selectedViewModelId
+  }
+});
+
+export const actionSetDataNarrativeViewProps = (viewId, zoomFactor, viewCoordinateX, viewCoordinateY, persist) => ({
+  type: ACTIONS.SET_DATA_NARRATIVE_VIEW_PROPS,
+  payload: {
+    viewId,
+    zoomFactor,
+    viewCoordinateX,
+    viewCoordinateY,
+    persist
   }
 });
 

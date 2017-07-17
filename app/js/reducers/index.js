@@ -524,6 +524,20 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.SET_DATA_NARRATIVE_VIEW_PROPS: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const view = graphTraversal.find(stateNew, viewId);
+      view.zoom = payload.zoomFactor;
+      view.viewCoordinates = { x: payload.viewCoordinateX, y: payload.viewCoordinateY };
+
+      if (payload.persist) {
+        stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+      }
+
+      return stateNew;
+    }
     default: {
       return state;
     }

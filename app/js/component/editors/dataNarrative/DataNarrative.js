@@ -33,8 +33,6 @@ DataNarrative.propTypes = {
 };
 
 const transformProps = (props) => {
-  c.l(`Zoom: ${props.data.zoom}`);
-
   return {
     id: props.id,
     data: props.data,

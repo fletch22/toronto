@@ -6,6 +6,8 @@ class DataNarrativeViewFactory {
     return {
       id: f22Uuid.generate(),
       zoom: 1,
+      viewCoordinates: { x: 0, y: 0 },
+      viewCoordinatesDragOffset: { x: 0, y: 0 },
       parentComponentViewId,
       children
     };
