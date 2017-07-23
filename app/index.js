@@ -5,7 +5,3 @@ import favicon from './images/favicon.ico';
 global.jQuery = jQuery;
 
 new AppStarter().start();
-
-
-
-
