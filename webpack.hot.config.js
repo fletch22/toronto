@@ -11,8 +11,6 @@ const PATHS = {
   worker: path.join(__dirname, 'app/js/worker')
 };
 
-// console.log(JSON.stringify(PATHS));
-
 const common = {
   // Entry accepts a path or an object of entries.
   entry: {
@@ -55,7 +53,6 @@ const common = {
 module.exports = merge(common, {
   devtool: 'eval',
   devServer: {
-    // contentBase: PATHS.build // ,
     hot: true,
     inline: true,
     progress: true,
@@ -86,39 +83,3 @@ module.exports = merge(common, {
     }
   }
 });
-
-
-// module.exports = merge(common, {
-//   devtool: 'eval',
-//   devServer: {
-//     contentBase: PATHS.build,
-//     hot: true,
-//     inline: true,
-//     progress: true,
-//
-//     // Display only errors to reduce the amount of output.
-//     stats: 'errors-only',
-//
-//     // Parse host and port from env so this is easy to customize.
-//     host: process.env.HOST,
-//     port: 8888 // process.env.PORT
-//   },
-//   plugins: [
-//     new webpack.HotModuleReplacementPlugin(),
-//     new CopyWebpackPlugin([
-//       { from: 'app/images', to: 'images' }
-//     ])
-//   ],
-//   postcss: [
-//     autoprefixer({
-//       browsers: ['last 2 versions']
-//     })
-//   ],
-//   resolve: {
-//     extensions: ['', '.js', '.scss'],
-//     modulesDirectories: ['app', 'node_modules'],
-//     alias: {
-//       c: path.resolve(__dirname, 'app', 'js', 'util', 'c.js')
-//     }
-//   }
-// });

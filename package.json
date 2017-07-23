@@ -6,7 +6,7 @@
   "scripts": {
     "test": "karma start",
     "intTest": "set EXECUTE_INTEGRATION_TESTS=true && karma start",
-    "start": "webpack-dev-server --config webpack.hot.config.js # --content-base build/",
+    "start": "webpack-dev-server --config webpack.hot.config.js",
     "lint": "eslint --ext .js,.jsx assets/**"
   },
   "author": "Chris Flesche",
