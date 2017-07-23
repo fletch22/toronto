@@ -11,6 +11,8 @@ npm install phantomjs-prebuilt@2.1.4 -g
 npm install webpack@1.12.14 -g
 npm install webpack-dev-server@1.14.1 -g
 
+
+
 #rm -rf ./node_modules/
 #
 #npm install
