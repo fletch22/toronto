@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
 import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
-import buttonSubmitModelFactory from '../../../domain/component/ButtonSubmitModelFactory';
+import buttonSubmitModelFactory from '../../../domain/component/buttonSubmitModelFactory';
 import stateUtil from '../../../util/stateUtil';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
 

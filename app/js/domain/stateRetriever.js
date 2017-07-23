@@ -13,6 +13,7 @@ class StateRetriever {
         const modelToStateGenerator = new ModelToStateGenerator(state);
         modelToStateGenerator.process(responseData.appContainer);
         state.serverStartupTimestamp = responseData.startupTimestamp;
+        state.typeLiveViewAttributes = responseData.typeLiveViewAttributes;
 
         return state;
       })
@@ -45,7 +46,6 @@ class StateRetriever {
             reject(error);
           });
         } else {
-          c.l(data.startupTimestamp, 'startupTimestamp: ');
           c.l(state.serverStartupTimestamp, 'state.serverStartupTimestamp: ');
 
           const startupTimestamp = data.startupTimestamp;

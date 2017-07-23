@@ -4,26 +4,31 @@ import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class DdlModelFactory extends ModelFactory {
 
-  createInstance(parentId, elementId, dataStoreId, dataModelId, dataValueId, dataTextId) {
+  createInstanceFromModel(model) {
     const id = f22Uuid.generate();
 
     let dataStoreIdNumber = null;
-    if (dataStoreId) {
-      dataStoreIdNumber = parseInt(dataStoreId, 10);
+    if (model.dataStoreId) {
+      dataStoreIdNumber = parseInt(model.dataStoreId, 10);
     }
 
     return {
-      parentId,
+      parentId: model.parentId,
       id,
-      elementId,
+      elementId: model.elementId,
       dataStoreId: dataStoreIdNumber,
-      dataModelId,
-      dataValueId,
-      dataTextId,
+      dataModelId: model.dataModelId,
+      dataValueId: model.dataValueId,
+      dataTextId: model.dataTextId,
       typeLabel: ComponentTypes.DropDownListbox,
-      style: null
+      style: model.style || null
     };
+  }
+
+  createInstance(parentId, elementId, dataStoreId, dataModelId, dataValueId, dataTextId) {
+    return this.createInstanceFromModel({ parentId, elementId, dataStoreId, dataModelId, dataValueId, dataTextId });
   }
 }
 
 export default new DdlModelFactory();
+

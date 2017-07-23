@@ -36,7 +36,8 @@ Toolbar.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     createLayoutMinion: () => {
-      const model = layoutMinionModelFactory.createInstance(ownProps.selectedViewModel.viewModel.id, `${new Date().getTime()}`, '1', '1', '0', '0', '');
+      const proto = layoutMinionModelFactory.createProtoInstance(ownProps.selectedViewModel.viewModel.id, `${new Date().getTime()}`, '1', '1', '0', '0', '');
+      const model = layoutMinionModelFactory.createInstanceFromModel(proto);
       bodyChildrenCreatorService.create(dispatch, model, ownProps.selectedViewModel.id);
     },
     toggleMinionStaticLock: () => {

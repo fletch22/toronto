@@ -3,11 +3,11 @@ import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class LayoutModelFactory extends ModelFactory {
 
-  createInstance(parentId) {
-    const id = this.ensureId({});
+  createInstanceFromModel(model) {
+    const id = this.ensureId(model);
 
     const instance = {
-      parentId,
+      parentId: model.parentId,
       id,
       typeLabel: ComponentTypes.Layout,
       children: []

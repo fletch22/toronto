@@ -7,6 +7,10 @@ import datastoreModelFactory from './datastoreModelFactory';
 import dataUniverseModelFactory from './dataUniverseModelFactory';
 import DomFactory from './DomFactory';
 import ComponentTypes from '../component/ComponentTypes';
+import layoutModelFactory from './layoutModelFactory';
+import layoutMinionModelFactory from './layoutMinionModelFactory';
+import ddlModelFactory from './ddlModelFactory';
+import buttonSubmitModelFactory from "./buttonSubmitModelFactory";
 
 class ComponentGenerator {
 
@@ -66,6 +70,38 @@ class ComponentGenerator {
     };
   }
 
+  createLayout(model) {
+    const modelChild = layoutModelFactory.createInstanceFromModel(model);
+    return {
+      model: modelChild,
+      dom: null
+    };
+  }
+
+  createLayoutMinion(model) {
+    const modelChild = layoutMinionModelFactory.createInstanceFromModel(model);
+    return {
+      model: modelChild,
+      dom: null
+    };
+  }
+
+  createDropDownListbox(model) {
+    const modelChild = ddlModelFactory.createInstanceFromModel(model);
+    return {
+      model: modelChild,
+      dom: null
+    };
+  }
+
+  createButtonSubmit(model) {
+    const modelChild = buttonSubmitModelFactory.createInstanceFromModel(model);
+    return {
+      model: modelChild,
+      dom: null
+    };
+  }
+
   createComponent(model) {
     switch (model.typeLabel) {
       case ComponentTypes.AppContainer: {
@@ -89,6 +125,18 @@ class ComponentGenerator {
       case ComponentTypes.WebPage: {
         return this.createWebPage(model);
       }
+      case ComponentTypes.Layout: {
+        return this.createLayout(model);
+      }
+      case ComponentTypes.LayoutMinion: {
+        return this.createLayoutMinion(model);
+      }
+      case ComponentTypes.DropDownListbox: {
+        return this.createDropDownListbox(model);
+      }
+      case ComponentTypes.ButtonSubmit: {
+        return this.createButtonSubmit(model);
+      }
       default: {
         throw new Error(`Could not determine component type from model's type label \'${model.typeLabel}\'`);
       }
@@ -97,3 +145,4 @@ class ComponentGenerator {
 }
 
 export default new ComponentGenerator();
+

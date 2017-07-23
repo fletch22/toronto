@@ -44,19 +44,18 @@ class SvgRoot extends React.Component {
 
   onDrag(x, y) {
     const data = Object.assign({}, this.props.data);
-    data.viewCoordinates = { x, y };
+    data.viewCoordinates = { x: 0, y };
     this.props.onDrag(data);
   }
 
-  getViewDragOffsetCoordinates(xNew, yNew) {
-    const xCurrent = this.props.data.viewCoordinates.x;
+  getViewDragOffsetCoordinates(yNew) {
     const yCurrent = this.props.data.viewCoordinates.y;
 
-    return { x: xNew - xCurrent, y: yNew - yCurrent };
+    return { x: 0, y: yNew - yCurrent };
   }
 
   beforeDrag() {
-    this.props.data.viewCoordinatesDragOffset = this.getViewDragOffsetCoordinates(event.subject.x, event.subject.y);
+    this.props.data.viewCoordinatesDragOffset = this.getViewDragOffsetCoordinates(event.subject.y);
     this.props.beforeDrag(this.props.data);
   }
 
@@ -72,19 +71,19 @@ class SvgRoot extends React.Component {
   addRect() {
     this.rootGroupNodeSelection
     .append('rect')
-      .attr('width', '500')
+      .attr('width', '200')
       .attr('height', '200')
-      .attr('x', 100)
-      .attr('y', 0)
-      .style('fill', 'red');
-
-    this.rootGroupNodeSelection
-      .append('rect')
-      .attr('width', '300')
-      .attr('height', '300')
-      .attr('x', 100)
+      .attr('x', 0)
       .attr('y', 0)
       .style('fill', 'steelblue');
+
+    // this.rootGroupNodeSelection
+    //   .append('rect')
+    //   .attr('width', '300')
+    //   .attr('height', '300')
+    //   .attr('x', 100)
+    //   .attr('y', 0)
+    //   .style('fill', 'steelblue');
   }
 
   render() {

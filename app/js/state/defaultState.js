@@ -28,7 +28,8 @@ class DefaultState {
           children: []
         }
       },
-      serverStartupTimestamp: null
+      serverStartupTimestamp: null,
+      typeLiveViewAttributes: null
     };
   }
 }

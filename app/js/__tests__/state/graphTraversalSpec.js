@@ -37,7 +37,7 @@ describe('graphTraversal', () => {
     const matches = graphTraversal.collectPropValuesByPropName(model, 'name');
 
     // Assert
-    expect(matches.length).to.be.equal(2);
+    expect(matches.length).to.be.equal(3);
     expect(matches.includes(existingSelects[0]));
     expect(matches.includes(existingSelects[1]));
   });

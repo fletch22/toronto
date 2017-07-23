@@ -6,7 +6,7 @@ import ComponentTypes from '../../domain/component/ComponentTypes';
 describe('viewModelFactory', () => {
   it('create a faithful model out of a view model', () => {
 
-    const layoutModel = layoutModelFactory.createInstance('foo');
+    const layoutModel = layoutModelFactory.createInstanceFromModel({ parentId: 'foo' });
     const viewModel = actionComponentCreator.generateViewModel(123, layoutModel);
 
     const model = actionComponentCreator.extractModelFromViewModel(viewModel);

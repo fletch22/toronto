@@ -40,7 +40,8 @@ class ModelGenerator {
         return webPageModelFactory.createInstance(protoModel);
       }
       case ComponentTypes.Layout: {
-        return layoutModelFactory.createInstance(parentId);
+        protoModel = this.protoGenerate(parentId, childTypeLabel);
+        return layoutModelFactory.createInstanceFromModel(protoModel);
       }
       case ComponentTypes.Div: {
         return divModelFactory.createInstance(parentId);

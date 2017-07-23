@@ -1,20 +1,24 @@
 import ModelFactory from './ModelFactory';
 import f22Uuid from '../../util/f22Uuid';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from './ComponentTypes';
 
 class ButtonSubmitModelFactory extends ModelFactory {
 
-  createInstance(parentId, elementId, label) {
-    const id = f22Uuid.generate();
+  createInstanceFromModel(model) {
+    const id = this.ensureId(model);
 
     return {
-      parentId,
+      parentId: model.parentId,
       id,
       typeLabel: ComponentTypes.ButtonSubmit,
-      elementId,
-      label,
-      style: null
+      elementId: model.elementId,
+      label: model.label,
+      style: model.style || null
     };
+  }
+
+  createInstance(parentId, elementId, label) {
+    return this.createInstanceFromModel({ parentId, elementId, label });
   }
 }
 
