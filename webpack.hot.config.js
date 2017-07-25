@@ -14,11 +14,15 @@ const PATHS = {
 const common = {
   // Entry accepts a path or an object of entries.
   entry: {
-    bundle: ['./app/index.js', 'bootstrap-loader']
+    bundle: [
+      './app/index.js',
+      'bootstrap-loader'
+    ]
   },
   output: {
     filename: '[name].js',
-    publicPath: '/'
+    publicPath: '/',
+    path: path.resolve(__dirname, 'build')
   },
   module: {
     loaders: [
@@ -49,7 +53,6 @@ const common = {
 module.exports = merge(common, {
   devtool: 'eval',
   devServer: {
-    contentBase: PATHS.build,
     hot: true,
     inline: true,
     progress: true,
