@@ -60,15 +60,22 @@ class GridLayout extends React.Component {
         className={wrapperClass}
         data-viewid={this.props.viewModel.id}
         onClick={this.props.onClick}
-        style={{ height: '100%', width: '100%', minHeight: '50px', backgroundColor: 'white', padding: '0px', margin: '0px', verticalAlign: 'top' }}
+        style={{ display: 'flex', height: '100%', width: '100%', minHeight: '50px', backgroundColor: 'white', padding: '0px', margin: '0px', verticalAlign: 'top' }}
       >
-        <ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} margin={[0, 0]} containerPadding={[0, 0]} rowHeight={35}>
+        <div style={{ flex: '1' }}>
           { generate()}
-        </ReactGridLayoutInitialized>
+        </div>
+        <div style={{ flex: '12', border: '1px solid red' }}>
+          foo
+        </div>
       </div>
     );
   }
 }
+
+{/*<ReactGridLayoutInitialized onLayoutChange={this.props.onLayoutChange} margin={[0, 0]} containerPadding={[0, 0]} rowHeight={35}>*/}
+  {/*{ generate()}*/}
+{/*</ReactGridLayoutInitialized>*/}
 
 GridLayout.propTypes = {
   id: PropTypes.any,
