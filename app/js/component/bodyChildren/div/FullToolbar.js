@@ -28,14 +28,12 @@ class FullToolbar extends React.Component {
             <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" disabled={this.props.isSaveButtonDisabled} />
             <Button faClass="fa-undo" onClick={this.props.onClickRevert} tooltipText="Revert" />
           </div>
-          <div className="full-toolbar-data flex-normal" style={{ display: 'flex', justifyContent: 'flex-start', border: '1px red solid' }}>
-            <div style={{ alignSelf: 'flex-start', border: '3px solid orange' }}>
-              <label>Flow<br />Direction:</label>
-            </div>
-            <div style={{ flexGrow: 1, alignSelf: 'flex-end', display: 'flex', justifyContent: 'flex-end', border: '3px solid orange' }}>
+          <div className="full-toolbar-data flex-normal" style={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <label>Flow<br />Direction:</label>
+            <div style={{ flexGrow: 1, alignItems: 'flex-end', display: 'flex', justifyContent: 'flex-end' }}>
                 <select style={{ flexGrow: 0 }}>
                   <option value="">(select one)</option>
-                  <option value="row">rowsss</option>
+                  <option value="row">row</option>
                   <option value="column">column</option>
                 </select>
             </div>
