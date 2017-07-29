@@ -1,8 +1,11 @@
 {
-  "presets": ["es2015", "react"],
-  "env": {
-    "development": {
-      "presets": ["react-hmre"]
-    }
-  }
+  "presets": [
+    [
+      "env", {
+        "targets": { "browsers": ["last 1 versions"] }
+      }
+    ],
+    "react-hmre",
+    "react"
+  ]
 }
