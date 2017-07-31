@@ -3,13 +3,21 @@ import actionComponentCreator from './viewModelFactory';
 
 class ActionBodyChildSelectorHandler {
 
-  process(state, targetViewModelId) {
+  process(state, targetViewModelId, rect) {
     const parentOfIntended = graphTraversal.findParent(state, targetViewModelId);
     let pageViewNode;
 
     if (parentOfIntended) {
       const intendedSelectedViewModel = graphTraversal.find(parentOfIntended.viewModel, targetViewModelId);
       intendedSelectedViewModel.isSelected = true;
+
+      const borderScrivener = state.borderScrivener;
+      borderScrivener.top = rect.top;
+      borderScrivener.left = rect.left;
+      borderScrivener.height = rect.height;
+      borderScrivener.width = rect.width;
+      borderScrivener.visible = true;
+      borderScrivener.border = '3px black solid';
       parentOfIntended.viewModel.children = [].concat(parentOfIntended.viewModel.children);
 
       pageViewNode = intendedSelectedViewModel;

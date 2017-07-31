@@ -10,7 +10,6 @@ class Body extends React.Component {
   render() {
     const children = (this.props.children) ? this.props.children : [];
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
-
     return (
       <div>
         <table style={{ width: '100%', height: '100%' }}>
@@ -63,7 +62,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    // This and the tags above can be abstracted into it's own tag.
     onClick: (event) => {
       event.stopPropagation();
       dispatch(actionSetCurrentBodyTool(event.currentTarget.dataset.viewid));

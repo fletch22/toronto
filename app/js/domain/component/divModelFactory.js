@@ -11,7 +11,7 @@ class DivModelFactory extends ModelFactory {
       parentId,
       id,
       typeLabel: ComponentTypes.Div,
-      style: JSON.stringify({ border: '1px solid red', minWidth: '100px', minHeight: '100px' }),
+      style: JSON.stringify({ boxShadow: 'inset 0px 0px 0px 1px gray', boxSizing: 'border-box', minWidth: '100px', minHeight: '100px' }),
       children: []
     };
   }

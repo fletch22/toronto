@@ -3,16 +3,14 @@ import { connect } from 'react-redux';
 import HierNavButtonToolbar from '../../../component/bodyChildren/HierNavButtonToolbar';
 import Toolbar from './Toolbar';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
-import PropPathTextInput from '../../editors/PropPathTextInput';
-import { actionShowErrorModal, actionHideCurrentModal, actionUpdateViewPropertyValue } from '../../../actions/index';
-import validationUtils from '../../../util/validationUtil';
+import { actionUpdateViewPropertyValue } from '../../../actions/index';
 import Button from '../../../component/bodyChildren/toolbar/Button';
-import stateUtil from '../../../util/stateUtil';
 import graphTraversal from '../../../state/graphTraversal';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class FullToolbar extends React.Component {
   render() {
+    const flowDirection = JSON.parse(this.props.style).flexDirection || '';
+
     return (
       <div className="bc-toolbar-container">
         <div className="bc-toolbar-col-1">
@@ -28,13 +26,13 @@ class FullToolbar extends React.Component {
             <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" disabled={this.props.isSaveButtonDisabled} />
             <Button faClass="fa-undo" onClick={this.props.onClickRevert} tooltipText="Revert" />
           </div>
-          <div className="full-toolbar-data flex-normal" style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <div className="full-toolbar-data flex-bc">
             <label>Flow<br />Direction:</label>
-            <div style={{ flexGrow: 1, alignItems: 'flex-end', display: 'flex', justifyContent: 'flex-end' }}>
-                <select style={{ flexGrow: 0 }}>
+            <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+                <select value={flowDirection} style={{ flexGrow: 0 }} onChange={this.props.onSelectFlowDirection}>
                   <option value="">(select one)</option>
-                  <option value="row">row</option>
-                  <option value="column">column</option>
+                  <option value="row">horizontal</option>
+                  <option value="column">vertical</option>
                 </select>
             </div>
           </div>
@@ -49,8 +47,6 @@ class FullToolbar extends React.Component {
   }
 }
 
-//<PropPathTextInput id={this.props.selectedViewModel.id} path="label" value={this.props.label} persistState={false} onBlur={this.props.onBlurName} />
-
 FullToolbar.propTypes = {
   selectedViewModel: PropTypes.object,
   onClickSave: PropTypes.func,
@@ -58,7 +54,9 @@ FullToolbar.propTypes = {
   isSaveButtonDisabled: PropTypes.bool,
   elementId: PropTypes.string,
   onBlurName: PropTypes.func,
-  label: PropTypes.string
+  label: PropTypes.string,
+  onSelectFlowDirection: PropTypes.func,
+  style: PropTypes.string
 };
 
 FullToolbar.contextTypes = { store: PropTypes.object };
@@ -73,7 +71,8 @@ const mapStateToProps = (state, ownProps) => {
     selectedViewModel: ownProps.selectedViewModel,
     isSaveButtonDisabled: ownProps.selectedViewModel.isSaveButtonDisabled,
     elementId,
-    label: ownProps.selectedViewModel.label
+    label: ownProps.selectedViewModel.label,
+    style: ownProps.selectedViewModel.viewModel.style
   };
 };
 
@@ -81,35 +80,18 @@ const isSaveButtonDisabled = (dispatch, ownProps, disabled) => {
   dispatch(actionUpdateViewPropertyValue(ownProps.selectedViewModel.id, 'isSaveButtonDisabled', disabled, true));
 };
 
-const updateNameChange = (ownProps, event) => {
-  return (dispatch, getState) => {
-    const state = getState();
+const update = (ownProps) => {
+  return (dispatch) => {
+    const successCallback = () => {
+      isSaveButtonDisabled(dispatch, ownProps, true);
+    };
 
-    const viewModel = ownProps.selectedViewModel.viewModel;
-
-    const model = graphTraversal.find(state.model, viewModel.id);
-
-    const webPage = stateUtil.findAncestorByTypeLabel(state.model, model, ComponentTypes.WebPage);
-
-    const isUnique = validationUtils.isUnique(webPage, model, 'elementId', ownProps.selectedViewModel.elementId);
-    if (!isUnique) {
-      dispatch(actionShowErrorModal('Submit Button Name Error',
-        'Encountered an error trying to save the name value. The value in the \'name\' field is not unique within the webpage.',
-        actionHideCurrentModal()));
-    } else {
-      viewModel.elementId = ownProps.selectedViewModel.elementId;
-      viewModel.label = ownProps.selectedViewModel.label;
-
-      const successCallback = () => {
-        isSaveButtonDisabled(dispatch, ownProps, true);
-      };
-
-      viewModelCreator.update(dispatch, ownProps.selectedViewModel, successCallback);
-    }
+    viewModelCreator.update(dispatch, ownProps.selectedViewModel, successCallback);
   };
 };
 
-const revertChanges = (ownProps, event) => {
+
+const revertChanges = (ownProps) => {
   return (dispatch, getState) => {
     const state = getState();
 
@@ -118,8 +100,21 @@ const revertChanges = (ownProps, event) => {
 
     const model = graphTraversal.find(state.model, viewModel.id);
 
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'elementId', model.elementId, true));
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'label', model.label, true));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'viewModel.style', model.style, true));
+  };
+};
+
+const selectFlowDirection = (ownProps, event) => {
+  return (dispatch) => {
+    const selectViewModel = ownProps.selectedViewModel;
+    const viewModel = selectViewModel.viewModel;
+
+    const styleString = viewModel.style;
+    const style = JSON.parse(styleString);
+
+    style.flexDirection = event.target.value;
+
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'viewModel.style', JSON.stringify(style), true));
   };
 };
 
@@ -133,10 +128,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
     },
     onClickSave: (event) => {
-      dispatch(updateNameChange(ownProps, event));
+      dispatch(update(ownProps, event));
     },
     onClickRevert: (event) => {
       dispatch(revertChanges(ownProps, event));
+    },
+    onSelectFlowDirection: (event) => {
+      dispatch(selectFlowDirection(ownProps, event));
     }
   };
 };

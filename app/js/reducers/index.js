@@ -215,6 +215,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       node[propertyName] = payload.propertyValue;
 
+      node = graphTraversal.find(stateNew, payload.viewId);
+
       if (payload.needsPersisting) {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
@@ -248,8 +250,11 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
       const intendedSelectedViewModelId = action.payload.viewModelId;
+      const rect = action.payload.rect;
 
-      return actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId);
+      c.lo(rect, 'arrl: ');
+
+      return actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId, rect);
     }
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {
       const childViewModelId = action.payload.viewModelId;

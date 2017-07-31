@@ -5,6 +5,7 @@ import Island from '../component/dashboard/Island';
 import PseudoModalWrangler from '../component/modals/PseudoModalWrangler';
 import ViewTypes from '../views/ViewTypes';
 import _ from 'lodash';
+import BorderScrivener from '../component/utils/BorderScrivener';
 
 class AppContainer extends React.Component {
   render() {
@@ -19,6 +20,12 @@ class AppContainer extends React.Component {
           }
         </div>
         <PseudoModalWrangler />
+        <BorderScrivener top={this.props.borderScrivener.top}
+          left={this.props.borderScrivener.left}
+          height={this.props.borderScrivener.height}
+          width={this.props.borderScrivener.width}
+          visible={this.props.borderScrivener.visible}
+        />
       </div>
     );
   }
@@ -26,7 +33,8 @@ class AppContainer extends React.Component {
 
 AppContainer.propTypes = {
   children: PropTypes.arrayOf(PropTypes.object).isRequired,
-  appContainerChildren: PropTypes.arrayOf(PropTypes.object)
+  appContainerChildren: PropTypes.arrayOf(PropTypes.object),
+  borderScrivener: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
@@ -41,8 +49,11 @@ const mapStateToProps = (state) => {
     }
   }
 
+  const borderScrivener = state.borderScrivener;
+
   return {
-    children
+    children,
+    borderScrivener
   };
 };
 

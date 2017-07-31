@@ -203,10 +203,13 @@ Begin Dashboard
 }
 
 .body-child-selected {
-  position: relative;
-  outline: 5px solid gray;
-  outline-offset: -5px;
-  z-index: 300000;
+  box-shadow: inset 0px 0px 0px 10px red !important;
+  box-sizing: border-box;
+}
+
+.bc-outline-border {
+  position: absolute;
+  z-index: 30000;
 }
 
 .bc-toolbar-container {
@@ -458,6 +461,12 @@ $carousel-transition: 0.2s ease-in-out;
 
 .flex-normal {
   display: flex;
+}
+
+.flex-bc {
+  display: flex;
+  justify-content: flex-start;
+  flex-grow: 1;
 }
 
 .flex-vertical {
