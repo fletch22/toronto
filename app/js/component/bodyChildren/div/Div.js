@@ -33,8 +33,6 @@ class Div extends React.Component {
     let wrapperClass = 'flex-bc';
     wrapperClass = (this.props.isSelected) ? `${wrapperClass} body-child-selected` : wrapperClass;
 
-    // c.lo(style);
-
     return (
       <div className={wrapperClass} onClick={this.bodySelect} style={style}>
         {

@@ -65,9 +65,6 @@ class GridLayout extends React.Component {
         <div style={{ flex: '1' }}>
           { generate()}
         </div>
-        <div style={{ flex: '12', border: '1px solid red' }}>
-          foo
-        </div>
       </div>
     );
   }

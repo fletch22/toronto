@@ -10,12 +10,12 @@ import Body from '../../../../component/bodyChildren/body/Body';
 class PageEditor extends React.Component {
   render() {
     return (
-      <div>
-        <Tabs activeKey={this.props.activeTab} onSelect={this.props.handleSelect} id="controlled-tab-example">
+      <div style={{ height: '100%' }}>
+        <Tabs activeKey={this.props.activeTab} onSelect={this.props.handleSelect} id="controlled-tab-example" style={{ height: '100%' }}>
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled}><Body { ... this.props.viewModel } /></Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled} style={{ height: '100%' }}><Body { ... this.props.viewModel } /></Tab>
         </Tabs>
       </div>
     );

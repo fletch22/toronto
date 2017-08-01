@@ -174,7 +174,7 @@ Begin Dashboard
 }
 
 .body-children-toolbar-col {
-  vertical-align: top;
+  width: 180px;
 }
 
 .body-children-toolbar-col > .btn-f22-create-layout {
@@ -203,7 +203,7 @@ Begin Dashboard
 }
 
 .body-child-selected {
-  box-shadow: inset 0px 0px 0px 10px red !important;
+  box-shadow: inset 0px 0px 0px 1px red !important;
   box-sizing: border-box;
 }
 
@@ -299,6 +299,7 @@ End Dashboard
 
 .tab-content {
   margin: 5px 1.5px;
+  height: 100%;
 }
 
 .hidden {
