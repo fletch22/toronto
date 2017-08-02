@@ -11,8 +11,8 @@ class Body extends React.Component {
     const children = (this.props.children) ? this.props.children : [];
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
     return (
-      <div style={{ height: '100%', display: 'flex', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-        <div className="body-children-toolbar-col" style={{ alignItems: 'stretch' }}>
+      <div className="flex-pseudo-modal" style={{ height: '100%' }}>
+        <div className="body-children-toolbar-col">
           <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
         </div>
         <div className={wrapperClass} style={{ flexGrow: 1 }} data-viewid={this.props.id} onClick={this.props.selectChild}>

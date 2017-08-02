@@ -50,17 +50,13 @@ class PseudoModal extends React.Component {
       <div>
         <div className="flex-normal dashboard-canvas" style={{ zIndex: this.props.zIndex }}>
           <div className={`pseudo-modal-content ${this.props.className}`} style={{ height: `${height}px` }}>
-            <div className="" style={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1 }}>
+            <div className="flex-pseudo-modal" style={{ flexGrow: 1 }}>
               <div className="" style={{ flexGrow: 1 }}>
                 {this.props.title}
               </div>
-              <div>
-                <div style={{ alignSelf: 'flex-end' }}>
-                  <Button faClass="fa-close" onClick={this.props.onCloseModal} tooltipText="Close" />
-                </div>
-              </div>
+              <Button faClass="fa-close" onClick={this.props.onCloseModal} tooltipText="Close" />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1, alignItems: 'stretch', height: `${tabContentHeight}px` }}>
+            <div className="flex-pseudo-modal" style={{ flexGrow: 1, height: `${tabContentHeight}px` }}>
               <div style={{ flexGrow: 1 }}>
                 { component }
               </div>
