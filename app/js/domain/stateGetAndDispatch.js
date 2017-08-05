@@ -8,7 +8,7 @@ class StateGetAndDispatch {
   }
 
   init() {
-    this.index = 0;
+    this.index = 1;
     this.currentStateClientId = null;
   }
 
