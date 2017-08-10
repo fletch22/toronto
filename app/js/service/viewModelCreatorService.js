@@ -34,7 +34,7 @@ class ViewModelCreatorService {
             if (stateViewModel) {
               Object.assign(stateViewModel, viewModel);
             } else {
-              this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
+              // this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
               stateParentViewModel.viewModel.children.push(viewModel);
             }
 

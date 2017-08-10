@@ -18,10 +18,62 @@ import viewUtils from '../views/viewUtils';
 import ViewTypes from '../views/ViewTypes';
 import ConfigureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
 
+const getBoundingClientRect = (selectedElementId) => {
+  let result = null;
+  const element = document.getElementById(selectedElementId);
+  if (!!element) {
+    const rectRaw = element.getBoundingClientRect();
+
+    c.l(`Width: ${rectRaw.width}`);
+
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    result = {
+      left: parseInt(rectRaw.left, 10) + scrollLeft,
+      top: parseInt(rectRaw.top, 10) + scrollTop,
+      width: parseInt(rectRaw.width, 10),
+      height: parseInt(rectRaw.height, 10)
+    };
+
+    c.lo(result, 'gbcr: ');
+  }
+
+  return result;
+};
+
+const domActionSyncer = (state) => {
+  const borderScrivener = state.borderScrivener;
+
+  c.l(`seid: ${borderScrivener.selectedElementId}`);
+
+  if (borderScrivener.selectedElementId) {
+    const rectCurrent = getBoundingClientRect(borderScrivener.selectedElementId);
+    if (rectCurrent) {
+      c.l(rectCurrent, 'rc: ');
+      if (rectCurrent.top !== borderScrivener.top
+        || rectCurrent.left !== borderScrivener.left
+        || rectCurrent.width !== borderScrivener.width
+        || rectCurrent.height !== borderScrivener.height) {
+        /* eslint-disable no-param-reassign */
+        Object.assign(borderScrivener, rectCurrent);
+        borderScrivener.visible = true;
+      }
+    } else {
+      borderScrivener.visible = false;
+    }
+  } else {
+    borderScrivener.visible = false;
+  }
+
+  return state;
+};
+
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
+
+  domActionSyncer(stateNew);
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
@@ -250,11 +302,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
       const intendedSelectedViewModelId = action.payload.viewModelId;
-      const rect = action.payload.rect;
 
-      c.lo(rect, 'arrl: ');
+      let stateModified = actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId);
 
-      return actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId, rect);
+      stateModified = domActionSyncer(stateModified);
+
+      return stateModified;
     }
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {
       const childViewModelId = action.payload.viewModelId;
@@ -541,6 +594,10 @@ const reducer = (state = defaultState.getInstance(), action) => {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
 
+      return stateNew;
+    }
+    case ACTIONS.types.SCRIBE_BORDER: {
+      // Do Nothing
       return stateNew;
     }
     default: {

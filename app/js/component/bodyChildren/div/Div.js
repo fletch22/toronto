@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import '../../../../css/f22-react-grid-layout.css';
 import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/index';
@@ -14,17 +13,7 @@ class Div extends React.Component {
 
   bodySelect(event) {
     event.stopPropagation();
-    const rectRaw = ReactDOM.findDOMNode(this).getBoundingClientRect();
-
-    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const rect = {
-      left: parseInt(rectRaw.left, 10) + scrollLeft,
-      top: parseInt(rectRaw.top, 10) + scrollTop,
-      width: parseInt(rectRaw.width, 10),
-      height: parseInt(rectRaw.height, 10)
-    };
-    this.props.onClick(rect);
+    this.props.onClick();
   }
 
   render() {
@@ -34,7 +23,7 @@ class Div extends React.Component {
     wrapperClass = (this.props.isSelected) ? `${wrapperClass} body-child-selected` : wrapperClass;
 
     return (
-      <div className={wrapperClass} onClick={this.bodySelect} style={style}>
+      <div id={this.props.id} className={wrapperClass} onClick={this.bodySelect} style={style}>
         {
           children.map((child) =>
             <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
@@ -44,6 +33,8 @@ class Div extends React.Component {
     );
   }
 }
+
+Div.contextTypes = { store: PropTypes.object };
 
 Div.propTypes = {
   id: PropTypes.any,
@@ -66,8 +57,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClick: (rect) => {
-      dispatch(actionSetCurrentBodyTool(ownProps.viewModel.id, rect));
+    onClick: () => {
+      event.stopPropagation();
+      dispatch(actionSetCurrentBodyTool(ownProps.id));
     }
   };
 };

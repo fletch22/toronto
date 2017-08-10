@@ -15,13 +15,14 @@ class Body extends React.Component {
         <div className="body-children-toolbar-col">
           <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
         </div>
-        <div className={wrapperClass} style={{ flexGrow: 1 }} data-viewid={this.props.id} onClick={this.props.selectChild}>
+        <div className={wrapperClass} style={{ flexGrow: 1, marginLeft: '4px' }} data-viewid={this.props.id} onClick={this.props.selectChild}>
           {
             children.map((child) =>
               <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
             )
           }
         </div>
+        <div style={{ width: '4px' }} />
       </div>
     );
   }
@@ -47,8 +48,6 @@ const mapStateToProps = (state, ownProps) => {
     selectedViewModel = Object.assign({}, graphTraversal.find(state, selectedChildViewId));
   }
 
-  c.lo(ownProps, 'op: ');
-
   return {
     children,
     selectedViewModel,
@@ -60,7 +59,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     selectChild: (event) => {
       event.stopPropagation();
-      dispatch(actionSetCurrentBodyTool(event.currentTarget.dataset.viewid, {}));
+      dispatch(actionSetCurrentBodyTool(event.currentTarget.dataset.viewid));
     }
   };
 };

@@ -6,11 +6,10 @@ export const ACTIONS = {
   SET_DATA_NARRATIVE_VIEW_PROPS: 'SET_DATA_NARRATIVE_VIEW_PROPS'
 };
 
-export const actionSetCurrentBodyTool = (viewModelId, rect) => ({
+export const actionSetCurrentBodyTool = (viewModelId) => ({
   type: ACTIONS.SET_CURRENT_BODY_CHILD_TOOL,
   payload: {
-    viewModelId,
-    rect
+    viewModelId
   }
 });
 

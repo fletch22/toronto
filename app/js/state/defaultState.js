@@ -7,7 +7,9 @@ class DefaultState {
         top: 0,
         width: 0,
         height: 0,
-        visible: false
+        visible: false,
+        needsUpdate: false,
+        selectedElementId: null
       },
       views: [],
       dom: {

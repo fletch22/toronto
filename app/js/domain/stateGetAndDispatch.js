@@ -8,6 +8,7 @@ class StateGetAndDispatch {
   }
 
   init() {
+    // NOTE: 08-06-2017: Index must be 1. Without it a major bug appears during rewind.
     this.index = 0;
     this.currentStateClientId = null;
   }
@@ -17,6 +18,7 @@ class StateGetAndDispatch {
       const state = JSON.parse(data.state);
       if (state !== null) {
         this.currentStateClientId = data.clientId;
+        c.l(`Current State Client ID: ${this.currentStateClientId}`);
         this.index = data.indexOfReturnedState;
         dispatch(actionSetState(state));
         resolve();
@@ -40,6 +42,8 @@ class StateGetAndDispatch {
   getStateAndDispatch(dispatch, step) {
     let indexOfState = this.index + step;
     indexOfState = (indexOfState < 0) ? 0 : indexOfState;
+
+    c.l(`indexOfState: ${indexOfState}`);
 
     const promise = stateSyncService.getHistoricalState(indexOfState);
 
@@ -83,6 +87,7 @@ class StateGetAndDispatch {
       promise = Promise.reject(error);
     } else {
       const self = this;
+      c.l(`Rolling back to ${this.currentStateClientId}`);
       promise = stateSyncService.rollbackToStateId(this.currentStateClientId);
       promise.then(() => {
         self.init();

@@ -3,7 +3,7 @@ import actionComponentCreator from './viewModelFactory';
 
 class ActionBodyChildSelectorHandler {
 
-  process(state, targetViewModelId, rect) {
+  process(state, targetViewModelId) {
     const parentOfIntended = graphTraversal.findParent(state, targetViewModelId);
     let pageViewNode;
 
@@ -12,12 +12,11 @@ class ActionBodyChildSelectorHandler {
       intendedSelectedViewModel.isSelected = true;
 
       const borderScrivener = state.borderScrivener;
-      borderScrivener.top = rect.top;
-      borderScrivener.left = rect.left;
-      borderScrivener.height = rect.height;
-      borderScrivener.width = rect.width;
-      borderScrivener.visible = true;
-      borderScrivener.border = '3px black solid';
+      borderScrivener.selectedElementId = intendedSelectedViewModel.id;
+      borderScrivener.visible = !!borderScrivener.selectedElementId;
+
+      c.lo(borderScrivener, 'bs: ');
+
       parentOfIntended.viewModel.children = [].concat(parentOfIntended.viewModel.children);
 
       pageViewNode = intendedSelectedViewModel;

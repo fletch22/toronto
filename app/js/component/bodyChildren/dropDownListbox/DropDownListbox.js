@@ -9,11 +9,11 @@ class DropDownListbox extends React.Component {
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
 
     return (
-      <span className={wrapperClass} onClick={this.props.onClick} style={style} title={this.props.viewModel.viewModel.name}>
+      <div id={this.props.id} className={wrapperClass} onClick={this.props.onClick} style={style} title={this.props.viewModel.viewModel.name}>
         <select>
           <option>(select)</option>
         </select>
-      </span>
+      </div>
     );
   }
 }

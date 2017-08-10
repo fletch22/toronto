@@ -28,7 +28,9 @@ export const ACTIONS = {
     RESTORE_FROM_DISK: 'RESTORE_FROM_DISK',
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
     CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT',
-    CREATE_PSEUDO_MODAL: 'CREATE_PSEUDO_MODAL'
+    CREATE_PSEUDO_MODAL: 'CREATE_PSEUDO_MODAL',
+    UPDATE_BORDER_SCRIVENER: 'UPDATE_BORDER_SCRIVENER',
+    SCRIBE_BORDER: 'SCRIBE_BORDER'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -169,3 +171,10 @@ export const actionCreatePseudoModal = (pseudoModalTypes, viewId) => ({
   }
 });
 
+export const actionUpdateBorderScrivener = () => ({
+  type: ACTIONS.types.UPDATE_BORDER_SCRIVENER
+});
+
+export const actionScribeBorder = () => ({
+  type: ACTIONS.types.SCRIBE_BORDER
+});

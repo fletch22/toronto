@@ -62,7 +62,7 @@ class GridHelper {
     const keys = Object.keys(clone);
     const attributes = {};
     keys.forEach((key) => {
-      const unprefixed = _.replace(key, new RegExp(this.CONSTANTS.COLUMN_SAFETY_PREFIX, 'g'), '');
+      const unprefixed = key.replace(new RegExp(this.CONSTANTS.COLUMN_SAFETY_PREFIX, 'g'), '');
       attributes[unprefixed] = clone[key];
     });
     return attributes;
