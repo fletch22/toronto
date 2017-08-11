@@ -24,8 +24,6 @@ const getBoundingClientRect = (selectedElementId) => {
   if (!!element) {
     const rectRaw = element.getBoundingClientRect();
 
-    c.l(`Width: ${rectRaw.width}`);
-
     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     result = {
@@ -34,8 +32,6 @@ const getBoundingClientRect = (selectedElementId) => {
       width: parseInt(rectRaw.width, 10),
       height: parseInt(rectRaw.height, 10)
     };
-
-    c.lo(result, 'gbcr: ');
   }
 
   return result;
@@ -44,12 +40,9 @@ const getBoundingClientRect = (selectedElementId) => {
 const domActionSyncer = (state) => {
   const borderScrivener = state.borderScrivener;
 
-  c.l(`seid: ${borderScrivener.selectedElementId}`);
-
   if (borderScrivener.selectedElementId) {
     const rectCurrent = getBoundingClientRect(borderScrivener.selectedElementId);
     if (rectCurrent) {
-      c.l(rectCurrent, 'rc: ');
       if (rectCurrent.top !== borderScrivener.top
         || rectCurrent.left !== borderScrivener.left
         || rectCurrent.width !== borderScrivener.width

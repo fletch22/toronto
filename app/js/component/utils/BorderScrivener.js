@@ -99,7 +99,6 @@ BorderScrivener.propTypes = {
 const mapDispatchToProps = (dispatch) => {
   return {
     onChange: () => {
-      c.l('Change called.');
       dispatch(actionScribeBorder());
     }
   };

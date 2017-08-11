@@ -66,7 +66,15 @@ class GraphTraversal {
   collectPropValuesByPropName(node, propertyName) {
     const collectedMatches = this.traverseAndCollect(node, propertyName);
 
-    return collectedMatches.map((item) => (item[propertyName]));
+    const names = [];
+    // NOTE: This is strange, unexpected and probably a bug in Chrome. Instead of a flat map we get back a hybrid of a flat and nested and array.
+    collectedMatches.forEach((item) => {
+      item.forEach((subItem) => {
+        names.push(subItem[propertyName]);
+      });
+    });
+
+    return names;
   }
 
   findAncestorByTypeLabel(rootishNode, node, typeLabel) {

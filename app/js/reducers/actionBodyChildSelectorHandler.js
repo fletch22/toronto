@@ -11,12 +11,6 @@ class ActionBodyChildSelectorHandler {
       const intendedSelectedViewModel = graphTraversal.find(parentOfIntended.viewModel, targetViewModelId);
       intendedSelectedViewModel.isSelected = true;
 
-      const borderScrivener = state.borderScrivener;
-      borderScrivener.selectedElementId = intendedSelectedViewModel.id;
-      borderScrivener.visible = !!borderScrivener.selectedElementId;
-
-      c.lo(borderScrivener, 'bs: ');
-
       parentOfIntended.viewModel.children = [].concat(parentOfIntended.viewModel.children);
 
       pageViewNode = intendedSelectedViewModel;
@@ -44,6 +38,10 @@ class ActionBodyChildSelectorHandler {
       }
     }
     pageViewNode.selectedChildViewId = targetViewModelId;
+
+    const borderScrivener = state.borderScrivener;
+    borderScrivener.selectedElementId = pageViewNode.selectedChildViewId;
+    borderScrivener.visible = !!borderScrivener.selectedElementId;
 
     return state;
   }

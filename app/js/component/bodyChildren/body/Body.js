@@ -15,7 +15,7 @@ class Body extends React.Component {
         <div className="body-children-toolbar-col">
           <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
         </div>
-        <div className={wrapperClass} style={{ flexGrow: 1, marginLeft: '4px' }} data-viewid={this.props.id} onClick={this.props.selectChild}>
+        <div id={this.props.id} className={wrapperClass} style={{ flexGrow: 1, marginLeft: '4px' }} onClick={this.props.selectChild}>
           {
             children.map((child) =>
               <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
@@ -49,6 +49,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
+    id: ownProps.id,
     children,
     selectedViewModel,
     isSelected: selectedChildViewId === ownProps.id
@@ -59,7 +60,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     selectChild: (event) => {
       event.stopPropagation();
-      dispatch(actionSetCurrentBodyTool(event.currentTarget.dataset.viewid));
+      dispatch(actionSetCurrentBodyTool(ownProps.id));
     }
   };
 };

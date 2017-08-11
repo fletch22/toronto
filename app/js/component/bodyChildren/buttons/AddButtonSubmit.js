@@ -21,13 +21,13 @@ AddButtonSubmit.propTypes = {
   onClick: PropTypes.func
 };
 
-const createDdl = (ownProps) => {
+const addButtonSubmit = (ownProps) => {
   return (dispatch, getState) => {
     const state = getState();
 
-    const nameUnique = stateUtil.getUniquePropertyValue(state.model, 'elementId', ComponentTypes.ButtonSubmit);
+    const nameUnique = stateUtil.getUniquePropertyValue(state, 'elementId', ComponentTypes.ButtonSubmit);
 
-    const model = buttonSubmitModelFactory.createInstance(ownProps.viewModel.viewModel.id, nameUnique, null);
+    const model = buttonSubmitModelFactory.createInstance(ownProps.viewModel.viewModel.id, nameUnique, 'Submit');
     bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
   };
 };
@@ -35,7 +35,7 @@ const createDdl = (ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      dispatch(createDdl(ownProps));
+      dispatch(addButtonSubmit(ownProps));
     }
   };
 };

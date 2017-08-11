@@ -113,9 +113,6 @@ SvgRoot.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
 
-  // let newCoord = Object.assign({}, ownProps.data.viewCoordinates);
-  // c.lo(newCoord, 'newCoord: ');
-
   return {
     data: ownProps.data,
     size: ownProps.size,
