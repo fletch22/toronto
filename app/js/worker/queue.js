@@ -7,6 +7,24 @@ import ServerErrorTransformer from '../service/serverErrorTransformer';
 
 class Queue {
   constructor() {
+    this.postMessage = this.postMessage.bind(this);
+    this.emitEventRollbackState = this.emitEventRollbackState.bind(this);
+    this.emitEventError = this.emitEventError.bind(this);
+    this.emitEventQueueEmpty = this.emitEventQueueEmpty.bind(this);
+    this.emitEventIfQueueEmpty = this.emitEventIfQueueEmpty.bind(this);
+    this.waitUntilQueueEmpty = this.waitUntilQueueEmpty.bind(this);
+    this.areAllQueuesFlushedAndEmpty = this.areAllQueuesFlushedAndEmpty.bind(this);
+    this.blockadeAndDrain = this.blockadeAndDrain.bind(this);
+    this.blockadeAndObliterate = this.blockadeAndObliterate.bind(this);
+    this.unblockade = this.unblockade.bind(this);
+    this.accumulatorItemProcessing = this.accumulatorItemProcessing.bind(this);
+    this.collectForAudit = this.collectForAudit.bind(this);
+    this.gatherFromAuditLog = this.gatherFromAuditLog.bind(this);
+    this.getQueueArrayIsPaused = this.getQueueArrayIsPaused.bind(this);
+    this.push = this.push.bind(this);
+    this.getAccumulator = this.getAccumulator.bind(this);
+    this.getIsPaused = this.getIsPaused.bind(this);
+    this.setIsAccumulatorPaused = this.setIsAccumulatorPaused.bind(this);
     this.reset();
   }
 
@@ -105,13 +123,6 @@ class Queue {
       return promise;
     }
 
-    // This guards against a weird behavior caused by splice; the array is momentarily 'undefined' during splicing.
-    // If it undefined we wait a moment. After waiting the array goes back to not 'undefined'.
-    if (typeof this.accumulator === 'undefined') {
-      setTimeout(this.accumulatorItemProcessing, 1);
-      return promise;
-    }
-
     if (this.accumulator.length === 0) {
       this.emitEventIfQueueEmpty();
     } else {
@@ -192,3 +203,4 @@ class Queue {
 }
 
 export default Queue;
+
