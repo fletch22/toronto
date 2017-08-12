@@ -30,9 +30,9 @@ class FullToolbar extends React.Component {
             <label>Flow<br />Direction:</label>
             <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                 <select value={flowDirection} style={{ flexGrow: 0 }} onChange={this.props.onSelectFlowDirection}>
-                  <option value="">(select one)</option>
-                  <option value="row">horizontal</option>
-                  <option value="column">vertical</option>
+                  <option value="" readOnly>(select one)</option>
+                  <option value="row" readOnly>horizontal</option>
+                  <option value="column" readOnly>vertical</option>
                 </select>
             </div>
           </div>
@@ -59,8 +59,6 @@ FullToolbar.propTypes = {
   style: PropTypes.string
 };
 
-FullToolbar.contextTypes = { store: PropTypes.object };
-
 const mapStateToProps = (state, ownProps) => {
   let elementId = ownProps.selectedViewModel.elementId;
   if (elementId === null) {
@@ -86,7 +84,18 @@ const update = (ownProps) => {
       isSaveButtonDisabled(dispatch, ownProps, true);
     };
 
-    viewModelCreator.update(dispatch, ownProps.selectedViewModel, successCallback);
+    const selectViewModel = ownProps.selectedViewModel;
+    const viewModel = selectViewModel.viewModel;
+
+    let styleString = viewModel.style;
+    const style = JSON.parse(styleString);
+
+    style.flexDirection = event.target.value;
+
+    styleString = JSON.stringify(style);
+    viewModel.style = styleString;
+
+    viewModelCreator.update(dispatch, selectViewModel, successCallback);
   };
 };
 
@@ -114,7 +123,8 @@ const selectFlowDirection = (ownProps, event) => {
 
     style.flexDirection = event.target.value;
 
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'viewModel.style', JSON.stringify(style), true));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'viewModel.style', JSON.stringify(style), false));
+    isSaveButtonDisabled(dispatch, ownProps, false);
   };
 };
 
@@ -128,7 +138,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
     },
     onClickSave: (event) => {
-      dispatch(update(ownProps, event));
+      if (!ownProps.selectedViewModel.isSaveButtonDisabled) {
+        dispatch(update(ownProps, event));
+      }
     },
     onClickRevert: (event) => {
       dispatch(revertChanges(ownProps, event));

@@ -29,7 +29,6 @@ export const ACTIONS = {
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
     CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT',
     CREATE_PSEUDO_MODAL: 'CREATE_PSEUDO_MODAL',
-    UPDATE_BORDER_SCRIVENER: 'UPDATE_BORDER_SCRIVENER',
     SCRIBE_BORDER: 'SCRIBE_BORDER'
   }
 };
@@ -169,10 +168,6 @@ export const actionCreatePseudoModal = (pseudoModalTypes, viewId) => ({
     pseudoModalTypes,
     viewId
   }
-});
-
-export const actionUpdateBorderScrivener = () => ({
-  type: ACTIONS.types.UPDATE_BORDER_SCRIVENER
 });
 
 export const actionScribeBorder = () => ({

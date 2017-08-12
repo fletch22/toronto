@@ -41,8 +41,4 @@ class ViewModelCopyEditor extends React.Component {
   }
 }
 
-ViewModelCopyEditor.contextTypes = {
-  store: React.PropTypes.object
-};
-
 export default ViewModelCopyEditor;

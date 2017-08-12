@@ -33,7 +33,7 @@ class BorderScrivener extends React.Component {
       width: this.props.width
     };
 
-    if (rect && this.props.visible) {
+    if (!!rect && !!this.props.selectedElementId) {
       const borderThickness = 3;
       const topOffsetWidth = 3 + borderThickness;
 
@@ -91,7 +91,6 @@ BorderScrivener.propTypes = {
   left: PropTypes.number,
   height: PropTypes.number,
   width: PropTypes.number,
-  visible: PropTypes.bool,
   onChange: PropTypes.func,
   selectedElementId: PropTypes.string
 };

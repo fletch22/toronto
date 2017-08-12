@@ -8,6 +8,7 @@ import _ from 'lodash';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
 import PropPathTextInput from '../../editors/PropPathTextInput';
 import { actionShowErrorModal, actionHideCurrentModal, actionUpdateViewPropertyValue } from '../../../actions/index';
+import { actionPageNeedsSaving, actionPageDoesNotNeedSaving } from '../../../actions/bodyChildrenEditor/index';
 import validationUtils from '../../../util/validationUtil';
 import Button from '../../../component/bodyChildren/toolbar/Button';
 import stateUtil from '../../../util/stateUtil';
@@ -17,19 +18,19 @@ import ComponentTypes from '../../../domain/component/ComponentTypes';
 class FullToolbar extends React.Component {
   render() {
     const optionDataSources = this.props.dataStores.map((dataStore) => {
-      return <option key={dataStore.id} value={dataStore.id}>{dataStore.label}</option>;
+      return <option key={dataStore.id} value={dataStore.id} readOnly>{dataStore.label}</option>;
     });
-    optionDataSources.unshift(<option key="select-one" value={-1}>(Select One)</option>);
+    optionDataSources.unshift(<option key="select-one" value={-1} readOnly>(Select One)</option>);
 
     const optionCollections = this.props.collections.map((collection) => {
-      return <option key={collection.id} value={collection.id}>{collection.label}</option>;
+      return <option key={collection.id} value={collection.id} readOnly>{collection.label}</option>;
     });
-    optionCollections.unshift(<option key="select-one" value={-1}>(Select One)</option>);
+    optionCollections.unshift(<option key="select-one" value={-1} readOnly>(Select One)</option>);
 
     const optionFields = this.props.fields.map((field) => {
-      return <option key={field.id} value={field.id}>{field.label}</option>;
+      return <option key={field.id} value={field.id} readOnly>{field.label}</option>;
     });
-    optionFields.unshift(<option key="select-one" value={-1}>(Select One)</option>);
+    optionFields.unshift(<option key="select-one" value={-1} readOnly>(Select One)</option>);
 
     return (
       <div className="bc-toolbar-container">
@@ -51,7 +52,9 @@ class FullToolbar extends React.Component {
               <label>Name:</label>
             </div>
             <div>
-              <PropPathTextInput id={this.props.selectedViewModel.id} path="elementId" value={this.props.elementId} persistState={false} onBlur={this.props.onBlurName} />
+              <PropPathTextInput id={this.props.selectedViewModel.id} path="elementId" value={this.props.elementId}
+                persistState={false} onBlur={this.props.onBlurName} onChangeExternal={this.props.onChangeElementId}
+              />
             </div>
           </div>
           <div className="full-toolbar-data">
@@ -113,7 +116,8 @@ FullToolbar.propTypes = {
   onClickRevert: PropTypes.func,
   isSaveButtonDisabled: PropTypes.bool,
   elementId: PropTypes.string,
-  onBlurName: PropTypes.func
+  onBlurName: PropTypes.func,
+  onChangeElementId: PropTypes.func
 };
 
 FullToolbar.contextTypes = { store: PropTypes.object };
@@ -179,7 +183,7 @@ const updateSelectChange = (dispatch, ownProps, event, propertyName) => {
   isSaveButtonDisabled(dispatch, ownProps, false);
 };
 
-const updateNameChange = (ownProps, event) => {
+const update = (ownProps) => {
   return (dispatch, getState) => {
     const state = getState();
 
@@ -199,6 +203,7 @@ const updateNameChange = (ownProps, event) => {
       viewModel.dataValueId = ownProps.selectedViewModel.dataValueId;
 
       const successCallback = () => {
+        dispatch(actionPageDoesNotNeedSaving(ownProps.selectedViewModel.id));
         isSaveButtonDisabled(dispatch, ownProps, true);
       };
 
@@ -245,11 +250,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onChangeDataText: (event) => {
       updateSelectChange(dispatch, ownProps, event, 'dataTextId');
     },
-    onClickSave: (event) => {
-      dispatch(updateNameChange(ownProps, event));
+    onClickSave: () => {
+      dispatch(update(ownProps));
     },
     onClickRevert: (event) => {
       dispatch(revertChanges(ownProps, event));
+    },
+    onChangeElementId: () => {
+      dispatch(actionPageNeedsSaving(ownProps.selectedViewModel.id));
     }
   };
 };

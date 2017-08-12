@@ -297,8 +297,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const intendedSelectedViewModelId = action.payload.viewModelId;
 
       let stateModified = actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId);
-
       stateModified = domActionSyncer(stateModified);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateModified));
 
       return stateModified;
     }
@@ -589,8 +590,43 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.PAGE_NEEDS_SAVING: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const pageViewModel = actionBodyChildSelectorHandler.getPageViewModel(state, viewId);
+      pageViewModel.needsSaving = true;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.PAGE_DOES_NOT_NEED_SAVING: {
+
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      c.l(`Made it here. dddd${viewId}`);
+      const pageViewModel = actionBodyChildSelectorHandler.getPageViewModel(state, viewId);
+      pageViewModel.needsSaving = false;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
     case ACTIONS.types.SCRIBE_BORDER: {
       // Do Nothing
+      return stateNew;
+    }
+    case ACTIONS.types.UNSET_CURRENT_BODY: {
+      const payload = action.payload;
+      const selectedViewId = payload.selectedViewId;
+
+      actionBodyChildSelectorHandler.deselectCurrentComponent(stateNew, selectedViewId);
+      stateNew.borderScrivener.selectedElementId = null;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
       return stateNew;
     }
     default: {

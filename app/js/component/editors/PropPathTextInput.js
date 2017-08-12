@@ -20,7 +20,7 @@ class PropPathTextInput extends React.Component {
     const value = (this.props.value) ? this.props.value : '';
     return (
       <div>
-        <input className={this.props.classNames} type="text" ref="input" value={value} onChange={this.props.onChangeDataStore} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress} />
+        <input className={this.props.classNames} type="text" ref="input" value={value} onChange={this.props.onChange} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress} />
       </div>
     );
   }
@@ -33,15 +33,19 @@ PropPathTextInput.propTypes = {
   value: PropTypes.string,
   onBlur: PropTypes.func,
   classNames: PropTypes.string,
-  onChangeDataStore: PropTypes.func
+  onChange: PropTypes.func,
+  onChangeExternal: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const persistState = ownProps.persistState ? ownProps.persistState : false;
 
   return {
-    onChangeDataStore: (event) => {
+    onChange: (event) => {
       dispatch(actionUpdateViewPropertyValue(ownProps.id, ownProps.path, event.target.value, persistState));
+      if (!!ownProps.onChangeExternal) {
+        ownProps.onChangeExternal(event);
+      }
     }
   };
 };
