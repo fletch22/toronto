@@ -594,8 +594,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const payload = action.payload;
       const viewId = payload.viewId;
 
-      const pageViewModel = actionBodyChildSelectorHandler.getPageViewModel(state, viewId);
-      pageViewModel.needsSaving = true;
+      const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(state, viewId);
+      pageAndSelected.pageViewModel.needsSaving = true;
+      pageAndSelected.selectedViewModel.isSaveButtonDisabled = false;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
@@ -606,9 +607,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const payload = action.payload;
       const viewId = payload.viewId;
 
-      c.l(`Made it here. dddd${viewId}`);
-      const pageViewModel = actionBodyChildSelectorHandler.getPageViewModel(state, viewId);
-      pageViewModel.needsSaving = false;
+      const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(state, viewId);
+      pageAndSelected.pageViewModel.needsSaving = false;
+      pageAndSelected.selectedViewModel.isSaveButtonDisabled = true;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

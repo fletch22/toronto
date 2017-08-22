@@ -8,6 +8,7 @@ class PropPathTextInput extends React.Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   handleKeyPress(event) {
@@ -16,11 +17,19 @@ class PropPathTextInput extends React.Component {
     }
   }
 
+  handleKeyDown(event) {
+    if (event.keyCode === 8) {
+      this.props.onChange(event);
+    }
+  }
+
   render() {
     const value = (this.props.value) ? this.props.value : '';
     return (
       <div>
-        <input className={this.props.classNames} type="text" ref="input" value={value} onChange={this.props.onChange} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress} />
+        <input className={this.props.classNames} type="text" ref="input" value={value}
+          onChange={this.props.onChange} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress}
+        />
       </div>
     );
   }

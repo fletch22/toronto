@@ -15,22 +15,34 @@ import stateUtil from '../../../util/stateUtil';
 import graphTraversal from '../../../state/graphTraversal';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
 
+const DDL_UNSET = -1;
+
+const getIsNeedsSaving = (userSelectData, data) => {
+  const innerViewModel = data.selectedViewModel.viewModel;
+
+  return userSelectData.elementId !== innerViewModel.elementId
+    || (userSelectData.selectedDataStoreId !== DDL_UNSET && userSelectData.selectedDataStoreId !== innerViewModel.dataStoreId)
+    || (userSelectData.selectedDataModelId !== DDL_UNSET && userSelectData.selectedDataModelId !== innerViewModel.dataModelId)
+    || (userSelectData.selectedDataValueId !== DDL_UNSET && userSelectData.selectedDataValueId !== innerViewModel.dataValueId)
+    || (userSelectData.selectedDataTextId !== DDL_UNSET && userSelectData.selectedDataTextId !== innerViewModel.dataTextId);
+};
+
 class FullToolbar extends React.Component {
   render() {
     const optionDataSources = this.props.dataStores.map((dataStore) => {
       return <option key={dataStore.id} value={dataStore.id} readOnly>{dataStore.label}</option>;
     });
-    optionDataSources.unshift(<option key="select-one" value={-1} readOnly>(Select One)</option>);
+    optionDataSources.unshift(<option key="select-one" value={DDL_UNSET} readOnly>(Select One)</option>);
 
     const optionCollections = this.props.collections.map((collection) => {
       return <option key={collection.id} value={collection.id} readOnly>{collection.label}</option>;
     });
-    optionCollections.unshift(<option key="select-one" value={-1} readOnly>(Select One)</option>);
+    optionCollections.unshift(<option key="select-one" value={DDL_UNSET} readOnly>(Select One)</option>);
 
     const optionFields = this.props.fields.map((field) => {
       return <option key={field.id} value={field.id} readOnly>{field.label}</option>;
     });
-    optionFields.unshift(<option key="select-one" value={-1} readOnly>(Select One)</option>);
+    optionFields.unshift(<option key="select-one" value={DDL_UNSET} readOnly>(Select One)</option>);
 
     return (
       <div className="bc-toolbar-container">
@@ -44,7 +56,7 @@ class FullToolbar extends React.Component {
             </div>
           </div>
           <div className="full-toolbar-data flex-normal">
-            <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" disabled={this.props.isSaveButtonDisabled} />
+            <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" disabled={!this.props.needsSaving} />
             <Button faClass="fa-undo" onClick={this.props.onClickRevert} tooltipText="Revert" />
           </div>
           <div className="full-toolbar-data flex-normal">
@@ -91,8 +103,8 @@ class FullToolbar extends React.Component {
           </div>
         </div>
         <div className="bc-toolbar-col-2">
-          <HierNavButtonToolbar selectedChildViewId={this.props.selectedViewModel.id} />
-          <Toolbar selectedViewModel={this.props.selectedViewModel} />
+          <HierNavButtonToolbar selectedChildViewId={this.props.selectedViewModel.id} disabled={this.props.needsSaving} />
+          <Toolbar selectedViewModel={this.props.selectedViewModel} disabled={this.props.needsSaving} />
         </div>
       </div>
     );
@@ -114,44 +126,41 @@ FullToolbar.propTypes = {
   onChangeDataText: PropTypes.func,
   onClickSave: PropTypes.func,
   onClickRevert: PropTypes.func,
-  isSaveButtonDisabled: PropTypes.bool,
   elementId: PropTypes.string,
   onBlurName: PropTypes.func,
-  onChangeElementId: PropTypes.func
+  onChangeElementId: PropTypes.func,
+  toolbarDisabled: PropTypes.bool,
+  needsSaving: PropTypes.bool
 };
 
 FullToolbar.contextTypes = { store: PropTypes.object };
 
 const mapStateToProps = (state, ownProps) => {
-  const UNSET = -1;
+
   const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
   const dataStores = dataStoreModelUtils.getDataStores(dataUniverse);
   let selectedDataStoreId = ownProps.selectedViewModel.dataStoreId;
-  selectedDataStoreId = (selectedDataStoreId !== null) ? selectedDataStoreId : UNSET;
+  selectedDataStoreId = (selectedDataStoreId !== null) ? selectedDataStoreId : DDL_UNSET;
 
-  let selectedDataStore = UNSET;
-  let selectedDataModelId = UNSET;
-  let selectedDataValueId = UNSET;
-  let selectedDataTextId = UNSET;
+  let selectedDataStore = DDL_UNSET;
+  let selectedDataModelId = DDL_UNSET;
+  let selectedDataValueId = DDL_UNSET;
+  let selectedDataTextId = DDL_UNSET;
   let collections = [];
   let fields = [];
-  if (selectedDataStoreId !== UNSET) {
+  if (selectedDataStoreId !== DDL_UNSET) {
     selectedDataStore = _.find(dataStores, { id: selectedDataStoreId });
     if (selectedDataStore) {
       collections = selectedDataStore.children;
     }
     selectedDataModelId = ownProps.selectedViewModel.dataModelId;
-    selectedDataModelId = (selectedDataModelId !== null) ? selectedDataModelId : UNSET;
 
     const dataModel = _.find(collections, { id: selectedDataModelId });
     if (dataModel) {
       fields = dataModel.children;
     }
     selectedDataValueId = ownProps.selectedViewModel.dataValueId;
-    selectedDataValueId = (selectedDataValueId !== null) ? selectedDataValueId : UNSET;
-
     selectedDataTextId = ownProps.selectedViewModel.dataTextId;
-    selectedDataTextId = (selectedDataTextId !== null) ? selectedDataTextId : UNSET;
   }
 
   let elementId = ownProps.selectedViewModel.elementId;
@@ -159,7 +168,7 @@ const mapStateToProps = (state, ownProps) => {
     elementId = ownProps.selectedViewModel.viewModel.elementId;
   }
 
-  return {
+  const result = {
     dataStores,
     selectedViewModel: ownProps.selectedViewModel,
     selectedDataStoreId,
@@ -168,9 +177,20 @@ const mapStateToProps = (state, ownProps) => {
     fields,
     selectedDataValueId,
     selectedDataTextId,
-    isSaveButtonDisabled: ownProps.selectedViewModel.isSaveButtonDisabled,
     elementId
   };
+
+  const changeData = {
+    elementId,
+    selectedDataStoreId,
+    selectedDataModelId,
+    selectedDataValueId,
+    selectedDataTextId
+  };
+
+  const needsSaving = getIsNeedsSaving(changeData, result);
+
+  return Object.assign(result, { needsSaving, toolbarDisabled: needsSaving });
 };
 
 const isSaveButtonDisabled = (dispatch, ownProps, disabled) => {
@@ -179,8 +199,8 @@ const isSaveButtonDisabled = (dispatch, ownProps, disabled) => {
 
 const updateSelectChange = (dispatch, ownProps, event, propertyName) => {
   const viewModel = ownProps.selectedViewModel;
+
   dispatch(actionUpdateViewPropertyValue(viewModel.id, propertyName, parseInt(event.target.value, 10), true));
-  isSaveButtonDisabled(dispatch, ownProps, false);
 };
 
 const update = (ownProps) => {
@@ -188,9 +208,7 @@ const update = (ownProps) => {
     const state = getState();
 
     const viewModel = ownProps.selectedViewModel.viewModel;
-
     const model = graphTraversal.find(state.model, viewModel.id);
-
     const webPage = stateUtil.findAncestorByTypeLabel(state.model, model, ComponentTypes.WebPage);
 
     const isUnique = validationUtils.isUnique(webPage, model, 'elementId', ownProps.selectedViewModel.elementId);
@@ -198,9 +216,10 @@ const update = (ownProps) => {
       dispatch(actionShowErrorModal('Select Field Error', 'Encountered an error trying to save the name value. The value in the \'name\' field is not unique within the webpage.', actionHideCurrentModal()));
     } else {
       viewModel.elementId = ownProps.selectedViewModel.elementId;
-      viewModel.dataStoreId = ownProps.selectedViewModel.dataStoreId;
-      viewModel.dataModelId = ownProps.selectedViewModel.dataModelId;
-      viewModel.dataValueId = ownProps.selectedViewModel.dataValueId;
+      viewModel.dataStoreId = ownProps.selectedViewModel.selectedDataStoreId;
+      viewModel.dataModelId = ownProps.selectedViewModel.selectedDataModelId;
+      viewModel.dataValueId = ownProps.selectedViewModel.selectedDataValueId;
+      viewModel.dataTextId = ownProps.selectedViewModel.selectedDataTextId;
 
       const successCallback = () => {
         dispatch(actionPageDoesNotNeedSaving(ownProps.selectedViewModel.id));
@@ -212,20 +231,25 @@ const update = (ownProps) => {
   };
 };
 
+const getOriginalModelFromViewModel = (state, selectViewModel) => {
+  const viewModel = selectViewModel.viewModel;
+  return graphTraversal.find(state.model, viewModel.id);
+};
+
 const revertChanges = (ownProps, event) => {
   return (dispatch, getState) => {
     const state = getState();
 
     const selectViewModel = ownProps.selectedViewModel;
-    const viewModel = selectViewModel.viewModel;
-
-    const model = graphTraversal.find(state.model, viewModel.id);
+    const model = getOriginalModelFromViewModel(state, selectViewModel);
 
     dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'elementId', model.elementId, true));
     dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataStoreId', model.dataStoreId, true));
     dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataModelId', model.dataModelId, true));
     dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataValueId', model.dataValueId, true));
     dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataTextId', model.dataTextId, true));
+
+    dispatch(actionPageDoesNotNeedSaving(ownProps.selectedViewModel.id));
   };
 };
 
@@ -256,8 +280,32 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onClickRevert: (event) => {
       dispatch(revertChanges(ownProps, event));
     },
-    onChangeElementId: () => {
-      dispatch(actionPageNeedsSaving(ownProps.selectedViewModel.id));
+    onChangeElementId: (event) => {
+      // c.l(`event.target.value: ${event.target.value}`);
+      // dispatch(updateElementId(ownProps, event.target.value));
+      const vm = ownProps.selectedViewModel;
+      const userSelectData = {
+        elementId: event.target.value,
+        selectedDataStoreId: vm.dataStoreId,
+        selectedDataModelId: vm.dataModelId,
+        selectedDataValueId: vm.dataValueId,
+        selectedDataTextId: vm.dataTextId
+      };
+
+      c.l(`vm.dataStoreId: ${vm.dataStoreId}`);
+      const needsSaving = getIsNeedsSaving(userSelectData, ownProps);
+
+      c.lo(ownProps, 'ownProps: ');
+      c.lo(userSelectData, 'userSelectData: ');
+
+      c.l(`elementId: ${userSelectData.elementId}`);
+      c.l(`NeedsSaving: ${needsSaving}`);
+
+      if (needsSaving) {
+        dispatch(actionPageNeedsSaving(vm.id));
+      } else {
+        dispatch(actionPageDoesNotNeedSaving(vm.id));
+      }
     }
   };
 };
