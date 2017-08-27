@@ -3,6 +3,7 @@ import dashboard from './dashboard';
 import { ActionTypes as ModalActionTypes } from './modal';
 import { ActionTypes as WizardActionTypes } from './wizard';
 import { ActionTypes as GridActionTypes } from './grid';
+import { ActionTypes as ProxyActionTypes } from './proxy';
 import { ACTIONS as bodyChildrenEditorActions } from './bodyChildrenEditor/index';
 
 export const ACTIONS = {
@@ -37,6 +38,7 @@ _.extend(ACTIONS.types, ModalActionTypes);
 _.extend(ACTIONS.types, bodyChildrenEditorActions);
 _.extend(ACTIONS.types, WizardActionTypes);
 _.extend(ACTIONS.types, GridActionTypes);
+_.extend(ACTIONS.types, ProxyActionTypes);
 
 export const actionChangeAppLabelInput = (appLabel) => {
   return {

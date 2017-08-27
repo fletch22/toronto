@@ -23,7 +23,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: (event) => {
       event.stopPropagation();
-      dispatch(actionSetCurrentBodyToolToParent(ownProps.selectedChildViewId));
+      if (!ownProps.disabled) {
+        dispatch(actionSetCurrentBodyToolToParent(ownProps.selectedChildViewId));
+      }
     }
   };
 };

@@ -25,7 +25,9 @@ Toolbar.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onConfigClick: () => {
-      dispatch(actionCreatePseudoModal(PseudoModalTypes.WizardTypes.ConfigureDdl, ownProps.selectedViewModel.id));
+      if (!ownProps.disabled) {
+        dispatch(actionCreatePseudoModal(PseudoModalTypes.WizardTypes.ConfigureDdl, ownProps.selectedViewModel.id));
+      }
     }
   };
 };

@@ -8,12 +8,16 @@ import _ from 'lodash';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
 import PropPathTextInput from '../../editors/PropPathTextInput';
 import { actionShowErrorModal, actionHideCurrentModal, actionUpdateViewPropertyValue } from '../../../actions/index';
-import { actionPageNeedsSaving, actionPageDoesNotNeedSaving } from '../../../actions/bodyChildrenEditor/index';
+import { actionPageDoesNotNeedSaving } from '../../../actions/bodyChildrenEditor/index';
 import validationUtils from '../../../util/validationUtil';
 import Button from '../../../component/bodyChildren/toolbar/Button';
 import stateUtil from '../../../util/stateUtil';
 import graphTraversal from '../../../state/graphTraversal';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
+import ActionRegistration from '../../../actions/ActionRegistration';
+import f22Uuid from '../../../util/f22Uuid';
+import stateFixer from '../../../domain/stateFixer';
+import actionBodyChildSelectorHandler from '../../../reducers/actionBodyChildSelectorHandler';
 
 const DDL_UNSET = -1;
 
@@ -21,10 +25,10 @@ const getIsNeedsSaving = (userSelectData, data) => {
   const innerViewModel = data.selectedViewModel.viewModel;
 
   return userSelectData.elementId !== innerViewModel.elementId
-    || (userSelectData.selectedDataStoreId !== DDL_UNSET && userSelectData.selectedDataStoreId !== innerViewModel.dataStoreId)
-    || (userSelectData.selectedDataModelId !== DDL_UNSET && userSelectData.selectedDataModelId !== innerViewModel.dataModelId)
-    || (userSelectData.selectedDataValueId !== DDL_UNSET && userSelectData.selectedDataValueId !== innerViewModel.dataValueId)
-    || (userSelectData.selectedDataTextId !== DDL_UNSET && userSelectData.selectedDataTextId !== innerViewModel.dataTextId);
+    || userSelectData.selectedDataStoreId !== innerViewModel.dataStoreId
+    || userSelectData.selectedDataModelId !== innerViewModel.dataModelId
+    || userSelectData.selectedDataValueId !== innerViewModel.dataValueId
+    || userSelectData.selectedDataTextId !== innerViewModel.dataTextId;
 };
 
 class FullToolbar extends React.Component {
@@ -65,7 +69,7 @@ class FullToolbar extends React.Component {
             </div>
             <div>
               <PropPathTextInput id={this.props.selectedViewModel.id} path="elementId" value={this.props.elementId}
-                persistState={false} onBlur={this.props.onBlurName} onChangeExternal={this.props.onChangeElementId}
+                persistState={false} onChangeExternal={this.props.onChangeElementId}
               />
             </div>
           </div>
@@ -127,40 +131,38 @@ FullToolbar.propTypes = {
   onClickSave: PropTypes.func,
   onClickRevert: PropTypes.func,
   elementId: PropTypes.string,
-  onBlurName: PropTypes.func,
   onChangeElementId: PropTypes.func,
   toolbarDisabled: PropTypes.bool,
   needsSaving: PropTypes.bool
 };
 
-FullToolbar.contextTypes = { store: PropTypes.object };
-
 const mapStateToProps = (state, ownProps) => {
 
   const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
   const dataStores = dataStoreModelUtils.getDataStores(dataUniverse);
-  let selectedDataStoreId = ownProps.selectedViewModel.dataStoreId;
-  selectedDataStoreId = (selectedDataStoreId !== null) ? selectedDataStoreId : DDL_UNSET;
+  const selectedDataStoreId = !!ownProps.selectedViewModel.dataStoreId ? ownProps.selectedViewModel.dataStoreId : DDL_UNSET;
 
-  let selectedDataStore = DDL_UNSET;
   let selectedDataModelId = DDL_UNSET;
   let selectedDataValueId = DDL_UNSET;
   let selectedDataTextId = DDL_UNSET;
   let collections = [];
   let fields = [];
   if (selectedDataStoreId !== DDL_UNSET) {
-    selectedDataStore = _.find(dataStores, { id: selectedDataStoreId });
+    const selectedDataStore = _.find(dataStores, { id: selectedDataStoreId });
     if (selectedDataStore) {
       collections = selectedDataStore.children;
     }
-    selectedDataModelId = ownProps.selectedViewModel.dataModelId;
+    selectedDataModelId = !!ownProps.selectedViewModel.dataModelId ? ownProps.selectedViewModel.dataModelId : DDL_UNSET;
 
     const dataModel = _.find(collections, { id: selectedDataModelId });
     if (dataModel) {
       fields = dataModel.children;
     }
-    selectedDataValueId = ownProps.selectedViewModel.dataValueId;
-    selectedDataTextId = ownProps.selectedViewModel.dataTextId;
+
+    if (selectedDataModelId !== DDL_UNSET) {
+      selectedDataValueId = !!ownProps.selectedViewModel.dataValueId ? ownProps.selectedViewModel.dataValueId : DDL_UNSET;
+      selectedDataTextId = !!ownProps.selectedViewModel.dataTextId ? ownProps.selectedViewModel.dataTextId : DDL_UNSET;
+    }
   }
 
   let elementId = ownProps.selectedViewModel.elementId;
@@ -193,119 +195,130 @@ const mapStateToProps = (state, ownProps) => {
   return Object.assign(result, { needsSaving, toolbarDisabled: needsSaving });
 };
 
-const isSaveButtonDisabled = (dispatch, ownProps, disabled) => {
-  dispatch(actionUpdateViewPropertyValue(ownProps.selectedViewModel.id, 'isSaveButtonDisabled', disabled, true));
-};
-
-const updateSelectChange = (dispatch, ownProps, event, propertyName) => {
-  const viewModel = ownProps.selectedViewModel;
-
-  dispatch(actionUpdateViewPropertyValue(viewModel.id, propertyName, parseInt(event.target.value, 10), true));
-};
-
-const update = (ownProps) => {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    const viewModel = ownProps.selectedViewModel.viewModel;
-    const model = graphTraversal.find(state.model, viewModel.id);
-    const webPage = stateUtil.findAncestorByTypeLabel(state.model, model, ComponentTypes.WebPage);
-
-    const isUnique = validationUtils.isUnique(webPage, model, 'elementId', ownProps.selectedViewModel.elementId);
-    if (!isUnique) {
-      dispatch(actionShowErrorModal('Select Field Error', 'Encountered an error trying to save the name value. The value in the \'name\' field is not unique within the webpage.', actionHideCurrentModal()));
-    } else {
-      viewModel.elementId = ownProps.selectedViewModel.elementId;
-      viewModel.dataStoreId = ownProps.selectedViewModel.selectedDataStoreId;
-      viewModel.dataModelId = ownProps.selectedViewModel.selectedDataModelId;
-      viewModel.dataValueId = ownProps.selectedViewModel.selectedDataValueId;
-      viewModel.dataTextId = ownProps.selectedViewModel.selectedDataTextId;
-
-      const successCallback = () => {
-        dispatch(actionPageDoesNotNeedSaving(ownProps.selectedViewModel.id));
-        isSaveButtonDisabled(dispatch, ownProps, true);
-      };
-
-      viewModelCreator.update(dispatch, ownProps.selectedViewModel, successCallback);
-    }
-  };
-};
-
 const getOriginalModelFromViewModel = (state, selectViewModel) => {
   const viewModel = selectViewModel.viewModel;
   return graphTraversal.find(state.model, viewModel.id);
 };
 
-const revertChanges = (ownProps, event) => {
+const COMPONENT_KEY = f22Uuid.generate();
+const UPDATE_SELECT_CHANGE = `${COMPONENT_KEY}-UPDATE_SELECT_CHANGE`;
+const fn = (actionStatePackage, args) => {
+  const stateNew = actionStatePackage.stateNew;
+  const view = graphTraversal.find(stateNew, args.viewId);
+
+  view[args.propertyName] = args.newValue;
+
+  const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(stateNew, args.viewId);
+  pageAndSelected.pageViewModel.needsSaving = args.needsSaving;
+
+  stateFixer.fix(actionStatePackage.jsonStateOld, JSON.stringify(stateNew));
+
+  return stateNew;
+};
+ActionRegistration.register(UPDATE_SELECT_CHANGE, fn);
+
+const updateSelectChange = (ownProps, newSelection, propertyName) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const mergedProps = _.cloneDeep(ownProps);
+    mergedProps.selectedViewModel[propertyName] = newSelection;
+
+    const props = mapStateToProps(state, mergedProps);
+
+    ActionRegistration.invoke(dispatch, UPDATE_SELECT_CHANGE, { viewId: ownProps.selectedViewModel.id, propertyName, newValue: parseInt(newSelection, 10), needsSaving: props.needsSaving });
+  };
+};
+
+const save = (ownProps) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const props = mapStateToProps(state, ownProps);
+
+    if (props.needsSaving) {
+      const viewModel = props.selectedViewModel.viewModel;
+      const model = graphTraversal.find(state.model, viewModel.id);
+      const webPage = stateUtil.findAncestorByTypeLabel(state.model, model, ComponentTypes.WebPage);
+
+      const isUnique = validationUtils.isUnique(webPage, model, 'elementId', props.selectedViewModel.elementId);
+      if (!isUnique) {
+        dispatch(actionShowErrorModal('Select Field Error', 'Encountered an error trying to save the name value. The value in the \'name\' field is not unique within the webpage.', actionHideCurrentModal()));
+      } else {
+        viewModel.elementId = props.elementId;
+        viewModel.dataStoreId = props.selectedDataStoreId;
+        viewModel.dataModelId = props.selectedDataModelId;
+        viewModel.dataValueId = props.selectedDataValueId;
+        viewModel.dataTextId = props.selectedDataTextId;
+
+        const setPageDoesNotNeedSaving = (stateThing) => {
+          const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(stateThing, props.selectedViewModel.id);
+          pageAndSelected.pageViewModel.needsSaving = false;
+        };
+
+        viewModelCreator.update(dispatch, props.selectedViewModel, undefined, setPageDoesNotNeedSaving);
+      }
+    }
+  };
+};
+
+const revertChanges = (ownProps) => {
   return (dispatch, getState) => {
     const state = getState();
 
     const selectViewModel = ownProps.selectedViewModel;
     const model = getOriginalModelFromViewModel(state, selectViewModel);
 
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'elementId', model.elementId, true));
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataStoreId', model.dataStoreId, true));
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataModelId', model.dataModelId, true));
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataValueId', model.dataValueId, true));
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataTextId', model.dataTextId, true));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'elementId', model.elementId, false));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataStoreId', model.dataStoreId, false));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataModelId', model.dataModelId, false));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataValueId', model.dataValueId, false));
+    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'dataTextId', model.dataTextId, false));
 
     dispatch(actionPageDoesNotNeedSaving(ownProps.selectedViewModel.id));
   };
 };
 
+const changeElementId = (ownProps, newElementId) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    let props = _.cloneDeep(ownProps);
+    props.elementId = newElementId;
+    props = mapStateToProps(state, ownProps);
+
+    if (props.needsSaving) {
+      dispatch(actionUpdateViewPropertyValue(props.selectedViewModel.id, 'elementId', newElementId, true));
+    }
+  };
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onBlurName: () => {
-      const viewModel = ownProps.selectedViewModel;
-
-      if (viewModel.elementId !== viewModel.viewModel.elementId) {
-        isSaveButtonDisabled(dispatch, ownProps, false);
-      }
-    },
     onChangeDataStore: (event) => {
-      updateSelectChange(dispatch, ownProps, event, 'dataStoreId');
+      const newSelection = event.target.value;
+      dispatch(updateSelectChange(ownProps, newSelection, 'dataStoreId'));
     },
     onChangeCollection: (event) => {
-      updateSelectChange(dispatch, ownProps, event, 'dataModelId');
+      const newSelection = event.target.value;
+      dispatch(updateSelectChange(ownProps, newSelection, 'dataModelId'));
     },
     onChangeDataValue: (event) => {
-      updateSelectChange(dispatch, ownProps, event, 'dataValueId');
+      const newSelection = event.target.value;
+      dispatch(updateSelectChange(ownProps, newSelection, 'dataValueId'));
     },
     onChangeDataText: (event) => {
-      updateSelectChange(dispatch, ownProps, event, 'dataTextId');
+      const newSelection = event.target.value;
+      dispatch(updateSelectChange(ownProps, newSelection, 'dataTextId'));
     },
     onClickSave: () => {
-      dispatch(update(ownProps));
+      dispatch(save(ownProps));
     },
-    onClickRevert: (event) => {
-      dispatch(revertChanges(ownProps, event));
+    onClickRevert: () => {
+      dispatch(revertChanges(ownProps));
     },
     onChangeElementId: (event) => {
-      // c.l(`event.target.value: ${event.target.value}`);
-      // dispatch(updateElementId(ownProps, event.target.value));
-      const vm = ownProps.selectedViewModel;
-      const userSelectData = {
-        elementId: event.target.value,
-        selectedDataStoreId: vm.dataStoreId,
-        selectedDataModelId: vm.dataModelId,
-        selectedDataValueId: vm.dataValueId,
-        selectedDataTextId: vm.dataTextId
-      };
-
-      c.l(`vm.dataStoreId: ${vm.dataStoreId}`);
-      const needsSaving = getIsNeedsSaving(userSelectData, ownProps);
-
-      c.lo(ownProps, 'ownProps: ');
-      c.lo(userSelectData, 'userSelectData: ');
-
-      c.l(`elementId: ${userSelectData.elementId}`);
-      c.l(`NeedsSaving: ${needsSaving}`);
-
-      if (needsSaving) {
-        dispatch(actionPageNeedsSaving(vm.id));
-      } else {
-        dispatch(actionPageDoesNotNeedSaving(vm.id));
-      }
+      dispatch(changeElementId(ownProps, event.target.value));
     }
   };
 };

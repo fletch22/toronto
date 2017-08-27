@@ -16,7 +16,7 @@ import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
 import viewUtils from '../views/viewUtils';
 import ViewTypes from '../views/ViewTypes';
-import ConfigureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
+import ActionRegistration from '../actions/ActionRegistration';
 
 const getBoundingClientRect = (selectedElementId) => {
   let result = null;
@@ -629,6 +629,18 @@ const reducer = (state = defaultState.getInstance(), action) => {
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;
+    }
+    case ACTIONS.types.PROXY.INVOKE: {
+      const key = action.payload.key;
+      const args = action.payload.args;
+
+      const actionStatePackage = {
+        state,
+        stateNew,
+        jsonStateOld
+      };
+
+      return ActionRegistration.execute(actionStatePackage, key, args);
     }
     default: {
       return state;
