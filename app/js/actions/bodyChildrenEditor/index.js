@@ -6,7 +6,8 @@ export const ACTIONS = {
   TOGGLE_LAYOUT_MINION_BORDERS: 'TOGGLE_LAYOUT_MINION_BORDERS',
   SET_DATA_NARRATIVE_VIEW_PROPS: 'SET_DATA_NARRATIVE_VIEW_PROPS',
   PAGE_NEEDS_SAVING: 'PAGE_NEEDS_SAVING',
-  PAGE_DOES_NOT_NEED_SAVING: 'PAGE_DOES_NOT_NEED_SAVING'
+  PAGE_DOES_NOT_NEED_SAVING: 'PAGE_DOES_NOT_NEED_SAVING',
+  SET_PAGE_NEEDS_SAVING: 'SET_PAGE_NEEDS_SAVING',
 };
 
 export const actionSetCurrentBodyTool = (viewModelId) => ({
@@ -59,6 +60,14 @@ export const actionPageDoesNotNeedSaving = (viewId) => ({
   type: ACTIONS.PAGE_DOES_NOT_NEED_SAVING,
   payload: {
     viewId
+  }
+});
+
+export const actionSetPageNeedsSaving = (viewId, needsSaving) => ({
+  type: ACTIONS.SET_PAGE_NEEDS_SAVING,
+  payload: {
+    viewId,
+    needsSaving
   }
 });
 

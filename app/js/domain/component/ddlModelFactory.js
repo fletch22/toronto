@@ -15,11 +15,11 @@ class DdlModelFactory extends ModelFactory {
     return {
       parentId: model.parentId,
       id,
-      elementId: model.elementId,
-      dataStoreId: dataStoreIdNumber,
-      dataModelId: model.dataModelId,
-      dataValueId: model.dataValueId,
-      dataTextId: model.dataTextId,
+      elementId: model.elementId || '-1',
+      dataStoreId: dataStoreIdNumber || '-1',
+      dataModelId: model.dataModelId || '-1',
+      dataValueId: model.dataValueId || '-1',
+      dataTextId: model.dataTextId || '-1',
       typeLabel: ComponentTypes.DropDownListbox,
       style: model.style || null
     };

@@ -14,21 +14,20 @@ import Button from '../../../component/bodyChildren/toolbar/Button';
 import stateUtil from '../../../util/stateUtil';
 import graphTraversal from '../../../state/graphTraversal';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
-import ActionRegistration from '../../../actions/ActionRegistration';
-import f22Uuid from '../../../util/f22Uuid';
+import ActionInvoker from '../../../actions/ActionInvoker';
 import stateFixer from '../../../domain/stateFixer';
 import actionBodyChildSelectorHandler from '../../../reducers/actionBodyChildSelectorHandler';
 
-const DDL_UNSET = -1;
+export const DDL_UNSET = -1;
 
-const getIsNeedsSaving = (userSelectData, data) => {
-  const innerViewModel = data.selectedViewModel.viewModel;
+const getIsNeedsSaving = (props) => {
+  const innerViewModel = props.selectedViewModel.viewModel;
 
-  return userSelectData.elementId !== innerViewModel.elementId
-    || userSelectData.selectedDataStoreId !== innerViewModel.dataStoreId
-    || userSelectData.selectedDataModelId !== innerViewModel.dataModelId
-    || userSelectData.selectedDataValueId !== innerViewModel.dataValueId
-    || userSelectData.selectedDataTextId !== innerViewModel.dataTextId;
+  return props.elementId !== innerViewModel.elementId
+    || props.selectedDataStoreId !== innerViewModel.dataStoreId
+    || props.selectedDataModelId !== innerViewModel.dataModelId
+    || props.selectedDataValueId !== innerViewModel.dataValueId
+    || props.selectedDataTextId !== innerViewModel.dataTextId;
 };
 
 class FullToolbar extends React.Component {
@@ -132,7 +131,6 @@ FullToolbar.propTypes = {
   onClickRevert: PropTypes.func,
   elementId: PropTypes.string,
   onChangeElementId: PropTypes.func,
-  toolbarDisabled: PropTypes.bool,
   needsSaving: PropTypes.bool
 };
 
@@ -155,19 +153,12 @@ const mapStateToProps = (state, ownProps) => {
     selectedDataModelId = !!ownProps.selectedViewModel.dataModelId ? ownProps.selectedViewModel.dataModelId : DDL_UNSET;
 
     const dataModel = _.find(collections, { id: selectedDataModelId });
-    if (dataModel) {
-      fields = dataModel.children;
-    }
+    fields = !!dataModel ? dataModel.children : [];
 
     if (selectedDataModelId !== DDL_UNSET) {
       selectedDataValueId = !!ownProps.selectedViewModel.dataValueId ? ownProps.selectedViewModel.dataValueId : DDL_UNSET;
       selectedDataTextId = !!ownProps.selectedViewModel.dataTextId ? ownProps.selectedViewModel.dataTextId : DDL_UNSET;
     }
-  }
-
-  let elementId = ownProps.selectedViewModel.elementId;
-  if (elementId === null) {
-    elementId = ownProps.selectedViewModel.viewModel.elementId;
   }
 
   const result = {
@@ -179,20 +170,12 @@ const mapStateToProps = (state, ownProps) => {
     fields,
     selectedDataValueId,
     selectedDataTextId,
-    elementId
+    elementId: ownProps.selectedViewModel.elementId
   };
 
-  const changeData = {
-    elementId,
-    selectedDataStoreId,
-    selectedDataModelId,
-    selectedDataValueId,
-    selectedDataTextId
-  };
+  const needsSaving = getIsNeedsSaving(result);
 
-  const needsSaving = getIsNeedsSaving(changeData, result);
-
-  return Object.assign(result, { needsSaving, toolbarDisabled: needsSaving });
+  return { ...result, needsSaving };
 };
 
 const getOriginalModelFromViewModel = (state, selectViewModel) => {
@@ -200,9 +183,7 @@ const getOriginalModelFromViewModel = (state, selectViewModel) => {
   return graphTraversal.find(state.model, viewModel.id);
 };
 
-const COMPONENT_KEY = f22Uuid.generate();
-const UPDATE_SELECT_CHANGE = `${COMPONENT_KEY}-UPDATE_SELECT_CHANGE`;
-const fn = (actionStatePackage, args) => {
+const stateUpdateSelectChange = (actionStatePackage, args) => {
   const stateNew = actionStatePackage.stateNew;
   const view = graphTraversal.find(stateNew, args.viewId);
 
@@ -215,7 +196,6 @@ const fn = (actionStatePackage, args) => {
 
   return stateNew;
 };
-ActionRegistration.register(UPDATE_SELECT_CHANGE, fn);
 
 const updateSelectChange = (ownProps, newSelection, propertyName) => {
   return (dispatch, getState) => {
@@ -226,7 +206,7 @@ const updateSelectChange = (ownProps, newSelection, propertyName) => {
 
     const props = mapStateToProps(state, mergedProps);
 
-    ActionRegistration.invoke(dispatch, UPDATE_SELECT_CHANGE, { viewId: ownProps.selectedViewModel.id, propertyName, newValue: parseInt(newSelection, 10), needsSaving: props.needsSaving });
+    ActionInvoker.invoke(dispatch, stateUpdateSelectChange, { viewId: ownProps.selectedViewModel.id, propertyName, newValue: parseInt(newSelection, 10), needsSaving: props.needsSaving });
   };
 };
 
@@ -284,7 +264,7 @@ const changeElementId = (ownProps, newElementId) => {
     const state = getState();
 
     let props = _.cloneDeep(ownProps);
-    props.elementId = newElementId;
+    props.selectedViewModel.elementId = newElementId;
     props = mapStateToProps(state, ownProps);
 
     if (props.needsSaving) {

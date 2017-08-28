@@ -4,10 +4,10 @@ export const ActionTypes = {
   }
 };
 
-export const actionInvokeProxy = (key, args) => ({
+export const actionInvokeProxy = (fnHash, args) => ({
   type: ActionTypes.PROXY.INVOKE,
   payload: {
-    key,
+    fnHash,
     args
   }
 });

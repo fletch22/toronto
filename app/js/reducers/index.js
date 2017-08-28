@@ -16,7 +16,7 @@ import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
 import viewUtils from '../views/viewUtils';
 import ViewTypes from '../views/ViewTypes';
-import ActionRegistration from '../actions/ActionRegistration';
+import actionInvoker from '../actions/ActionInvoker';
 
 const getBoundingClientRect = (selectedElementId) => {
   let result = null;
@@ -596,7 +596,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(state, viewId);
       pageAndSelected.pageViewModel.needsSaving = true;
-      pageAndSelected.selectedViewModel.isSaveButtonDisabled = false;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
@@ -609,7 +608,18 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(state, viewId);
       pageAndSelected.pageViewModel.needsSaving = false;
-      pageAndSelected.selectedViewModel.isSaveButtonDisabled = true;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.SET_PAGE_NEEDS_SAVING: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+      const needsSaving = payload.needsSaving;
+
+      const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(state, viewId);
+      pageAndSelected.pageViewModel.needsSaving = needsSaving;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
@@ -631,7 +641,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.PROXY.INVOKE: {
-      const key = action.payload.key;
+      const fnHash = action.payload.fnHash;
       const args = action.payload.args;
 
       const actionStatePackage = {
@@ -640,7 +650,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
         jsonStateOld
       };
 
-      return ActionRegistration.execute(actionStatePackage, key, args);
+      return actionInvoker.execute(actionStatePackage, fnHash, args);
     }
     default: {
       return state;

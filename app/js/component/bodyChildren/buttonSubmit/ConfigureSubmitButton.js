@@ -5,7 +5,7 @@ class ConfigureSubmitButton extends React.Component {
   render() {
     return (
       <div>
-        <Button faClass="fa fa-cog " onClick={this.props.onClick} tooltipText="Configure Select" />
+        <Button faClass="fa fa-cog " onClick={this.props.onClick} tooltipText="Configure Select" disabled={this.props.disabled} />
       </div>
     );
   }
@@ -13,7 +13,8 @@ class ConfigureSubmitButton extends React.Component {
 
 ConfigureSubmitButton.propTypes = {
   viewModel: PropTypes.object,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool
 };
 
 export default ConfigureSubmitButton;
