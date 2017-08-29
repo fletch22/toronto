@@ -22,10 +22,6 @@ class FullToolbar extends React.Component {
               This is a <b>new</b> Div component.
             </div>
           </div>
-          <div className="full-toolbar-data flex-normal">
-            <Button faClass="fa-cloud-upload" onClick={this.props.onClickSave} tooltipText="Save" disabled={this.props.isSaveButtonDisabled} />
-            <Button faClass="fa-undo" onClick={this.props.onClickRevert} tooltipText="Revert" />
-          </div>
           <div className="full-toolbar-data flex-bc">
             <label>Flow<br />Direction:</label>
             <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
@@ -49,41 +45,18 @@ class FullToolbar extends React.Component {
 
 FullToolbar.propTypes = {
   selectedViewModel: PropTypes.object,
-  onClickSave: PropTypes.func,
-  onClickRevert: PropTypes.func,
-  isSaveButtonDisabled: PropTypes.bool,
-  elementId: PropTypes.string,
-  onBlurName: PropTypes.func,
-  label: PropTypes.string,
   onSelectFlowDirection: PropTypes.func,
   style: PropTypes.string
 };
 
 const mapStateToProps = (state, ownProps) => {
-  let elementId = ownProps.selectedViewModel.elementId;
-  if (elementId === null) {
-    elementId = ownProps.selectedViewModel.viewModel.elementId;
-  }
-
   return {
-    selectedViewModel: ownProps.selectedViewModel,
-    isSaveButtonDisabled: ownProps.selectedViewModel.isSaveButtonDisabled,
-    elementId,
-    label: ownProps.selectedViewModel.label,
     style: ownProps.selectedViewModel.viewModel.style
   };
 };
 
-const isSaveButtonDisabled = (dispatch, ownProps, disabled) => {
-  dispatch(actionUpdateViewPropertyValue(ownProps.selectedViewModel.id, 'isSaveButtonDisabled', disabled, true));
-};
-
-const update = (ownProps) => {
+const selectFlowDirection = (ownProps, event) => {
   return (dispatch) => {
-    const successCallback = () => {
-      isSaveButtonDisabled(dispatch, ownProps, true);
-    };
-
     const selectViewModel = ownProps.selectedViewModel;
     const viewModel = selectViewModel.viewModel;
 
@@ -95,56 +68,12 @@ const update = (ownProps) => {
     styleString = JSON.stringify(style);
     viewModel.style = styleString;
 
-    viewModelCreator.update(dispatch, selectViewModel, successCallback);
-  };
-};
-
-
-const revertChanges = (ownProps) => {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    const selectViewModel = ownProps.selectedViewModel;
-    const viewModel = selectViewModel.viewModel;
-
-    const model = graphTraversal.find(state.model, viewModel.id);
-
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'viewModel.style', model.style, true));
-  };
-};
-
-const selectFlowDirection = (ownProps, event) => {
-  return (dispatch) => {
-    const selectViewModel = ownProps.selectedViewModel;
-    const viewModel = selectViewModel.viewModel;
-
-    const styleString = viewModel.style;
-    const style = JSON.parse(styleString);
-
-    style.flexDirection = event.target.value;
-
-    dispatch(actionUpdateViewPropertyValue(selectViewModel.id, 'viewModel.style', JSON.stringify(style), false));
-    isSaveButtonDisabled(dispatch, ownProps, false);
+    viewModelCreator.update(dispatch, selectViewModel);
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onBlurName: () => {
-      const viewModel = ownProps.selectedViewModel;
-
-      if (viewModel.elementId !== viewModel.viewModel.elementId || viewModel.label !== viewModel.viewModel.label) {
-        isSaveButtonDisabled(dispatch, ownProps, false);
-      }
-    },
-    onClickSave: (event) => {
-      if (!ownProps.selectedViewModel.isSaveButtonDisabled) {
-        dispatch(update(ownProps, event));
-      }
-    },
-    onClickRevert: (event) => {
-      dispatch(revertChanges(ownProps, event));
-    },
     onSelectFlowDirection: (event) => {
       dispatch(selectFlowDirection(ownProps, event));
     }
