@@ -10,25 +10,19 @@ class Body extends React.Component {
   render() {
     const children = (this.props.children) ? this.props.children : [];
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
-
     return (
-      <div>
-        <table style={{ width: '100%', height: '100%' }}>
-          <tbody>
-            <tr>
-              <td className="body-children-toolbar-col">
-                <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
-              </td>
-              <td className={wrapperClass} style={{ width: '1300px', minWidth: '1300px', maxWidth: '1300px' }} data-viewid={this.props.viewModel.id} onClick={this.props.selectChild}>
-                {
-                  children.map((child) =>
-                    <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
-                  )
-                }
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="flex-pseudo-modal" style={{ height: '100%' }}>
+        <div className="body-children-toolbar-col">
+          <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
+        </div>
+        <div id={this.props.id} className={wrapperClass} style={{ flexGrow: 1, marginLeft: '4px' }} onClick={this.props.selectChild}>
+          {
+            children.map((child) =>
+              <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
+            )
+          }
+        </div>
+        <div style={{ width: '4px' }} />
       </div>
     );
   }
@@ -55,6 +49,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
+    id: ownProps.id,
     children,
     selectedViewModel,
     isSelected: selectedChildViewId === ownProps.id
@@ -63,10 +58,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    // This and the tags above can be abstracted into it's own tag.
-    onClick: (event) => {
+    selectChild: (event) => {
       event.stopPropagation();
-      dispatch(actionSetCurrentBodyTool(event.currentTarget.dataset.viewid));
+      dispatch(actionSetCurrentBodyTool(ownProps.id));
     }
   };
 };

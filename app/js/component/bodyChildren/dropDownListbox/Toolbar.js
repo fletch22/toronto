@@ -10,7 +10,7 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div>
-        <ConfigureDdl viewModel={this.props.selectedViewModel} onClick={this.props.onConfigClick} />
+        <ConfigureDdl viewModel={this.props.selectedViewModel} onClick={this.props.onConfigClick} disabled={this.props.disabled} />
       </div>
     );
   }
@@ -18,13 +18,16 @@ class Toolbar extends React.Component {
 
 Toolbar.propTypes = {
   selectedViewModel: PropTypes.object,
-  onConfigClick: PropTypes.func
+  onConfigClick: PropTypes.func,
+  disabled: PropTypes.bool
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onConfigClick: () => {
-      dispatch(actionCreatePseudoModal(PseudoModalTypes.WizardTypes.ConfigureDdl, ownProps.selectedViewModel.id));
+      if (!ownProps.disabled) {
+        dispatch(actionCreatePseudoModal(PseudoModalTypes.WizardTypes.ConfigureDdl, ownProps.selectedViewModel.id));
+      }
     }
   };
 };

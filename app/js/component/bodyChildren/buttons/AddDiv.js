@@ -9,7 +9,7 @@ class AddDiv extends React.Component {
   render() {
     return (
       <div>
-        <Button faClass="fa-square-o" onClick={this.props.addDiv} tooltipText="Add Div" />
+        <Button faClass="fa-square-o" onClick={this.props.addDiv} tooltipText="Add Div" disabled={this.props.disabled} />
       </div>
     );
   }
@@ -17,7 +17,8 @@ class AddDiv extends React.Component {
 
 AddDiv.propTypes = {
   viewModel: PropTypes.object,
-  addDiv: PropTypes.func
+  addDiv: PropTypes.func,
+  disabled: PropTypes.bool
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {

@@ -27,11 +27,6 @@ class FlagSelContextToolbar extends React.Component {
         description = 'This element is a moveable resizable container for your content.';
         break;
       }
-      case ComponentTypes.Div: {
-        toolbar = <DivToolbar selectedViewModel={this.props.selectedViewModel} />;
-        description = 'This is basic building block of your site.';
-        break;
-      }
       case ComponentTypes.DropDownListbox: {
         toolbar = <DropDownListboxToolbar selectedViewModel={this.props.selectedViewModel} />;
         description = 'This is a select box.';

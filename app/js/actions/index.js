@@ -3,6 +3,7 @@ import dashboard from './dashboard';
 import { ActionTypes as ModalActionTypes } from './modal';
 import { ActionTypes as WizardActionTypes } from './wizard';
 import { ActionTypes as GridActionTypes } from './grid';
+import { ActionTypes as ProxyActionTypes } from './proxy';
 import { ACTIONS as bodyChildrenEditorActions } from './bodyChildrenEditor/index';
 
 export const ACTIONS = {
@@ -28,7 +29,8 @@ export const ACTIONS = {
     RESTORE_FROM_DISK: 'RESTORE_FROM_DISK',
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
     CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT',
-    CREATE_PSEUDO_MODAL: 'CREATE_PSEUDO_MODAL'
+    CREATE_PSEUDO_MODAL: 'CREATE_PSEUDO_MODAL',
+    SCRIBE_BORDER: 'SCRIBE_BORDER'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -36,6 +38,7 @@ _.extend(ACTIONS.types, ModalActionTypes);
 _.extend(ACTIONS.types, bodyChildrenEditorActions);
 _.extend(ACTIONS.types, WizardActionTypes);
 _.extend(ACTIONS.types, GridActionTypes);
+_.extend(ACTIONS.types, ProxyActionTypes);
 
 export const actionChangeAppLabelInput = (appLabel) => {
   return {
@@ -169,3 +172,6 @@ export const actionCreatePseudoModal = (pseudoModalTypes, viewId) => ({
   }
 });
 
+export const actionScribeBorder = () => ({
+  type: ACTIONS.types.SCRIBE_BORDER
+});

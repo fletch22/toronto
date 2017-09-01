@@ -16,12 +16,57 @@ import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
 import viewUtils from '../views/viewUtils';
 import ViewTypes from '../views/ViewTypes';
-import ConfigureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
+import actionInvoker from '../actions/ActionInvoker';
+
+const getBoundingClientRect = (selectedElementId) => {
+  let result = null;
+  const element = document.getElementById(selectedElementId);
+  if (!!element) {
+    const rectRaw = element.getBoundingClientRect();
+
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    result = {
+      left: parseInt(rectRaw.left, 10) + scrollLeft,
+      top: parseInt(rectRaw.top, 10) + scrollTop,
+      width: parseInt(rectRaw.width, 10),
+      height: parseInt(rectRaw.height, 10)
+    };
+  }
+
+  return result;
+};
+
+const domActionSyncer = (state) => {
+  const borderScrivener = state.borderScrivener;
+
+  if (borderScrivener.selectedElementId) {
+    const rectCurrent = getBoundingClientRect(borderScrivener.selectedElementId);
+    if (rectCurrent) {
+      if (rectCurrent.top !== borderScrivener.top
+        || rectCurrent.left !== borderScrivener.left
+        || rectCurrent.width !== borderScrivener.width
+        || rectCurrent.height !== borderScrivener.height) {
+        /* eslint-disable no-param-reassign */
+        Object.assign(borderScrivener, rectCurrent);
+        borderScrivener.visible = true;
+      }
+    } else {
+      borderScrivener.visible = false;
+    }
+  } else {
+    borderScrivener.visible = false;
+  }
+
+  return state;
+};
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
+
+  domActionSyncer(stateNew);
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
@@ -215,6 +260,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       node[propertyName] = payload.propertyValue;
 
+      node = graphTraversal.find(stateNew, payload.viewId);
+
       if (payload.needsPersisting) {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
@@ -249,7 +296,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TOOL: {
       const intendedSelectedViewModelId = action.payload.viewModelId;
 
-      return actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId);
+      let stateModified = actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId);
+      stateModified = domActionSyncer(stateModified);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateModified));
+
+      return stateModified;
     }
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {
       const childViewModelId = action.payload.viewModelId;
@@ -537,6 +589,68 @@ const reducer = (state = defaultState.getInstance(), action) => {
       }
 
       return stateNew;
+    }
+    case ACTIONS.types.PAGE_NEEDS_SAVING: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(state, viewId);
+      pageAndSelected.pageViewModel.needsSaving = true;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.PAGE_DOES_NOT_NEED_SAVING: {
+
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(state, viewId);
+      pageAndSelected.pageViewModel.needsSaving = false;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.SET_PAGE_NEEDS_SAVING: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+      const needsSaving = payload.needsSaving;
+
+      const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(state, viewId);
+      pageAndSelected.pageViewModel.needsSaving = needsSaving;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.SCRIBE_BORDER: {
+      // Do Nothing
+      return stateNew;
+    }
+    case ACTIONS.types.UNSET_CURRENT_BODY: {
+      const payload = action.payload;
+      const selectedViewId = payload.selectedViewId;
+
+      actionBodyChildSelectorHandler.deselectCurrentComponent(stateNew, selectedViewId);
+      stateNew.borderScrivener.selectedElementId = null;
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.PROXY.INVOKE: {
+      const fnHash = action.payload.fnHash;
+      const args = action.payload.args;
+
+      const actionStatePackage = {
+        state,
+        stateNew,
+        jsonStateOld
+      };
+
+      return actionInvoker.execute(actionStatePackage, fnHash, args);
     }
     default: {
       return state;

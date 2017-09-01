@@ -7,6 +7,7 @@ import StatePackager from '../service/StatePackager';
 import actionComponentCreator from '../reducers/viewModelFactory';
 import ComponentTypes from '../domain/component/ComponentTypes';
 import dancePartnerSynchronizer from '../views/dancePartnerSynchronizer';
+import actionBodyChildSelectorHandler from '../reducers/actionBodyChildSelectorHandler';
 
 class ViewModelCreatorService {
 
@@ -14,11 +15,7 @@ class ViewModelCreatorService {
     this.statePackager = new StatePackager();
   }
 
-  createUpdateChild(dispatch, parentViewModelId, viewModel, successCallback) {
-    return this.createUpdateChildren(dispatch, parentViewModelId, [viewModel], successCallback);
-  }
-
-  createUpdateChildren(dispatch, parentViewModelId, viewModelChildren, successCallback) {
+  createUpdateChildren(dispatch, parentViewModelId, viewModelChildren, successCallback, fnAdditionalStateMutator) {
     const dispatchHelper = () => {
       const createUpdate = (cuDispatch, state) => {
         try {
@@ -34,7 +31,7 @@ class ViewModelCreatorService {
             if (stateViewModel) {
               Object.assign(stateViewModel, viewModel);
             } else {
-              this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
+              // this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
               stateParentViewModel.viewModel.children.push(viewModel);
             }
 
@@ -57,6 +54,10 @@ class ViewModelCreatorService {
           // NOTE: 06-17-2017: This method is meant to help synchronize the dashboard island view with changes to the state elsewhere.
           dancePartnerSynchronizer.update(stateNew);
 
+          if (!!fnAdditionalStateMutator) {
+            fnAdditionalStateMutator(stateNew);
+          }
+
           const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
           return stateSyncService.saveState(statePackage)
             .then((result) => {
@@ -73,10 +74,6 @@ class ViewModelCreatorService {
           return Promise.reject(error);
         }
       };
-
-      if (successCallback === undefined) {
-        c.l('No success callback used.');
-      }
 
       return crudActionCreator.invoke(createUpdate, successCallback);
     };

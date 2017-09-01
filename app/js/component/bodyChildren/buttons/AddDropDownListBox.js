@@ -26,7 +26,7 @@ const createDdl = (ownProps) => {
 
     const nameUnique = ddlModelUtils.getUniqueDdlName(state);
 
-    const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, nameUnique, null, null, null, null);
+    const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, nameUnique);
     bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
   };
 };

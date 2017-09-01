@@ -8,7 +8,8 @@ class StateGetAndDispatch {
   }
 
   init() {
-    this.index = 1;
+    // NOTE: 08-06-2017: Index must be 1. Without it a major bug appears during rewind.
+    this.index = 0;
     this.currentStateClientId = null;
   }
 

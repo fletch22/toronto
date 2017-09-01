@@ -8,16 +8,17 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div>
-        <AddDropDownListbox viewModel={this.props.selectedViewModel} />
-        <AddButtonSubmit viewModel={this.props.selectedViewModel} />
-        <AddDiv viewModel={this.props.selectedViewModel} />
+        <AddDropDownListbox viewModel={this.props.selectedViewModel} disabled={this.props.disabled} />
+        <AddButtonSubmit viewModel={this.props.selectedViewModel} disabled={this.props.disabled} />
+        <AddDiv viewModel={this.props.selectedViewModel} disabled={this.props.disabled} />
       </div>
     );
   }
 }
 
 Toolbar.propTypes = {
-  selectedViewModel: PropTypes.object
+  selectedViewModel: PropTypes.object,
+  disabled: PropTypes.bool
 };
 
 export default Toolbar;

@@ -6,7 +6,8 @@ class ViewFactory {
     return {
       id: f22Uuid.generate(),
       selectedChildViewId: null,
-      isSelected: false
+      isSelected: false,
+      needsSaving: false
     };
   }
 

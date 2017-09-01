@@ -100,8 +100,6 @@ BarChart.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  c.lo(ownProps.data, 'data: ');
-
   return {
     data: ownProps.data,
     size: ownProps.size

@@ -4,26 +4,26 @@ import viewModelCreatorService from './viewModelCreatorService';
 
 class BodyChildrenCreatorService {
 
-  create(dispatch, model, parentViewId) {
+  create(dispatch, model, parentViewId, fnAdditionalStateMutator) {
     const viewModel = viewModelFactory.generateViewModel(parentViewId, model);
 
-    this.persistArrayOfChildren(dispatch, [viewModel], parentViewId);
+    this.persistArrayOfChildren(dispatch, [viewModel], parentViewId, fnAdditionalStateMutator);
   }
 
-  update(dispatch, viewModel, parentViewId) {
-    this.updateChildren(dispatch, [viewModel], parentViewId);
+  update(dispatch, viewModel, parentViewId, fnAdditionalStateMutator) {
+    this.updateChildren(dispatch, [viewModel], parentViewId, fnAdditionalStateMutator);
   }
 
-  updateChildren(dispatch, viewModelChildren, parentViewId) {
-    this.persistArrayOfChildren(dispatch, viewModelChildren, parentViewId);
+  updateChildren(dispatch, viewModelChildren, parentViewId, fnAdditionalStateMutator) {
+    this.persistArrayOfChildren(dispatch, viewModelChildren, parentViewId, fnAdditionalStateMutator);
   }
 
-  persistArrayOfChildren(dispatch, viewModelChildren, parentViewId) {
+  persistArrayOfChildren(dispatch, viewModelChildren, parentViewId, fnAdditionalStateMutator) {
     const successCallback = () => {
       dispatch(actionSetCurrentBodyTool(parentViewId));
     };
 
-    viewModelCreatorService.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback);
+    viewModelCreatorService.createUpdateChildren(dispatch, parentViewId, viewModelChildren, successCallback, fnAdditionalStateMutator);
   }
 }
 

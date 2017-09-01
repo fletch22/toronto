@@ -2,6 +2,15 @@ class DefaultState {
 
   getInstance() {
     return {
+      borderScrivener: {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
+        visible: false,
+        needsUpdate: false,
+        selectedElementId: null
+      },
       views: [],
       dom: {
         hasInitialStateBeenSaved: false,

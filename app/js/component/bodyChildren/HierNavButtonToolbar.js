@@ -7,7 +7,7 @@ class HierNavButtonToolbar extends React.Component {
   render() {
     return (
       <div>
-        <Button faClass="fa-caret-square-o-up" tooltipText="Move up the hierarchy." onClick={this.props.onClick} />
+        <Button faClass="fa-caret-square-o-up" tooltipText="Move up the hierarchy." onClick={this.props.onClick} disabled={this.props.disabled} />
       </div>
     );
   }
@@ -15,14 +15,17 @@ class HierNavButtonToolbar extends React.Component {
 
 HierNavButtonToolbar.propTypes = {
   onClick: PropTypes.func,
-  selectedChildViewId: PropTypes.any
+  selectedChildViewId: PropTypes.any,
+  disabled: PropTypes.bool
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: (event) => {
       event.stopPropagation();
-      dispatch(actionSetCurrentBodyToolToParent(ownProps.selectedChildViewId));
+      if (!ownProps.disabled) {
+        dispatch(actionSetCurrentBodyToolToParent(ownProps.selectedChildViewId));
+      }
     }
   };
 };

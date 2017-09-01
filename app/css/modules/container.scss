@@ -130,6 +130,12 @@ Begin Dashboard
   width: 100%;
 }
 
+.flex-pseudo-modal {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch
+}
+
 .dashboard-canvas .pseudo-modal-content {
   background-color: white;
   padding: 0 0 0 7px;
@@ -174,7 +180,7 @@ Begin Dashboard
 }
 
 .body-children-toolbar-col {
-  vertical-align: top;
+  width: 180px;
 }
 
 .body-children-toolbar-col > .btn-f22-create-layout {
@@ -203,10 +209,13 @@ Begin Dashboard
 }
 
 .body-child-selected {
-  position: relative;
-  outline: 5px solid gray;
-  outline-offset: -5px;
-  z-index: 300000;
+  box-shadow: inset 0px 0px 0px 1px red !important;
+  box-sizing: border-box;
+}
+
+.bc-outline-border {
+  position: absolute;
+  z-index: 30000;
 }
 
 .bc-toolbar-container {
@@ -296,6 +305,7 @@ End Dashboard
 
 .tab-content {
   margin: 5px 1.5px;
+  height: 100%;
 }
 
 .hidden {
@@ -449,7 +459,6 @@ $carousel-transition: 0.2s ease-in-out;
 }
 
 #main .button-submit {
-  width: 80px;
   height: 25px;
   padding: 0;
   margin: 0;
@@ -458,6 +467,12 @@ $carousel-transition: 0.2s ease-in-out;
 
 .flex-normal {
   display: flex;
+}
+
+.flex-bc {
+  display: flex;
+  justify-content: flex-start;
+  flex-grow: 1;
 }
 
 .flex-vertical {
