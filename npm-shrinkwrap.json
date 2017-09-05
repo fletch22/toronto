@@ -11143,6 +11143,21 @@
         }
       }
     },
+    "react-dnd-html5-backend": {
+      "version": "2.4.1",
+      "resolved": "https://registry.npmjs.org/react-dnd-html5-backend/-/react-dnd-html5-backend-2.4.1.tgz",
+      "integrity": "sha1-Q50ryvi9i4elE4a+tRwSiCYYLd0=",
+      "requires": {
+        "lodash": "4.17.4"
+      },
+      "dependencies": {
+        "lodash": {
+          "version": "4.17.4",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz",
+          "integrity": "sha1-eCA6TRwyiuHYbcpkYONptX9AVa4="
+        }
+      }
+    },
     "react-dock": {
       "version": "0.2.4",
       "resolved": "https://registry.npmjs.org/react-dock/-/react-dock-0.2.4.tgz",

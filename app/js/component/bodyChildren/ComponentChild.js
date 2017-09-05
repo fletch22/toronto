@@ -5,8 +5,19 @@ import LayoutMinion from './LayoutMinion';
 import Div from './div/Div';
 import DropDownListbox from './dropDownListbox/DropDownListbox';
 import ButtonSubmit from './buttonSubmit/ButtonSubmit';
+import { DragDropContext as dragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 class ComponentChild extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.moveCard = this.moveCard.bind(this);
+  }
+
+  moveCard(dragIndex, hoverIndex) {
+    c.l(`dragIndex: ${dragIndex}`);
+  }
 
   render() {
     let component;
@@ -28,7 +39,7 @@ class ComponentChild extends React.Component {
         break;
       }
       case ComponentTypes.ButtonSubmit: {
-        component = <ButtonSubmit id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
+        component = <ButtonSubmit id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} moveCard={this.moveCard} />;
         break;
       }
       default: {
@@ -48,5 +59,7 @@ ComponentChild.propTypes = {
   isSelected: PropTypes.bool,
   viewModel: PropTypes.object
 };
+
+ComponentChild = dragDropContext(HTML5Backend)(ComponentChild);
 
 export default ComponentChild;
