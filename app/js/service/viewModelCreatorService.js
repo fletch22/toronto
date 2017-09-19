@@ -7,7 +7,6 @@ import StatePackager from '../service/StatePackager';
 import actionComponentCreator from '../reducers/viewModelFactory';
 import ComponentTypes from '../domain/component/ComponentTypes';
 import dancePartnerSynchronizer from '../views/dancePartnerSynchronizer';
-import actionBodyChildSelectorHandler from '../reducers/actionBodyChildSelectorHandler';
 
 class ViewModelCreatorService {
 

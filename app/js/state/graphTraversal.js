@@ -1,4 +1,4 @@
-import ComponentTypes from '../domain/component/ComponentTypes';
+import _ from 'lodash';
 
 class GraphTraversal {
 
@@ -92,6 +92,15 @@ class GraphTraversal {
         throw new Error(`Encountered problem trying to find ancestor \'${typeLabel}\' in ${JSON.stringify(node)}`);
       }
     }
+  }
+
+  getChildsIndex(array, id) {
+    if (!Array.isArray(array)) {
+      throw new Error('Encountered error while trying to get child\'s index. Passed object is not array.');
+    }
+    return _.findIndex(array, (child) => {
+      return child.id === id;
+    });
   }
 }
 

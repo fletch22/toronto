@@ -652,6 +652,54 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return actionInvoker.execute(actionStatePackage, fnHash, args);
     }
+    case ACTIONS.types.DND.HOVER_OVER: {
+      const payload = action.payload;
+      const draggedId = payload.draggedId;
+      const hoverOveredId = payload.hoverOveredId;
+      const position = payload.position;
+
+      // c.l(`hoid: ${hoverOveredId}; pos: ${position}`);
+      const parentOfHoverOver = graphTraversal.findParent(stateNew, hoverOveredId);
+      const childsIndex = graphTraversal.getChildsIndex(parentOfHoverOver.viewModel.children, hoverOveredId);
+      const targetChildDropIndex = (position === 'before') ? childsIndex - 1 : childsIndex + 1;
+
+      const parentOfDraggedItem = graphTraversal.findParent(stateNew, hoverOveredId);
+      const draggedItemIndex = graphTraversal.getChildsIndex(parentOfHoverOver.viewModel.children, draggedId);
+
+      // c.l(`ParentId: ${parentOfHoverOver.id}; draggedItemIndex: ${draggedItemIndex}`);
+
+      let isMoveLegal = false;
+      if (parentOfDraggedItem.id === parentOfHoverOver.id) {
+        if (draggedItemIndex !== targetChildDropIndex) {
+          isMoveLegal = true;
+        }
+      } else {
+        isMoveLegal = true;
+      }
+
+      if (isMoveLegal) {
+        const dateLastFired = state.dragNDrop.dateLastFired || new Date().getMilliseconds();
+
+        if (new Date().getMilliseconds() - dateLastFired < 1000) {
+          const dnd = {
+            hoverOverId: hoverOveredId,
+            parentOfHoverOverId: parentOfHoverOver.id,
+            draggedId,
+            draggedItemIndex,
+            parentOfDraggedItemId: parentOfDraggedItem.id,
+            targetChildDropIndex,
+            dateLastFired: new Date().getMilliseconds(),
+            position
+          };
+          stateNew.dragNDrop = dnd;
+          return stateNew;
+        } else {
+          return state;
+        }
+      } else {
+        return state;
+      }
+    }
     default: {
       return state;
     }

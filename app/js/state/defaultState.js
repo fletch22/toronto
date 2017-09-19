@@ -2,6 +2,16 @@ class DefaultState {
 
   getInstance() {
     return {
+      dragNDrop: {
+        hoverOverId: null,
+        parentOfHoverOverId: null,
+        draggedId: null,
+        draggedItemIndex: null,
+        parentOfDraggedItemId: null,
+        targetChildDropIndex: null,
+        dateLastFired: null,
+        position: null
+      },
       borderScrivener: {
         left: 0,
         top: 0,

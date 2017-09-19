@@ -1,3 +1,3 @@
 export default {
-  CARD: 'card'
+  GENERIC_ITEM: 'GENERIC_ITEM'
 };

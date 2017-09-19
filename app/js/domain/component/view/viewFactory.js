@@ -7,7 +7,8 @@ class ViewFactory {
       id: f22Uuid.generate(),
       selectedChildViewId: null,
       isSelected: false,
-      needsSaving: false
+      needsSaving: false,
+      canBeDroppedOn: true
     };
   }
 
@@ -30,7 +31,8 @@ class ViewFactory {
   createDivView() {
     return {
       id: f22Uuid.generate(),
-      isSelected: false
+      isSelected: false,
+      canBeDroppedOn: true
     };
   }
 
@@ -43,7 +45,8 @@ class ViewFactory {
       dataValueId: model.dataValueId,
       dataTextId: model.dataTextId,
       isSaveButtonDisabled: true,
-      isSelected: false
+      isSelected: false,
+      canBeDroppedOn: false
     };
   }
 
@@ -70,7 +73,8 @@ class ViewFactory {
       id: f22Uuid.generate(),
       elementId: model.elementId,
       label: model.label,
-      isSelected: false
+      isSelected: false,
+      canBeDroppedOn: false
     };
   }
 
