@@ -32,7 +32,8 @@ class ViewFactory {
     return {
       id: f22Uuid.generate(),
       isSelected: false,
-      canBeDroppedOn: true
+      canBeDroppedOn: true,
+      visibility: true
     };
   }
 
@@ -74,7 +75,8 @@ class ViewFactory {
       elementId: model.elementId,
       label: model.label,
       isSelected: false,
-      canBeDroppedOn: false
+      canBeDroppedOn: false,
+      visibility: true
     };
   }
 

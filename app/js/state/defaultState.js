@@ -6,10 +6,9 @@ class DefaultState {
         hoverOverId: null,
         parentOfHoverOverId: null,
         draggedId: null,
-        draggedItemIndex: null,
+        draggedItemOriginalIndex: null,
         parentOfDraggedItemId: null,
         targetChildDropIndex: null,
-        dateLastFired: null,
         position: null
       },
       borderScrivener: {

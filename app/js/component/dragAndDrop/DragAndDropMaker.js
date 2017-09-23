@@ -9,18 +9,20 @@ const cardSource = {
       id: props.id,
       index: props.index
     };
-  }
-  //,
-  // endDrag(props, monitor) {
-  // const draggedItem = monitor.getItem();
-  // const didDrop = monitor.didDrop();
-  //
-  // c.l(`did: ${draggedItem.id}; props.id: ${props.id}`);
+  },
+  endDrag(props, monitor) {
+    const draggedItem = monitor.getItem();
+    const didDrop = monitor.didDrop();
 
-  // if (didDrop) {
-  //   props.moveCard(draggedItem.id, props.id);
-  // }
-  // }
+    c.l(`endDrop: ${draggedItem.id}; props.id: ${props.id}`);
+
+    if (didDrop) {
+      props.moveAsPhantom(draggedItem.id, props.id);
+    } else {
+      // Cancel drag - make original reappear.
+      props.cancelDrag();
+    }
+  }
 };
 
 
@@ -80,7 +82,7 @@ const isBeforeOrAfter = (component, monitor) => {
 
 const cardTarget = {
   hover(props, monitor, component) {
-    c.l('Hovering...');
+    // c.l('Hovering...');
     const hoverItem = props;
     const dragItem = monitor.getItem();
 
@@ -93,23 +95,19 @@ const cardTarget = {
 
     props.hoverOver(dragItem.id, hoverItem.id, position);
   },
-  canDrop(props, monitor) {
-    return props.canBeDroppedOn;
+  canDrop(props) {
+    return props.viewModel.canBeDroppedOn;
   },
   drop(props, monitor, component) {
     const hoverItem = props;
     const dragItem = monitor.getItem();
 
-    c.l(`did: ${hoverItem.id}; props.id: ${dragItem.id}`);
-
     // Don't replace items with themselves
     if (hoverItem.id === dragItem.id) {
-      return;
+      return undefined;
     }
 
-    const position = isBeforeOrAfter(component, monitor);
-
-    props.moveCard(dragItem.id, hoverItem.id, position);
+    return dragItem;
   }
 };
 
@@ -141,7 +139,10 @@ class DragAndDropMaker {
       canBeDroppedOn: PropTypes.bool,
       isParentHoveredOver: PropTypes.bool,
       parentHoverOvered: PropTypes.object,
-      dragNDrop: PropTypes.object
+      dragNDrop: PropTypes.object,
+      visibility: PropTypes.bool,
+      cancelDrag: PropTypes.func,
+      moveAsPhantom: PropTypes.func
     });
   }
 

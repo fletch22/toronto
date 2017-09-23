@@ -34,7 +34,8 @@ Body.propTypes = {
   selectedViewModel: PropTypes.object,
   selectChild: PropTypes.func,
   isSelected: PropTypes.bool,
-  children: PropTypes.array
+  children: PropTypes.array,
+  numChildren: PropTypes.number
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -52,7 +53,8 @@ const mapStateToProps = (state, ownProps) => {
     id: ownProps.id,
     children,
     selectedViewModel,
-    isSelected: selectedChildViewId === ownProps.id
+    isSelected: selectedChildViewId === ownProps.id,
+    numChildren: children.length
   };
 };
 

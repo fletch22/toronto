@@ -30,12 +30,11 @@ Div.PropTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-
   let parentHoveredOver;
 
-  if (ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId) {
+  // c.l(`This div should have red border: ${ownProps.viewModel.id}: ${ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId}`);
 
-    c.l(`In div.`);
+  if (ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId) {
     const dnd = state.dragNDrop;
     parentHoveredOver = {
       id: dnd.parentOfHoverOverId,

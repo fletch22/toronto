@@ -6780,6 +6780,13 @@
             "rx-lite": "3.1.2",
             "strip-ansi": "3.0.1",
             "through": "2.3.8"
+          },
+          "dependencies": {
+            "lodash": {
+              "version": "3.10.1",
+              "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz",
+              "integrity": "sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y="
+            }
           }
         }
       }
@@ -7514,6 +7521,12 @@
           "resolved": "https://registry.npmjs.org/isbinaryfile/-/isbinaryfile-3.0.2.tgz",
           "integrity": "sha1-Sj6XTsDLqQBNP8bN5yCeppNopiE=",
           "dev": true
+        },
+        "lodash": {
+          "version": "3.10.1",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz",
+          "integrity": "sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y=",
+          "dev": true
         }
       }
     },
@@ -7829,9 +7842,9 @@
       }
     },
     "lodash": {
-      "version": "3.10.1",
-      "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz",
-      "integrity": "sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y="
+      "version": "4.17.4",
+      "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz",
+      "integrity": "sha1-eCA6TRwyiuHYbcpkYONptX9AVa4="
     },
     "lodash-es": {
       "version": "4.17.4",
@@ -8480,6 +8493,11 @@
             "once": "1.4.0",
             "path-is-absolute": "1.0.1"
           }
+        },
+        "lodash": {
+          "version": "3.10.1",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz",
+          "integrity": "sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y="
         },
         "readable-stream": {
           "version": "1.0.34",
@@ -15161,6 +15179,11 @@
             "strip-ansi": "3.0.1",
             "through": "2.3.8"
           }
+        },
+        "lodash": {
+          "version": "3.10.1",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz",
+          "integrity": "sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y="
         }
       }
     },

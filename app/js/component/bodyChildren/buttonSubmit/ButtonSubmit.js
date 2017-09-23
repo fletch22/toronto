@@ -9,12 +9,13 @@ class ButtonSubmit extends BodyChild {
   render() {
     const style = JSON.parse(this.props.viewModel.viewModel.style) || {};
     style.padding = '0 4px';
+    const display = 'block'; //this.props.visibility ? 'block' : 'none';
 
     let classNames = 'button-submit';
     classNames += (this.props.isSelected) ? ' body-child-selected' : '';
 
     return DragAndDropMaker.connectRender(this.props, (
-      <div id={this.props.id} onClick={this.props.onClick} style={{ paddingRight: '4px' }}>
+      <div id={this.props.id} onClick={this.props.onClick} style={{ paddingRight: '4px', display }}>
         <button className={classNames} style={style}>{this.props.label}</button>
       </div>
     ));
@@ -32,14 +33,14 @@ ButtonSubmit.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const viewModel = ownProps.viewModel;
 
-  c.l(`DragNDrop aint falsey: ${!!state.dragNDrop}`);
-
+  const visibility = viewModel.visibility;
   return {
     isSelected: viewModel.isSelected,
     viewModel,
     label: viewModel.viewModel.label,
     canBeDroppedOn: viewModel.canBeDroppedOn,
-    dragNDrop: state.dragNDrop
+    dragNDrop: state.dragNDrop,
+    visibility
   };
 };
 
