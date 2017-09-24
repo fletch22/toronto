@@ -14,8 +14,6 @@ const cardSource = {
     const draggedItem = monitor.getItem();
     const didDrop = monitor.didDrop();
 
-    c.l(`endDrop: ${draggedItem.id}; props.id: ${props.id}`);
-
     if (didDrop) {
       props.moveAsPhantom(draggedItem.id, props.id);
     } else {
@@ -82,13 +80,11 @@ const isBeforeOrAfter = (component, monitor) => {
 
 const cardTarget = {
   hover(props, monitor, component) {
-    // c.l('Hovering...');
     const hoverItem = props;
     const dragItem = monitor.getItem();
 
-    // Don't replace items with themselves
     if (hoverItem.id === dragItem.id) {
-      return;
+      props.hoverOver(dragItem.id, hoverItem.id, null);
     }
 
     const position = isBeforeOrAfter(component, monitor);

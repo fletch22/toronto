@@ -9,22 +9,29 @@ class DndActionHandler {
       dragNDrop.hoverOverId = hoverOveredId;
       const parentOfHoverOver = graphTraversal.findParent(stateNew, dragNDrop.hoverOverId);
       dragNDrop.parentOfHoverOverId = parentOfHoverOver.id;
-      const hoverChildsIndex = graphTraversal.getChildsIndex(parentOfHoverOver.viewModel.children, dragNDrop.hoverOverId);
-      dragNDrop.targetChildDropIndex = (position === 'before') ? hoverChildsIndex : hoverChildsIndex + 1;
+      let hoverChildsIndex = graphTraversal.getChildsIndex(parentOfHoverOver.viewModel.children, dragNDrop.hoverOverId);
+
+      if (dragNDrop.parentOfHoverOverId === dragNDrop.parentOfDraggedItemId) {
+        if (dragNDrop.indexDraggedItem < hoverChildsIndex) {
+          hoverChildsIndex--;
+        }
+      }
+      dragNDrop.indexChildTarget = (position === 'before') ? hoverChildsIndex : hoverChildsIndex + 1;
     }
 
     if (draggedId !== dragNDrop.draggedId) {
       dragNDrop.draggedId = draggedId;
       const draggedItem = graphTraversal.find(stateNew, draggedId);
       const parentOfDraggedItem = graphTraversal.find(stateNew, draggedItem.parentId);
-      dragNDrop.draggedItemOriginalIndex = graphTraversal.getChildsIndex(parentOfDraggedItem.viewModel.children, dragNDrop.draggedId);
+      dragNDrop.indexDraggedItem = graphTraversal.getChildsIndex(parentOfDraggedItem.viewModel.children, dragNDrop.draggedId);
       dragNDrop.parentOfDraggedItemId = draggedItem.parentId;
       draggedItem.visibility = false;
     }
 
     let isMoveLegal = false;
     if (dragNDrop.parentOfDraggedItemId === dragNDrop.parentOfHoverOverId) {
-      if (dragNDrop.draggedItemOriginalIndex !== dragNDrop.targetChildDropIndex) {
+      if (dragNDrop.draggedId !== dragNDrop.hoverOverId
+        && dragNDrop.indexDraggedItem !== dragNDrop.indexChildTarget) {
         isMoveLegal = true;
       }
     } else {

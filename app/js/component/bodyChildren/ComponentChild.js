@@ -122,61 +122,46 @@ const hoverOver = (draggedId, hoverOveredId, position) => {
     }
   };
 };
+
 const moveAsPhantomStateChange = (actionStatePackage) => {
-  c.l('moveAsPhantomStateChange');
   const stateNew = actionStatePackage.stateNew;
   const state = actionStatePackage.state;
 
   const dnd = stateNew.dragNDrop;
 
-  const parentOfDragged = graphTraversal.find(stateNew, dnd.parentOfDraggedItemId);
-  // c.l(`parentOfDragged exists? ${!!parentOfDragged}`);
-  // c.lo(parentOfDragged, 'ParentOfDragg: ');
-  // parentOfDragged.viewModel.children = [];
-  // parentOfDragged.viewModel = JSON.parse(JSON.stringify(parentOfDragged.viewModel)); //{ ...parentOfDragged.viewModel };
-  // c.lo({ ...parentOfDragged.viewModel }, 'ells: ');
-  // c.lo(parentOfDragged.viewModel);
-  // c.l(`dnd.draggedItemOriginalIndex: ${dnd.draggedItemOriginalIndex}`);
+  let endState = state;
+  if (dnd.draggedId !== dnd.hoverOverId) {
+    const parentOfDragged = graphTraversal.find(stateNew, dnd.parentOfDraggedItemId);
+    const draggedItem = parentOfDragged.viewModel.children.splice(dnd.indexDraggedItem, 1)[0];
+    parentOfDragged.viewModel.children = [].concat(parentOfDragged.viewModel.children);
 
-  c.l(parentOfDragged.viewModel.children.length);
-  const draggedItem = parentOfDragged.viewModel.children.splice(dnd.draggedItemOriginalIndex, 1)[0];
-  c.l(parentOfDragged.viewModel.children.length);
-  c.l(`draggedItem exists? ${!!draggedItem}`);
-  // c.lo(draggedItem);
-  parentOfDragged.viewModel.children = [].concat(parentOfDragged.viewModel.children);
-
-  c.l(`Drop index: ${dnd.targetChildDropIndex}`);
-  const parentOfHover = graphTraversal.find(stateNew, dnd.parentOfHoverOverId);
-  parentOfHover.viewModel.children.splice(dnd.targetChildDropIndex, 0, draggedItem);
-  parentOfHover.viewModel.children = [].concat(parentOfHover.viewModel.children);
-
-  // parentOfHover.viewModel = JSON.parse(JSON.stringify(parentOfHover.viewModel));
-
-
-
-
-  return stateNew;
+    const parentOfHover = graphTraversal.find(stateNew, dnd.parentOfHoverOverId);
+    parentOfHover.viewModel.children.splice(dnd.indexChildTarget, 0, draggedItem);
+    draggedItem.parentId = parentOfHover.id;
+    parentOfHover.viewModel.children = [].concat(parentOfHover.viewModel.children);
+    endState = stateNew;
+  }
+  return endState;
 };
 
 const cancelDragStateChange = (actionStatePackage) => {
-  c.l('cancelDragStateChange');
   const stateNew = actionStatePackage.stateNew;
 
   const dnd = stateNew.dragNDrop;
 
   const parentOfHover = graphTraversal.find(stateNew, dnd.parentOfHoverOverId);
-  const draggedItem = parentOfHover.viewModel.children.slice(dnd.targetChildDropIndex, 1);
+  const draggedItem = parentOfHover.viewModel.children.slice(dnd.indexChildTarget, 1);
 
   const parentOfDragged = graphTraversal.find(stateNew, dnd.parentOfDraggedItemId);
-  parentOfDragged.viewModel.children.slice(dnd.draggedItemOriginalIndex, 0, draggedItem);
+  parentOfDragged.viewModel.children.slice(dnd.indexDraggedItem, 0, draggedItem);
 
   stateNew.dragNDrop = {
     hoverOverId: null,
     parentOfHoverOverId: null,
     draggedId: null,
-    draggedItemOriginalIndex: null,
+    indexDraggedItem: null,
     parentOfDraggedItemId: null,
-    targetChildDropIndex: null,
+    indexChildTarget: null,
     position: null
   };
 

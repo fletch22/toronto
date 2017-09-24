@@ -38,7 +38,7 @@ const mapStateToProps = (state, ownProps) => {
     const dnd = state.dragNDrop;
     parentHoveredOver = {
       id: dnd.parentOfHoverOverId,
-      targetChildDropIndex: dnd.targetChildDropIndex
+      indexChildTarget: dnd.indexChildTarget
     };
   }
 
