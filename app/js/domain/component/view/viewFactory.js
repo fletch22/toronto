@@ -85,6 +85,13 @@ class ViewFactory {
       id: f22Uuid.generate()
     };
   }
+
+  createPhantomDropper() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
+
 }
 
 export default new ViewFactory();

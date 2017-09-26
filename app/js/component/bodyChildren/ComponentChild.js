@@ -7,6 +7,7 @@ import LayoutMinion from './LayoutMinion';
 import Div from './div/Div';
 import DropDownListbox from './dropDownListbox/DropDownListbox';
 import ButtonSubmit from './buttonSubmit/ButtonSubmit';
+import PhantomDropper from '../dragAndDrop/PhantomDropper';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import graphTraversal from '../../state/graphTraversal';
@@ -14,6 +15,7 @@ import modalDispatcher from '../../component/modals/modalDispatcher';
 import MoveComponentService from '../../service/MoveComponentService';
 import { actionHoverOver } from '../../actions/dnd/index.js';
 import ActionInvoker from '../../actions/ActionInvoker';
+import phantomDropperModelFactory from '../../domain/component/phantomDropperModelFactory';
 
 class ComponentChild extends React.Component {
   render() {
@@ -29,7 +31,7 @@ class ComponentChild extends React.Component {
       }
       case ComponentTypes.Div: {
         component = (<Div id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected}
-          moveCard={this.props.moveCard} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag}
+          move={this.props.move} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag}
           moveAsPhantom={this.props.moveAsPhantom}
         />);
         break;
@@ -40,9 +42,13 @@ class ComponentChild extends React.Component {
       }
       case ComponentTypes.ButtonSubmit: {
         component = (<ButtonSubmit id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected}
-          moveCard={this.props.moveCard} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag}
+          move={this.props.move} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag}
           moveAsPhantom={this.props.moveAsPhantom}
         />);
+        break;
+      }
+      case ComponentTypes.PhantomDropper: {
+        component = <PhantomDropper id={this.props.id} />;
         break;
       }
       default: {
@@ -61,7 +67,7 @@ ComponentChild.propTypes = {
   id: PropTypes.any,
   isSelected: PropTypes.bool,
   viewModel: PropTypes.object,
-  moveCard: PropTypes.func,
+  move: PropTypes.func,
   hoverOver: PropTypes.func,
   dragNDrop: PropTypes.object,
   cancelDrag: PropTypes.func,
@@ -70,44 +76,76 @@ ComponentChild.propTypes = {
 
 ComponentChild = dragDropContext(HTML5Backend)(ComponentChild);
 
-const persistMove = (draggedId, hoverId, position) => {
+const persistMoveOld = (draggedId, hoverId, position) => {
   return (dispatch, getState) => {
     // c.l(`Persist Move: draggedId: ${draggedId}; hoverId: ${hoverId}`);
 
     const state = getState();
+
     try {
       const jsonStateOld = JSON.stringify(state);
       const stateNew = JSON.parse(jsonStateOld);
 
-      const draggedParentViewModel = graphTraversal.findParent(stateNew, draggedId);
-      const hoverParentViewModel = graphTraversal.findParent(stateNew, hoverId);
+      const draggedItem = graphTraversal.find(stateNew, draggedId);
+      draggedItem.visibility = true;
+      // const draggedParentViewModel = graphTraversal.find(stateNew, draggedItem.parentId);
+      // const hoverParentViewModel = graphTraversal.findParent(stateNew, hoverId);
+      //
+      // const draggedViewModelChildIndex = graphTraversal.getChildsIndex(draggedParentViewModel.viewModel.children, draggedId);
+      // draggedParentViewModel.viewModel.children.splice(draggedViewModelChildIndex, 1);
+      //
+      // const modelId = draggedParentViewModel.viewModel.id;
+      // const draggedParentModel = graphTraversal.findParent(stateNew.model, modelId);
+      //
+      // const hoverModelId = hoverParentViewModel.viewModel.id;
+      // const hoverParentModel = graphTraversal.findParent(stateNew.model, hoverModelId);
+      //
+      // const draggedModelChildIndex = graphTraversal.getChildsIndex(draggedParentModel.children, modelId);
+      // draggedParentModel.children.splice(draggedModelChildIndex, 1);
 
-      const draggedViewModelChildIndex = graphTraversal.getChildsIndex(draggedParentViewModel.viewModel.children, draggedId);
-      draggedParentViewModel.viewModel.children.splice(draggedViewModelChildIndex, 1);
+      return stateNew;
 
-      const modelId = draggedParentViewModel.viewModel.id;
-      const draggedParentModel = graphTraversal.findParent(stateNew.model, modelId);
-
-      const hoverModelId = hoverParentViewModel.viewModel.id;
-      const hoverParentModel = graphTraversal.findParent(stateNew.model, hoverModelId);
-
-      const draggedModelChildIndex = graphTraversal.getChildsIndex(draggedParentModel.children, modelId);
-      draggedParentModel.children.splice(draggedModelChildIndex, 1);
-
-      return MoveComponentService.move(draggedParentModel.id, hoverParentModel.id, modelId)
-        .then((result) => {
-          console.debug('Success Callback.');
-          return Promise.resolve(result);
-        })
-        .catch((error) => {
-          console.debug('Failure Callback.');
-          modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to create/update component.', dispatch);
-          return Promise.reject(error);
-        });
+      // return MoveComponentService.move(draggedParentModel.id, hoverParentModel.id, modelId)
+      //   .then((result) => {
+      //     console.debug('Success Callback.');
+      //     return Promise.resolve(result);
+      //   })
+      //   .catch((error) => {
+      //     console.debug('Failure Callback.');
+      //     modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to create/update component.', dispatch);
+      //     return Promise.reject(error);
+      //   });
     } catch (error) {
       console.error(error);
     }
   };
+};
+
+const persistMove = (actionStatePackage, args) => {
+  const state = actionStatePackage.state;
+  const stateNew = actionStatePackage.stateNew;
+  const draggedId = args[0];
+
+  const draggedItem = graphTraversal.find(stateNew, draggedId);
+  draggedItem.visibility = true;
+
+  // xxx
+  // const draggedParentViewModel = graphTraversal.find(stateNew, draggedItem.parentId);
+  // const hoverParentViewModel = graphTraversal.findParent(stateNew, hoverId);
+  //
+  // const draggedViewModelChildIndex = graphTraversal.getChildsIndex(draggedParentViewModel.viewModel.children, draggedId);
+  // draggedParentViewModel.viewModel.children.splice(draggedViewModelChildIndex, 1);
+  //
+  // const modelId = draggedParentViewModel.viewModel.id;
+  // const draggedParentModel = graphTraversal.findParent(stateNew.model, modelId);
+  //
+  // const hoverModelId = hoverParentViewModel.viewModel.id;
+  // const hoverParentModel = graphTraversal.findParent(stateNew.model, hoverModelId);
+  //
+  // const draggedModelChildIndex = graphTraversal.getChildsIndex(draggedParentModel.children, modelId);
+  // draggedParentModel.children.splice(draggedModelChildIndex, 1);
+
+  return stateNew;
 };
 
 const hoverOver = (draggedId, hoverOveredId, position) => {
@@ -151,6 +189,7 @@ const cancelDragStateChange = (actionStatePackage) => {
 
   const parentOfHover = graphTraversal.find(stateNew, dnd.parentOfHoverOverId);
   const draggedItem = parentOfHover.viewModel.children.slice(dnd.indexChildTarget, 1);
+  draggedItem.visibility = true;
 
   const parentOfDragged = graphTraversal.find(stateNew, dnd.parentOfDraggedItemId);
   parentOfDragged.viewModel.children.slice(dnd.indexDraggedItem, 0, draggedItem);
@@ -170,11 +209,13 @@ const cancelDragStateChange = (actionStatePackage) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    moveCard: (draggedId, hoverId, position) => {
+    move: (draggedId, hoverId, position) => {
       c.l('Move called.');
-      dispatch(persistMove(draggedId, hoverId));
+      // dispatch(persistMove(...arguments));
+      ActionInvoker.invoke(dispatch, persistMove, [draggedId, hoverId, position]);
     },
     hoverOver: (draggedId, hoverOveredId, position) => {
+      c.l('hoverCalled!');
       dispatch(hoverOver(draggedId, hoverOveredId, position));
     },
     cancelDrag: () => {
@@ -193,7 +234,7 @@ const mapStateToProps = (state, ownProps) => {
     id: ownProps.id,
     isSelected: ownProps.isSelected,
     viewModel: ownProps.viewModel,
-    moveCard: ownProps.moveCard,
+    move: ownProps.move,
     hoverOver: ownProps.hoverOver,
     dragNDrop
   };

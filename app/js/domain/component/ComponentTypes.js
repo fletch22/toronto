@@ -13,7 +13,8 @@ const ComponentTypes = {
   LayoutMinion: 'LayoutMinion',
   Div: 'Div',
   DropDownListbox: 'DropDownListbox',
-  DataNarrative: 'DataNarratives'
+  DataNarrative: 'DataNarratives',
+  PhantomDropper: 'PhantomDropper'
 };
 
 export default ComponentTypes;

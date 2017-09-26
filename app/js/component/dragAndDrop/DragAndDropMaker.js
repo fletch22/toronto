@@ -15,7 +15,7 @@ const cardSource = {
     const didDrop = monitor.didDrop();
 
     if (didDrop) {
-      props.moveAsPhantom(draggedItem.id, props.id);
+      props.move(draggedItem.id, props.id);
     } else {
       // Cancel drag - make original reappear.
       props.cancelDrag();
@@ -25,7 +25,10 @@ const cardSource = {
 
 
 const isBeforeOrAfter = (component, monitor) => {
+  c.l(`Component iboa null: ${component === null}`);
   const dom = findDOMNode(component);
+
+  c.lo(dom, 'dom: ');
 
   const style = window.getComputedStyle(dom);
   let isVerticalLayout;
@@ -81,12 +84,20 @@ const isBeforeOrAfter = (component, monitor) => {
 const cardTarget = {
   hover(props, monitor, component) {
     const hoverItem = props;
+
+    if (monitor.isOver({ shallow: false })) {
+      return;
+    }
+
     const dragItem = monitor.getItem();
 
     if (hoverItem.id === dragItem.id) {
-      props.hoverOver(dragItem.id, hoverItem.id, null);
+      props.hoverOver(dragItem.id, hoverItem.id, 'before');
     }
 
+    if (!component) {
+      return;
+    }
     const position = isBeforeOrAfter(component, monitor);
 
     props.hoverOver(dragItem.id, hoverItem.id, position);
@@ -126,7 +137,7 @@ class DragAndDropMaker {
 
   static incorporateEnhancedPropTypes(propTypes) {
     return Object.assign(propTypes, {
-      moveCard: PropTypes.func,
+      move: PropTypes.func,
       hoverOver: PropTypes.func,
       connectDragSource: PropTypes.func.isRequired,
       connectDropTarget: PropTypes.func.isRequired,
