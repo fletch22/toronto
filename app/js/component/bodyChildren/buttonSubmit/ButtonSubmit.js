@@ -4,13 +4,18 @@ import '../../../../css/f22-react-grid-layout.css';
 import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/index';
 import BodyChild from '../BodyChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
+import DropMarker from '../../bodyChildren/DropMarker';
 
 class ButtonSubmit extends BodyChild {
+
+  constructor(props) {
+    super(props);
+    this.render = this.render.bind(this);
+  }
+
   render() {
     const style = JSON.parse(this.props.viewModel.viewModel.style) || {};
     style.padding = '0 4px';
-
-    c.l(`this.props.visibility: ${this.props.visibility}`);
 
     const display = this.props.visibility ? 'block' : 'none';
 
@@ -18,8 +23,9 @@ class ButtonSubmit extends BodyChild {
     classNames += (this.props.isSelected) ? ' body-child-selected' : '';
 
     return DragAndDropMaker.connectRender(this.props, (
-      <div id={this.props.id} onClick={this.props.onClick} style={{ paddingRight: '4px', display }}>
+      <div className="dnd-hover-target" id={this.props.id} onClick={this.props.onClick} style={{ paddingRight: '4px', display }}>
         <button className={classNames} style={style}>{this.props.label}</button>
+        <DropMarker ownerId={this.props.id} />
       </div>
     ));
   }

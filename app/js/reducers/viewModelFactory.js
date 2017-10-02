@@ -132,7 +132,7 @@ class ViewModelFactory {
         break;
       }
       case ComponentTypes.PhantomDropper: {
-        view = viewFactory.createPhantomDropper(model);
+        view = viewFactory.createPhantomDropper();
         break;
       }
       default: {

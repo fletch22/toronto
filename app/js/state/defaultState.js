@@ -9,7 +9,9 @@ class DefaultState {
         indexDraggedItem: null,
         parentOfDraggedItemId: null,
         indexChildTarget: null,
-        position: null
+        phantomDropperId: null,
+        position: null,
+        measurements: null
       },
       borderScrivener: {
         left: 0,

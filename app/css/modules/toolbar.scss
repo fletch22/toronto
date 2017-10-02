@@ -27,6 +27,7 @@
   height: 24px;
   margin: 2px;
   display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
 }
 
 #nuke-and-pave {
@@ -38,6 +39,7 @@
   height: 24px;
   margin: 2px;
   display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
 }
 
 #save-system-to-disk {
@@ -49,6 +51,7 @@
   height: 24px;
   margin: 2px 2px 2px 2px;
   display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
 }
 
 #restore-system-from-disk {
@@ -60,6 +63,7 @@
   height: 24px;
   margin: 2px 2px 2px 2px;
   display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
 }
 
 .toolbar-label {

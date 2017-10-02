@@ -4,11 +4,11 @@ export const ActionTypes = {
   }
 };
 
-export const actionHoverOver = (draggedId, hoverOveredId, position) => ({
+export const actionHoverOver = (draggedId, hoverOveredId, measurements) => ({
   type: ActionTypes.DND.HOVER_OVER,
   payload: {
     draggedId,
     hoverOveredId,
-    position
+    measurements
   }
 });

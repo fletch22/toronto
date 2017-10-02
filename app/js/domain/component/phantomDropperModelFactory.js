@@ -11,7 +11,8 @@ class PhantomDropperModelFactory extends ModelFactory {
       id,
       typeLabel: ComponentTypes.PhantomDropper,
       elementId: model.elementId,
-      style: model.style || null
+      style: model.style || null,
+      canBeDroppedOn: true
     };
   }
 

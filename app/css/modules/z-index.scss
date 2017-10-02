@@ -1,5 +1,6 @@
 $zIndexMax: 1000;
 $zIndexTopMost: 2000;
-$zIndexTimeTravelToolbar: $zIndexTopMost;
-$zIndexTimeTravelToolbarScrim: ($zIndexTopMost - 1);
-$zIndexApplicationToolbar: ($zIndexTopMost - 2);
+$zIndexTopMostBodyChildren: ($zIndexTopMost + 10);
+$zIndexTimeTravelToolbar: ($zIndexTopMostBodyChildren - 1);
+$zIndexTimeTravelToolbarScrim: ($zIndexTimeTravelToolbar - 1);
+$zIndexApplicationToolbar: ($zIndexTimeTravelToolbarScrim - 1);

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import '../../../../css/f22-react-grid-layout.css';
 import ComponentChild from '../ComponentChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
+import DropMarker from '../DropMarker';
 
 class Div extends BodyChild {
   render() {
@@ -14,12 +15,13 @@ class Div extends BodyChild {
     }
 
     return DragAndDropMaker.connectRender(this.props, (
-      <div id={this.props.id} className="flex-bc" onClick={this.componentSelect} style={style}>
+      <div id={this.props.id} className="flex-bc dnd-hover-target" onClick={this.componentSelect} style={style}>
         {
           this.props.children.map((child) =>
             <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
           )
         }
+        <DropMarker ownerId={this.props.id} />
       </div>
     ));
   }

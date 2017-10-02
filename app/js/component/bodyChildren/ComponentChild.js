@@ -48,7 +48,9 @@ class ComponentChild extends React.Component {
         break;
       }
       case ComponentTypes.PhantomDropper: {
-        component = <PhantomDropper id={this.props.id} />;
+        component = (<PhantomDropper id={this.props.id} viewModel={this.props.viewModel} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag}
+          moveAsPhantom={this.props.moveAsPhantom}
+        />);
         break;
       }
       default: {
@@ -121,42 +123,91 @@ const persistMoveOld = (draggedId, hoverId, position) => {
   };
 };
 
-const persistMove = (actionStatePackage, args) => {
+const getDndOnEnd = (state) => {
+  /* eslint-disable no-param-reassign */
+  return {
+    hoverOverId: null,
+    parentOfHoverOverId: null,
+    draggedId: null,
+    indexDraggedItem: null,
+    parentOfDraggedItemId: null,
+    indexChildTarget: null,
+    phantomDropperId: null,
+    position: null,
+    measurements: null
+  };
+};
+
+const persistMove = (actionStatePackage) => {
   const state = actionStatePackage.state;
   const stateNew = actionStatePackage.stateNew;
-  const draggedId = args[0];
+  const dnd = stateNew.dragNDrop;
 
-  const draggedItem = graphTraversal.find(stateNew, draggedId);
-  draggedItem.visibility = true;
+  // Find dragged item vm and parent.
+  const draggedParentViewModel = graphTraversal.find(stateNew, dnd.parentOfDraggedItemId);
+  const draggedViewModel = draggedParentViewModel.viewModel.children[dnd.indexDraggedItem];
 
-  // xxx
-  // const draggedParentViewModel = graphTraversal.find(stateNew, draggedItem.parentId);
-  // const hoverParentViewModel = graphTraversal.findParent(stateNew, hoverId);
-  //
-  // const draggedViewModelChildIndex = graphTraversal.getChildsIndex(draggedParentViewModel.viewModel.children, draggedId);
-  // draggedParentViewModel.viewModel.children.splice(draggedViewModelChildIndex, 1);
-  //
-  // const modelId = draggedParentViewModel.viewModel.id;
-  // const draggedParentModel = graphTraversal.findParent(stateNew.model, modelId);
-  //
-  // const hoverModelId = hoverParentViewModel.viewModel.id;
-  // const hoverParentModel = graphTraversal.findParent(stateNew.model, hoverModelId);
-  //
-  // const draggedModelChildIndex = graphTraversal.getChildsIndex(draggedParentModel.children, modelId);
-  // draggedParentModel.children.splice(draggedModelChildIndex, 1);
+  // Find hover parent.
+  const hoverParentViewModel = graphTraversal.find(stateNew, dnd.parentOfHoverOverId);
+
+  let indexChildTarget = dnd.indexChildTarget;
+
+  // Remove dragged vm item from its parent.
+  draggedParentViewModel.viewModel.children.splice(dnd.indexDraggedItem, 1);
+  draggedParentViewModel.viewModel.children = [].concat(draggedParentViewModel.viewModel.children);
+  if (draggedParentViewModel.id === hoverParentViewModel.id) {
+    if (dnd.indexDraggedItem < indexChildTarget) {
+      indexChildTarget -= 1;
+    }
+  }
+
+  // // Add dragged vm item to hover vm parent.
+  hoverParentViewModel.viewModel.children.splice(indexChildTarget, 0, draggedViewModel);
+  hoverParentViewModel.viewModel.children = [].concat(hoverParentViewModel.viewModel.children);
+  draggedViewModel.parentId = hoverParentViewModel.id;
+
+  // Find dragged model and hover model parent.
+  const draggedParentModel = graphTraversal.find(stateNew.model, draggedViewModel.viewModel.parentId);
+  const draggedItemModel = draggedParentModel.children[dnd.indexDraggedItem];
+
+  // NOTE: 010-01-2017: This can be removed once Drag N Drop seems to be stable.
+  if (!draggedItemModel) {
+    c.l('Aborting!!!!!!');
+    state.dragNDrop = getDndOnEnd();
+    return state;
+  }
+
+  // Last operation on dragged viewModel: set new model parent Id;
+  draggedViewModel.viewModel.parentId = hoverParentViewModel.viewModel.id;
+
+  // Find hover model parent.
+  const hoverParentModel = graphTraversal.find(stateNew.model, hoverParentViewModel.viewModel.id);
+
+  // Remove dragged model item from its parent.
+  draggedParentModel.children.splice(dnd.indexDraggedItem, 1);
+  draggedParentModel.children = [].concat(draggedParentModel.children);
+
+  // Add dragged model item to hover model parent.
+  hoverParentModel.children.splice(indexChildTarget, 0, draggedItemModel);
+  hoverParentModel.children = [].concat(hoverParentModel.children);
+  draggedItemModel.parentId = hoverParentModel.id;
+
+  draggedViewModel.visibility = true;
+  stateNew.dragNDrop = getDndOnEnd();
 
   return stateNew;
 };
 
-const hoverOver = (draggedId, hoverOveredId, position) => {
+
+const hoverOver = (draggedId, hoverOveredId, measurements) => {
   return (dispatch, getState) => {
     const state = getState();
 
     const dnd = state.dragNDrop;
     if (dnd.draggedId !== draggedId
       || dnd.hoverOverId !== hoverOveredId
-      || dnd.position !== position) {
-      dispatch(actionHoverOver(draggedId, hoverOveredId, position));
+      || dnd.position !== measurements.position) {
+      dispatch(actionHoverOver(draggedId, hoverOveredId, measurements));
     }
   };
 };
@@ -184,39 +235,24 @@ const moveAsPhantomStateChange = (actionStatePackage) => {
 
 const cancelDragStateChange = (actionStatePackage) => {
   const stateNew = actionStatePackage.stateNew;
-
   const dnd = stateNew.dragNDrop;
 
-  const parentOfHover = graphTraversal.find(stateNew, dnd.parentOfHoverOverId);
-  const draggedItem = parentOfHover.viewModel.children.slice(dnd.indexChildTarget, 1);
+  const draggedItem = graphTraversal.find(stateNew, dnd.draggedId);
   draggedItem.visibility = true;
 
-  const parentOfDragged = graphTraversal.find(stateNew, dnd.parentOfDraggedItemId);
-  parentOfDragged.viewModel.children.slice(dnd.indexDraggedItem, 0, draggedItem);
+  stateNew.dragNDrop = getDndOnEnd();
 
-  stateNew.dragNDrop = {
-    hoverOverId: null,
-    parentOfHoverOverId: null,
-    draggedId: null,
-    indexDraggedItem: null,
-    parentOfDraggedItemId: null,
-    indexChildTarget: null,
-    position: null
-  };
-
-  return actionStatePackage.state;
+  return stateNew;
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     move: (draggedId, hoverId, position) => {
-      c.l('Move called.');
-      // dispatch(persistMove(...arguments));
-      ActionInvoker.invoke(dispatch, persistMove, [draggedId, hoverId, position]);
+      ActionInvoker.invoke(dispatch, persistMove);
     },
-    hoverOver: (draggedId, hoverOveredId, position) => {
-      c.l('hoverCalled!');
-      dispatch(hoverOver(draggedId, hoverOveredId, position));
+    hoverOver: (draggedId, hoverOveredId, position, coordinates) => {
+      // c.l('hoverCalled!');
+      dispatch(hoverOver(draggedId, hoverOveredId, position, coordinates));
     },
     cancelDrag: () => {
       ActionInvoker.invoke(dispatch, cancelDragStateChange);

@@ -657,9 +657,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const payload = action.payload;
       const draggedId = payload.draggedId;
       const hoverOveredId = payload.hoverOveredId;
-      const position = payload.position;
+      const measurements = payload.measurements;
 
-      return DndActionHandler.handleHover(state, stateNew, hoverOveredId, draggedId, position);
+      return DndActionHandler.handleHover(state, stateNew, hoverOveredId, draggedId, measurements);
     }
     default: {
       return state;

@@ -312,6 +312,10 @@ End Dashboard
   visibility: hidden;
 }
 
+.display-none {
+  display: none;
+}
+
 // Bootstrap Carousel Begin
 
 #main .carousel-control.left {
@@ -485,3 +489,46 @@ $carousel-transition: 0.2s ease-in-out;
 .data-narrative-button-menu {
   width: 100%;
 }
+
+/* Drop N Drag Stuff */
+.dnd-hover-target {
+  position: relative;
+}
+
+.pricetag {
+  white-space: nowrap;
+  position: absolute;
+  margin: 0 5px 0 10px;
+  height: 25px;
+  border-radius: 0 5px 5px 0;
+  padding: 0 25px 0 15px;
+  background: #E8EDF0;
+  border-style: solid;
+  border-color: #C7D2D4;
+  border-width: 1px 1px 1px 0;
+  color: red;
+  line-height: 23px;
+  z-index: $zIndexTopMostBodyChildren;
+  transform: rotate(-41deg);
+}
+
+.pricetag:before {
+  position: absolute;
+  content: "\25CF";
+  color: white;
+  text-shadow: 0 0 1px #333;
+  font-size: 11px;
+  line-height: 0;
+  text-indent: 12px;
+  left: -14px;
+  top: -1px;
+  width: 1px;
+  height: 0;
+  border-right: 14px solid #E8EDF0;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
+  transform: matrix(1, 0, 0, .93, .5, -.5);
+}
+
+
+

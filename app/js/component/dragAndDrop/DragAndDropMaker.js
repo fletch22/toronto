@@ -2,6 +2,7 @@ import { PropTypes } from 'react';
 import ItemTypes from './ItemTypes';
 import { DragSource as dragSource, DropTarget as dropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
+import ComponentTypes from '../../domain/component/ComponentTypes';
 
 const cardSource = {
   beginDrag(props) {
@@ -25,10 +26,8 @@ const cardSource = {
 
 
 const isBeforeOrAfter = (component, monitor) => {
-  c.l(`Component iboa null: ${component === null}`);
+  // c.l(`Component iboa null: ${component === null}`);
   const dom = findDOMNode(component);
-
-  c.lo(dom, 'dom: ');
 
   const style = window.getComputedStyle(dom);
   let isVerticalLayout;
@@ -57,7 +56,7 @@ const isBeforeOrAfter = (component, monitor) => {
     const clientOffset = monitor.getClientOffset();
 
     // Get pixels to the top
-    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+    const hoverClientY = clientOffset.y - hoverBoundingRect.top + window.pageYOffset;
 
     // Find out which is lower/higher
     if (hoverClientY > hoverMiddleY) {
@@ -71,36 +70,55 @@ const isBeforeOrAfter = (component, monitor) => {
     const clientOffset = monitor.getClientOffset();
 
     // Get pixels to the top
-    const hoverClientX = clientOffset.x - hoverBoundingRect.left;
+    const hoverClientX = clientOffset.x - hoverBoundingRect.left + window.pageXOffset;
 
     // Find out which is lower/higher
     if (hoverClientX > hoverMiddleX) {
       position = 'after';
     }
   }
-  return position;
+
+  return {
+    position,
+    hoverBoundingRect
+  };
 };
 
 const cardTarget = {
   hover(props, monitor, component) {
-    const hoverItem = props;
-
-    if (monitor.isOver({ shallow: false })) {
+    // NOTE: 09-30-2017: fleschec: if an argument is passed to 'isOver', it **MUST** be { shallow: true } -- otherwise
+    // it doesn't work correctly. { shallow: false } does not work.
+    if (!monitor.isOver({ shallow: true })) {
+      // c.l(`hi id: ${props.viewModel.viewModel.id}: typeLabel: ${props.viewModel.viewModel.typeLabel}: ${new Date().getMilliseconds()}`);
       return;
     }
 
+    // c.l(`typeLAbel: ${props.viewModel.viewModel.typeLabel}`);
+    if (props.viewModel.viewModel.typeLabel === ComponentTypes.PhantomDropper) {
+      // c.l('Found dropper.');
+      return;
+    }
+
+    const coordinates = monitor.getClientOffset();
+
+    const hoverItem = props;
     const dragItem = monitor.getItem();
 
     if (hoverItem.id === dragItem.id) {
-      props.hoverOver(dragItem.id, hoverItem.id, 'before');
+      props.hoverOver(dragItem.id, hoverItem.id, 'before', null);
     }
 
+    // c.l(`component hover: ${!component}`);
     if (!component) {
       return;
     }
-    const position = isBeforeOrAfter(component, monitor);
+    const positionAndDimensions = isBeforeOrAfter(component, monitor);
+    // c.lo(hoverItem, 'hi: ');
+    // c.l(`p: ${position}: ${hoverItem.viewModel.viewModel.typeLabel}`);
 
-    props.hoverOver(dragItem.id, hoverItem.id, position);
+    const measurements = Object.assign(positionAndDimensions, coordinates);
+
+    props.hoverOver(dragItem.id, hoverItem.id, measurements);
   },
   canDrop(props) {
     return props.viewModel.canBeDroppedOn;
