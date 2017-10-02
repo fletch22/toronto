@@ -198,15 +198,16 @@ const persistMove = (actionStatePackage) => {
   return stateNew;
 };
 
-
 const hoverOver = (draggedId, hoverOveredId, measurements) => {
   return (dispatch, getState) => {
     const state = getState();
 
     const dnd = state.dragNDrop;
+
     if (dnd.draggedId !== draggedId
       || dnd.hoverOverId !== hoverOveredId
-      || dnd.position !== measurements.position) {
+      || dnd.measurements.position !== measurements.position
+      || !dnd.measurements) {
       dispatch(actionHoverOver(draggedId, hoverOveredId, measurements));
     }
   };
@@ -250,9 +251,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     move: (draggedId, hoverId, position) => {
       ActionInvoker.invoke(dispatch, persistMove);
     },
-    hoverOver: (draggedId, hoverOveredId, position, coordinates) => {
+    hoverOver: (draggedId, hoverOveredId, measurements) => {
       // c.l('hoverCalled!');
-      dispatch(hoverOver(draggedId, hoverOveredId, position, coordinates));
+      dispatch(hoverOver(draggedId, hoverOveredId, measurements));
     },
     cancelDrag: () => {
       ActionInvoker.invoke(dispatch, cancelDragStateChange);

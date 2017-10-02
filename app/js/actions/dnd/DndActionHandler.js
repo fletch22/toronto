@@ -1,7 +1,4 @@
 import graphTraversal from '../../state/graphTraversal';
-import viewModelFactory from '../../reducers/viewModelFactory';
-import phantomDropperModelFactory from '../../domain/component/phantomDropperModelFactory';
-import f22Uuid from '../../util/f22Uuid';
 
 class DndActionHandler {
   static handleHover(state, stateNew, hoverOveredId, draggedId, measurements) {

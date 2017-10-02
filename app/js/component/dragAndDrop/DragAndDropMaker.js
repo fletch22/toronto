@@ -89,13 +89,10 @@ const cardTarget = {
     // NOTE: 09-30-2017: fleschec: if an argument is passed to 'isOver', it **MUST** be { shallow: true } -- otherwise
     // it doesn't work correctly. { shallow: false } does not work.
     if (!monitor.isOver({ shallow: true })) {
-      // c.l(`hi id: ${props.viewModel.viewModel.id}: typeLabel: ${props.viewModel.viewModel.typeLabel}: ${new Date().getMilliseconds()}`);
       return;
     }
 
-    // c.l(`typeLAbel: ${props.viewModel.viewModel.typeLabel}`);
     if (props.viewModel.viewModel.typeLabel === ComponentTypes.PhantomDropper) {
-      // c.l('Found dropper.');
       return;
     }
 
@@ -108,13 +105,10 @@ const cardTarget = {
       props.hoverOver(dragItem.id, hoverItem.id, 'before', null);
     }
 
-    // c.l(`component hover: ${!component}`);
     if (!component) {
       return;
     }
     const positionAndDimensions = isBeforeOrAfter(component, monitor);
-    // c.lo(hoverItem, 'hi: ');
-    // c.l(`p: ${position}: ${hoverItem.viewModel.viewModel.typeLabel}`);
 
     const measurements = Object.assign(positionAndDimensions, coordinates);
 
