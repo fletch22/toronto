@@ -23,7 +23,7 @@ class ButtonSubmit extends BodyChild {
     classNames += (this.props.isSelected) ? ' body-child-selected' : '';
 
     return DragAndDropMaker.connectRender(this.props, (
-      <div className="dnd-hover-target" id={this.props.id} onClick={this.props.onClick} style={{ paddingRight: '4px', display }}>
+      <div id={this.props.id} onClick={this.props.onClick} style={{ paddingRight: '4px', display }}>
         <button className={classNames} style={style}>{this.props.label}</button>
         <DropMarker ownerId={this.props.id} />
       </div>

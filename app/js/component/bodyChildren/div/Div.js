@@ -15,7 +15,7 @@ class Div extends BodyChild {
     }
 
     return DragAndDropMaker.connectRender(this.props, (
-      <div id={this.props.id} className="flex-bc dnd-hover-target" onClick={this.componentSelect} style={style}>
+      <div id={this.props.id} className="flex-bc" onClick={this.componentSelect} style={style}>
         {
           this.props.children.map((child) =>
             <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />

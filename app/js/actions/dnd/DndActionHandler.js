@@ -21,14 +21,34 @@ class DndActionHandler {
 
     let parentOfHoverOver = null;
 
+
+
+
+
+
     if (hoverOveredId !== dragNDrop.hoverOverId || position !== dragNDrop.position) {
       dragNDrop.hoverOverId = hoverOveredId;
-      parentOfHoverOver = graphTraversal.findParent(stateNew, dragNDrop.hoverOverId);
-      dragNDrop.parentOfHoverOverId = parentOfHoverOver.id;
-      const hoverChildsIndex = graphTraversal.getChildsIndex(parentOfHoverOver.viewModel.children, dragNDrop.hoverOverId);
 
-      dragNDrop.indexChildTarget = (position === 'before') ? hoverChildsIndex : hoverChildsIndex + 1;
-      dragNDrop.indexChildTarget = (dragNDrop.indexChildTarget < 0) ? 0 : dragNDrop.indexChildTarget;
+      dragNDrop.lastChildViewModelId = null;
+      if (position === 'middle') {
+        dragNDrop.parentOfHoverOverId = hoverOveredId;
+        parentOfHoverOver = graphTraversal.find(stateNew, dragNDrop.parentOfHoverOverId);
+        dragNDrop.indexChildTarget = parentOfHoverOver.viewModel.children.length;
+        if (parentOfHoverOver.viewModel.children.length > 0) {
+          if (dragNDrop.indexChildTarget > dragNDrop.indexDraggedItem && dragNDrop.parentOfDraggedItemId === dragNDrop.parentOfHoverOverId) {
+            dragNDrop.indexChildTarget++;
+          }
+          dragNDrop.lastChildViewModelId = parentOfHoverOver.viewModel.children[parentOfHoverOver.viewModel.children.length - 1].id;
+        }
+        c.l(`dragNDrop.lastChildViewModelId: ${dragNDrop.lastChildViewModelId}`);
+      } else {
+        parentOfHoverOver = graphTraversal.findParent(stateNew, dragNDrop.hoverOverId);
+        dragNDrop.parentOfHoverOverId = parentOfHoverOver.id;
+        const hoverChildsIndex = graphTraversal.getChildsIndex(parentOfHoverOver.viewModel.children, dragNDrop.hoverOverId);
+
+        dragNDrop.indexChildTarget = (position === 'before') ? hoverChildsIndex : hoverChildsIndex + 1;
+        dragNDrop.indexChildTarget = (dragNDrop.indexChildTarget < 0) ? 0 : dragNDrop.indexChildTarget;
+      }
     }
 
     return stateNew;

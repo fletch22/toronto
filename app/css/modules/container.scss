@@ -491,13 +491,9 @@ $carousel-transition: 0.2s ease-in-out;
 }
 
 /* Drop N Drag Stuff */
-.dnd-hover-target {
-  position: relative;
-}
-
 .pricetag {
   white-space: nowrap;
-  position: absolute;
+  position: fixed;
   margin: 0 5px 0 10px;
   height: 25px;
   border-radius: 0 5px 5px 0;

@@ -11,7 +11,8 @@ class DefaultState {
         indexChildTarget: null,
         phantomDropperId: null,
         position: null,
-        measurements: null
+        measurements: null,
+        lastChildViewModelId: null
       },
       borderScrivener: {
         left: 0,

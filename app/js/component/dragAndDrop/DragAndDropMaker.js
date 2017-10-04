@@ -25,7 +25,7 @@ const cardSource = {
 };
 
 
-const isBeforeOrAfter = (component, monitor) => {
+const isBeforeOrAfter = (component, monitor, canBeDroppedOn) => {
   // c.l(`Component iboa null: ${component === null}`);
   const dom = findDOMNode(component);
 
@@ -48,33 +48,76 @@ const isBeforeOrAfter = (component, monitor) => {
   const hoverBoundingRect = dom.getBoundingClientRect();
 
   let position = 'before';
-  if (isVerticalLayout) {
-    // Get vertical middle
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+  const division = 5;
+  const beforeSectionFraction = (1 / division);
+  const middleSectionFraction = (division - 1) / division;
 
-    // Determine mouse position
-    const clientOffset = monitor.getClientOffset();
+  if (canBeDroppedOn) {
+    if (isVerticalLayout) {
+      // Get vertical middle
 
-    // Get pixels to the top
-    const hoverClientY = clientOffset.y - hoverBoundingRect.top + window.pageYOffset;
+      const beforeMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) * beforeSectionFraction;
+      const middleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) * middleSectionFraction;
 
-    // Find out which is lower/higher
-    if (hoverClientY > hoverMiddleY) {
-      position = 'after';
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+
+      // Get pixels to the top
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top + window.pageYOffset;
+
+      // Find out which is lower/higher
+      if (hoverClientY > beforeMiddleY && hoverClientY < middleY) {
+        position = 'middle';
+      } else if (hoverClientY > middleY) {
+        position = 'after';
+      }
+    } else {
+      // Get vertical middle
+      const beforeMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) * beforeSectionFraction;
+      const middleX = (hoverBoundingRect.right - hoverBoundingRect.left) * middleSectionFraction;
+
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+
+      // Get pixels to the top
+      const hoverClientX = clientOffset.x - hoverBoundingRect.left + window.pageXOffset;
+
+      // Find out which is lower/higher
+      if (hoverClientX > beforeMiddleX && hoverClientX < middleX) {
+        position = 'middle';
+      } else if (hoverClientX > middleX) {
+        position = 'after';
+      }
     }
   } else {
-    // Get vertical middle
-    const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+    if (isVerticalLayout) {
+      // Get vertical middle
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
-    // Determine mouse position
-    const clientOffset = monitor.getClientOffset();
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
 
-    // Get pixels to the top
-    const hoverClientX = clientOffset.x - hoverBoundingRect.left + window.pageXOffset;
+      // Get pixels to the top
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top + window.pageYOffset;
 
-    // Find out which is lower/higher
-    if (hoverClientX > hoverMiddleX) {
-      position = 'after';
+      // Find out which is lower/higher
+      if (hoverClientY > hoverMiddleY) {
+        position = 'after';
+      }
+    } else {
+      // Get vertical middle
+      const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+
+      // Get pixels to the top
+      const hoverClientX = clientOffset.x - hoverBoundingRect.left + window.pageXOffset;
+
+      // Find out which is lower/higher
+      if (hoverClientX > hoverMiddleX) {
+        position = 'after';
+      }
     }
   }
 
@@ -92,10 +135,6 @@ const cardTarget = {
       return;
     }
 
-    if (props.viewModel.viewModel.typeLabel === ComponentTypes.PhantomDropper) {
-      return;
-    }
-
     const coordinates = monitor.getClientOffset();
 
     const hoverItem = props;
@@ -108,7 +147,8 @@ const cardTarget = {
     if (!component) {
       return;
     }
-    const positionAndDimensions = isBeforeOrAfter(component, monitor);
+
+    const positionAndDimensions = isBeforeOrAfter(component, monitor, props.viewModel.canBeDroppedOn);
 
     const measurements = Object.assign(positionAndDimensions, coordinates);
 
