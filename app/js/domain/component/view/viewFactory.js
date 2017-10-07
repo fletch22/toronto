@@ -76,8 +76,7 @@ class ViewFactory {
       label: model.label,
       isSelected: false,
       canBeDroppedOn: false,
-      visibility: true,
-      f22IsDragging: false
+      visibility: true
     };
   }
 

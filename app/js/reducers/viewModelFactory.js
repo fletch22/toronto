@@ -140,7 +140,7 @@ class ViewModelFactory {
   }
 
   generateChildrensViewModels(viewModelParentId, modelParent) {
-    const viewModelParent = Object.assign({}, modelParent);
+    const viewModelParent = _.cloneDeep(modelParent);
     if (viewModelParent.children) {
       viewModelParent.children.forEach((model, index) => {
         viewModelParent.children[index] = this.generateViewModel(viewModelParentId, model);
