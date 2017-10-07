@@ -57,8 +57,7 @@ const mapStateToProps = (state, ownProps) => {
     label: viewModel.viewModel.label,
     canBeDroppedOn: viewModel.canBeDroppedOn,
     dragNDrop: state.dragNDrop,
-    visibility,
-    f22IsDragging: viewModel.f22IsDragging
+    visibility
   };
 };
 

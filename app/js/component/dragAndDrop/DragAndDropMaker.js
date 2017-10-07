@@ -199,8 +199,7 @@ class DragAndDropMaker {
       parentHoverOvered: PropTypes.object,
       dragNDrop: PropTypes.object,
       visibility: PropTypes.bool,
-      cancelDrag: PropTypes.func,
-      f22IsDragging: PropTypes.bool
+      cancelDrag: PropTypes.func
     });
   }
 
