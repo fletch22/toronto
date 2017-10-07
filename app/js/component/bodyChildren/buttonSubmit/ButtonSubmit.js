@@ -5,13 +5,21 @@ import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/in
 import BodyChild from '../BodyChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
 import DropMarker from '../../bodyChildren/DropMarker';
-
 class ButtonSubmit extends BodyChild {
 
   constructor(props) {
     super(props);
     this.render = this.render.bind(this);
   }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   const dispatch = this.context.store.dispatch;
+  //   // c.l(`prevProps.isDragging: ${prevProps.isDragging}`);
+  //   if (!prevProps.visibility && this.props.visibility) {
+  //     c.l(`Setting set current body tool.`);
+  //     // dispatch(actionSetCurrentBodyTool(this.props.id));
+  //   }
+  // }
 
   render() {
     const style = JSON.parse(this.props.viewModel.viewModel.style) || {};
@@ -49,7 +57,8 @@ const mapStateToProps = (state, ownProps) => {
     label: viewModel.viewModel.label,
     canBeDroppedOn: viewModel.canBeDroppedOn,
     dragNDrop: state.dragNDrop,
-    visibility
+    visibility,
+    f22IsDragging: viewModel.f22IsDragging
   };
 };
 

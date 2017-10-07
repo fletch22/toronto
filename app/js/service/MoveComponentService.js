@@ -2,8 +2,8 @@ import componentService from './componentService';
 
 class MoveComponentService {
 
-  static move(sourceParentId, destinationParentId, childId) {
-    return componentService.moveComponent(sourceParentId, destinationParentId, childId);
+  static move(statePackage, sourceParentId, destinationParentId, childId) {
+    return componentService.moveComponent(statePackage, sourceParentId, destinationParentId, childId);
   }
 }
 

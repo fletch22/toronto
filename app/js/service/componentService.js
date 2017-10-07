@@ -2,8 +2,9 @@ import Service from './Service';
 
 class ComponentService extends Service {
 
-  moveComponent(sourceParentId, destinationParentId, childId) {
+  moveComponent(statePackage, sourceParentId, destinationParentId, childId) {
     const body = {
+      statePackage,
       sourceParentId,
       destinationParentId,
       childId

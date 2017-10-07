@@ -9,7 +9,6 @@ class DefaultState {
         indexDraggedItem: null,
         parentOfDraggedItemId: null,
         indexChildTarget: null,
-        phantomDropperId: null,
         position: null,
         measurements: null,
         lastChildViewModelId: null

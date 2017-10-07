@@ -69,6 +69,9 @@ class DndActionHandler {
       }
     }
 
+    /* eslint-disable no-param-reassign */
+    stateNew.borderScrivener.selectedElementId = null;
+
     return stateNew;
   }
 }

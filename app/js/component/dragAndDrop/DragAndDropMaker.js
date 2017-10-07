@@ -2,7 +2,6 @@ import { PropTypes } from 'react';
 import ItemTypes from './ItemTypes';
 import { DragSource as dragSource, DropTarget as dropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
-import ComponentTypes from '../../domain/component/ComponentTypes';
 
 const cardSource = {
   beginDrag(props) {
@@ -201,7 +200,7 @@ class DragAndDropMaker {
       dragNDrop: PropTypes.object,
       visibility: PropTypes.bool,
       cancelDrag: PropTypes.func,
-      moveAsPhantom: PropTypes.func
+      f22IsDragging: PropTypes.bool
     });
   }
 

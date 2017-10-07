@@ -131,10 +131,6 @@ class ViewModelFactory {
         view = viewFactory.createDataNarrativeView(model);
         break;
       }
-      case ComponentTypes.PhantomDropper: {
-        view = viewFactory.createPhantomDropper();
-        break;
-      }
       default: {
         throw new Error(`Encountered error trying to determine view to create for model typelabel \'${model.typeLabel}\'.`);
       }

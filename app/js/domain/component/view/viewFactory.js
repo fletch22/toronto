@@ -76,7 +76,8 @@ class ViewFactory {
       label: model.label,
       isSelected: false,
       canBeDroppedOn: false,
-      visibility: true
+      visibility: true,
+      f22IsDragging: false
     };
   }
 
@@ -85,13 +86,6 @@ class ViewFactory {
       id: f22Uuid.generate()
     };
   }
-
-  createPhantomDropper() {
-    return {
-      id: f22Uuid.generate()
-    };
-  }
-
 }
 
 export default new ViewFactory();

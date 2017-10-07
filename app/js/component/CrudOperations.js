@@ -28,23 +28,23 @@ class CrudOperations {
     return crudActionCreator.invoke(removeAppCallback);
   }
 
-  updateProperty(component, property, newPropertyValue) {
-    const changeLabelCallback = (dispatch, state) => {
-      const jsonStateOld = JSON.stringify(state);
-      const stateNew = JSON.parse(jsonStateOld);
-
-      const componentService = new ComponentService();
-      const promise = componentService.update(stateNew, jsonStateOld, component.id, property, newPropertyValue);
-
-      promise.catch((error) => {
-        modalDispatcher.dispatchErrorModal(error, `There was an error updating the ${component.typeLabel} object.`, dispatch);
-      });
-
-      return promise;
-    };
-
-    return crudActionCreator.invoke(changeLabelCallback);
-  }
+  // updateProperty(component, property, newPropertyValue) {
+  //   const changeLabelCallback = (dispatch, state) => {
+  //     const jsonStateOld = JSON.stringify(state);
+  //     const stateNew = JSON.parse(jsonStateOld);
+  //
+  //     const componentService = new ComponentService();
+  //     const promise = componentService.update(stateNew, jsonStateOld, component.id, property, newPropertyValue);
+  //
+  //     promise.catch((error) => {
+  //       modalDispatcher.dispatchErrorModal(error, `There was an error updating the ${component.typeLabel} object.`, dispatch);
+  //     });
+  //
+  //     return promise;
+  //   };
+  //
+  //   return crudActionCreator.invoke(changeLabelCallback);
+  // }
 }
 
 export default new CrudOperations();
