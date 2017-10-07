@@ -90,7 +90,6 @@ const moveInState = (state) => {
   // Find dragged item vm and parent.
   const draggedParentViewModel = graphTraversal.find(state, dnd.parentOfDraggedItemId);
   const draggedViewModel = draggedParentViewModel.viewModel.children[dnd.indexDraggedItem];
-  draggedViewModel.f22IsDragging = false;
 
   // Find hover parent.
   const hoverParentViewModel = graphTraversal.find(state, dnd.parentOfHoverOverId);
@@ -131,7 +130,6 @@ const moveInState = (state) => {
   draggedItemModel.parentId = hoverParentModel.id;
 
   draggedViewModel.visibility = true;
-  draggedViewModel.f22IsDragging = true;
 
   state.borderScrivener.selectedElementId = dnd.draggedId;
 

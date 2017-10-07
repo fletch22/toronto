@@ -21,6 +21,7 @@ import DndActionHandler from '../actions/dnd/DndActionHandler';
 
 const getBoundingClientRect = (selectedElementId) => {
   let result = null;
+
   const element = document.getElementById(selectedElementId);
   if (!!element) {
     const rectRaw = element.getBoundingClientRect();
