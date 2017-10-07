@@ -2,7 +2,6 @@ import graphTraversal from '../../state/graphTraversal';
 
 class DndActionHandler {
   static handleHover(state, stateNew, hoverOveredId, draggedId, measurements) {
-
     const dragNDrop = stateNew.dragNDrop;
 
     dragNDrop.measurements = measurements;
