@@ -14,6 +14,8 @@ class Div extends BodyChild {
       style.border = '2px solid red';
     }
 
+    style.display = this.props.visibility ? style.display : 'none';
+
     return DragAndDropMaker.connectRender(this.props, (
       <div id={this.props.id} className="flex-bc" onClick={this.componentSelect} style={style}>
         {
@@ -28,7 +30,8 @@ class Div extends BodyChild {
 }
 
 Div.PropTypes = {
-  dnd: PropTypes.object
+  dnd: PropTypes.object,
+  visibility: PropTypes.boolean
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -48,7 +51,8 @@ const mapStateToProps = (state, ownProps) => {
     children: ownProps.viewModel.viewModel.children,
     isSelected: ownProps.viewModel.isSelected,
     style: ownProps.viewModel.viewModel.style,
-    parentHoveredOver
+    parentHoveredOver,
+    visibility: ownProps.viewModel.visibility
   };
 };
 

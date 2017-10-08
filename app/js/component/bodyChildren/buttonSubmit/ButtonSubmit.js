@@ -25,7 +25,7 @@ class ButtonSubmit extends BodyChild {
     const style = JSON.parse(this.props.viewModel.viewModel.style) || {};
     style.padding = '0 4px';
 
-    const display = this.props.visibility ? 'block' : 'none';
+    const display = this.props.visibility ? style.display : 'none';
 
     let classNames = 'button-submit';
     classNames += (this.props.isSelected) ? ' body-child-selected' : '';
