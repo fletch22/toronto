@@ -5,7 +5,7 @@ import Island from '../component/dashboard/Island';
 import PseudoModalWrangler from '../component/modals/PseudoModalWrangler';
 import ViewTypes from '../views/ViewTypes';
 import _ from 'lodash';
-import BorderScrivener from '../component/utils/BorderScrivener';
+import BorderScrivener from './BorderScrivener';
 
 class AppContainer extends React.Component {
   render() {

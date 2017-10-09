@@ -47,7 +47,7 @@ const isBeforeOrAfter = (component, monitor, canBeDroppedOn) => {
   const hoverBoundingRect = dom.getBoundingClientRect();
 
   let position = 'before';
-  const division = 5;
+  const division = 9;
   const beforeSectionFraction = (1 / division);
   const middleSectionFraction = (division - 1) / division;
 

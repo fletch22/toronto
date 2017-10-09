@@ -8,13 +8,6 @@ class BodyChild extends React.Component {
     this.componentSelect = this.componentSelect.bind(this);
   }
 
-  componentWillUnmount() {
-    if (this.props.isSelected) {
-      const dispatch = this.context.store.dispatch;
-      dispatch(actionUnsetCurrentBody(this.props.id));
-    }
-  }
-
   componentSelect(event) {
     event.stopPropagation();
     this.context.store.dispatch(actionSetCurrentBodyTool(this.props.id));

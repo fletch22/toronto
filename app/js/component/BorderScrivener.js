@@ -1,20 +1,40 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { actionScribeBorder } from '../../actions/index.js';
+import { actionScribeBorder } from '../actions/index.js';
 
 class BorderScrivener extends React.Component {
 
   constructor(props) {
     super(props);
     this.drawSelectionRectangle = this.drawSelectionRectangle.bind(this);
+    this.fireBorderScrivenerRedraw = this.fireBorderScrivenerRedraw.bind(this);
   }
 
   componentDidMount() {
+    // this.fireBorderScrivenerRedraw();
     window.addEventListener('resize', this.drawSelectionRectangle);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.top !== prevProps.top
+      || this.props.left !== prevProps.left
+      || this.props.width !== prevProps.width
+      || this.props.height !== prevProps.height) {
+      c.l('Calling draw!!');
+      // this.drawSelectionRectangle();
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.drawSelectionRectangle);
+  }
+
+  fireBorderScrivenerRedraw() {
+    window.setTimeout(() => {
+      c.l('This is test.');
+      this.drawSelectionRectangle();
+      this.fireBorderScrivenerRedraw();
+    }, 10);
   }
 
   drawSelectionRectangle() {
@@ -32,6 +52,8 @@ class BorderScrivener extends React.Component {
       height: this.props.height,
       width: this.props.width
     };
+
+    c.l(`this.props.selectedElementId: ${this.props.selectedElementId}`);
 
     if (!!rect && !!this.props.selectedElementId) {
       const borderThickness = 3;

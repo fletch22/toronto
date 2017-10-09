@@ -16,6 +16,7 @@ import MoveComponentService from '../../service/MoveComponentService';
 import modalDispatcher from '../../component/modals/modalDispatcher';
 import StatePackager from '../../service/StatePackager';
 import crudActionCreator from '../../actions/crudActionCreator';
+import borderScrivenerUtils from '../../component/utils/borderScrivenerUtils';
 
 class ComponentChild extends React.Component {
   render() {
@@ -69,7 +70,7 @@ ComponentChild.propTypes = {
 
 ComponentChild = dragDropContext(HTML5Backend)(ComponentChild);
 
-const getDndOnEnd = (state) => {
+const getDndOnEnd = () => {
   /* eslint-disable no-param-reassign */
   return {
     hoverOverId: null,
@@ -132,6 +133,8 @@ const moveInState = (state) => {
   draggedViewModel.visibility = true;
 
   state.borderScrivener.selectedElementId = dnd.draggedId;
+  state.borderScrivener.needsUpdate = true;
+  borderScrivenerUtils.domActionSyncer(state);
 
   state.dragNDrop = getDndOnEnd();
 
