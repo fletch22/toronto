@@ -6,7 +6,7 @@
   "scripts": {
     "test": "./node_modules/karma/bin/karma start",
     "intTest": "set EXECUTE_INTEGRATION_TESTS=true && karma start",
-    "start": "./node_modules/.bin/webpack-dev-server --config webpack.hot.config.js",
+    "start": "./node_modules/.bin/webpack-dev-server --config webpack.hot.config.js --progress",
     "lint": "eslint --ext .js,.jsx assets/**",
     "preinstall": "npm i -g node-gyp@3.3.0"
   },

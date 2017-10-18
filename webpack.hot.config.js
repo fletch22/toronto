@@ -67,7 +67,7 @@ module.exports = merge(common, {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new CopyWebpackPlugin([
-      { from: 'app/images', to: 'images' }
+      { from: path.resolve(__dirname, 'app', 'images'), to: 'images' }
     ])
   ],
   postcss: [
