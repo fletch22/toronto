@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { actionScribeBorder } from '../actions/index.js';
+import DragCorner from './dragAndDrop/DragCorner';
 
 class BorderScrivener extends React.Component {
 
@@ -11,7 +12,6 @@ class BorderScrivener extends React.Component {
   }
 
   componentDidMount() {
-    // this.fireBorderScrivenerRedraw();
     window.addEventListener('resize', this.drawSelectionRectangle);
   }
 
@@ -20,8 +20,7 @@ class BorderScrivener extends React.Component {
       || this.props.left !== prevProps.left
       || this.props.width !== prevProps.width
       || this.props.height !== prevProps.height) {
-      c.l('Calling draw!!');
-      // this.drawSelectionRectangle();
+      this.drawSelectionRectangle();
     }
   }
 
@@ -31,7 +30,6 @@ class BorderScrivener extends React.Component {
 
   fireBorderScrivenerRedraw() {
     window.setTimeout(() => {
-      c.l('This is test.');
       this.drawSelectionRectangle();
       this.fireBorderScrivenerRedraw();
     }, 10);
@@ -53,11 +51,11 @@ class BorderScrivener extends React.Component {
       width: this.props.width
     };
 
-    c.l(`this.props.selectedElementId: ${this.props.selectedElementId}`);
-
     if (!!rect && !!this.props.selectedElementId) {
       const borderThickness = 3;
       const topOffsetWidth = 3 + borderThickness;
+
+      const dragCornerOffsetX = rect.width - 1;
 
       const topStyle = {
         top: `${rect.top - topOffsetWidth}px`,
@@ -93,7 +91,12 @@ class BorderScrivener extends React.Component {
       };
 
       borders = (<div>
-        <div className="bc-outline-border" style={ topStyle }></div>
+        <div className="bc-outline-border" style={ topStyle }>
+          <DragCorner dragCornerOffsetX={dragCornerOffsetX} clazz={"DragCorner"}
+            selectedElementId={this.props.selectedElementId}
+            selectedElementIndex={this.props.selectedElementIndex}
+          />
+        </div>
         <div className="bc-outline-border" style={ rightStyle }></div>
         <div className="bc-outline-border" style={ bottomStyle }></div>
         <div className="bc-outline-border" style={ leftStyle }></div>
@@ -114,7 +117,8 @@ BorderScrivener.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
   onChange: PropTypes.func,
-  selectedElementId: PropTypes.string
+  selectedElementId: PropTypes.string,
+  selectedElementIndex: PropTypes.number
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -129,5 +133,6 @@ BorderScrivener = connect(
   null,
   mapDispatchToProps
 )(BorderScrivener);
+
 
 export default BorderScrivener;

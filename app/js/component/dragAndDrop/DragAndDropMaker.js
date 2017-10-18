@@ -2,12 +2,26 @@ import { PropTypes } from 'react';
 import ItemTypes from './ItemTypes';
 import { DragSource as dragSource, DropTarget as dropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
+// import DragCorner from '../../component/dragAndDrop/DragCorner';
 
 const cardSource = {
   beginDrag(props) {
+    let id = props.id;
+    let index = props.index;
+
+    if (props.clazz && props.clazz === 'DragCorner') {
+      id = props.selectedElementId;
+      index = props.selectedElementIndex;
+    }
+
+    c.lo({
+      id,
+      index
+    }, 'id/index: ');
+
     return {
-      id: props.id,
-      index: props.index
+      id,
+      index
     };
   },
   endDrag(props, monitor) {
@@ -18,6 +32,7 @@ const cardSource = {
       props.move(draggedItem.id, props.id);
     } else {
       // Cancel drag - make original reappear.
+      c.l('Cancelling.');
       props.cancelDrag();
     }
   }
@@ -126,6 +141,13 @@ const isBeforeOrAfter = (component, monitor, canBeDroppedOn) => {
   };
 };
 
+
+const canBeDroppedOn = (props) => (
+  // NOTE: 10-17-2017: fleschec: Bit of voodoo here; The Body tag will not have viewModel. Instead the 'canBeDroppedOn' property will be directly on props. If it's not on props, then we can assume
+  // we shouldn't be dropping on the target at all.
+  !!props.viewModel ? props.viewModel.canBeDroppedOn : !!props.canBeDroppedOn
+);
+
 const cardTarget = {
   hover(props, monitor, component) {
     // NOTE: 09-30-2017: fleschec: if an argument is passed to 'isOver', it **MUST** be { shallow: true } -- otherwise
@@ -147,14 +169,16 @@ const cardTarget = {
       return;
     }
 
-    const positionAndDimensions = isBeforeOrAfter(component, monitor, props.viewModel.canBeDroppedOn);
+    const positionAndDimensions = isBeforeOrAfter(component, monitor, canBeDroppedOn(props));
 
     const measurements = Object.assign(positionAndDimensions, coordinates);
 
-    props.hoverOver(dragItem.id, hoverItem.id, measurements);
+    if (!!props.hoverOver) {
+      props.hoverOver(dragItem.id, hoverItem.id, measurements);
+    }
   },
   canDrop(props) {
-    return props.viewModel.canBeDroppedOn;
+    return canBeDroppedOn(props);
   },
   drop(props, monitor, component) {
     const hoverItem = props;
@@ -170,40 +194,59 @@ const cardTarget = {
 };
 
 class DragAndDropMaker {
-  static connect(ComponentClass) {
+  static connectDrop(ComponentClass) {
     /* eslint-disable no-param-reassign */
-    ComponentClass.propTypes = DragAndDropMaker.incorporateEnhancedPropTypes(ComponentClass.propTypes);
+    ComponentClass.propTypes = DragAndDropMaker.incorporateBasicAndDropPropTypes(ComponentClass.propTypes);
 
-    let ComponentClassEnhanced = dragSource(ItemTypes.GENERIC_ITEM, cardSource, (connect, monitor) => ({
+    return DragAndDropMaker.connectDropTarget(ComponentClass);
+  }
+
+  static connectDropTarget(ComponentClass) {
+    return dropTarget(ItemTypes.GENERIC_ITEM, cardTarget, (connect) => ({
+      connectDropTarget: connect.dropTarget()
+    }))(ComponentClass);
+  }
+
+  static connectDragAndDrop(ComponentClass) {
+    /* eslint-disable no-param-reassign */
+    ComponentClass.propTypes = DragAndDropMaker.incorporateDragAndDropPropTypes(ComponentClass.propTypes);
+
+    let ComponentClassEnhanced = DragAndDropMaker.connectDropTarget(ComponentClass);
+
+    ComponentClassEnhanced = dragSource(ItemTypes.GENERIC_ITEM, cardSource, (connect, monitor) => ({
       connectDragSource: connect.dragSource(),
       isDragging: monitor.isDragging()
-    }))(ComponentClass);
-
-    ComponentClassEnhanced = dropTarget(ItemTypes.GENERIC_ITEM, cardTarget, (connect) => ({
-      connectDropTarget: connect.dropTarget()
     }))(ComponentClassEnhanced);
 
     return ComponentClassEnhanced;
   }
 
-  static incorporateEnhancedPropTypes(propTypes) {
+  static incorporateBasicAndDropPropTypes(propTypes) {
     return Object.assign(propTypes, {
       move: PropTypes.func,
       hoverOver: PropTypes.func,
-      connectDragSource: PropTypes.func.isRequired,
       connectDropTarget: PropTypes.func.isRequired,
-      isDragging: PropTypes.bool.isRequired,
-      isHoveredOver: PropTypes.bool,
       canBeDroppedOn: PropTypes.bool,
-      isParentHoveredOver: PropTypes.bool,
-      parentHoverOvered: PropTypes.object,
-      dragNDrop: PropTypes.object,
+      dragNDrop: PropTypes.object
+    });
+  }
+
+  static incorporateDragAndDropPropTypes(propTypes) {
+    return Object.assign(propTypes, DragAndDropMaker.incorporateBasicAndDropPropTypes(propTypes), {
+      connectDragSource: PropTypes.func.isRequired,
+      isDragging: PropTypes.bool.isRequired,
       visibility: PropTypes.bool,
       cancelDrag: PropTypes.func
     });
   }
 
-  static connectRender(props, content) {
+  static connectDropRender(props, content) {
+    const { connectDropTarget } = props;
+
+    return connectDropTarget(content);
+  }
+
+  static connectDragAndDropRender(props, content) {
     const { connectDragSource, connectDropTarget } = props;
 
     return connectDragSource(connectDropTarget(content));

@@ -1,5 +1,4 @@
 
-
 class BorderScrivenerUtils {
 
   constructor() {
@@ -36,10 +35,12 @@ class BorderScrivenerUtils {
           || rectCurrent.left !== borderScrivener.left
           || rectCurrent.width !== borderScrivener.width
           || rectCurrent.height !== borderScrivener.height) {
-          c.l('Should redraw ...');
           /* eslint-disable no-param-reassign */
           Object.assign(borderScrivener, rectCurrent);
           borderScrivener.visible = true;
+
+          // const viewModel = graphTraversal.find(state, borderScrivener.selectedElementId);
+          // c.l(`Underlying selected model: ${viewModel.viewModel.id}`);
         }
       } else {
         borderScrivener.visible = false;

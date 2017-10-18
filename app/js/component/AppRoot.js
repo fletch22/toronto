@@ -3,6 +3,8 @@ import AppContainer from '../component/AppContainer';
 import RollbackBroadcastHandler from '../domain/message/rollbackBroadastHandler';
 import { actionInitializeApp } from '../actions/index';
 import 'expose?$!expose?c!c'; // Globally exposes the an instance of 'c' class (a custom console class).
+import { DragDropContext as dragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 class App extends React.Component {
 
@@ -23,5 +25,7 @@ class App extends React.Component {
 }
 
 App.contextTypes = { store: React.PropTypes.object };
+
+App = dragDropContext(HTML5Backend)(App);
 
 export default App;

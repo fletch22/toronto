@@ -15,6 +15,20 @@ class DivModelFactory extends ModelFactory {
       children: []
     };
   }
+
+  createInstanceFromModel(model) {
+    const id = this.ensureId(model);
+
+    const instance = {
+      parentId: model.parentId,
+      id,
+      typeLabel: ComponentTypes.Div,
+      style: model.style,
+      children: []
+    };
+
+    return instance;
+  }
 }
 
 export default new DivModelFactory();

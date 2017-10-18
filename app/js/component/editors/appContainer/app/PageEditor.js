@@ -15,7 +15,7 @@ class PageEditor extends React.Component {
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled} style={{ height: '100%' }}><Body { ... this.props.viewModel } /></Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled} style={{ height: '100%' }}><Body { ... this.props.viewModel } canBeDroppedOn /></Tab>
         </Tabs>
       </div>
     );

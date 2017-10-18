@@ -5,21 +5,13 @@ import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/in
 import BodyChild from '../BodyChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
 import DropMarker from '../../bodyChildren/DropMarker';
+
 class ButtonSubmit extends BodyChild {
 
   constructor(props) {
     super(props);
     this.render = this.render.bind(this);
   }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   const dispatch = this.context.store.dispatch;
-  //   // c.l(`prevProps.isDragging: ${prevProps.isDragging}`);
-  //   if (!prevProps.visibility && this.props.visibility) {
-  //     c.l(`Setting set current body tool.`);
-  //     // dispatch(actionSetCurrentBodyTool(this.props.id));
-  //   }
-  // }
 
   render() {
     const style = JSON.parse(this.props.viewModel.viewModel.style) || {};
@@ -30,7 +22,7 @@ class ButtonSubmit extends BodyChild {
     let classNames = 'button-submit';
     classNames += (this.props.isSelected) ? ' body-child-selected' : '';
 
-    return DragAndDropMaker.connectRender(this.props, (
+    return DragAndDropMaker.connectDragAndDropRender(this.props, (
       <div id={this.props.id} onClick={this.props.onClick} style={{ paddingRight: '4px', display }}>
         <button className={classNames} style={style}>{this.props.label}</button>
         <DropMarker ownerId={this.props.id} />
@@ -75,7 +67,7 @@ ButtonSubmit = reduxConnect(
   mapDispatchToProps
 )(ButtonSubmit);
 
-ButtonSubmit = DragAndDropMaker.connect(ButtonSubmit);
+ButtonSubmit = DragAndDropMaker.connectDragAndDrop(ButtonSubmit);
 
 export default ButtonSubmit;
 

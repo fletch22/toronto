@@ -19,59 +19,13 @@ import ViewTypes from '../views/ViewTypes';
 import actionInvoker from '../actions/ActionInvoker';
 import borderScrivenerUtils from '../component/utils/borderScrivenerUtils';
 import DndActionHandler from '../actions/dnd/DndActionHandler';
-// import borderScrivenerUtils from '../../../
-
-// const getBoundingClientRect = (selectedElementId) => {
-//   let result = null;
-//
-//   const element = document.getElementById(selectedElementId);
-//   if (!!element) {
-//     const rectRaw = element.getBoundingClientRect();
-//
-//     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-//     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-//     result = {
-//       left: parseInt(rectRaw.left, 10) + scrollLeft,
-//       top: parseInt(rectRaw.top, 10) + scrollTop,
-//       width: parseInt(rectRaw.width, 10),
-//       height: parseInt(rectRaw.height, 10)
-//     };
-//   }
-//
-//   return result;
-// };
-//
-// const domActionSyncer = (state) => {
-//   const borderScrivener = state.borderScrivener;
-//
-//   if (borderScrivener.selectedElementId) {
-//     const rectCurrent = getBoundingClientRect(borderScrivener.selectedElementId);
-//     if (rectCurrent) {
-//       if (rectCurrent.top !== borderScrivener.top
-//         || rectCurrent.left !== borderScrivener.left
-//         || rectCurrent.width !== borderScrivener.width
-//         || rectCurrent.height !== borderScrivener.height) {
-//         c.l('Should redraw ...');
-//         /* eslint-disable no-param-reassign */
-//         Object.assign(borderScrivener, rectCurrent);
-//         borderScrivener.visible = true;
-//       }
-//     } else {
-//       borderScrivener.visible = false;
-//     }
-//   } else {
-//     borderScrivener.visible = false;
-//   }
-//
-//   return state;
-// };
 
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
 
-  c.l(`action.type: ${action.type}`);
+  // c.l(`action.type: ${action.type}`);
   borderScrivenerUtils.domActionSyncer(stateNew);
 
   switch (action.type) {
@@ -305,7 +259,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       let stateModified = actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId);
       stateModified = borderScrivenerUtils.domActionSyncer(stateModified);
 
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateModified));
+      // stateFixer.fix(jsonStateOld, JSON.stringify(stateModified));
 
       return stateModified;
     }
@@ -643,6 +597,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       actionBodyChildSelectorHandler.deselectCurrentComponent(stateNew, selectedViewId);
       stateNew.borderScrivener.selectedElementId = null;
+      stateNew.borderScrivener.selectedElementIndex = null;
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

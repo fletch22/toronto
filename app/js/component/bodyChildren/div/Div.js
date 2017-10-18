@@ -7,6 +7,12 @@ import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
 import DropMarker from '../DropMarker';
 
 class Div extends BodyChild {
+
+  constructor(props) {
+    super(props);
+    this.render = this.render.bind(this);
+  }
+
   render() {
     const style = JSON.parse(this.props.style);
 
@@ -16,7 +22,7 @@ class Div extends BodyChild {
 
     style.display = this.props.visibility ? style.display : 'none';
 
-    return DragAndDropMaker.connectRender(this.props, (
+    return DragAndDropMaker.connectDragAndDropRender(this.props, (
       <div id={this.props.id} className="flex-bc" onClick={this.componentSelect} style={style}>
         {
           this.props.children.map((child) =>
@@ -61,7 +67,7 @@ Div = connect(
   null
 )(Div);
 
-Div = DragAndDropMaker.connect(Div);
+Div = DragAndDropMaker.connectDragAndDrop(Div);
 
 export default Div;
 

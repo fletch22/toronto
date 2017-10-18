@@ -5,12 +5,19 @@ import graphTraversal from '../../../state/graphTraversal';
 import 'css/modules/time-travel-toolbar';
 import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/index';
 import SelectedContextToolbar from '../SelectedContextToolbar';
+import DragAndDropMaker from '../../../component/dragAndDrop/DragAndDropMaker';
 
 class Body extends React.Component {
+  constructor(props) {
+    super(props);
+    this.render = this.render.bind(this);
+  }
+
   render() {
     const children = (this.props.children) ? this.props.children : [];
     const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
-    return (
+
+    return DragAndDropMaker.connectDropRender(this.props, (
       <div className="flex-pseudo-modal" style={{ height: '100%' }}>
         <div className="body-children-toolbar-col">
           <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
@@ -24,7 +31,7 @@ class Body extends React.Component {
         </div>
         <div style={{ width: '4px' }} />
       </div>
-    );
+    ));
   }
 }
 
@@ -39,6 +46,8 @@ Body.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  c.l(`CanBeDroppedOn: ${ownProps.canBeDroppedOn}`);
+
   const parent = graphTraversal.find(state, ownProps.id);
 
   const children = parent.viewModel.children;
@@ -66,6 +75,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
   };
 };
+
+Body = DragAndDropMaker.connectDrop(Body);
 
 Body = connect(
   mapStateToProps,

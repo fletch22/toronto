@@ -10,7 +10,8 @@ import ComponentTypes from '../component/ComponentTypes';
 import layoutModelFactory from './layoutModelFactory';
 import layoutMinionModelFactory from './layoutMinionModelFactory';
 import ddlModelFactory from './ddlModelFactory';
-import buttonSubmitModelFactory from "./buttonSubmitModelFactory";
+import buttonSubmitModelFactory from './buttonSubmitModelFactory';
+import divModelFactory from './divModelFactory';
 
 class ComponentGenerator {
 
@@ -86,6 +87,14 @@ class ComponentGenerator {
     };
   }
 
+  createDiv(model) {
+    const modelChild = divModelFactory.createInstanceFromModel(model);
+    return {
+      model: modelChild,
+      dom: null
+    };
+  }
+
   createDropDownListbox(model) {
     const modelChild = ddlModelFactory.createInstanceFromModel(model);
     return {
@@ -125,11 +134,8 @@ class ComponentGenerator {
       case ComponentTypes.WebPage: {
         return this.createWebPage(model);
       }
-      case ComponentTypes.Layout: {
-        return this.createLayout(model);
-      }
-      case ComponentTypes.LayoutMinion: {
-        return this.createLayoutMinion(model);
+      case ComponentTypes.Div: {
+        return this.createDiv(model);
       }
       case ComponentTypes.DropDownListbox: {
         return this.createDropDownListbox(model);

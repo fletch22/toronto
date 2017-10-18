@@ -7,6 +7,7 @@ import StatePackager from '../service/StatePackager';
 import actionComponentCreator from '../reducers/viewModelFactory';
 import ComponentTypes from '../domain/component/ComponentTypes';
 import dancePartnerSynchronizer from '../views/dancePartnerSynchronizer';
+import deepDiff from 'deep-diff';
 
 class ViewModelCreatorService {
 
@@ -31,11 +32,14 @@ class ViewModelCreatorService {
               Object.assign(stateViewModel, viewModel);
             } else {
               // this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
+              // c.lo(stateParentViewModel.viewModel.children, 'siblings1: ');
               stateParentViewModel.viewModel.children.push(viewModel);
+              // c.lo(stateParentViewModel.viewModel.children, 'siblings2: ');
             }
 
             // NOTE: 06-17-2017: Converts back to model.
             let model = actionComponentCreator.extractModelFromViewModel(viewModel);
+            // c.l(`Model tm1: ${JSON.stringify(model.typeLabel)}`);
             const parentModel = graphTraversal.find(stateNew.model, model.parentId);
 
             // NOTE: 06-17-2017: Syncs with model.
@@ -48,7 +52,9 @@ class ViewModelCreatorService {
               this.ensureModelSiblingsPrepped(parentModel.children, parentModel.typeLabel);
               parentModel.children.push(model);
             }
+            // c.l(`Model tm2: ${JSON.stringify(model.typeLabel)}`);
           });
+          // c.lo(stateParentViewModel.viewModel.children, 'siblings3: ');
 
           // NOTE: 06-17-2017: This method is meant to help synchronize the dashboard island view with changes to the state elsewhere.
           dancePartnerSynchronizer.update(stateNew);
@@ -57,10 +63,15 @@ class ViewModelCreatorService {
             fnAdditionalStateMutator(stateNew);
           }
 
+          // c.lo(stateNew.model.appContainer.children[0].children[0], 'update sn: ');
+          // const diff = deepDiff(state.model, stateNew.model);
+          // c.lo(diff, 'diff before ss:');
+
           const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
           return stateSyncService.saveState(statePackage)
             .then((result) => {
               console.debug('Success Callback.');
+              // c.lo(result.model.appContainer, 'rez: ');
               return Promise.resolve(result);
             })
             .catch((error) => {

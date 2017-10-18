@@ -54,7 +54,7 @@ SlideChooseDataStore.propTypes = {
   isSlideActive: PropTypes.bool,
   buttonNextDisabled: PropTypes.bool,
   dataStores: PropTypes.array,
-  dataStoreId: PropTypes.number,
+  dataStoreId: PropTypes.any,
   onCollectionFocus: PropTypes.func
 };
 

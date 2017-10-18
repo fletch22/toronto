@@ -2,6 +2,7 @@ import ModelToStateGenerator from '../stores/ModelToStateGenerator';
 import RestService from '../service/restService';
 import stateSyncService from '../service/stateSyncService';
 import defaultState from '../state/defaultState';
+import deepDiff from 'deep-diff';
 
 class StateRetriever {
 
@@ -33,9 +34,18 @@ class StateRetriever {
       });
 
       promise.then((data) => {
-        const state = JSON.parse(data.state);
+        const stateRecent = JSON.parse(data.state);
 
-        if (state === null) {
+        // NOTE: 10-17-2017: fleschec: This is for developement only. In production this is unnecessary and might even be slow.
+        this.deriveState().then((derivedState) => {
+          const diff = deepDiff(derivedState.model, stateRecent.model);
+          if (diff) {
+            c.lo(diff, 'diff: ');
+            throw new Error('Encountered error when comparing rush state with derived state. Your logic is incorrect.');
+          }
+        });
+
+        if (stateRecent === null) {
           const promiseInner = this.deriveState();
 
           promiseInner.then((stateInner) => {
@@ -46,16 +56,16 @@ class StateRetriever {
             reject(error);
           });
         } else {
-          c.l(state.serverStartupTimestamp, 'state.serverStartupTimestamp: ');
+          c.l(stateRecent.serverStartupTimestamp, 'state.serverStartupTimestamp: ');
 
           const startupTimestamp = data.startupTimestamp;
-          if (state.serverStartupTimestamp !== startupTimestamp) {
+          if (stateRecent.serverStartupTimestamp !== startupTimestamp) {
             console.debug('It appears that the server timestamp and the state timestamp are out of sync. This can happen if the state has been restored from backup.' +
               'To fix this, the system will set the current startup timestamp to the server timestamp.');
-            state.serverStartupTimestamp = startupTimestamp;
+            stateRecent.serverStartupTimestamp = startupTimestamp;
           }
 
-          resolve(state);
+          resolve(stateRecent);
         }
       });
     });

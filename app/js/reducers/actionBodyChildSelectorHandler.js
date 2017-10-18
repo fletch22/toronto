@@ -7,6 +7,7 @@ class ActionBodyChildSelectorHandler {
     const pageAndSelected = this.getPageViewModelAndSelectedViewModel(state, targetViewModelId);
     const pageViewNode = pageAndSelected.pageViewModel;
     const intendedSelectedViewModel = pageAndSelected.selectedViewModel;
+    const selectedViewModelIndex = pageAndSelected.selectedViewModelIndex;
 
     if (pageViewNode.needsSaving) {
       return state;
@@ -27,6 +28,7 @@ class ActionBodyChildSelectorHandler {
 
     const borderScrivener = state.borderScrivener;
     borderScrivener.selectedElementId = pageViewNode.selectedChildViewId;
+    borderScrivener.selectedElementIndex = selectedViewModelIndex;
     borderScrivener.visible = !!borderScrivener.selectedElementId;
 
     return state;
@@ -57,9 +59,16 @@ class ActionBodyChildSelectorHandler {
       selectedViewModel = pageViewModel;
     }
 
+    // NOTE: 10-17-2017: fleschec: There will be no parent if this is Body -- the outermost parent.
+    let selectedViewModelIndex = 0;
+    if (!!parentOfIntended) {
+      selectedViewModelIndex = graphTraversal.getChildsIndex(parentOfIntended.viewModel.children, selectedViewModel.id);
+    }
+
     return {
       pageViewModel,
-      selectedViewModel
+      selectedViewModel,
+      selectedViewModelIndex
     };
   }
 
@@ -74,11 +83,6 @@ class ActionBodyChildSelectorHandler {
     if (!!stateAndSel.pageViewModel) {
       stateAndSel.pageViewModel.selectedChildViewId = null;
     }
-  }
-
-  getPageViewModel(state, childIdInQuestion) {
-    const stateAndSel = this.getPageViewModelAndSelectedViewModel(state, childIdInQuestion);
-    return stateAndSel.pageViewModel;
   }
 }
 

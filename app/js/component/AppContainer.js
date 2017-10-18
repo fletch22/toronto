@@ -25,6 +25,7 @@ class AppContainer extends React.Component {
           height={this.props.borderScrivener.height}
           width={this.props.borderScrivener.width}
           selectedElementId={this.props.borderScrivener.selectedElementId}
+          selectedElementIndex={this.props.borderScrivener.selectedElementIndex}
         />
       </div>
     );

@@ -60,11 +60,18 @@ class DndActionHandler {
         }
       } else { // NOTE: 10-03-2017: The position is not middle
         parentOfHoverOver = graphTraversal.findParent(stateNew, dragNDrop.hoverOverId);
-        dragNDrop.parentOfHoverOverId = parentOfHoverOver.id;
-        const hoverChildsIndex = graphTraversal.getChildsIndex(parentOfHoverOver.viewModel.children, dragNDrop.hoverOverId);
 
-        dragNDrop.indexChildTarget = (position === 'before') ? hoverChildsIndex : hoverChildsIndex + 1;
-        dragNDrop.indexChildTarget = (dragNDrop.indexChildTarget < 0) ? 0 : dragNDrop.indexChildTarget;
+        // NOTE: 10-17-2017: If we are at the Body element, there is no parent.
+        if (!!parentOfHoverOver) {
+          dragNDrop.parentOfHoverOverId = parentOfHoverOver.id;
+          const hoverChildsIndex = graphTraversal.getChildsIndex(parentOfHoverOver.viewModel.children, dragNDrop.hoverOverId);
+
+          dragNDrop.indexChildTarget = (position === 'before') ? hoverChildsIndex : hoverChildsIndex + 1;
+          dragNDrop.indexChildTarget = (dragNDrop.indexChildTarget < 0) ? 0 : dragNDrop.indexChildTarget;
+        } else {
+          dragNDrop.parentOfHoverOverId = null;
+          dragNDrop.indexChildTarget = null;
+        }
       }
     }
 
