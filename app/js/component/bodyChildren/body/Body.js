@@ -46,7 +46,7 @@ Body.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  c.l(`CanBeDroppedOn: ${ownProps.canBeDroppedOn}`);
+  // c.l(`CanBeDroppedOn: ${ownProps.canBeDroppedOn}`);
 
   const parent = graphTraversal.find(state, ownProps.id);
 

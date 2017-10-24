@@ -12,12 +12,13 @@ class ButtonSubmitModelFactory extends ModelFactory {
       typeLabel: ComponentTypes.ButtonSubmit,
       elementId: model.elementId,
       label: model.label,
-      style: model.style || null
+      style: model.style || null,
+      ordinal: model.ordinal
     };
   }
 
-  createInstance(parentId, elementId, label) {
-    return this.createInstanceFromModel({ parentId, elementId, label });
+  createInstance(parentId, elementId, label, ordinal) {
+    return this.createInstanceFromModel({ parentId, elementId, label, ordinal });
   }
 }
 

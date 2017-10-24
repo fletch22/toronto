@@ -36,14 +36,17 @@ class StateRetriever {
       promise.then((data) => {
         const stateRecent = JSON.parse(data.state);
 
-        // NOTE: 10-17-2017: fleschec: This is for developement only. In production this is unnecessary and might even be slow.
-        this.deriveState().then((derivedState) => {
-          const diff = deepDiff(derivedState.model, stateRecent.model);
-          if (diff) {
-            c.lo(diff, 'diff: ');
-            throw new Error('Encountered error when comparing rush state with derived state. Your logic is incorrect.');
-          }
-        });
+        // NOTE: 10-17-2017: fleschec: This is for development only. In production this is unnecessary and might even be slow.
+        if (!!stateRecent) {
+          this.deriveState().then((derivedState) => {
+            const diff = deepDiff(derivedState.model, stateRecent.model);
+            if (diff) {
+              c.lo(derivedState.model, 'derivedState.model :');
+              c.lo(diff, 'diff: ');
+              throw new Error('Encountered error when comparing derived state with rush state. Your logic is incorrect.');
+            }
+          });
+        }
 
         if (stateRecent === null) {
           const promiseInner = this.deriveState();

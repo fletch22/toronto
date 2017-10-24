@@ -22,6 +22,15 @@ const getDndOnEnd = () => {
   };
 };
 
+const resetOrdinals = (children) => {
+  children.forEach((child, index) => {
+    child.ordinal = String(index);
+  });
+  children.sort((a, b) => {
+    return parseInt(a.ordinal, 10) - parseInt(b.ordinal, 10);
+  });
+};
+
 const moveInState = (state) => {
   const dnd = state.dragNDrop;
 
@@ -38,6 +47,7 @@ const moveInState = (state) => {
 
   // Remove dragged vm item from its parent.
   draggedParentViewModel.viewModel.children.splice(dnd.indexDraggedItem, 1);
+  resetOrdinals(draggedParentViewModel.viewModel.children);
   draggedParentViewModel.viewModel.children = [].concat(draggedParentViewModel.viewModel.children);
   if (draggedParentViewModel.id === hoverParentViewModel.id) {
     if (dnd.indexDraggedItem < indexChildTarget) {
@@ -47,6 +57,9 @@ const moveInState = (state) => {
 
   // // Add dragged vm item to hover vm parent.
   hoverParentViewModel.viewModel.children.splice(indexChildTarget, 0, draggedViewModel);
+  resetOrdinals(hoverParentViewModel.viewModel.children);
+
+  // draggedViewModel.viewModel.ordinal = indexChildTarget;
   hoverParentViewModel.viewModel.children = [].concat(hoverParentViewModel.viewModel.children);
   draggedViewModel.parentId = hoverParentViewModel.id;
 
@@ -62,10 +75,12 @@ const moveInState = (state) => {
 
   // Remove dragged model item from its parent.
   draggedParentModel.children.splice(dnd.indexDraggedItem, 1);
+  resetOrdinals(draggedParentModel.children);
   draggedParentModel.children = [].concat(draggedParentModel.children);
 
   // Add dragged model item to hover model parent.
   hoverParentModel.children.splice(indexChildTarget, 0, draggedItemModel);
+  resetOrdinals(hoverParentModel.children);
   hoverParentModel.children = [].concat(hoverParentModel.children);
   draggedItemModel.parentId = hoverParentModel.id;
 
@@ -83,7 +98,8 @@ const moveInState = (state) => {
     state,
     draggedParentModelId: draggedParentModel.id,
     hoveredParentModelId: hoverParentModel.id,
-    draggedModelId: draggedViewModel.viewModel.id
+    draggedModelId: draggedViewModel.viewModel.id,
+    ordinalChildTarget: indexChildTarget
   };
 };
 
@@ -96,7 +112,7 @@ const persistMove = () => {
       const statePackager = new StatePackager();
       const statePackage = statePackager.package(jsonStateOld, JSON.stringify(moveInfo.state));
 
-      return MoveComponentService.move(statePackage, moveInfo.draggedParentModelId, moveInfo.hoveredParentModelId, moveInfo.draggedModelId)
+      return MoveComponentService.move(statePackage, moveInfo.draggedParentModelId, moveInfo.hoveredParentModelId, moveInfo.draggedModelId, moveInfo.ordinalChildTarget)
         .then((result) => {
           console.debug('Success Callback.');
           return Promise.resolve(result);

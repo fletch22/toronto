@@ -4,15 +4,16 @@ import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class DivModelFactory extends ModelFactory {
 
-  createInstance(parentId) {
+  createInstance(model) {
     const id = f22Uuid.generate();
 
     return {
-      parentId,
+      parentId: model.parentId,
       id,
       typeLabel: ComponentTypes.Div,
       style: JSON.stringify({ boxShadow: 'inset 0px 0px 0px 1px gray', boxSizing: 'border-box', minWidth: '100px', minHeight: '100px' }),
-      children: []
+      children: [],
+      ordinal: model.ordinal
     };
   }
 
@@ -24,7 +25,8 @@ class DivModelFactory extends ModelFactory {
       id,
       typeLabel: ComponentTypes.Div,
       style: model.style,
-      children: []
+      children: [],
+      ordinal: model.ordinal
     };
 
     return instance;
