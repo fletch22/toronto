@@ -41,7 +41,7 @@ class DndActionHandler {
         if (parentOfHoverOver.viewModel.children.length > 0) {
           // NOTE: 10-03-2017: Does the hovered over component come after the dragged component and are they in the same container?
           if (dragNDrop.indexChildTarget > dragNDrop.indexDraggedItem && dragNDrop.parentOfDraggedItemId === dragNDrop.parentOfHoverOverId) {
-            dragNDrop.indexChildTarget++;
+            dragNDrop.indexChildTarget--;
           }
 
           // NOTE: 10-03-2017: Pretend the container is empty.
