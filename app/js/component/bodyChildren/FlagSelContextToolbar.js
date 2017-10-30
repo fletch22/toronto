@@ -12,11 +12,6 @@ class FlagSelContextToolbar extends React.Component {
     let toolbar = '';
     let description = '';
     switch (this.props.selectedViewModel.viewModel.typeLabel) {
-      case ComponentTypes.WebPage: {
-        toolbar = <BodyToolbar selectedViewModel={this.props.selectedViewModel} />;
-        description = (<span>This element is the root of your page. There can be only <a href="https://media.giphy.com/media/sqtSOp8DOsIa4/giphy.gif">one.</a></span>);
-        break;
-      }
       case ComponentTypes.Layout: {
         toolbar = <LayoutToolbar selectedViewModel={this.props.selectedViewModel} />;
         description = 'This element helps you form the foundation your page. Want a smaller, nested, layout? Select an element, then click the \'Layout\' button.';

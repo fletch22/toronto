@@ -12,31 +12,63 @@ class DropMarker extends React.Component {
     let offsetTop = 0;
 
     if (this.props.visible) {
-      switch (this.props.position) {
-        case 'before':
-          offsetLeft = this.props.rectX - 15;
-          offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
-          break;
-        case 'middle': {
-          if (this.props.lastChildViewModelId === null) {
-            offsetLeft = this.props.rectX - 5;
-            offsetTop = this.props.rectY - (this.props.rectHeight / 2);
-          } else {
-            const dom = window.document.getElementById(this.props.lastChildViewModelId);
-            const hoverBoundingRect = dom.getBoundingClientRect();
-            offsetLeft = hoverBoundingRect.x + (hoverBoundingRect.width / 2) + 15;
-            offsetTop = hoverBoundingRect.y - (hoverBoundingRect.height / 2) - 20;
+
+      if (this.props.isVerticalLayout) {
+        switch (this.props.position) {
+          case 'before':
+            offsetLeft = this.props.rectX - 15;
+            offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
+            break;
+          case 'middle': {
+            c.l(`LastChildvmid: ${this.props.lastChildViewModelId}`);
+            if (this.props.lastChildViewModelId === null) {
+              offsetLeft = this.props.rectX - 5;
+              offsetTop = this.props.rectY - (this.props.rectHeight / 2);
+            } else {
+              const dom = window.document.getElementById(this.props.lastChildViewModelId);
+              const hoverBoundingRect = dom.getBoundingClientRect();
+              offsetLeft = hoverBoundingRect.x + (hoverBoundingRect.width / 2) + 15;
+              offsetTop = hoverBoundingRect.y + (hoverBoundingRect.height);
+            }
+            break;
           }
-          break;
+          case 'after':
+            offsetLeft = (this.props.rectX + this.props.rectWidth) - 15;
+            offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
+            break;
+          case null:
+            break;
+          default: {
+            throw new Error(`Encountered error trying to handle position. Position ${this.props.position} not recognized.`);
+          }
         }
-        case 'after':
-          offsetLeft = (this.props.rectX + this.props.rectWidth) - 15;
-          offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
-          break;
-        case null:
-          break;
-        default: {
-          throw new Error(`Encountered error trying to handle position. Position ${this.props.position} not recognized.`);
+      } else {
+        switch (this.props.position) {
+          case 'before':
+            offsetLeft = this.props.rectX - 15;
+            offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
+            break;
+          case 'middle': {
+            if (this.props.lastChildViewModelId === null) {
+              offsetLeft = this.props.rectX - 5;
+              offsetTop = this.props.rectY - (this.props.rectHeight / 2);
+            } else {
+              const dom = window.document.getElementById(this.props.lastChildViewModelId);
+              const hoverBoundingRect = dom.getBoundingClientRect();
+              offsetLeft = hoverBoundingRect.x + (hoverBoundingRect.width / 2) + 15;
+              offsetTop = hoverBoundingRect.y - (hoverBoundingRect.height / 2) - 20;
+            }
+            break;
+          }
+          case 'after':
+            offsetLeft = (this.props.rectX + this.props.rectWidth) - 15;
+            offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
+            break;
+          case null:
+            break;
+          default: {
+            throw new Error(`Encountered error trying to handle position. Position ${this.props.position} not recognized.`);
+          }
         }
       }
     }
@@ -46,18 +78,7 @@ class DropMarker extends React.Component {
       </span>
     );
   }
-
-
-
-
-
-
-
-
 }
-
-
-
 
 DropMarker.propTypes = {
   ownerId: PropTypes.string,
@@ -68,7 +89,8 @@ DropMarker.propTypes = {
   rectHeight: PropTypes.number,
   rectX: PropTypes.number,
   rectY: PropTypes.number,
-  lastChildViewModelId: PropTypes.string
+  lastChildViewModelId: PropTypes.string,
+  isVerticalLayout: PropTypes.bool
 };
 
 const mapStateToProps = (state, props) => {
@@ -78,10 +100,12 @@ const mapStateToProps = (state, props) => {
   let position = null;
 
   const measurements = dnd.measurements;
+
   let rectWidth = 0;
   let rectHeight = 0;
   let rectX = 0.0;
   let rectY = 0.0;
+  let isVerticalLayout;
   if (measurements && measurements.hoverBoundingRect) {
     const rect = measurements.hoverBoundingRect;
     rectWidth = rect.width;
@@ -89,6 +113,8 @@ const mapStateToProps = (state, props) => {
     position = measurements.position;
     rectX = rect.x;
     rectY = rect.y;
+    // c.lo(measurements, 'measurements: ');
+    isVerticalLayout = measurements.isVerticalLayout;
   }
 
   const lastChildViewModelId = dnd.lastChildViewModelId;
@@ -100,7 +126,8 @@ const mapStateToProps = (state, props) => {
     rectHeight,
     rectX,
     rectY,
-    lastChildViewModelId
+    lastChildViewModelId,
+    isVerticalLayout
   };
 };
 

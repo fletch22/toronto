@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import 'rc-menu/assets/index.css';
-import '../../../../../css/modules/container.scss';
+// import '../../../../../css/modules/container.scss';
 import ModelPropTextInput from '../../../editors/ModelPropTextInput';
 import HeaderMenu from './HeaderMenu';
 import { actionUpdateViewPropertyValue } from '../../../../actions/index';

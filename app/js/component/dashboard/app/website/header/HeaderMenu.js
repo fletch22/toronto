@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Menu, { MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
-import '../../../../../../css/modules/container.scss';
+// import '../../../../../../css/modules/container.scss';
 import { actionAppToggleMenu } from '../../../../../actions/dashboard/app/index';
 import { actionCreatePseudoModalComponent } from '../../../../../actions/index';
 import ComponentTypes from '../../../../../domain/component/ComponentTypes';

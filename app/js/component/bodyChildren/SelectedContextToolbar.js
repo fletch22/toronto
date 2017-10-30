@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { default as DropDownListboxToolbar } from './dropDownListbox/FullToolbar';
 import { default as ButtonSubmitToolbar } from './buttonSubmit/FullToolbar';
 import { default as DivToolbar } from './div/FullToolbar';
+import { default as BodyToolbar } from './body/FullToolbar';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import FlagSelContextToolbar from './FlagSelContextToolbar';
 
@@ -20,6 +21,10 @@ class SelectedContextToolbar extends React.Component {
       }
       case ComponentTypes.Div: {
         contextToolbar = <DivToolbar selectedViewModel={this.props.selectedViewModel} />;
+        break;
+      }
+      case ComponentTypes.WebPage: {
+        contextToolbar = <BodyToolbar selectedViewModel={this.props.selectedViewModel} />;
         break;
       }
       default:

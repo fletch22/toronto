@@ -1,4 +1,5 @@
 import graphTraversal from '../../state/graphTraversal';
+import ComponentTypes from '../../domain/component/ComponentTypes';
 
 class DndActionHandler {
   static handleHover(state, stateNew, hoverOveredId, draggedId, measurements) {
@@ -40,7 +41,9 @@ class DndActionHandler {
         // NOTE: 10-03-2017: Is there more than one child?
         if (parentOfHoverOver.viewModel.children.length > 0) {
           // NOTE: 10-03-2017: Does the hovered over component come after the dragged component and are they in the same container?
-          if (dragNDrop.indexChildTarget > dragNDrop.indexDraggedItem && dragNDrop.parentOfDraggedItemId === dragNDrop.parentOfHoverOverId) {
+          if (dragNDrop.indexChildTarget > dragNDrop.indexDraggedItem
+            && dragNDrop.parentOfDraggedItemId === dragNDrop.parentOfHoverOverId
+            && dragNDrop.indexChildTarget === dragNDrop.parentOfHoverOverId) {
             dragNDrop.indexChildTarget--;
           }
 
@@ -69,6 +72,9 @@ class DndActionHandler {
           dragNDrop.indexChildTarget = (position === 'before') ? hoverChildsIndex : hoverChildsIndex + 1;
           dragNDrop.indexChildTarget = (dragNDrop.indexChildTarget < 0) ? 0 : dragNDrop.indexChildTarget;
         } else {
+          const hoveredOverVm = graphTraversal.find(stateNew, dragNDrop.hoverOverId);
+          const hoveredOverModel = graphTraversal.find(stateNew.model, hoveredOverVm.viewModel.id);
+
           dragNDrop.parentOfHoverOverId = null;
           dragNDrop.indexChildTarget = null;
         }

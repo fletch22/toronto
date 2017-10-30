@@ -1,5 +1,7 @@
 @import 'css/config/colors';
 @import 'css/modules/z-index';
+$fa-font-path: '~font-awesome/fonts' !default;
+@import '../node_modules/font-awesome/scss/font-awesome';
 
 .f22-app-root.container-fluid {
   padding-left: 0px;

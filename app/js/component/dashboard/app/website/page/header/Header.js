@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import '../../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
+// import '../../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
 import ModelPropTextInput from '../../../../../editors/ModelPropTextInput';
 import 'rc-menu/assets/index.css';
 import HeaderMenu from './HeaderMenu';

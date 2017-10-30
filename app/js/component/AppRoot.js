@@ -5,6 +5,7 @@ import { actionInitializeApp } from '../actions/index';
 import 'expose?$!expose?c!c'; // Globally exposes the an instance of 'c' class (a custom console class).
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import '../../css/modules/container.scss';
 
 class App extends React.Component {
 

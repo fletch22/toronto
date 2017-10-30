@@ -16,14 +16,14 @@ class Div extends BodyChild {
   render() {
     const style = JSON.parse(this.props.style);
 
-    if (!!this.props.parentHoveredOver) {
+    if (this.props.isHoveringOver) {
       style.border = '2px solid red';
     }
 
     style.display = this.props.visibility ? style.display : 'none';
 
     return DragAndDropMaker.connectDragAndDropRender(this.props, (
-      <div id={this.props.id} className="flex-bc" onClick={this.componentSelect} style={style}>
+      <div id={this.props.id} className="flex-bc" ref={node => (this.node = node)} onClick={this.componentSelect} style={style}>
         {
           this.props.children.map((child) =>
             <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
@@ -41,23 +41,13 @@ Div.PropTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  let parentHoveredOver;
-
   // c.l(`This div should have red border: ${ownProps.viewModel.id}: ${ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId}`);
-
-  if (ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId) {
-    const dnd = state.dragNDrop;
-    parentHoveredOver = {
-      id: dnd.parentOfHoverOverId,
-      indexChildTarget: dnd.indexChildTarget
-    };
-  }
 
   return {
     children: ownProps.viewModel.viewModel.children,
     isSelected: ownProps.viewModel.isSelected,
     style: ownProps.viewModel.viewModel.style,
-    parentHoveredOver,
+    isHoveringOver: ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId,
     visibility: ownProps.viewModel.visibility
   };
 };

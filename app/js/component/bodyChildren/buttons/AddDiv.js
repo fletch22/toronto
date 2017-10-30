@@ -21,12 +21,12 @@ AddDiv.propTypes = {
   disabled: PropTypes.bool
 };
 
-const addDiv = (parentModelId, viewModelId) => {
+const addDiv = (parentModelId, viewModelId, modelFactory) => {
   return (dispatch, getState) => {
     const state = getState();
     const parentModel = graphTraversal.find(state.model, parentModelId);
 
-    const model = divModelFactory.createInstance({ parentId: parentModelId, ordinal: String(parentModel.children.length) });
+    const model = modelFactory.createInstance({ parentId: parentModelId, ordinal: String(parentModel.children.length) });
 
     bodyChildrenCreatorService.create(dispatch, model, viewModelId);
   };
@@ -35,9 +35,7 @@ const addDiv = (parentModelId, viewModelId) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addDiv: () => {
-      // const model = modelGenerator.generate(ownProps.viewModel.viewModel.id, ComponentTypes.Div);
-      // bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
-      dispatch(addDiv(ownProps.viewModel.viewModel.id, ownProps.viewModel.id));
+      dispatch(addDiv(ownProps.viewModel.viewModel.id, ownProps.viewModel.id, divModelFactory));
     }
   };
 };
