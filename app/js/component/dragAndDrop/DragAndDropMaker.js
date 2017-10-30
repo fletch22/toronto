@@ -14,22 +14,16 @@ const cardSource = {
       index = props.selectedElementIndex;
     }
 
-    c.lo({
-      id,
-      index
-    }, 'id/index: ');
-
     return {
       id,
       index
     };
   },
   endDrag(props, monitor) {
-    const draggedItem = monitor.getItem();
     const didDrop = monitor.didDrop();
 
     if (didDrop) {
-      props.move(draggedItem.id, props.id);
+      props.move();
     } else {
       // Cancel drag - make original reappear.
       c.l('Cancelling.');
@@ -39,14 +33,27 @@ const cardSource = {
 };
 
 
-const isBeforeOrAfter = (component, monitor, canBeDroppedOn) => {
+const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
   // c.l(`Component iboa null: ${component === null}`);
-  const dom = findDOMNode(component);
+  // const dom = findDOMNode(component);
 
-  const style = window.getComputedStyle(dom);
+  // c.l(`Ref node found? ${!!component.node}`);
+
+  const node = component.node || findDOMNode(component);
+
+  // c.l(`Element ID: ${dom.getAttribute('id')}`);
+  // c.lo(node.getAttribute('id'), 'node id: ');
+  // c.lo(node.getAttribute('style'), 'node id: ');
+
+  const style = window.getComputedStyle(node);
   let isVerticalLayout;
 
+  // c.lo(dom, 'dom');
+  // c.lo(component.decoratedComponentInstance, 'dci: ');
+  // c.lo(style, 'cstyle: ');
+
   const direction = style['flex-direction'];
+  // c.lo(direction, 'direction: ');
   switch (direction) {
     case 'row':
       isVerticalLayout = false;
@@ -59,7 +66,7 @@ const isBeforeOrAfter = (component, monitor, canBeDroppedOn) => {
   }
 
   // Determine rectangle on screen
-  const hoverBoundingRect = dom.getBoundingClientRect();
+  const hoverBoundingRect = node.getBoundingClientRect();
 
   let position = 'before';
   const division = 9;
@@ -137,16 +144,17 @@ const isBeforeOrAfter = (component, monitor, canBeDroppedOn) => {
 
   return {
     position,
-    hoverBoundingRect
+    hoverBoundingRect,
+    isVerticalLayout
   };
 };
 
 
-const canBeDroppedOn = (props) => (
+const canBeDroppedOn = (props) => {
   // NOTE: 10-17-2017: fleschec: Bit of voodoo here; The Body tag will not have viewModel. Instead the 'canBeDroppedOn' property will be directly on props. If it's not on props, then we can assume
   // we shouldn't be dropping on the target at all.
-  !!props.viewModel ? props.viewModel.canBeDroppedOn : !!props.canBeDroppedOn
-);
+  return props.canBeDroppedOn || props.viewModel.canBeDroppedOn;
+};
 
 const cardTarget = {
   hover(props, monitor, component) {
@@ -169,7 +177,7 @@ const cardTarget = {
       return;
     }
 
-    const positionAndDimensions = isBeforeOrAfter(component, monitor, canBeDroppedOn(props));
+    const positionAndDimensions = getPositionAndDimensions(component, monitor, canBeDroppedOn(props));
 
     const measurements = Object.assign(positionAndDimensions, coordinates);
 

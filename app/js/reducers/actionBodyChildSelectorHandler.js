@@ -1,5 +1,6 @@
 import graphTraversal from '../state/graphTraversal';
 import actionComponentCreator from './viewModelFactory';
+import ComponentTypes from '../domain/component/ComponentTypes';
 
 class ActionBodyChildSelectorHandler {
 
@@ -35,24 +36,29 @@ class ActionBodyChildSelectorHandler {
   }
 
   getPageViewModelAndSelectedViewModel(state, childIdInQuestion) {
-    const parentOfIntended = graphTraversal.findParent(state, childIdInQuestion);
+    let parentOfIntended = graphTraversal.findParent(state, childIdInQuestion);
+
     let pageViewModel;
     let selectedViewModel;
 
     if (parentOfIntended) {
+      parentOfIntended = { ...parentOfIntended };
       selectedViewModel = graphTraversal.find(parentOfIntended.viewModel, childIdInQuestion);
 
       parentOfIntended.viewModel.children = [].concat(parentOfIntended.viewModel.children);
 
       pageViewModel = selectedViewModel;
       let parentNodeId = selectedViewModel.parentId;
-      while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
+      let typeLabel = selectedViewModel.viewModel.typeLabel;
+      // while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
+      while (typeLabel !== ComponentTypes.WebPage) {
         const parentNode = graphTraversal.find(state, parentNodeId);
         if (!parentNode) {
           throw new Error('Encountered problem trying to find web page root node.');
         }
         parentNodeId = parentNode.parentId;
         pageViewModel = parentNode;
+        typeLabel = parentNode.viewModel.typeLabel;
       }
     } else {
       pageViewModel = graphTraversal.find(state, childIdInQuestion);

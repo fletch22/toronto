@@ -92,8 +92,6 @@ const moveInState = (state) => {
 
   state.dragNDrop = getDndOnEnd();
 
-  // c.lo(state, 'state:');
-
   return {
     state,
     draggedParentModelId: draggedParentModel.id,
@@ -163,7 +161,7 @@ class DragAndDropUtils {
 
   static mapDispatchToProps(dispatch, ownProps) {
     return {
-      move: (draggedId, hoverId, position) => {
+      move: () => {
         dispatch(persistMove());
       },
       hoverOver: (draggedId, hoverOveredId, measurements) => {
@@ -175,18 +173,5 @@ class DragAndDropUtils {
     };
   }
 }
-
-// const mapStateToProps = (state, ownProps) => {
-//   const dragNDrop = state.dragNDrop;
-//
-//   return {
-//     id: ownProps.id,
-//     isSelected: ownProps.isSelected,
-//     viewModel: ownProps.viewModel,
-//     move: ownProps.move,
-//     hoverOver: ownProps.hoverOver,
-//     dragNDrop
-//   };
-// };
 
 export default DragAndDropUtils;

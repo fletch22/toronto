@@ -27,14 +27,13 @@ class ViewModelCreatorService {
           // NOTE: 06-17-2017: This method synchronizes changes to the cloned viewModel with the original viewModel. Warning: There is no order of operations here -- multiple changes
           // might be synced without regard to ordinal impacts. Before finishing syncing a particular viewModel, it syncs with the global state model.
           viewModelChildren.forEach((viewModel) => {
-            const stateViewModel = _.find(stateParentViewModel.viewModel.children, { id: viewModel.id });
-            if (stateViewModel) {
-              Object.assign(stateViewModel, viewModel);
-            } else {
-              // this.ensureViewModelSiblingsPrepped(stateParentViewModel.viewModel.children, stateParentViewModel.viewModel.typeLabel);
-              // c.lo(stateParentViewModel.viewModel.children, 'siblings1: ');
-              stateParentViewModel.viewModel.children.push(viewModel);
-              // c.lo(stateParentViewModel.viewModel.children, 'siblings2: ');
+            if (stateParentViewModel) {
+              const stateViewModel = _.find(stateParentViewModel.viewModel.children, {id: viewModel.id});
+              if (stateViewModel) {
+                Object.assign(stateViewModel, viewModel);
+              } else {
+                stateParentViewModel.viewModel.children.push(viewModel);
+              }
             }
 
             // NOTE: 06-17-2017: Converts back to model.
@@ -43,7 +42,7 @@ class ViewModelCreatorService {
             const parentModel = graphTraversal.find(stateNew.model, model.parentId);
 
             // NOTE: 06-17-2017: Syncs with model.
-            const stateModel = _.find(parentModel.children, { id: model.id });
+            const stateModel = _.find(parentModel.children, {id: model.id});
             if (stateModel) {
               model = Object.assign({}, model);
               delete model.children;
@@ -52,9 +51,7 @@ class ViewModelCreatorService {
               this.ensureModelSiblingsPrepped(parentModel.children, parentModel.typeLabel);
               parentModel.children.push(model);
             }
-            // c.l(`Model tm2: ${JSON.stringify(model.typeLabel)}`);
           });
-          // c.lo(stateParentViewModel.viewModel.children, 'siblings3: ');
 
           // NOTE: 06-17-2017: This method is meant to help synchronize the dashboard island view with changes to the state elsewhere.
           dancePartnerSynchronizer.update(stateNew);
@@ -62,10 +59,6 @@ class ViewModelCreatorService {
           if (!!fnAdditionalStateMutator) {
             fnAdditionalStateMutator(stateNew);
           }
-
-          // c.lo(stateNew.model.appContainer.children[0].children[0], 'update sn: ');
-          // const diff = deepDiff(state.model, stateNew.model);
-          // c.lo(diff, 'diff before ss:');
 
           const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
           return stateSyncService.saveState(statePackage)

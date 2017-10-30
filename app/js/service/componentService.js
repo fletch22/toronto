@@ -10,16 +10,6 @@ class ComponentService extends Service {
       childId,
       ordinalChildTarget
     };
-
-    const tmpMoveInfo = {
-      sourceParentId,
-      destinationParentId,
-      childId,
-      ordinalChildTarget
-    };
-
-    c.lo(tmpMoveInfo, 'moveInfo: ');
-
     return this.fetch(`${this.getOrbServerRootUrl()}/component/move`, 'post', body);
   }
 }

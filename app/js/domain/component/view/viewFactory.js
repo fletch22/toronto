@@ -2,7 +2,7 @@ import f22Uuid from '../../../util/f22Uuid';
 
 class ViewFactory {
 
-  createPageView() {
+  createPageView(model) {
     return {
       id: f22Uuid.generate(),
       selectedChildViewId: null,

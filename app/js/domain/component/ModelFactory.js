@@ -3,11 +3,6 @@ import f22Uuid from '../../util/f22Uuid';
 
 class ModelViewFactory {
 
-  wrapType(typeLabel, object) {
-    object.typeLabel = typeLabel;
-    return object;
-  }
-
   validateNotBlank(value, propertyName) {
     if (!!value === false
       || _.trim(value) === '') {

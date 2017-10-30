@@ -1,6 +1,6 @@
 import ModelFactory from './ModelFactory';
 
-class WebFolderModelFactory extends ModelFactory {
+class WebPageModelFactory extends ModelFactory {
 
   createInstance(model) {
     this.validateNotBlank(model.pageName, 'pageName');
@@ -12,11 +12,12 @@ class WebFolderModelFactory extends ModelFactory {
       id,
       pageName: model.pageName,
       typeLabel: model.typeLabel,
-      children: []
+      children: [],
+      style: model.style
     };
 
     return instance;
   }
 }
 
-export default new WebFolderModelFactory();
+export default new WebPageModelFactory();

@@ -92,7 +92,7 @@ class ViewModelFactory {
     let view;
     switch (model.typeLabel) {
       case ComponentTypes.WebPage: {
-        view = viewFactory.createPageView();
+        view = viewFactory.createPageView(model);
         break;
       }
       case ComponentTypes.Layout: {
@@ -135,7 +135,6 @@ class ViewModelFactory {
         throw new Error(`Encountered error trying to determine view to create for model typelabel \'${model.typeLabel}\'.`);
       }
     }
-
     return Object.assign(view, { parentId: viewModelParentId }, { viewModel: this.generateChildrensViewModels(view.id, model) });
   }
 

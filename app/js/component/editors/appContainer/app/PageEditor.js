@@ -15,7 +15,12 @@ class PageEditor extends React.Component {
           <Tab eventKey={1} title="Metadata">
             <MetaData { ... this.props } />
           </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled} style={{ height: '100%' }}><Body { ... this.props.viewModel } canBeDroppedOn /></Tab>
+          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled} style={{ height: '100%' }}>
+            <Body { ... this.props.viewModel }
+              selectedChildViewId={this.props.selectedChildViewId}
+              canBeDroppedOn
+            />
+          </Tab>
         </Tabs>
       </div>
     );
@@ -29,7 +34,8 @@ PageEditor.propTypes = {
   modelNodeId: PropTypes.any,
   activeTab: PropTypes.number,
   handleSelect: PropTypes.func,
-  tabBodyDisabled: PropTypes.bool
+  tabBodyDisabled: PropTypes.bool,
+  selectedChildViewId: PropTypes.string
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -41,7 +47,9 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     activeTab,
-    tabBodyDisabled
+    tabBodyDisabled,
+    selectedChildViewId: ownProps.viewModel.selectedChildViewId,
+    viewModel: ownProps.viewModel
   };
 };
 

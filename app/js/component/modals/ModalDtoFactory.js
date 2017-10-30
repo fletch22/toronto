@@ -10,8 +10,8 @@ class ModalDtoFactory {
     };
   }
 
-  getPseudoModalInstance(properties) {
-    return Object.assign(this.getCore(ModalTypes.PseudoModal), properties);
+  getPseudoModalInstance(component) {
+    return Object.assign(this.getCore(ModalTypes.PseudoModal), component);
   }
 }
 
