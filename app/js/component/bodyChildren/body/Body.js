@@ -20,12 +20,12 @@ class Body extends BodyChild {
     // const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
 
     // c.l(`this.props.isHoveringOver ${this.props.isHoveringOver}`);
-    const style = JSON.parse(this.props.style) || {};
+    const style = JSON.parse(this.props.viewModel.style) || {};
+    // c.lo(style, 'body style: ');
+    // c.l(`Body ID: ${this.props.id}`);
 
     style.flexGrow = 1;
     style.marginLeft = '4px';
-
-    // c.lo(style, 'style: ');
 
     if (this.props.isHoveringOver) {
       style.border = '2px solid red';
@@ -75,10 +75,11 @@ const mapStateToProps = (state, ownProps) => {
     selectedChildViewId,
     selectedViewModel,
     isSelected: selectedChildViewId === ownProps.id,
-    isHoveringOver: ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId,
+    isHoveringOver: ownProps.id === state.dragNDrop.hoverOverId,
     numChildren: children.length,
     canBeDroppedOn: ownProps.canBeDroppedOn,
-    style: selectedViewModel.viewModel.style
+    style: selectedViewModel.viewModel.style,
+    viewModel: ownProps.viewModel
   };
 };
 

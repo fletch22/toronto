@@ -72,8 +72,8 @@ class DndActionHandler {
           dragNDrop.indexChildTarget = (position === 'before') ? hoverChildsIndex : hoverChildsIndex + 1;
           dragNDrop.indexChildTarget = (dragNDrop.indexChildTarget < 0) ? 0 : dragNDrop.indexChildTarget;
         } else {
-          const hoveredOverVm = graphTraversal.find(stateNew, dragNDrop.hoverOverId);
-          const hoveredOverModel = graphTraversal.find(stateNew.model, hoveredOverVm.viewModel.id);
+          // const hoveredOverVm = graphTraversal.find(stateNew, dragNDrop.hoverOverId);
+          // const hoveredOverModel = graphTraversal.find(stateNew.model, hoveredOverVm.viewModel.id);
 
           dragNDrop.parentOfHoverOverId = null;
           dragNDrop.indexChildTarget = null;

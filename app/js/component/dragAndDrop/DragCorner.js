@@ -29,20 +29,6 @@ DragCorner.propTypes = {
   cancelDrag: PropTypes.func
 };
 
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//   return {
-//     move: (draggedId, hoverId, position) => {
-//       dispatch(persistMove());
-//     },
-//     hoverOver: (draggedId, hoverOveredId, measurements) => {
-//       dispatch(hoverOver(draggedId, hoverOveredId, measurements));
-//     },
-//     cancelDrag: () => {
-//       ActionInvoker.invoke(dispatch, cancelDragStateChange);
-//     }
-//   };
-// };
-
 DragCorner = DragAndDropMaker.connectDragAndDrop(DragCorner);
 
 DragCorner = reduxConnect(

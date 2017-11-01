@@ -41,6 +41,8 @@ const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
 
   const node = component.node || findDOMNode(component);
 
+  // c.l(`Refs node: ${component.refs.node === null}.`);
+
   // c.l(`Element ID: ${dom.getAttribute('id')}`);
   // c.lo(node.getAttribute('id'), 'node id: ');
   // c.lo(node.getAttribute('style'), 'node id: ');
@@ -53,7 +55,6 @@ const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
   // c.lo(style, 'cstyle: ');
 
   const direction = style['flex-direction'];
-  // c.lo(direction, 'direction: ');
   switch (direction) {
     case 'row':
       isVerticalLayout = false;
@@ -76,7 +77,6 @@ const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
   if (canBeDroppedOn) {
     if (isVerticalLayout) {
       // Get vertical middle
-
       const beforeMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) * beforeSectionFraction;
       const middleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) * middleSectionFraction;
 
@@ -93,7 +93,7 @@ const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
         position = 'after';
       }
     } else {
-      // Get vertical middle
+      // Get horizontal middle
       const beforeMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) * beforeSectionFraction;
       const middleX = (hoverBoundingRect.right - hoverBoundingRect.left) * middleSectionFraction;
 

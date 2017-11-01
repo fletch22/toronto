@@ -22,6 +22,8 @@ class Div extends BodyChild {
 
     style.display = this.props.visibility ? style.display : 'none';
 
+    c.l(`Div ID: ${this.props.id}`);
+
     return DragAndDropMaker.connectDragAndDropRender(this.props, (
       <div id={this.props.id} className="flex-bc" ref={node => (this.node = node)} onClick={this.componentSelect} style={style}>
         {
