@@ -51,9 +51,9 @@ class DropMarker extends React.Component {
             offsetTop = this.props.rectY - markerOffsetY;
             break;
           case 'middle': {
-            if (this.props.lastChildViewModelId === null) {
+            if (!this.props.lastChildViewModelId) {
               offsetLeft = this.props.rectX - 5;
-              offsetTop = this.props.rectY - (this.props.rectHeight / 2);
+              offsetTop = this.props.rectY - markerOffsetY + 10;
             } else {
               const dom = window.document.getElementById(this.props.lastChildViewModelId);
               const hoverBoundingRect = dom.getBoundingClientRect();
