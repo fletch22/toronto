@@ -2,7 +2,9 @@ import { PropTypes } from 'react';
 import ItemTypes from './ItemTypes';
 import { DragSource as dragSource, DropTarget as dropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
-// import DragCorner from '../../component/dragAndDrop/DragCorner';
+import ComponentTypes from '../../domain/component/ComponentTypes';
+
+const COMPONENT_ATTRIBUTE = 'data-f22-component';
 
 const cardSource = {
   beginDrag(props) {
@@ -32,29 +34,40 @@ const cardSource = {
   }
 };
 
+const findParentComponentDomNode = (node) => {
+  let parentNode = node.parentNode;
+  if (!parentNode.hasAttribute(COMPONENT_ATTRIBUTE)) {
+    parentNode = findParentComponentDomNode(parentNode);
+  }
+  return parentNode;
+};
 
-const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
-  // c.l(`Component iboa null: ${component === null}`);
-  // const dom = findDOMNode(component);
+const isRootMost = (node) => {
+  return node.hasAttribute(COMPONENT_ATTRIBUTE) && node.getAttribute(COMPONENT_ATTRIBUTE) === ComponentTypes.WebPage;
+};
 
-  // c.l(`Ref node found? ${!!component.node}`);
+const getFlexDirection = (node, canBeDroppedOn) => {
+  let searchNode = node;
 
-  const node = component.node || findDOMNode(component);
+  // c.l(`CBDO: ${canBeDroppedOn}`);
 
-  // c.l(`Refs node: ${component.refs.node === null}.`);
+  if (!canBeDroppedOn) {
+    if (!isRootMost(node)) {
+      // c.l('Ain\'t root.');
+      searchNode = findParentComponentDomNode(node);
+    }
+  }
 
-  // c.l(`Element ID: ${dom.getAttribute('id')}`);
-  // c.lo(node.getAttribute('id'), 'node id: ');
-  // c.lo(node.getAttribute('style'), 'node id: ');
-
-  const style = window.getComputedStyle(node);
   let isVerticalLayout;
 
   // c.lo(dom, 'dom');
   // c.lo(component.decoratedComponentInstance, 'dci: ');
   // c.lo(style, 'cstyle: ');
 
+  const style = window.getComputedStyle(searchNode);
+
   const direction = style['flex-direction'];
+  // c.l(`direction: ${direction}`);
   switch (direction) {
     case 'row':
       isVerticalLayout = false;
@@ -65,6 +78,16 @@ const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
     default:
       throw new Error(`Encountered error trying to interpret unrecognized flex-direction: '${direction}.'`);
   }
+
+  return isVerticalLayout;
+};
+
+const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
+  let node = component.node || findDOMNode(component);
+
+  node = document.getElementById(node.getAttribute('id'));
+
+  const isVerticalLayout = getFlexDirection(node, canBeDroppedOn);
 
   // Determine rectangle on screen
   const hoverBoundingRect = node.getBoundingClientRect();
@@ -119,7 +142,7 @@ const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
       const clientOffset = monitor.getClientOffset();
 
       // Get pixels to the top
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top + window.pageYOffset;
+      const hoverClientY = (clientOffset.y - hoverBoundingRect.top); // + window.pageYOffset;
 
       // Find out which is lower/higher
       if (hoverClientY > hoverMiddleY) {

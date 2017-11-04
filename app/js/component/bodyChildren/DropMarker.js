@@ -12,18 +12,22 @@ class DropMarker extends React.Component {
     let offsetTop = 0;
 
     if (this.props.visible) {
+      // c.l(`classNames: ${classNames}`);
+      // c.l(`pos: ${this.props.position}`);
+      // c.l(`isvl: ${this.props.isVerticalLayout}`);
+      const markerOffsetY = 60;
       if (this.props.isVerticalLayout) {
         switch (this.props.position) {
           case 'before':
             offsetLeft = this.props.rectX - 15;
-            offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
+            offsetTop = this.props.rectY - markerOffsetY;
             break;
           case 'middle': {
             if (!!this.props.lastChildViewModelId) {
               const dom = window.document.getElementById(this.props.lastChildViewModelId);
-              const hoverBoundingRect = dom.getBoundingClientRect();
-              offsetLeft = hoverBoundingRect.x - 20;
-              offsetTop = hoverBoundingRect.y + (hoverBoundingRect.height);
+              const lastChildBoundingRect = dom.getBoundingClientRect();
+              offsetLeft = lastChildBoundingRect.x - 15;
+              offsetTop = lastChildBoundingRect.y + lastChildBoundingRect.height - 60;
             } else {
               offsetLeft = this.props.rectX - 5;
               offsetTop = this.props.rectY - (this.props.rectHeight / 2);
@@ -31,8 +35,8 @@ class DropMarker extends React.Component {
             break;
           }
           case 'after':
-            offsetLeft = (this.props.rectX + this.props.rectWidth) - 15;
-            offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
+            offsetLeft = this.props.rectX - 15;
+            offsetTop = this.props.rectY + this.props.rectHeight - markerOffsetY;
             break;
           case null:
             break;
@@ -43,8 +47,8 @@ class DropMarker extends React.Component {
       } else {
         switch (this.props.position) {
           case 'before':
-            offsetLeft = this.props.rectX - 15;
-            offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
+            offsetLeft = this.props.rectX - 19;
+            offsetTop = this.props.rectY - markerOffsetY;
             break;
           case 'middle': {
             if (this.props.lastChildViewModelId === null) {
@@ -53,14 +57,14 @@ class DropMarker extends React.Component {
             } else {
               const dom = window.document.getElementById(this.props.lastChildViewModelId);
               const hoverBoundingRect = dom.getBoundingClientRect();
-              offsetLeft = hoverBoundingRect.x + (hoverBoundingRect.width / 2) + 15;
-              offsetTop = hoverBoundingRect.y - (hoverBoundingRect.height / 2) - 20;
+              offsetLeft = hoverBoundingRect.x + hoverBoundingRect.width - 19;
+              offsetTop = hoverBoundingRect.y - markerOffsetY;
             }
             break;
           }
           case 'after':
-            offsetLeft = (this.props.rectX + this.props.rectWidth) - 15;
-            offsetTop = this.props.rectY - (this.props.rectHeight / 2) - 20;
+            offsetLeft = this.props.rectX + this.props.rectWidth - 19;
+            offsetTop = this.props.rectY - markerOffsetY;
             break;
           case null:
             break;
@@ -97,14 +101,21 @@ const mapStateToProps = (state, props) => {
   const visible = (dnd.hoverOverId === props.ownerId);
   let position = null;
 
+  // c.l(`hoid: ${dnd.hoverOverId}`);
+  // c.l(`ownerId: ${props.ownerId}`);
+
   const measurements = dnd.measurements;
+
+  // if (visible) {
+  //   c.lo(measurements, 'measurements: ');
+  // }
 
   let rectWidth = 0;
   let rectHeight = 0;
   let rectX = 0.0;
   let rectY = 0.0;
   let isVerticalLayout;
-  if (measurements && measurements.hoverBoundingRect) {
+  if (visible && measurements && measurements.hoverBoundingRect) {
     const rect = measurements.hoverBoundingRect;
     rectWidth = rect.width;
     rectHeight = rect.height;

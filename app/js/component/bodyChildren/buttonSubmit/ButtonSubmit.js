@@ -5,6 +5,7 @@ import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/in
 import BodyChild from '../BodyChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
 import DropMarker from '../../bodyChildren/DropMarker';
+import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class ButtonSubmit extends BodyChild {
 
@@ -23,7 +24,7 @@ class ButtonSubmit extends BodyChild {
     classNames += (this.props.isSelected) ? ' body-child-selected' : '';
 
     return DragAndDropMaker.connectDragAndDropRender(this.props, (
-      <div id={this.props.id} onClick={this.props.onClick} style={{ paddingRight: '4px', display }}>
+      <div id={this.props.id} onClick={this.props.onClick} data-f22-component={ComponentTypes.ButtonSubmit} style={{ paddingRight: '4px', display }}>
         <button className={classNames} style={style}>{this.props.label}</button>
         <DropMarker ownerId={this.props.id} />
       </div>

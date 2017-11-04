@@ -8,6 +8,7 @@ import DragAndDropMaker from '../../../component/dragAndDrop/DragAndDropMaker';
 import DragAndDropUtils from '../../../component/dragAndDrop/DragAndDropUtils';
 import DropMarker from '../../../component/bodyChildren/DropMarker';
 import BodyChild from '../../bodyChildren/BodyChild';
+import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class Body extends BodyChild {
   constructor(props) {
@@ -36,7 +37,7 @@ class Body extends BodyChild {
         <div className="body-children-toolbar-col">
           <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
         </div>
-        <div id={this.props.id} style={style} ref={node => (this.node = node)} onClick={this.componentSelect}>
+        <div id={this.props.id} style={style} ref={node => (this.node = node)} onClick={this.componentSelect} data-f22-component={ComponentTypes.WebPage}>
           {
             children.map((child) =>
               <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />

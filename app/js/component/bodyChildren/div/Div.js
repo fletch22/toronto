@@ -5,6 +5,7 @@ import '../../../../css/f22-react-grid-layout.css';
 import ComponentChild from '../ComponentChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
 import DropMarker from '../DropMarker';
+import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class Div extends BodyChild {
 
@@ -22,10 +23,10 @@ class Div extends BodyChild {
 
     style.display = this.props.visibility ? style.display : 'none';
 
-    c.l(`Div ID: ${this.props.id}`);
+    // c.l(`Div ID: ${this.props.id}`);
 
     return DragAndDropMaker.connectDragAndDropRender(this.props, (
-      <div id={this.props.id} className="flex-bc" ref={node => (this.node = node)} onClick={this.componentSelect} style={style}>
+      <div id={this.props.id} className="flex-bc" ref={node => (this.node = node)} onClick={this.componentSelect} data-f22-component={ComponentTypes.Div} style={style}>
         {
           this.props.children.map((child) =>
             <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
