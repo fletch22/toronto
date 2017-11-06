@@ -28,7 +28,7 @@ const cardSource = {
       props.move();
     } else {
       // Cancel drag - make original reappear.
-      c.l('Cancelling.');
+      c.l('Cancelling drag.');
       props.cancelDrag();
     }
   }
@@ -48,26 +48,15 @@ const isRootMost = (node) => {
 
 const getFlexDirection = (node, canBeDroppedOn) => {
   let searchNode = node;
-
-  // c.l(`CBDO: ${canBeDroppedOn}`);
-
   if (!canBeDroppedOn) {
     if (!isRootMost(node)) {
-      // c.l('Ain\'t root.');
       searchNode = findParentComponentDomNode(node);
     }
   }
 
   let isVerticalLayout;
-
-  // c.lo(dom, 'dom');
-  // c.lo(component.decoratedComponentInstance, 'dci: ');
-  // c.lo(style, 'cstyle: ');
-
   const style = window.getComputedStyle(searchNode);
-
   const direction = style['flex-direction'];
-  // c.l(`direction: ${direction}`);
   switch (direction) {
     case 'row':
       isVerticalLayout = false;
@@ -175,8 +164,8 @@ const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
 
 const canBeDroppedOn = (props) => {
   // NOTE: 10-17-2017: fleschec: Bit of voodoo here; The Body tag will not have viewModel. Instead the 'canBeDroppedOn' property will be directly on props. If it's not on props, then we can assume
-  // we shouldn't be dropping on the target at all.
-  return props.canBeDroppedOn || props.viewModel.canBeDroppedOn;
+  // we shouldn't be dropping on the target at all. DragCorner has no viewmodel so we test for props.viewModel first.
+  return props.canBeDroppedOn || (props.viewModel && props.viewModel.canBeDroppedOn);
 };
 
 const cardTarget = {
