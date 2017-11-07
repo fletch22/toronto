@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect as reduxConnect } from 'react-redux';
 import DragAndDropMaker from '../dragAndDrop/DragAndDropMaker';
 import DropMarker from '../../component/bodyChildren/DropMarker';
-import DragAndDropUtils from "./DragAndDropUtils";
+import DragAndDropUtils from './DragAndDropUtils';
+import f22Uuid from '../../util/f22Uuid';
 
 /* eslint-disable react/prefer-stateless-function */
 class DragCorner extends React.Component {
@@ -13,7 +14,7 @@ class DragCorner extends React.Component {
 
   render() {
     return DragAndDropMaker.connectDragAndDropRender(this.props, (
-      <div style={{ position: 'absolute', top: '-12px', left: this.props.dragCornerOffsetX, width: '10px', height: '10px', backgroundColor: 'yellow', border: '1px solid red' }}>
+      <div id={f22Uuid.generate()} style={{ position: 'absolute', top: '-12px', left: this.props.dragCornerOffsetX, width: '10px', height: '10px', backgroundColor: 'yellow', border: '1px solid red' }}>
         <DropMarker ownerId={this.props.id} />
       </div>
     ));

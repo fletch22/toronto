@@ -43,7 +43,7 @@ const findParentComponentDomNode = (node) => {
 };
 
 const isRootMost = (node) => {
-  return node.hasAttribute(COMPONENT_ATTRIBUTE) && node.getAttribute(COMPONENT_ATTRIBUTE) === ComponentTypes.WebPage;
+  return node && node.hasAttribute(COMPONENT_ATTRIBUTE) && node.getAttribute(COMPONENT_ATTRIBUTE) === ComponentTypes.WebPage;
 };
 
 const getFlexDirection = (node, canBeDroppedOn) => {
@@ -71,10 +71,8 @@ const getFlexDirection = (node, canBeDroppedOn) => {
   return isVerticalLayout;
 };
 
-const getPositionAndDimensions = (component, monitor, canBeDroppedOn) => {
-  let node = component.node || findDOMNode(component);
-
-  node = document.getElementById(node.getAttribute('id'));
+const getPositionAndDimensions = (component, monitor, canBeDroppedOn, hoveredItemId) => {
+  const node = document.getElementById(hoveredItemId);
 
   const isVerticalLayout = getFlexDirection(node, canBeDroppedOn);
 
@@ -189,7 +187,7 @@ const cardTarget = {
       return;
     }
 
-    const positionAndDimensions = getPositionAndDimensions(component, monitor, canBeDroppedOn(props));
+    const positionAndDimensions = getPositionAndDimensions(component, monitor, canBeDroppedOn(props), hoverItem.id);
 
     const measurements = Object.assign(positionAndDimensions, coordinates);
 

@@ -34,8 +34,6 @@ const resetOrdinals = (children) => {
 const moveInState = (state) => {
   const dnd = state.dragNDrop;
 
-  // c.lo(dnd, 'dnd: ');
-
   // Find dragged item vm and parent.
   const draggedParentViewModel = graphTraversal.find(state, dnd.parentOfDraggedItemId);
   const draggedViewModel = draggedParentViewModel.viewModel.children[dnd.indexDraggedItem];
@@ -55,7 +53,7 @@ const moveInState = (state) => {
     }
   }
 
-  // // Add dragged vm item to hover vm parent.
+  // Add dragged vm item to hover vm parent.
   hoverParentViewModel.viewModel.children.splice(indexChildTarget, 0, draggedViewModel);
   resetOrdinals(hoverParentViewModel.viewModel.children);
 
