@@ -25,7 +25,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
 
-  // c.l(`action.type: ${action.type}`);
+  c.l(`action.type: ${action.type}`);
   borderScrivenerUtils.domActionSyncer(stateNew);
 
   switch (action.type) {

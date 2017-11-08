@@ -32,7 +32,6 @@ class Div extends BodyChild {
             <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
           )
         }
-        <DropMarker ownerId={this.props.id} />
       </div>
     ));
   }

@@ -26,7 +26,6 @@ class ButtonSubmit extends BodyChild {
     return DragAndDropMaker.connectDragAndDropRender(this.props, (
       <div id={this.props.id} onClick={this.props.onClick} data-f22-component={ComponentTypes.ButtonSubmit} style={{ paddingRight: '4px', display }}>
         <button className={classNames} style={style}>{this.props.label}</button>
-        <DropMarker ownerId={this.props.id} />
       </div>
     ));
   }

@@ -18,12 +18,7 @@ class Body extends BodyChild {
 
   render() {
     const children = (this.props.children) ? this.props.children : [];
-    // const wrapperClass = (this.props.isSelected) ? 'body-child-selected' : '';
-
-    // c.l(`this.props.isHoveringOver ${this.props.isHoveringOver}`);
     const style = JSON.parse(this.props.viewModel.style) || {};
-    // c.lo(style, 'body style: ');
-    // c.l(`Body ID: ${this.props.id}`);
 
     style.flexGrow = 1;
     style.marginLeft = '4px';
@@ -44,7 +39,6 @@ class Body extends BodyChild {
             )
           }
         </div>
-        <DropMarker ownerId={this.props.id} />
       </div>
     ));
   }

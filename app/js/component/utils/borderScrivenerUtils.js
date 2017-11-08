@@ -8,7 +8,7 @@ class BorderScrivenerUtils {
   getBoundingClientRect(selectedElementId) {
     let result = null;
 
-    const element = document.getElementById(selectedElementId);
+    const element = window.document.getElementById(selectedElementId);
     if (!!element) {
       const rectRaw = element.getBoundingClientRect();
 

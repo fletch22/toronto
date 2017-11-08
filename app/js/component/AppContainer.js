@@ -6,6 +6,7 @@ import PseudoModalWrangler from '../component/modals/PseudoModalWrangler';
 import ViewTypes from '../views/ViewTypes';
 import _ from 'lodash';
 import BorderScrivener from './BorderScrivener';
+import DropMarker from '../component/bodyChildren/DropMarker';
 
 class AppContainer extends React.Component {
   render() {
@@ -27,6 +28,7 @@ class AppContainer extends React.Component {
           selectedElementId={this.props.borderScrivener.selectedElementId}
           selectedElementIndex={this.props.borderScrivener.selectedElementIndex}
         />
+        <DropMarker dragNDrop={this.props.dragNDrop} />
       </div>
     );
   }
@@ -35,7 +37,8 @@ class AppContainer extends React.Component {
 AppContainer.propTypes = {
   children: PropTypes.arrayOf(PropTypes.object).isRequired,
   appContainerChildren: PropTypes.arrayOf(PropTypes.object),
-  borderScrivener: PropTypes.object
+  borderScrivener: PropTypes.object,
+  dragNDrop: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
@@ -51,10 +54,12 @@ const mapStateToProps = (state) => {
   }
 
   const borderScrivener = state.borderScrivener;
+  const dragNDrop = state.dragNDrop;
 
   return {
     children,
-    borderScrivener
+    borderScrivener,
+    dragNDrop
   };
 };
 

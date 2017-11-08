@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { actionSetCurrentBodyTool, actionUnsetCurrentBody } from '../../actions/bodyChildrenEditor/index';
+import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 
 class BodyChild extends React.Component {
 

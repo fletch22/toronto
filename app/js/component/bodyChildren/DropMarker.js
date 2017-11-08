@@ -12,9 +12,6 @@ class DropMarker extends React.Component {
     let offsetTop = 0;
 
     if (this.props.visible) {
-      // c.l(`classNames: ${classNames}`);
-      // c.l(`pos: ${this.props.position}`);
-      // c.l(`isvl: ${this.props.isVerticalLayout}`);
       const markerOffsetY = 60;
       if (this.props.isVerticalLayout) {
         switch (this.props.position) {
@@ -83,7 +80,6 @@ class DropMarker extends React.Component {
 }
 
 DropMarker.propTypes = {
-  ownerId: PropTypes.string,
   hoveringId: PropTypes.string,
   visible: PropTypes.bool,
   position: PropTypes.string,
@@ -92,43 +88,41 @@ DropMarker.propTypes = {
   rectX: PropTypes.number,
   rectY: PropTypes.number,
   lastChildViewModelId: PropTypes.string,
-  isVerticalLayout: PropTypes.bool
+  isVerticalLayout: PropTypes.bool,
+  dragNDrop: PropTypes.object
 };
 
 const mapStateToProps = (state, props) => {
-  const dnd = state.dragNDrop;
+  const dnd = props.dragNDrop;
 
-  const visible = (dnd.hoverOverId === props.ownerId);
+  let visible = false;
   let position = null;
-
-  // c.l(`hoid: ${dnd.hoverOverId}`);
-  // c.l(`ownerId: ${props.ownerId}`);
-
-  const measurements = dnd.measurements;
-
-  // if (visible) {
-  //   c.lo(measurements, 'measurements: ');
-  // }
 
   let rectWidth = 0;
   let rectHeight = 0;
   let rectX = 0.0;
   let rectY = 0.0;
   let isVerticalLayout;
-  if (visible && measurements && measurements.hoverBoundingRect) {
-    const rect = measurements.hoverBoundingRect;
-    rectWidth = rect.width;
-    rectHeight = rect.height;
-    position = measurements.position;
-    rectX = rect.x;
-    rectY = rect.y;
-    // c.lo(measurements, 'measurements: ');
-    isVerticalLayout = measurements.isVerticalLayout;
+  let lastChildViewModelId;
+  let hoveringId;
+  if (dnd) {
+    visible = !!dnd.hoverOverId;
+    const measurements = dnd.measurements;
+    if (visible && measurements && measurements.hoverBoundingRect) {
+      const rect = measurements.hoverBoundingRect;
+      rectWidth = rect.width;
+      rectHeight = rect.height;
+      position = measurements.position;
+      rectX = rect.x;
+      rectY = rect.y;
+      isVerticalLayout = measurements.isVerticalLayout;
+    }
+    lastChildViewModelId = dnd.lastChildViewModelId;
+    hoveringId = dnd.hoverOverId;
   }
 
-  const lastChildViewModelId = dnd.lastChildViewModelId;
-
   return {
+    hoveringId,
     visible,
     position,
     rectWidth,
