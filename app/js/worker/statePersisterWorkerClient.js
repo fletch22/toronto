@@ -1,4 +1,4 @@
-import Worker from 'worker!./statePersisterWorker.js';
+import Worker from 'worker-loader!./statePersisterWorker.js';
 import WorkerMessage, { WorkerMessageTypes } from './workerMessage';
 import StatePackager from '../service/StatePackager';
 import MessagePoster from '../domain/message/messagePoster';

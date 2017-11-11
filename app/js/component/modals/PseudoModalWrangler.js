@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import update from 'react-addons-update';
 import PseudoModal from '../../component/modals/PseudoModal';
 
 class PseudoModalWrangler extends React.Component {
@@ -31,7 +30,7 @@ const mapStateToProps = (state, props) => {
 
   if ((props.pseudoModals && statePseudoModals && props.pseudoModals.length !== statePseudoModals.length)
     || oldChildren !== newChildren) {
-    statePseudoModals = update(state.dom.pseudoModals, { $push: [] });
+    statePseudoModals = [].concat(state.dom.pseudoModals);
   }
 
   return {

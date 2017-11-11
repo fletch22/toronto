@@ -70,14 +70,14 @@ module.exports = merge(common, {
       { from: path.resolve(__dirname, 'app', 'images'), to: 'images' }
     ])
   ],
-  postcss: [
-    autoprefixer({
-      browsers: ['last 2 versions']
-    })
-  ],
+  // postcss: [
+  //   autoprefixer({
+  //     browsers: ['last 2 versions']
+  //   })
+  // ],
   resolve: {
-    extensions: ['', '.js', '.scss'],
-    modulesDirectories: ['app', 'node_modules'],
+    extensions: ['*', '.js', '.scss'],
+    modules: ['app', 'node_modules'],
     alias: {
       c: path.resolve(__dirname, 'app', 'js', 'util', 'c.js')
     }
