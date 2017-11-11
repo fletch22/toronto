@@ -19,7 +19,7 @@ class LayoutMinion extends React.Component {
       <div className="layout-minion" data-viewid={this.props.id} onClick={this.props.onClick} style={style}>
           {
             children.map((child) =>
-              <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
+              <ComponentChild key={child.id} id={child.id} viewModel={child} />
             )
           }
       </div>

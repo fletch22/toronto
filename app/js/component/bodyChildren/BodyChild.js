@@ -3,6 +3,10 @@ import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index
 
 class BodyChild extends React.Component {
 
+  static mergePropTypes(descendentProps) {
+    return { ...BodyChild.propTypes, ...descendentProps };
+  }
+
   constructor(props) {
     super(props);
     this.componentSelect = this.componentSelect.bind(this);
@@ -17,12 +21,15 @@ class BodyChild extends React.Component {
 BodyChild.contextTypes = { store: PropTypes.object };
 
 BodyChild.propTypes = {
-  id: PropTypes.any,
-  viewModel: PropTypes.any,
-  isSelected: PropTypes.bool,
-  onClick: PropTypes.func,
+  id: PropTypes.any.isRequired,
+  viewModel: PropTypes.any.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  isHoveringOver: PropTypes.bool.isRequired,
   children: PropTypes.array,
-  style: PropTypes.string
+  style: PropTypes.string,
+  visibility: PropTypes.bool,
+  canBeDroppedOn: PropTypes.bool
 };
 
 export default BodyChild;

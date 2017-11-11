@@ -1,5 +1,6 @@
 import graphTraversal from '../../state/graphTraversal';
 import { actionHoverOver } from '../../actions/dnd/index.js';
+import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 import ActionInvoker from '../../actions/ActionInvoker';
 import MoveComponentService from '../../service/MoveComponentService';
 import modalDispatcher from '../../component/modals/modalDispatcher';
@@ -167,6 +168,10 @@ class DragAndDropUtils {
       },
       cancelDrag: () => {
         ActionInvoker.invoke(dispatch, cancelDragStateChange);
+      },
+      onClick: (event) => {
+        event.stopPropagation();
+        dispatch(actionSetCurrentBodyTool(ownProps.id));
       }
     };
   }

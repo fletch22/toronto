@@ -1,16 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { WidthProvider as widthProvider } from 'react-grid-layout';
-import ReactGridLayout from 'react-grid-layout';
-const ReactGridLayoutInitialized = widthProvider(ReactGridLayout);
 import '../../../css/f22-react-grid-layout.css';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 import ComponentChild from './ComponentChild';
 import LayoutService from '../../service/component/LayoutChangeService';
-import graphTraversal from '../../state/graphTraversal';
-import actionComponentCreator from '../../reducers/viewModelFactory';
 
 class GridLayout extends React.Component {
 
@@ -28,7 +23,7 @@ class GridLayout extends React.Component {
 
     return (
       <div className={wrapperClass} key={gridItem.i} data-grid={gridItem} style={{ padding: '0px', margin: '0px' }}>
-        <ComponentChild id={viewModel.id} viewModel={viewModel} isSelected={viewModel.isSelected} />
+        <ComponentChild id={viewModel.id} viewModel={viewModel} />
       </div>
     );
   }

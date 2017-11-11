@@ -19,7 +19,7 @@ class DefaultState {
         width: 0,
         height: 0,
         visible: false,
-        needsUpdate: false,
+        lastUpdateRequest: new Date().getMilliseconds(),
         selectedElementId: null
       },
       views: [],

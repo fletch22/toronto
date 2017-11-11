@@ -7,30 +7,27 @@ class ActionBodyChildSelectorHandler {
   process(state, targetViewModelId) {
     const pageAndSelected = this.getPageViewModelAndSelectedViewModel(state, targetViewModelId);
     const pageViewNode = pageAndSelected.pageViewModel;
-    const intendedSelectedViewModel = pageAndSelected.selectedViewModel;
     const selectedViewModelIndex = pageAndSelected.selectedViewModelIndex;
 
     if (pageViewNode.needsSaving) {
       return state;
     }
 
-    intendedSelectedViewModel.isSelected = true;
-
     if (pageViewNode.selectedChildViewId && pageViewNode.selectedChildViewId !== targetViewModelId) {
       const parentOfExisting = graphTraversal.findParent(state, pageViewNode.selectedChildViewId);
       if (parentOfExisting) {
-        const currentlySelectedViewModel = graphTraversal.find(parentOfExisting.viewModel, pageViewNode.selectedChildViewId);
-        currentlySelectedViewModel.isSelected = false;
-
         parentOfExisting.viewModel.children = [].concat(parentOfExisting.viewModel.children);
       }
     }
     pageViewNode.selectedChildViewId = targetViewModelId;
 
-    const borderScrivener = state.borderScrivener;
+    const borderScrivener = { ...state.borderScrivener };
     borderScrivener.selectedElementId = pageViewNode.selectedChildViewId;
     borderScrivener.selectedElementIndex = selectedViewModelIndex;
     borderScrivener.visible = !!borderScrivener.selectedElementId;
+
+    /* eslint-disable no-param-reassign */
+    state.borderScrivener = borderScrivener;
 
     return state;
   }
@@ -76,19 +73,6 @@ class ActionBodyChildSelectorHandler {
       selectedViewModel,
       selectedViewModelIndex
     };
-  }
-
-  deselectCurrentComponent(state, selectedViewModelId) {
-    const view = graphTraversal.find(state, selectedViewModelId);
-
-    if (!!view) {
-      view.isSelected = false;
-    }
-
-    const stateAndSel = this.getPageViewModelAndSelectedViewModel(state, selectedViewModelId);
-    if (!!stateAndSel.pageViewModel) {
-      stateAndSel.pageViewModel.selectedChildViewId = null;
-    }
   }
 }
 

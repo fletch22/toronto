@@ -76,21 +76,20 @@ describe('GraphTraversal', () => {
     expect(endDate - startDate < 10).to.equal(true);
   });
 
-  it('should find an object correctly.', () => {
+  it('should find an object correctly..', () => {
 
     let object;
     const start = new Date();
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < 1000; i++) {
       object = graphTraversal.find(state, 'section0');
     }
     const end = new Date();
 
     const elapsed = end - start;
 
-    expect(elapsed).is.lessThan(150);
+    expect(elapsed).is.lessThan(35);
     expect(object).is.not.equal(null);
     expect(typeof object).is.equal('object');
     expect(object.id).to.equal('section0');
-
   });
 });

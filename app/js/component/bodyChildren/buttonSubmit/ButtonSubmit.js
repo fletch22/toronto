@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect as reduxConnect } from 'react-redux';
 import '../../../../css/f22-react-grid-layout.css';
-import { actionSetCurrentBodyTool } from '../../../actions/bodyChildrenEditor/index';
 import BodyChild from '../BodyChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
-import DropMarker from '../../bodyChildren/DropMarker';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class ButtonSubmit extends BodyChild {
@@ -31,40 +29,23 @@ class ButtonSubmit extends BodyChild {
   }
 }
 
-ButtonSubmit.propTypes = {
-  id: PropTypes.any,
-  viewModel: PropTypes.object,
-  isSelected: PropTypes.bool,
-  label: PropTypes.string,
-  onClick: PropTypes.func
-};
+ButtonSubmit.propTypes = BodyChild.mergePropTypes({
+  label: PropTypes.string
+});
 
 const mapStateToProps = (state, ownProps) => {
   const viewModel = ownProps.viewModel;
 
-  const visibility = viewModel.visibility;
   return {
-    isSelected: viewModel.isSelected,
-    viewModel,
     label: viewModel.viewModel.label,
     canBeDroppedOn: viewModel.canBeDroppedOn,
-    dragNDrop: state.dragNDrop,
-    visibility
-  };
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onClick: (event) => {
-      event.stopPropagation();
-      dispatch(actionSetCurrentBodyTool(ownProps.id));
-    }
+    visibility: viewModel.visibility
   };
 };
 
 ButtonSubmit = reduxConnect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(ButtonSubmit);
 
 ButtonSubmit = DragAndDropMaker.connectDragAndDrop(ButtonSubmit);

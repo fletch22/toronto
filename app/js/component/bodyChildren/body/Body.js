@@ -6,14 +6,13 @@ import 'css/modules/time-travel-toolbar';
 import SelectedContextToolbar from '../SelectedContextToolbar';
 import DragAndDropMaker from '../../../component/dragAndDrop/DragAndDropMaker';
 import DragAndDropUtils from '../../../component/dragAndDrop/DragAndDropUtils';
-import DropMarker from '../../../component/bodyChildren/DropMarker';
 import BodyChild from '../../bodyChildren/BodyChild';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
+import { actionUnsetCurrentBody } from '../../../actions/bodyChildrenEditor/index';
 
 class Body extends BodyChild {
-  constructor(props) {
-    super(props);
-    this.render = this.render.bind(this);
+  componentWillUnmount() {
+    this.props.onWillUnmount();
   }
 
   render() {
@@ -22,20 +21,17 @@ class Body extends BodyChild {
 
     style.flexGrow = 1;
     style.marginLeft = '4px';
-
-    if (this.props.isHoveringOver) {
-      style.border = '2px solid red';
-    }
+    style.border = this.props.isHoveringOver ? '2px solid red' : style.border;
 
     return DragAndDropMaker.connectDropRender(this.props, (
       <div className="flex-bc" style={{ height: '100%' }}>
         <div className="body-children-toolbar-col">
           <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
         </div>
-        <div id={this.props.id} style={style} ref={node => (this.node = node)} onClick={this.componentSelect} data-f22-component={ComponentTypes.WebPage}>
+        <div id={this.props.id} style={style} onClick={this.componentSelect} data-f22-component={ComponentTypes.WebPage}>
           {
             children.map((child) =>
-              <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
+              <ComponentChild key={child.id} id={child.id} viewModel={child} />
             )
           }
         </div>
@@ -44,20 +40,13 @@ class Body extends BodyChild {
   }
 }
 
-Body.propTypes = {
-  id: PropTypes.any,
-  viewModel: PropTypes.object,
+Body.propTypes = BodyChild.mergePropTypes({
   selectedViewModel: PropTypes.object,
   selectedChildViewId: PropTypes.string,
-  isSelected: PropTypes.bool,
-  children: PropTypes.array,
-  numChildren: PropTypes.number,
-  isHoveringOver: PropTypes.bool
-};
+  onWillUnmount: PropTypes.func
+});
 
 const mapStateToProps = (state, ownProps) => {
-  const children = [].concat(ownProps.viewModel.children);
-
   let selectedViewModel;
   const selectedChildViewId = (ownProps.selectedChildViewId) ? ownProps.selectedChildViewId : ownProps.id;
   if (selectedChildViewId) {
@@ -65,24 +54,25 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
-    id: ownProps.id,
-    children,
     selectedChildViewId,
     selectedViewModel,
-    isSelected: selectedChildViewId === ownProps.id,
-    isHoveringOver: ownProps.id === state.dragNDrop.hoverOverId,
-    numChildren: children.length,
-    canBeDroppedOn: ownProps.canBeDroppedOn,
-    style: selectedViewModel.viewModel.style,
-    viewModel: ownProps.viewModel
+    canBeDroppedOn: ownProps.canBeDroppedOn
   };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  const onWillUnmount = () => {
+    dispatch(actionUnsetCurrentBody());
+  };
+
+  return { ...DragAndDropUtils.mapDispatchToProps(dispatch), onWillUnmount };
 };
 
 Body = DragAndDropMaker.connectDrop(Body);
 
 Body = connect(
   mapStateToProps,
-  DragAndDropUtils.mapDispatchToProps
+  mapDispatchToProps
 )(Body);
 
 export default Body;

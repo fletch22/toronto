@@ -12,10 +12,6 @@ class DndActionHandler {
     const parentOfDraggedItem = graphTraversal.find(stateNew, draggedItem.parentId);
     const indexCurrentDraggedItem = graphTraversal.getChildsIndex(parentOfDraggedItem.viewModel.children, draggedId);
 
-    // c.lo(parentOfDraggedItem.viewModel.children, 'parentOfDraggedItem.viewModel.children: ');
-    // c.l(`indexCurrentDraggedItem: ${indexCurrentDraggedItem}`);
-    // c.l(`dragNDrop.draggedId bef: ${dragNDrop.draggedId}`);
-
     // NOTE: 10-03-2017: If we are dragging a new item or if the dragged item's parent is different or if the ordinal position of the
     // dragged item has changed
     if (draggedId !== dragNDrop.draggedId
@@ -25,8 +21,6 @@ class DndActionHandler {
       dragNDrop.parentOfDraggedItemId = draggedItem.parentId;
       draggedItem.visibility = false;
     }
-
-    // c.l(`dragNDrop.draggedId aft: ${dragNDrop.draggedId}`);
 
     let parentOfHoverOver = null;
 

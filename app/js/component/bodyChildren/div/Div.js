@@ -4,32 +4,19 @@ import { connect } from 'react-redux';
 import '../../../../css/f22-react-grid-layout.css';
 import ComponentChild from '../ComponentChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
-import DropMarker from '../DropMarker';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class Div extends BodyChild {
-
-  constructor(props) {
-    super(props);
-    this.render = this.render.bind(this);
-  }
-
   render() {
     const style = JSON.parse(this.props.style);
-
-    if (this.props.isHoveringOver) {
-      style.border = '2px solid red';
-    }
-
+    style.border = this.props.isHoveringOver ? '2px solid red' : style.border;
     style.display = this.props.visibility ? style.display : 'none';
 
-    // c.l(`Div ID: ${this.props.id}`);
-
     return DragAndDropMaker.connectDragAndDropRender(this.props, (
-      <div id={this.props.id} className="flex-bc" ref={node => (this.node = node)} onClick={this.componentSelect} data-f22-component={ComponentTypes.Div} style={style}>
+      <div id={this.props.id} className="flex-bc" onClick={this.componentSelect} data-f22-component={ComponentTypes.Div} style={style}>
         {
           this.props.children.map((child) =>
-            <ComponentChild key={child.id} id={child.id} viewModel={child} isSelected={child.isSelected} />
+            <ComponentChild key={child.id} id={child.id} viewModel={child} />
           )
         }
       </div>
@@ -37,19 +24,14 @@ class Div extends BodyChild {
   }
 }
 
-Div.PropTypes = {
-  dnd: PropTypes.object,
-  visibility: PropTypes.boolean
-};
+Div.propTypes = BodyChild.mergePropTypes({
+  visibility: PropTypes.bool
+});
 
 const mapStateToProps = (state, ownProps) => {
-  // c.l(`This div should have red border: ${ownProps.viewModel.id}: ${ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId}`);
-
   return {
     children: ownProps.viewModel.viewModel.children,
-    isSelected: ownProps.viewModel.isSelected,
     style: ownProps.viewModel.viewModel.style,
-    isHoveringOver: ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId,
     visibility: ownProps.viewModel.visibility
   };
 };

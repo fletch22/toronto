@@ -38,9 +38,6 @@ class BorderScrivenerUtils {
           /* eslint-disable no-param-reassign */
           Object.assign(borderScrivener, rectCurrent);
           borderScrivener.visible = true;
-
-          // const viewModel = graphTraversal.find(state, borderScrivener.selectedElementId);
-          // c.l(`Underlying selected model: ${viewModel.viewModel.id}`);
         }
       } else {
         borderScrivener.visible = false;
@@ -50,6 +47,20 @@ class BorderScrivenerUtils {
     }
 
     return state;
+  }
+
+  clearBorderScrivener(state) {
+    const borderScrivener = state.borderScrivener;
+
+    for (const x in borderScrivener) {
+      if (borderScrivener.hasOwnProperty(x)) {
+        borderScrivener[x] = null;
+      }
+    }
+  }
+
+  isSelected(state, id) {
+    return state.borderScrivener.selectedElementId === id;
   }
 }
 

@@ -1,23 +1,19 @@
-import React, {PropTypes} from 'react';
-import {connect} from 'react-redux';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import ComponentTypes from '../../domain/component/ComponentTypes';
-import GridLayout from './GridLayout';
 import Div from './div/Div';
 import DropDownListbox from './dropDownListbox/DropDownListbox';
 import ButtonSubmit from './buttonSubmit/ButtonSubmit';
 import DragAndDropUtils from '../dragAndDrop/DragAndDropUtils';
+import borderScrivenerUtils from '../utils/borderScrivenerUtils';
 
 class ComponentChild extends React.Component {
   render() {
     let component;
     switch (this.props.viewModel.viewModel.typeLabel) {
-      case ComponentTypes.Layout: {
-        component = <GridLayout id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
-        break;
-      }
       case ComponentTypes.Div: {
-        component = (<Div id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected}
-          move={this.props.move} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag}
+        component = (<Div id={this.props.id} viewModel={this.props.viewModel} onClick={this.props.onClick}
+          move={this.props.move} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag} isSelected={this.props.isSelected} isHoveringOver={this.props.isHoveringOver}
         />);
         break;
       }
@@ -26,8 +22,8 @@ class ComponentChild extends React.Component {
         break;
       }
       case ComponentTypes.ButtonSubmit: {
-        component = (<ButtonSubmit id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected}
-          move={this.props.move} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag}
+        component = (<ButtonSubmit id={this.props.id} viewModel={this.props.viewModel} onClick={this.props.onClick}
+          move={this.props.move} hoverOver={this.props.hoverOver} cancelDrag={this.props.cancelDrag} isSelected={this.props.isSelected} isHoveringOver={this.props.isHoveringOver}
         />);
         break;
       }
@@ -45,18 +41,27 @@ class ComponentChild extends React.Component {
 
 ComponentChild.propTypes = {
   id: PropTypes.any,
-  isSelected: PropTypes.bool,
   viewModel: PropTypes.object,
   move: PropTypes.func,
+  onClick: PropTypes.func,
   hoverOver: PropTypes.func,
   dragNDrop: PropTypes.object,
-  cancelDrag: PropTypes.func
+  cancelDrag: PropTypes.func,
+  isSelected: PropTypes.bool,
+  isHoveringOver: PropTypes.bool
 };
 
+const mapStateToProps = (state, ownProps) => {
+  return {
+    isSelected: borderScrivenerUtils.isSelected(state, ownProps.id),
+    isHoveringOver: ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId
+  };
+};
 
 ComponentChild = connect(
-  null,
+  mapStateToProps,
   DragAndDropUtils.mapDispatchToProps
 )(ComponentChild);
 
 export default ComponentChild;
+

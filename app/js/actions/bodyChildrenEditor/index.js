@@ -71,9 +71,6 @@ export const actionSetPageNeedsSaving = (viewId, needsSaving) => ({
   }
 });
 
-export const actionUnsetCurrentBody = (selectedViewId) => ({
-  type: ACTIONS.UNSET_CURRENT_BODY,
-  payload: {
-    selectedViewId
-  }
+export const actionUnsetCurrentBody = () => ({
+  type: ACTIONS.UNSET_CURRENT_BODY
 });

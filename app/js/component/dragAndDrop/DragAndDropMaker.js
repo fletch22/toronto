@@ -1,7 +1,6 @@
 import { PropTypes } from 'react';
 import ItemTypes from './ItemTypes';
 import { DragSource as dragSource, DropTarget as dropTarget } from 'react-dnd';
-import { findDOMNode } from 'react-dom';
 import ComponentTypes from '../../domain/component/ComponentTypes';
 
 const COMPONENT_ATTRIBUTE = 'data-f22-component';
@@ -9,16 +8,13 @@ const COMPONENT_ATTRIBUTE = 'data-f22-component';
 const cardSource = {
   beginDrag(props) {
     let id = props.id;
-    let index = props.index;
 
     if (props.clazz && props.clazz === 'DragCorner') {
       id = props.selectedElementId;
-      index = props.selectedElementIndex;
     }
 
     return {
-      id,
-      index
+      id
     };
   },
   endDrag(props, monitor) {
@@ -28,7 +24,6 @@ const cardSource = {
       props.move();
     } else {
       // Cancel drag - make original reappear.
-      c.l('Cancelling drag.');
       props.cancelDrag();
     }
   }
@@ -244,8 +239,7 @@ class DragAndDropMaker {
       move: PropTypes.func,
       hoverOver: PropTypes.func,
       connectDropTarget: PropTypes.func.isRequired,
-      canBeDroppedOn: PropTypes.bool,
-      dragNDrop: PropTypes.object
+      canBeDroppedOn: PropTypes.bool
     });
   }
 

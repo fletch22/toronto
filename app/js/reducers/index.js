@@ -25,7 +25,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
   const stateNew = Object.assign({}, state);
   const appContainerDom = stateNew.dom.view.appContainer;
 
-  c.l(`action.type: ${action.type}`);
+  // c.l(`action.type: ${action.type}`);
   borderScrivenerUtils.domActionSyncer(stateNew);
 
   switch (action.type) {
@@ -49,6 +49,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.SET_STATE: {
+      const borderScrivener = action.state.borderScrivener;
+      borderScrivener.lastUpdateRequest = new Date().getMilliseconds();
+
       return action.state;
     }
     case ACTIONS.types.SET_STATE_AND_PERSIST: {
@@ -273,6 +276,13 @@ const reducer = (state = defaultState.getInstance(), action) => {
         return borderScrivenerUtils.domActionSyncer(stateModified);
       }
       return state;
+    }
+    case ACTIONS.types.UNSET_CURRENT_BODY: {
+      borderScrivenerUtils.clearBorderScrivener(stateNew);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
     }
     case ACTIONS.types.TOGGLE_MINION_STATIC_LOCK: {
       const selectedViewModelId = action.payload.selectedViewModelId;
@@ -589,18 +599,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
     }
     case ACTIONS.types.SCRIBE_BORDER: {
       // Do Nothing
-      return stateNew;
-    }
-    case ACTIONS.types.UNSET_CURRENT_BODY: {
-      const payload = action.payload;
-      const selectedViewId = payload.selectedViewId;
-
-      actionBodyChildSelectorHandler.deselectCurrentComponent(stateNew, selectedViewId);
-      stateNew.borderScrivener.selectedElementId = null;
-      stateNew.borderScrivener.selectedElementIndex = null;
-
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-
       return stateNew;
     }
     case ACTIONS.types.PROXY.INVOKE: {

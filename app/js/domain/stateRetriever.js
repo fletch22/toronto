@@ -19,7 +19,7 @@ class StateRetriever {
         return state;
       })
       .catch((error) => {
-        console.debug('Got error calling getAppContainer.');
+        c.l('Got error calling getAppContainer.');
         return Promise.reject(error);
       });
   }

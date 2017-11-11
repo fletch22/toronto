@@ -15,7 +15,7 @@ class GridLayoutMinion extends React.Component {
 
     return (
       <div className={wrapperClass} key={gridItem.i} data-grid={gridItem}>
-        <ComponentChild id={this.props.viewModel.id} viewModel={this.props.viewModel} isSelected={this.props.viewModel.isSelected} />
+        <ComponentChild id={this.props.viewModel.id} viewModel={this.props.viewModel} />
       </div>
     );
   }

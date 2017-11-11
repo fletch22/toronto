@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import actionBodyChildSelectorHandler from '../../reducers/actionBodyChildSelectorHandler';
 import viewModelFactory from '../../reducers/viewModelFactory';
 import graphTraversal from '../../state/graphTraversal';
+import ComponentTypes from '../../domain/component/ComponentTypes';
 
 describe('actionBodySelector', () => {
 
@@ -11,13 +12,18 @@ describe('actionBodySelector', () => {
     isSelected: false,
     parentId: viewModelFactory.WEB_PAGE_ROOT,
     selectedChildViewId: 'viewId1',
+    selectedViewModel: {
+      viewModel: {
+        typeLabel: 'foo'
+      }
+    },
     viewModel: {
       id: '12341432',
       pageName: 'ThePageName',
+      typeLabel: ComponentTypes.WebPage,
       children: [
         {
           id: 'viewId1',
-          isSelected: true,
           parentId: 'viewIdRoot',
           viewModel: {
             id: 'some-orb-id-1',
@@ -25,9 +31,8 @@ describe('actionBodySelector', () => {
             children: [
               {
                 id: 'viewId2',
-                isSelected: false,
                 parentId: 'viewId1',
-                viewMode: {
+                viewModel: {
                   id: 'some-orb-id-3',
                   parentId: 'some-orb-id-1'
                 }
@@ -40,22 +45,14 @@ describe('actionBodySelector', () => {
   };
 
   it('should select viewId2 node and deselect other selected nodes', () => {
-    const stateClone = _.cloneDeep(state);
+    const targetChildView = 'viewId2';
+    let stateClone = _.cloneDeep(state);
+    stateClone = actionBodyChildSelectorHandler.process(stateClone, targetChildView);
 
-    const viewModel1 = graphTraversal.find(stateClone, 'viewId1');
-
-    expect(viewModel1.isSelected).to.equal(true);
-
-    state = actionBodyChildSelectorHandler.process(stateClone, 'viewId2');
-
-    expect(stateClone.selectedChildViewId).to.equal('viewId2');
-    expect(stateClone.isSelected).to.equal(false);
-
+    expect(stateClone.selectedChildViewId).to.equal(targetChildView);
     expect(stateClone).to.not.equal(undefined);
-    expect(viewModel1.isSelected).to.equal(false);
+    expect(stateClone.borderScrivener.selectedElementId).to.equal(targetChildView);
 
-    const viewModel2 = graphTraversal.find(stateClone, 'viewId2');
-    expect(viewModel2.isSelected).to.equal(true);
   });
 
   it('should select viewId1 node and deselect other selected nodes', () => {
@@ -64,14 +61,8 @@ describe('actionBodySelector', () => {
     state = actionBodyChildSelectorHandler.process(stateClone, 'viewId1');
 
     expect(stateClone.selectedChildViewId).to.equal('viewId1');
-    expect(stateClone.isSelected).to.equal(false);
 
     expect(stateClone).to.not.equal(undefined);
-    const viewModel1 = graphTraversal.find(stateClone, 'viewId1');
-    expect(viewModel1.isSelected).to.equal(true);
-
-    const viewModel2 = graphTraversal.find(stateClone, 'viewId2');
-    expect(viewModel2.isSelected).to.equal(false);
   });
 
   it('should select the root and deselect other selected nodes', () => {
@@ -80,13 +71,10 @@ describe('actionBodySelector', () => {
     state = actionBodyChildSelectorHandler.process(stateClone, 'viewIdRoot');
 
     expect(stateClone.selectedChildViewId).to.equal('viewIdRoot');
-    expect(stateClone.isSelected).to.equal(true);
 
     expect(stateClone).to.not.equal(undefined);
     const viewModel1 = graphTraversal.find(stateClone, 'viewId1');
-    expect(viewModel1.isSelected).to.equal(false);
 
     const viewModel2 = graphTraversal.find(stateClone, 'viewId2');
-    expect(viewModel2.isSelected).to.equal(false);
   });
 });

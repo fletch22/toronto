@@ -23,8 +23,6 @@ describe('Worker service', () => {
     worker = new Worker();
 
     worker.addEventListener('message', (event) => {
-      const message = JSON.parse(event.data);
-      console.log(JSON.stringify(message));
       done();
     });
 

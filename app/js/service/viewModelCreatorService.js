@@ -64,7 +64,6 @@ class ViewModelCreatorService {
           return stateSyncService.saveState(statePackage)
             .then((result) => {
               console.debug('Success Callback.');
-              // c.lo(result.model.appContainer, 'rez: ');
               return Promise.resolve(result);
             })
             .catch((error) => {
