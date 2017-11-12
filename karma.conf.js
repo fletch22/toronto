@@ -2,6 +2,8 @@ const webpackConfig = require('./webpack.hot.config.js');
 /* eslint-disable no-var */
 var pattern;
 
+const browser = process.env.EXECUTE_INTEGRATION_TESTS ? 'Chrome' : 'PhantomJS';
+
 const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
   const webpackConfigTest = webpackConfig;
 
@@ -46,7 +48,7 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     autoWatch: true,
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'], // ['Chrome', 'PhantomJS', ],
+    browsers: [browser], // ['Chrome', 'PhantomJS', ],
     webpack: webpackConfigTest,
     webpackMiddleware: {
       noInfo: true

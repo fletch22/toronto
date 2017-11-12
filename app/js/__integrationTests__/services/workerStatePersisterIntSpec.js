@@ -1,7 +1,5 @@
-import Worker from 'worker!../../worker/statePersisterWorker.js';
+import Worker from 'worker-loader!../../worker/statePersisterWorker.js';
 import WorkerMessage, { WorkerMessageTypes } from '../../worker/workerMessage';
-import stateSyncService from '../../service/stateSyncService';
-import { expect } from 'chai';
 
 describe('Worker service', () => {
   let worker;

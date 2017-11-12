@@ -1,7 +1,6 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const PATHS = {
@@ -70,11 +69,6 @@ module.exports = merge(common, {
       { from: path.resolve(__dirname, 'app', 'images'), to: 'images' }
     ])
   ],
-  // postcss: [
-  //   autoprefixer({
-  //     browsers: ['last 2 versions']
-  //   })
-  // ],
   resolve: {
     extensions: ['*', '.js', '.scss'],
     modules: ['app', 'node_modules'],
