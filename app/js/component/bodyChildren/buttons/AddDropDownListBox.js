@@ -4,6 +4,7 @@ import Button from '../toolbar/Button';
 import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
 import ddlModelFactory from '../../../domain/component/ddlModelFactory';
 import ddlModelUtils from '../../../domain/component/ddlModelUtils';
+import graphTraversal from '../../../state/graphTraversal';
 
 class AddDropDownListbox extends React.Component {
   render() {
@@ -26,7 +27,9 @@ const createDdl = (ownProps) => {
 
     const nameUnique = ddlModelUtils.getUniqueDdlName(state);
 
-    const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, nameUnique);
+    const parentViewModel = graphTraversal.find(state, ownProps.viewModel.id);
+
+    const model = ddlModelFactory.createInstance(ownProps.viewModel.viewModel.id, nameUnique, null, null, null, null, String(parentViewModel.viewModel.children.length));
     bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
   };
 };

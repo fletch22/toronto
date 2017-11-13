@@ -6,23 +6,16 @@ import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
 import ComponentTypes from '../../../domain/component/ComponentTypes';
 
 class ButtonSubmit extends BodyChild {
-
-  constructor(props) {
-    super(props);
-    this.render = this.render.bind(this);
-  }
-
   render() {
     const style = JSON.parse(this.props.viewModel.viewModel.style) || {};
-    style.padding = '0 4px';
-
-    const display = this.props.visibility ? style.display : 'none';
+    style.padding = '0 2px 0 0';
+    style.display = this.props.visibility ? style.display : 'none';
 
     let classNames = 'button-submit';
     classNames += (this.props.isSelected) ? ' body-child-selected' : '';
 
     return DragAndDropMaker.connectDragAndDropRender(this.props, (
-      <div id={this.props.id} onClick={this.props.onClick} data-f22-component={ComponentTypes.ButtonSubmit} style={{ paddingRight: '4px', display }}>
+      <div id={this.props.id} onClick={this.props.onClick} data-f22-component={ComponentTypes.ButtonSubmit} style={style}>
         <button className={classNames} style={style}>{this.props.label}</button>
       </div>
     ));

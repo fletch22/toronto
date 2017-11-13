@@ -24,9 +24,7 @@ class Div extends BodyChild {
   }
 }
 
-Div.propTypes = BodyChild.mergePropTypes({
-  visibility: PropTypes.bool
-});
+Div.propTypes = BodyChild.mergePropTypes({});
 
 const mapStateToProps = (state, ownProps) => {
   return {

@@ -46,8 +46,8 @@ class ViewFactory {
       dataValueId: model.dataValueId,
       dataTextId: model.dataTextId,
       isSaveButtonDisabled: true,
-      isSelected: false,
-      canBeDroppedOn: false
+      canBeDroppedOn: false,
+      visibility: true
     };
   }
 
@@ -74,7 +74,6 @@ class ViewFactory {
       id: f22Uuid.generate(),
       elementId: model.elementId,
       label: model.label,
-      isSelected: false,
       canBeDroppedOn: false,
       visibility: true
     };

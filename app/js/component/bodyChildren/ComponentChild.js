@@ -18,7 +18,19 @@ class ComponentChild extends React.Component {
         break;
       }
       case ComponentTypes.DropDownListbox: {
-        component = <DropDownListbox id={this.props.id} viewModel={this.props.viewModel} isSelected={this.props.isSelected} />;
+        component = (<DropDownListbox
+          id={this.props.id}
+          viewModel={this.props.viewModel}
+          onClick={this.props.onClick}
+          move={this.props.move}
+          hoverOver={this.props.hoverOver}
+          cancelDrag={this.props.cancelDrag}
+          isSelected={this.props.isSelected}
+          isHoveringOver={this.props.isHoveringOver}
+          visibility={this.props.visibility}
+          style={this.props.style}
+          children={this.props.children}
+        />);
         break;
       }
       case ComponentTypes.ButtonSubmit: {
@@ -48,13 +60,19 @@ ComponentChild.propTypes = {
   dragNDrop: PropTypes.object,
   cancelDrag: PropTypes.func,
   isSelected: PropTypes.bool,
-  isHoveringOver: PropTypes.bool
+  isHoveringOver: PropTypes.bool,
+  children: PropTypes.any,
+  style: PropTypes.string,
+  visibility: PropTypes.bool
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
     isSelected: borderScrivenerUtils.isSelected(state, ownProps.id),
-    isHoveringOver: ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId
+    isHoveringOver: ownProps.viewModel.id === state.dragNDrop.parentOfHoverOverId,
+    children: ownProps.viewModel.viewModel.children,
+    style: ownProps.viewModel.style,
+    visibility: ownProps.viewModel.visibility
   };
 };
 

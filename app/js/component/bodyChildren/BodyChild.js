@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
+import _ from 'lodash';
 
 class BodyChild extends React.Component {
 
   static mergePropTypes(descendentProps) {
-    return { ...BodyChild.propTypes, ...descendentProps };
+    return { ...(_.cloneDeep(BodyChild.propTypes)), ...descendentProps };
   }
 
   constructor(props) {

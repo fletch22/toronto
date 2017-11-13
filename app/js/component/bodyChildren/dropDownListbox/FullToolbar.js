@@ -206,7 +206,7 @@ const updateSelectChange = (ownProps, newSelection, propertyName) => {
 
     const props = mapStateToProps(state, mergedProps);
 
-    ActionInvoker.invoke(dispatch, stateUpdateSelectChange, { viewId: ownProps.selectedViewModel.id, propertyName, newValue: parseInt(newSelection, 10), needsSaving: props.needsSaving });
+    ActionInvoker.invoke(dispatch, stateUpdateSelectChange, { viewId: ownProps.selectedViewModel.id, propertyName, newValue: newSelection, needsSaving: props.needsSaving });
   };
 };
 

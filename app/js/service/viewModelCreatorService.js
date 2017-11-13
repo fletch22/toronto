@@ -38,11 +38,10 @@ class ViewModelCreatorService {
 
             // NOTE: 06-17-2017: Converts back to model.
             let model = actionComponentCreator.extractModelFromViewModel(viewModel);
-            // c.l(`Model tm1: ${JSON.stringify(model.typeLabel)}`);
             const parentModel = graphTraversal.find(stateNew.model, model.parentId);
 
             // NOTE: 06-17-2017: Syncs with model.
-            const stateModel = _.find(parentModel.children, {id: model.id});
+            const stateModel = _.find(parentModel.children, { id: model.id });
             if (stateModel) {
               model = Object.assign({}, model);
               delete model.children;
