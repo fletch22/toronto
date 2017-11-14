@@ -8,7 +8,9 @@ class ViewFactory {
       selectedChildViewId: null,
       isSelected: false,
       needsSaving: false,
-      canBeDroppedOn: true
+      canBeDroppedOn: true,
+      pageName: model.pageName,
+      style: model.style
     };
   }
 

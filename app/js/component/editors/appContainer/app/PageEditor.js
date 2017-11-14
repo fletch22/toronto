@@ -12,20 +12,13 @@ class PageEditor extends React.Component {
   render() {
     return (
       <div style={{ height: '100%' }}>
-        <Tabs activeKey={this.props.activeTab} onSelect={this.props.handleSelect} id="controlled-tab-example" style={{ height: '100%' }}>
-          <Tab eventKey={1} title="Metadata">
-            <MetaData { ... this.props } />
-          </Tab>
-          <Tab eventKey={2} title="Page Body" disabled={this.props.tabBodyDisabled} style={{ height: '100%' }}>
-            <Body { ... this.props.viewModel }
-              selectedChildViewId={this.props.selectedChildViewId}
-              canBeDroppedOn
-              isSelected={this.props.isBodySelected}
-              children={this.props.viewModel.viewModel.children}
-              isHoveringOver={this.props.isHoveringOver}
-            />
-          </Tab>
-        </Tabs>
+        <Body { ... this.props.viewModel }
+          selectedChildViewId={this.props.selectedChildViewId}
+          canBeDroppedOn
+          isSelected={this.props.isBodySelected}
+          children={this.props.viewModel.viewModel.children}
+          isHoveringOver={this.props.isHoveringOver}
+        />
       </div>
     );
   }
@@ -33,27 +26,14 @@ class PageEditor extends React.Component {
 
 PageEditor.propTypes = {
   id: PropTypes.string,
-  model: PropTypes.object,
   viewModel: PropTypes.object,
-  modelNodeId: PropTypes.any,
-  activeTab: PropTypes.number,
-  handleSelect: PropTypes.func,
-  tabBodyDisabled: PropTypes.bool,
   selectedChildViewId: PropTypes.string,
   isBodySelected: PropTypes.bool,
   isHoveringOver: PropTypes.bool
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const viewContainer = state.dom;
-  const object = graphTraversal.find(viewContainer, ownProps.id);
-
-  const activeTab = (_.has(object, 'activeTab')) ? object.activeTab : 1;
-  const tabBodyDisabled = !_.has(ownProps, 'modelNodeId');
-
   return {
-    activeTab,
-    tabBodyDisabled,
     selectedChildViewId: ownProps.viewModel.selectedChildViewId,
     viewModel: ownProps.viewModel,
     isBodySelected: borderScrivenerUtils.isSelected(state, ownProps.id),
@@ -61,17 +41,9 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    handleSelect: (event) => {
-      dispatch(actionUpdateViewPropertyValue(ownProps.id, 'activeTab', event, true));
-    }
-  };
-};
-
 PageEditor = connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(PageEditor);
 
 export default PageEditor;

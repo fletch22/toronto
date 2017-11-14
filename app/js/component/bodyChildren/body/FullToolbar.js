@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 import HierNavButtonToolbar from '../../../component/bodyChildren/HierNavButtonToolbar';
 import Toolbar from './Toolbar';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
+import PropPathTextInput from '../../../component/editors/PropPathTextInput';
+import { actionSetPageNeedsSaving } from '../../../actions/bodyChildrenEditor/index';
+import _ from 'lodash';
+import Button from '../toolbar/Button';
 
 class FullToolbar extends React.Component {
   render() {
@@ -20,6 +24,21 @@ class FullToolbar extends React.Component {
             </div>
           </div>
           <div className="full-toolbar-data flex-bc">
+            <div>
+              <label>Page Name:</label>
+            </div>
+            <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+              <PropPathTextInput
+                id={this.props.selectedViewModel.id}
+                path={'pageName'}
+                value={this.props.pageName}
+                persistState={false} onChangeExternal={this.props.onPageNameChange}
+                classNames=""
+              />
+              <Button faClass="fa-cloud-upload" onClick={this.props.onClickSavePageName} tooltipText="Save" />
+            </div>
+          </div>
+          <div className="full-toolbar-data flex-bc">
             <label>Flow<br />Direction:</label>
             <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                 <select value={flowDirection} style={{ flexGrow: 0 }} onChange={this.props.onSelectFlowDirection}>
@@ -29,7 +48,6 @@ class FullToolbar extends React.Component {
                 </select>
             </div>
           </div>
-
         </div>
         <div className="bc-toolbar-col-2">
           <HierNavButtonToolbar selectedChildViewId={this.props.selectedViewModel.id} />
@@ -41,14 +59,35 @@ class FullToolbar extends React.Component {
 }
 
 FullToolbar.propTypes = {
+  id: PropTypes.string,
+  pageName: PropTypes.string,
   selectedViewModel: PropTypes.object,
   onSelectFlowDirection: PropTypes.func,
-  style: PropTypes.string
+  style: PropTypes.string,
+  onPageNameChange: PropTypes.func,
+  needsSaving: PropTypes.bool,
+  onClickSavePageName: PropTypes.func
+};
+
+const getIsNeedsSaving = (props) => {
+  let result = false;
+  const selectedViewModel = props.selectedViewModel;
+  const innerViewModel = selectedViewModel.viewModel;
+
+  if (selectedViewModel.pageName !== innerViewModel.pageName) {
+    result = true;
+  }
+  return result;
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const needsSaving = getIsNeedsSaving(ownProps);
+  const pageName = ownProps.selectedViewModel.pageName;
+
   return {
-    style: ownProps.selectedViewModel.viewModel.style
+    style: ownProps.selectedViewModel.style,
+    needsSaving,
+    pageName
   };
 };
 
@@ -69,10 +108,39 @@ const selectFlowDirection = (ownProps, event) => {
   };
 };
 
+const clickSavePageName = (ownProps) => {
+  return (dispatch) => {
+    const selectViewModel = ownProps.selectedViewModel;
+    const viewModel = selectViewModel.viewModel;
+
+    viewModel.pageName = selectViewModel.pageName;
+
+    viewModelCreator.update(dispatch, selectViewModel);
+  };
+};
+
+const pageNameChange = (ownProps, newLabel) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    let props = _.cloneDeep(ownProps);
+    props.selectedViewModel.label = newLabel;
+    props = mapStateToProps(state, props);
+
+    dispatch(actionSetPageNeedsSaving(props.selectedViewModel.id, props.needsSaving));
+  };
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSelectFlowDirection: (event) => {
       dispatch(selectFlowDirection(ownProps, event));
+    },
+    onPageNameChange: (event) => {
+      dispatch(pageNameChange(ownProps, event.target.value));
+    },
+    onClickSavePageName: () => {
+      dispatch(clickSavePageName(ownProps));
     }
   };
 };
