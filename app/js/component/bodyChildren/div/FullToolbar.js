@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 import HierNavButtonToolbar from '../../../component/bodyChildren/HierNavButtonToolbar';
 import Toolbar from './Toolbar';
 import viewModelCreator from '../../../component/utils/viewModelCreator';
-import { actionUpdateViewPropertyValue } from '../../../actions/index';
-import Button from '../../../component/bodyChildren/toolbar/Button';
-import graphTraversal from '../../../state/graphTraversal';
 
 class FullToolbar extends React.Component {
   render() {
@@ -22,14 +19,14 @@ class FullToolbar extends React.Component {
               This is a <b>new</b> Div component.
             </div>
           </div>
-          <div className="full-toolbar-data flex-bc">
-            <label>Flow<br />Direction:</label>
-            <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
-                <select value={flowDirection} style={{ flexGrow: 0 }} onChange={this.props.onSelectFlowDirection}>
-                  <option value="" readOnly>(select one)</option>
-                  <option value="row" readOnly>horizontal</option>
-                  <option value="column" readOnly>vertical</option>
-                </select>
+          <div className="full-toolbar-data flex-bc" style={{ paddingTop: '25px' }}>
+            <div className="flex-bc" style={{ alignItems: 'center', justifyContent: 'flex-start' }}>
+              <label>Flow Direction:</label>
+              <select value={flowDirection} style={{ flexGrow: 0 }} onChange={this.props.onSelectFlowDirection}>
+                <option value="" readOnly>(select one)</option>
+                <option value="row" readOnly>horizontal</option>
+                <option value="column" readOnly>vertical</option>
+              </select>
             </div>
           </div>
 

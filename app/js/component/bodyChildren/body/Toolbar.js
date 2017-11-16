@@ -6,7 +6,6 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div>
-        <CreateLayout viewModel={this.props.selectedViewModel} />
         <AddDiv viewModel={this.props.selectedViewModel} />
       </div>
     );

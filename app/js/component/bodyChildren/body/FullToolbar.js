@@ -24,10 +24,10 @@ class FullToolbar extends React.Component {
             </div>
           </div>
           <div className="full-toolbar-data flex-bc">
-            <div>
-              <label>Page Name:</label>
-            </div>
-            <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+            <div className="flex-bc" style={{ alignItems: 'center', justifyContent: 'flex-start', paddingTop: '25px' }}>
+              <div>
+                <label>Page Name:</label>
+              </div>
               <PropPathTextInput
                 id={this.props.selectedViewModel.id}
                 path={'pageName'}
@@ -39,8 +39,8 @@ class FullToolbar extends React.Component {
             </div>
           </div>
           <div className="full-toolbar-data flex-bc">
-            <label>Flow<br />Direction:</label>
-            <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+            <label>Flow Direction:</label>
+            <div className="flex-bc" style={{ alignItems: 'flex-end', justifyContent: 'flex-start' }}>
                 <select value={flowDirection} style={{ flexGrow: 0 }} onChange={this.props.onSelectFlowDirection}>
                   <option value="" readOnly>(select one)</option>
                   <option value="row" readOnly>horizontal</option>

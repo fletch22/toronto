@@ -4,15 +4,13 @@ import f22Uuid from '../../util/f22Uuid';
 
 class DataModelFieldFactory extends ModelFactory {
 
-  createInstance(parentId, label) {
-    this.validateNotBlank(label, 'label');
-
-    const id = f22Uuid.generate();
+  createInstanceFromModel(model) {
+    const id = this.ensureId(model);
 
     const instance = {
-      parentId,
+      parentId: model.parentId,
       id,
-      label,
+      label: model.label,
       typeLabel: ComponentTypes.DataModel,
       children: []
     };
@@ -22,3 +20,4 @@ class DataModelFieldFactory extends ModelFactory {
 }
 
 export default new DataModelFieldFactory();
+

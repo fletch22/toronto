@@ -12,6 +12,8 @@ import layoutMinionModelFactory from './layoutMinionModelFactory';
 import ddlModelFactory from './ddlModelFactory';
 import buttonSubmitModelFactory from './buttonSubmitModelFactory';
 import divModelFactory from './divModelFactory';
+import dataModelFactory from './dataModelModelFactory';
+import dataFieldModelFactory from './dataFieldModelFactory';
 
 class ComponentGenerator {
 
@@ -111,6 +113,23 @@ class ComponentGenerator {
     };
   }
 
+  // createDataModel
+  createDataModelModel(model) {
+    const modelChild = dataModelFactory.createInstanceFromModel(model);
+    return {
+      model: modelChild,
+      dom: null
+    };
+  }
+
+  createDataFieldModel(model) {
+    const modelChild = dataFieldModelFactory.createInstanceFromModel(model);
+    return {
+      model: modelChild,
+      dom: null
+    };
+  }
+
   createComponent(model) {
     switch (model.typeLabel) {
       case ComponentTypes.AppContainer: {
@@ -142,6 +161,12 @@ class ComponentGenerator {
       }
       case ComponentTypes.ButtonSubmit: {
         return this.createButtonSubmit(model);
+      }
+      case ComponentTypes.DataModel: {
+        return this.createDataModelModel(model);
+      }
+      case ComponentTypes.DataField: {
+        return this.createDataFieldModel(model);
       }
       default: {
         throw new Error(`Could not determine component type from model's type label \'${model.typeLabel}\'`);

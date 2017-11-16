@@ -132,7 +132,7 @@ const doSaveCollectionAction = (event, ownProps) => {
     const state = getState();
 
     const props = partialFlatten(state, ownProps);
-    const model = dataModelModelFactory.createInstance(props.viewModel.viewModel.id, props.newItemNameInput.value);
+    const model = dataModelModelFactory.createInstanceFromModel({ parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value });
 
     const successCallback = () => {
       dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
