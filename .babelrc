@@ -2,7 +2,8 @@
   "presets": [
     [
       "env", {
-        "targets": { "browsers": ["last 1 versions"] }
+        "targets": { "browsers": ["last 1 versions"] },
+        "modules": false
       }
     ],
     "react-hmre",

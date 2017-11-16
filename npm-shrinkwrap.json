@@ -13660,6 +13660,11 @@
       "integrity": "sha1-M6qE8Rd6VUjIk1Uzy/6zQgl19aQ=",
       "dev": true
     },
+    "start-server-webpack-plugin": {
+      "version": "2.2.0",
+      "resolved": "https://registry.npmjs.org/start-server-webpack-plugin/-/start-server-webpack-plugin-2.2.0.tgz",
+      "integrity": "sha1-H6ta+NS7fOprZXB31M5JScf38S4="
+    },
     "statuses": {
       "version": "1.3.1",
       "resolved": "https://registry.npmjs.org/statuses/-/statuses-1.3.1.tgz",
@@ -15893,6 +15898,11 @@
           }
         }
       }
+    },
+    "webpack-node-externals": {
+      "version": "1.6.0",
+      "resolved": "https://registry.npmjs.org/webpack-node-externals/-/webpack-node-externals-1.6.0.tgz",
+      "integrity": "sha1-Iyxi7GCSsQBjWj0p2DwXRxKN+b0="
     },
     "webpack-sources": {
       "version": "1.0.2",

@@ -47,3 +47,4 @@ test/babeled/
 node_modules-old/
 node_modules-old2/
 node_modules-opld/
+server-build/
