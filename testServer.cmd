@@ -1,0 +1,1 @@
+./node_modules/.bin/babel-watch src/server/spec/index.js
