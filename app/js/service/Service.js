@@ -12,11 +12,16 @@ class Service {
     return `${orbServer.scheme}://${orbServer.host}:${orbServer.port}/${orbServer.appContext}/api`;
   }
 
+  getNodeServerRootUrl() {
+    const nodeServer = AppProperties.nodeServer;
+    return `${nodeServer.scheme}://${nodeServer.host}:${nodeServer.port}/api`;
+  }
+
   fetchSynchronous(url, method, object) {
     try {
       return JSON.parse(jQuery.ajax({
         type: method,
-        url: url,
+        url,
         async: false,
         contentType: 'application/json',
         data: JSON.stringify(object),

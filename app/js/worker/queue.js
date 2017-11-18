@@ -4,6 +4,7 @@ import { WorkerMessageTypes } from '../worker/workerMessage';
 import WorkerMessage from '../worker/workerMessage';
 import SentStateAuditTrail from './sentStateAuditTrail';
 import ServerErrorTransformer from '../service/serverErrorTransformer';
+import c from '../util/c';
 
 class Queue {
   constructor() {
@@ -141,6 +142,11 @@ class Queue {
             this.sendArray = [];
             queue.deliveryProcessingIsPaused = false;
             queue.emitEventIfQueueEmpty();
+
+            stateSyncService.saveStateArrayToNode(stateArrayPackage).then((nodeResponse) => {
+              c.l(nodeResponse);
+            });
+
             resolve(response);
           })
           .catch((error) => {
