@@ -75,8 +75,6 @@ const getIsNeedsSaving = (props) => {
   const selectedViewModel = props.selectedViewModel;
   const innerViewModel = selectedViewModel.viewModel;
 
-  c.l(`${selectedViewModel.pageName}: ${innerViewModel.pageName}`);
-
   if (selectedViewModel.pageName !== innerViewModel.pageName) {
     result = true;
   }
@@ -86,8 +84,6 @@ const getIsNeedsSaving = (props) => {
 const mapStateToProps = (state, ownProps) => {
   const needsSaving = getIsNeedsSaving(ownProps);
   const pageName = ownProps.selectedViewModel.pageName;
-
-  c.l(needsSaving);
 
   const selectedViewModel = (ownProps.selectedViewModel) ? ownProps.selectedViewModel : ownProps;
 
