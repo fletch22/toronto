@@ -7,6 +7,7 @@ import PropPathTextInput from '../../../component/editors/PropPathTextInput';
 import { actionSetPageNeedsSaving } from '../../../actions/bodyChildrenEditor/index';
 import _ from 'lodash';
 import Button from '../toolbar/Button';
+import actionBodyChildSelectorHandler from '../../../reducers/actionBodyChildSelectorHandler';
 
 class FullToolbar extends React.Component {
   render() {
@@ -35,7 +36,7 @@ class FullToolbar extends React.Component {
                 persistState={false} onChangeExternal={this.props.onPageNameChange}
                 classNames=""
               />
-              <Button faClass="fa-cloud-upload" onClick={this.props.onClickSavePageName} tooltipText="Save" />
+              <Button faClass="fa-cloud-upload" onClick={this.props.onClickSavePageName} tooltipText="Save" disabled={!this.props.needsSaving} />
             </div>
           </div>
           <div className="full-toolbar-data flex-bc">
@@ -50,8 +51,8 @@ class FullToolbar extends React.Component {
           </div>
         </div>
         <div className="bc-toolbar-col-2">
-          <HierNavButtonToolbar selectedChildViewId={this.props.selectedViewModel.id} />
-          <Toolbar selectedViewModel={this.props.selectedViewModel} />
+          <HierNavButtonToolbar selectedChildViewId={this.props.selectedViewModel.id} disabled={this.props.needsSaving} />
+          <Toolbar selectedViewModel={this.props.selectedViewModel} disabled={this.props.needsSaving} />
         </div>
       </div>
     );
@@ -74,6 +75,8 @@ const getIsNeedsSaving = (props) => {
   const selectedViewModel = props.selectedViewModel;
   const innerViewModel = selectedViewModel.viewModel;
 
+  c.l(`${selectedViewModel.pageName}: ${innerViewModel.pageName}`);
+
   if (selectedViewModel.pageName !== innerViewModel.pageName) {
     result = true;
   }
@@ -84,7 +87,12 @@ const mapStateToProps = (state, ownProps) => {
   const needsSaving = getIsNeedsSaving(ownProps);
   const pageName = ownProps.selectedViewModel.pageName;
 
+  c.l(needsSaving);
+
+  const selectedViewModel = (ownProps.selectedViewModel) ? ownProps.selectedViewModel : ownProps;
+
   return {
+    selectedViewModel,
     style: ownProps.selectedViewModel.style,
     needsSaving,
     pageName
@@ -115,7 +123,12 @@ const clickSavePageName = (ownProps) => {
 
     viewModel.pageName = selectViewModel.pageName;
 
-    viewModelCreator.update(dispatch, selectViewModel);
+    const setPageDoesNotNeedSaving = (stateThing) => {
+      const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(stateThing, ownProps.selectedViewModel.id);
+      pageAndSelected.pageViewModel.needsSaving = false;
+    };
+
+    viewModelCreator.update(dispatch, selectViewModel, undefined, setPageDoesNotNeedSaving);
   };
 };
 

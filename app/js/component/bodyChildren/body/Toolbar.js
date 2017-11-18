@@ -6,14 +6,15 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div>
-        <AddDiv viewModel={this.props.selectedViewModel} />
+        <AddDiv viewModel={this.props.selectedViewModel} disabled={this.props.disabled} />
       </div>
     );
   }
 }
 
 Toolbar.propTypes = {
-  selectedViewModel: PropTypes.object
+  selectedViewModel: PropTypes.object,
+  disabled: PropTypes.bool
 };
 
 export default Toolbar;
