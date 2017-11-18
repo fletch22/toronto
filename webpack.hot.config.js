@@ -4,20 +4,19 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const PATHS = {
-  app: path.join(__dirname, 'app/'),
-  images: path.join(__dirname, 'app/images'),
-  build: path.join(__dirname, 'build'),
-  worker: path.join(__dirname, 'app/js/worker')
+  app: path.join(__dirname, 'src/app/'),
+  images: path.join(__dirname, 'src/app/images'),
+  build: path.join(__dirname, 'src/build'),
+  worker: path.join(__dirname, 'src/app/js/worker')
 };
 
 const common = {
   // Entry accepts a path or an object of entries.
   entry: {
     bundle: [
-      './app/index.js',
+      './src/app/index.js',
       'bootstrap-loader'
-    ],
-    c: './app/js/util/c.js'
+    ]
   },
   output: {
     filename: '[name].js',
@@ -67,11 +66,11 @@ module.exports = merge(common, {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new CopyWebpackPlugin([
-      { from: path.resolve(__dirname, 'app', 'images'), to: 'images' }
+      { from: path.resolve(__dirname, 'src', 'app', 'images'), to: 'images' }
     ])
   ],
   resolve: {
     extensions: ['*', '.js', '.scss'],
-    modules: ['app', 'node_modules']
+    modules: ['src', 'node_modules']
   }
 });
