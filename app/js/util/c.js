@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 class C {
 
   l(value) {
@@ -10,6 +8,7 @@ class C {
     let value = val;
     let prefix = pref;
     let type = typeof value;
+    const _ = require('lodash'); // NOTE: This class will break if this line is placed at the top.
     prefix = (!!prefix) ? _.trim(prefix) : '';
 
     let message;
