@@ -96,7 +96,7 @@ describe('Queue', () => {
       expect(0).to.equal(queueArray.length);
       expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
       expect(saveStateArray.callCount).to.equal(1);
-      expect(fetch.callCount).to.equal(1);
+      expect(fetch.callCount).to.equal(3);
       queueArray = queue.getAccumulator();
       expect(queue.getQueueArrayIsPaused()).to.equal(false);
       expect(rollbackAndFetchStateHistory.callCount).to.equal(0);

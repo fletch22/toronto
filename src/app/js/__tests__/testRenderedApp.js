@@ -2,7 +2,7 @@ import React from 'react';
 import CurrentStateRetriever from '../domain/stateRetriever';
 import TestUtils from 'react-dom/test-utils';
 import { expect } from 'chai';
-import App from 'js/component/AppRoot';
+import App from 'app/js/component/AppRoot';
 import { Provider } from 'react-redux';
 import defaultState from '../state/defaultState';
 import AllStore from '../stores/allStore';

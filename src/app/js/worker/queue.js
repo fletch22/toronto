@@ -143,6 +143,7 @@ class Queue {
             queue.deliveryProcessingIsPaused = false;
             queue.emitEventIfQueueEmpty();
 
+            // NOTE: 11-18-2017: This is for the new backend. We will will start with saving state in a lazy fashion.
             stateSyncService.saveStateArrayToNode(stateArrayPackage).then((nodeResponse) => {
               c.l(nodeResponse);
             });

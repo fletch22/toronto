@@ -1,4 +1,4 @@
-import 'expose-loader?$!expose-loader?c!c';
+import 'expose-loader?c!../../../util/c';
 
 const context = require.context('./', true, /Spec\.js$/);
 context.keys().forEach(context);

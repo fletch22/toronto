@@ -31,7 +31,7 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'app/css/modules/header.scss': ['webpack']
+      'src/app/css/modules/header.scss': ['webpack']
     },
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -60,11 +60,11 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
 
   if (process.env.EXECUTE_INTEGRATION_TESTS) {
     console.log('Running INTEGRATION tests only ...');
-    pattern = 'app/js/__integrationTests__/test-context.js';
+    pattern = 'src/app/js/__integrationTests__/test-context.js';
   } else {
     console.log('Running UNIT tests only ...');
     config.files.unshift({ pattern: 'node_modules/babel-polyfill/dist/polyfill.js', watched: false }); // Needed for Promise to be recognized. Note 'unshift'. Needs to be first element.
-    pattern = 'app/js/__tests__/test-context.js';
+    pattern = 'src/app/js/__tests__/test-context.js';
   }
 
   config.files.push({ pattern, watched: false });
