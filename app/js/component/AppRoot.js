@@ -2,7 +2,7 @@ import React from 'react';
 import AppContainer from '../component/AppContainer';
 import RollbackBroadcastHandler from '../domain/message/rollbackBroadastHandler';
 import { actionInitializeApp } from '../actions/index';
-import 'expose-loader?$!expose-loader?c!c'; // Globally exposes the an instance of 'c' class (a custom console class).
+import 'expose-loader?c!../util/c.js'; // Globally exposes the an instance of 'c' class (a custom console class).
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import '../../css/modules/container.scss';
@@ -15,8 +15,6 @@ class App extends React.Component {
 
     this.context.store.dispatch(actionInitializeApp());
   }
-
-  /// <AppContainer numberApps="0" />
 
   render() {
     return (

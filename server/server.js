@@ -1,10 +1,15 @@
 import express from 'express';
+import c from './util/c';
 const app = express();
 
-app.get('/api', (req, res) => {
-  res.send({
-    message: 'I am a server route and can also be hot reloaded!'
-  });
+
+const apiPath = '/api';
+
+app.post(apiPath, (req, res) => {
+
+  c('foo');
+
+  res.send();
 });
 
 export default app;

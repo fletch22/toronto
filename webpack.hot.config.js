@@ -16,7 +16,8 @@ const common = {
     bundle: [
       './app/index.js',
       'bootstrap-loader'
-    ]
+    ],
+    c: './app/js/util/c.js'
   },
   output: {
     filename: '[name].js',
@@ -71,9 +72,6 @@ module.exports = merge(common, {
   ],
   resolve: {
     extensions: ['*', '.js', '.scss'],
-    modules: ['app', 'node_modules'],
-    alias: {
-      c: path.resolve(__dirname, 'app', 'js', 'util', 'c.js')
-    }
+    modules: ['app', 'node_modules']
   }
 });

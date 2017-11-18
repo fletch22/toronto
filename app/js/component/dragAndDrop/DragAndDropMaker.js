@@ -221,7 +221,6 @@ class DragAndDropMaker {
   }
 
   static connectDragAndDrop(ComponentClass) {
-    console.log(ComponentClass.name);
     /* eslint-disable no-param-reassign */
     ComponentClass.propTypes = DragAndDropMaker.incorporateDragAndDropPropTypes(ComponentClass.propTypes);
 
