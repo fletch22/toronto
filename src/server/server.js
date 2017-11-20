@@ -1,7 +1,10 @@
 import express from 'express';
-import c from '../util/c';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { persistState } from './service/persistToDiskService';
+import c from '../util/c';
+
+global.c = c;
 
 const app = express();
 
@@ -11,8 +14,7 @@ app.use(bodyParser.json());
 const apiPath = '/api';
 
 app.post(apiPath, (req, res) => {
-
-  c.lo(req.body);
+  persistState(req.body);
 
   res.send('{ "result": "success}" }');
 });
