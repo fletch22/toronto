@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { persistState } from './service/persistToDiskService';
+import persistStateToDiskService from './service/persistStateToDiskService';
 import c from '../util/c';
 
 global.c = c;
@@ -14,9 +14,15 @@ app.use(bodyParser.json());
 const apiPath = '/api';
 
 app.post(apiPath, (req, res) => {
-  persistState(req.body);
+  persistStateToDiskService.persistState(req.body).then(() => {
+    res.send('{ "result": "success" }');
+  });
+});
 
-  res.send('{ "result": "success}" }');
+app.get(`${apiPath}/sessions/mostRecentHistorical`, (req, res) => {
+  persistStateToDiskService.findMostRecentHistoricalState().then(() => {
+    res.send('{ "result": "not yet implemented." }');
+  });
 });
 
 export default app;

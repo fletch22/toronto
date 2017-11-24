@@ -1,7 +1,8 @@
+import persistStateToDiskService from '../../service/persistStateToDiskService';
 import persistToDiskService from '../../service/persistToDiskService';
 import sinon from 'sinon';
 
-describe('Server', () => {
+describe('PersistStateDiskService', () => {
   let sandbox;
 
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe('Server', () => {
     const writeToFileStub = sandbox.stub(persistToDiskService, 'writeToFile');
 
     // Act
-    persistToDiskService.groupAndWrite(persistGrouping);
+    persistStateToDiskService.groupAndWrite(persistGrouping);
 
     // Assert
     expect(writeToFileStub.callCount).toBe(2);
@@ -55,7 +56,7 @@ describe('Server', () => {
     ];
 
     // Act
-    const groupings = persistToDiskService.groupByTimestamp(states);
+    const groupings = persistStateToDiskService.groupByTimestamp(states);
 
     const keys = [];
     for (const key in groupings) {
@@ -68,5 +69,17 @@ describe('Server', () => {
     expect(keys.length).toBe(2);
     expect(keys[0]).toBe(timestamp1);
     expect(keys[0]).toBe(timestamp1);
+  });
+
+  it('Should get the most recent historical state', (done) => {
+    // Arrange
+    // Act
+    persistStateToDiskService.findMostRecentHistoricalState().then((result) => {
+    // Assert
+      c.lo(result, 'fmrhs: ');
+      done();
+    }).catch((err) => {
+      throw new Error(err);
+    });
   });
 });
