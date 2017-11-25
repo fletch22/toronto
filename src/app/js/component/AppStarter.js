@@ -1,10 +1,10 @@
-import 'app/css/base';
+import '../../css/base.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AppRoot from '../component/AppRoot';
 import { Provider } from 'react-redux';
-import 'app/css/modules/container';
-import 'app/css/modules/toolbar';
+import '../../css/modules/container.scss';
+import '../../css/modules/toolbar.scss';
 import AllStore from '../stores/allStore';
 import CrusoeModal from '../component/modals/CrusoeModal';
 import dateformat from 'dateformat';
@@ -37,7 +37,7 @@ class AppStarter {
       }).catch((error) => {
         const dateFormatted = dateformat(new Date(), 'HH:MM.ss TT');
         const bodyText2 = `Last attempt: ${dateFormatted}.`;
-        const bodyText3 = `Next retry: ${this.retryWaitMillis/1000} seconds.`;
+        const bodyText3 = `Next retry: ${this.retryWaitMillis / 1000} seconds.`;
 
         ReactDOM.render(
             <CrusoeModal showModal headerText="Render Error" bodyText1={error.stack} bodyText2={bodyText2} bodyText3={bodyText3} />,

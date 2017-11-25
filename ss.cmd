@@ -8,4 +8,4 @@ IF EXIST %BUILD_DIR% (
     rmdir %BUILD_DIR% /s /q
 )
 
-node_modules/.bin/webpack --config webpack.config.server.js
+node_modules/.bin/babel-watch ./src/server/serverNew.js

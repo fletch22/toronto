@@ -7,7 +7,8 @@ import { actionCreatePseudoModalComponent } from '../../../../../actions/index';
 import ComponentTypes from '../../../../../domain/component/ComponentTypes';
 import crudComponentOperations from '../../../../CrudOperations';
 import { actionUpdateViewPropertyValue } from '../../../../../actions/index';
-import 'app/css/modules/menu';
+import '../../../../../../css/modules/menu.scss';
+
 
 class HeaderMenu extends React.Component {
   static menuKeys() {

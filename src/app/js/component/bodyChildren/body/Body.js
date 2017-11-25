@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ComponentChild from '../ComponentChild';
 import graphTraversal from '../../../state/graphTraversal';
-import 'app/css/modules/time-travel-toolbar';
+import '../../../../css/modules/time-travel-toolbar.scss';
 import SelectedContextToolbar from '../SelectedContextToolbar';
 import DragAndDropMaker from '../../../component/dragAndDrop/DragAndDropMaker';
 import DragAndDropUtils from '../../../component/dragAndDrop/DragAndDropUtils';

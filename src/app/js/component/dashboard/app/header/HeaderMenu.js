@@ -5,7 +5,7 @@ import 'rc-menu/assets/index.css';
 import { actionCreatePseudoModalComponent } from '../../../../actions/index';
 import ComponentTypes from '../../../../domain/component/ComponentTypes';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app/index';
-import 'app/css/modules/menu';
+import '../../../../../css/modules/menu.scss';
 import crudComponentOperations from '../../../CrudOperations';
 import { actionUpdateViewPropertyValue } from '../../../../actions/index';
 

@@ -12,7 +12,7 @@ import crudActionCreator from '../../../actions/crudActionCreator';
 import ModalWrangler from '../../../component/modals/ModalWrangler';
 import TimeTravelNavBar from './TimeTravelNavBar';
 import modalDispatch from '../../modals/modalDispatcher';
-import 'app/css/modules/time-travel-toolbar';
+import '../../../../css/modules/time-travel-toolbar.scss';
 import persistAppService from '../../../service/appPersistenceService';
 
 class AppContainerToolbar extends React.Component {
@@ -31,7 +31,7 @@ class AppContainerToolbar extends React.Component {
               +
             </button>
           </div>
-          <div className="col-lg-1"><span className="toolbar-label">Numbers Added: <span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
+          <div className="col-lg-1"><span className="toolbar-label">Numbers Added: WWW<span className="toolbar-label-value">{this.props.numberApps}</span></span></div>
           <div className="col-lg-3">
             <button id="police-box" onClick={this.props.onShowTimeTravelOverlay} className="btn btn-default button-application-toolbar"></button>
             <button id="nuke-and-pave" onClick={this.props.onNukeAndPaveClick} className="btn btn-default button-application-toolbar"></button>
