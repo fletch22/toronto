@@ -1,4 +1,4 @@
-const webpackConfig = require('./webpack.hot.config.js');
+const webpackConfig = require('./webpack.config.js');
 /* eslint-disable no-var */
 var pattern;
 

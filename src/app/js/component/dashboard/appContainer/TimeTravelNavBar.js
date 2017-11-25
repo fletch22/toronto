@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import 'app/css/modules/time-travel-toolbar';
+import '../../../../css/modules/time-travel-toolbar.scss';
 import stateGetAndDispatch from '../../../domain/stateGetAndDispatch';
 
 class TimeTravelNavBar extends React.Component {

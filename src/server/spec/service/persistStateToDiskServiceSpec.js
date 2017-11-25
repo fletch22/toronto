@@ -71,15 +71,16 @@ describe('PersistStateDiskService', () => {
     expect(keys[0]).toBe(timestamp1);
   });
 
-  it('Should get the most recent historical state', (done) => {
+  xit('Should get the most recent historical state', (done) => {
     // Arrange
     // Act
-    persistStateToDiskService.findMostRecentHistoricalState().then((result) => {
-    // Assert
-      c.lo(result, 'fmrhs: ');
-      done();
-    }).catch((err) => {
-      throw new Error(err);
-    });
+    // persistStateToDiskService.findMostRecentHistoricalState().then((result) => {
+    // // Assert
+    //   c.lo(result, 'fmrhs: ');
+    //   done();
+    // }).catch((err) => {
+    //   throw new Error(err);
+    // });
+    expect(true).toBe(false);
   });
 });
