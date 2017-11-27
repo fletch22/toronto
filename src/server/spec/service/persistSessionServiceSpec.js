@@ -1,6 +1,7 @@
 import persistSessionService from '../../service/persistSessionService';
 import persistToDiskService from '../../service/persistToDiskService';
 import sinon from 'sinon';
+import fs from 'fs';
 
 describe('PersistSessionService', () => {
   let sandbox;
@@ -33,5 +34,21 @@ describe('PersistSessionService', () => {
       expect(filePath.endsWith('session.json'));
       done();
     });
+  });
+
+  it('should get current session key', () => {
+    // Arrange
+    const sessionExpected = {
+      lastSavedSessionKey: '1234567890'
+    };
+
+    const readMock = sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(sessionExpected));
+
+    // Act
+    const sessionKey = persistSessionService.getCurrentSessionKey();
+
+    // Assert
+    expect(readMock.calledOnce);
+    expect(sessionKey).toBe(sessionExpected.lastSavedSessionKey);
   });
 });

@@ -1,8 +1,13 @@
 import persistStateToDiskService from '../../service/persistStateToDiskService';
 import persistToDiskService from '../../service/persistToDiskService';
+import persistSessionService from '../../service/persistSessionService';
 import sinon from 'sinon';
+import moment from 'moment';
+import fs from 'fs';
+import path from 'path';
+import util from '../../util/util';
 
-describe('PersistStateDiskService', () => {
+describe.only('PersistStateDiskService', () => {
   let sandbox;
 
   beforeEach(() => {
@@ -71,16 +76,63 @@ describe('PersistStateDiskService', () => {
     expect(keys[0]).toBe(timestamp1);
   });
 
-  xit('Should get the most recent historical state', (done) => {
+  test('Should get the most recent historical state', () => {
     // Arrange
+    const now1 = new Date(moment()).getTime();
+
+    const filesMockNew = [];
+    util.times(100)((count) => {
+      filesMockNew.push(path.basename(persistStateToDiskService.composeFilePathFromSessionKey(now1 + (count * 1000))));
+    });
+    filesMockNew.sort();
+
+    const readdirSyncStub = sandbox.stub(fs, 'readdirSync').returns(filesMockNew);
+
     // Act
-    // persistStateToDiskService.findMostRecentHistoricalState().then((result) => {
-    // // Assert
-    //   c.lo(result, 'fmrhs: ');
-    //   done();
-    // }).catch((err) => {
-    //   throw new Error(err);
-    // });
-    expect(true).toBe(false);
+    const mostRecent = persistStateToDiskService.findMostRecentHistoricalFile();
+
+    // Assert
+    expect(readdirSyncStub.callCount).toBe(1);
+    expect(mostRecent).toEqual(filesMockNew[filesMockNew.length - 1]);
+  });
+
+  test('Should get the most recent historical state from the session stored', () => {
+    // Arrange
+    const now1 = new Date(moment()).getTime();
+
+    const expectedState1 = {
+      foo: 'bar'
+    };
+
+    const expectedState2 = {
+      foo: 'banana'
+    };
+
+    const EventEmitter = require('events');
+    class MyEventEmitter extends EventEmitter {}
+
+    const myEventEmitter = new MyEventEmitter();
+
+    const arrayStates = [expectedState1, expectedState2];
+
+    myEventEmitter.on = (value, fn) => {
+      fn(JSON.stringify(arrayStates.pop()));
+      myEventEmitter.emit('line', null);
+    };
+
+    const getCurrentSessionKeyMock = sandbox.stub(persistSessionService, 'getCurrentSessionKey').returns(now1.toString());
+    const createLineReadStreamMock = sandbox.stub(persistStateToDiskService, 'createLineReadStream').returns(myEventEmitter);
+
+    myEventEmitter.emit('line', null);
+    expect.assertions(3);
+
+    // Act
+    return persistStateToDiskService.findMostRecentStateInFile().then((state) => {
+      // Assert
+      expect(getCurrentSessionKeyMock.callCount).toBe(1);
+      expect(createLineReadStreamMock.callCount).toBe(1);
+      expect(state).toEqual(expectedState2);
+    });
   });
 });
+

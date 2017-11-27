@@ -63,7 +63,7 @@ app.post(apiPath, (req, res) => {
 });
 
 app.get(`${apiPath}/sessions/mostRecentHistorical`, (req, res) => {
-  persistStateToDiskService.findMostRecentHistoricalState().then(() => {
+  persistStateToDiskService.findMostRecentHistoricalFile().then(() => {
     res.send('{ "result": "not yet implemented." }');
   });
 });

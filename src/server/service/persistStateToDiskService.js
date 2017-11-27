@@ -1,16 +1,19 @@
-import 'datejs';
+import moment from 'moment';
 import format from 'string-template';
 import path from 'path';
 import persistToDiskService from './persistToDiskService';
 import persistSessionService from './persistSessionService';
 import { stopwatch } from 'durations';
 import objectUtil from '../util/objectUtil';
+import fs from 'fs';
+import readline from 'readline';
 
 const watch = stopwatch();
-const persistDateFormat = 'yyyy-MM-dd-HH-mm-ss-tt';
+const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';
 export const persistRootPath = persistToDiskService.getPersistRootPath();
-const filePathTemplate = path.join(persistRootPath, 'stateLog-{persistFilenamePart}.txt');
-
+export const stateLogPrefix = 'stateLog-';
+export const stateLogSuffix = '.txt';
+const filePathTemplate = path.join(persistRootPath, `${stateLogPrefix}{persistFilenamePart}${stateLogSuffix}`);
 
 class PersistStateToDiskService {
 
@@ -23,11 +26,12 @@ class PersistStateToDiskService {
     this.persistState = this.persistState.bind(this);
     this.persistSession = this.persistSession.bind(this);
     this.sortSessionKeys = this.sortSessionKeys.bind(this);
+    this.createLineReadStream = this.createLineReadStream.bind(this);
   }
 
   getPersistFilenamePart(serverStartupTimestamp) {
     const startupTimestamp = new Date(parseInt(serverStartupTimestamp, 10));
-    return `${startupTimestamp.toString(persistDateFormat)}`;
+    return `${moment(startupTimestamp.toISOString()).format(persistDateFormat)}`;
   }
 
   groupAndWrite(persistGrouping) {
@@ -88,9 +92,7 @@ class PersistStateToDiskService {
     watch.reset();
     watch.start();
 
-    return this.saveDataToFile(stateArray.states).then((persistedSessionStateKeys) => {
-      return this.persistSession(persistedSessionStateKeys);
-    });
+    return this.saveDataToFile(stateArray.states).then((persistedSessionStateKeys) => this.persistSession(persistedSessionStateKeys));
   }
 
   persistSession(persistedSessionStateKeys) {
@@ -103,8 +105,49 @@ class PersistStateToDiskService {
       });
   }
 
-  findMostRecentHistoricalState() {
-    return Promise.reject(new Error('foo'));
+  findMostRecentHistoricalFile() {
+    const matchingFiles = {};
+    const keys = [];
+
+    fs.readdirSync(persistRootPath).forEach(file => {
+      if (file.startsWith(stateLogPrefix)) {
+        const filenameSuffix = file.substring(stateLogPrefix.length);
+        const indexOfExtension = filenameSuffix.indexOf(stateLogSuffix);
+        const datestamp = filenameSuffix.substring(0, indexOfExtension);
+        const key = new Date(moment(datestamp, persistDateFormat)).getTime();
+        matchingFiles[key] = file;
+        keys.push(key);
+      }
+    });
+
+    keys.sort();
+    return matchingFiles[keys[keys.length - 1]];
+  }
+
+  findMostRecentStateInFile() {
+    const sessionKey = persistSessionService.getCurrentSessionKey();
+    const filePath = this.composeFilePathFromSessionKey(sessionKey);
+
+    const lineReader = this.createLineReadStream(filePath);
+
+    let lastLine;
+
+    lineReader.on('line', (line) => {
+      lastLine = line;
+    });
+
+    return new Promise((resolve, reject) => {
+      lineReader.on('close', () => {
+        console.log("Closed!!!");
+        resolve(JSON.parse(lastLine));
+      });
+    });
+  }
+
+  createLineReadStream(filepath) {
+    return readline.createInterface({
+      input: fs.createReadStream(filepath)
+    });
   }
 }
 
