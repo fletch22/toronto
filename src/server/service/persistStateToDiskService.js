@@ -138,7 +138,6 @@ class PersistStateToDiskService {
 
     return new Promise((resolve, reject) => {
       lineReader.on('close', () => {
-        console.log("Closed!!!");
         resolve(JSON.parse(lastLine));
       });
     });

@@ -33,7 +33,6 @@ class PersistToDiskService {
 
     return new Promise((resolve, reject) => {
       return fs.writeFile(filePath, data, options, (err) => {
-        console.log("The file was saved???");
         if (!!err) {
           reject(err);
         }
