@@ -2,6 +2,8 @@ import persistStateToDiskService from './service/persistStateToDiskService';
 import persistSessionService from './service/persistSessionService';
 import path from 'path';
 
+export const apiPath = '/api';
+
 export const setupDevelopmentBuildRoutes = (app) => {
   const httpProxy = require('http-proxy');
   const proxy = httpProxy.createProxyServer();
@@ -29,14 +31,13 @@ export const setupDevelopmentBuildRoutes = (app) => {
 };
 
 export const setupNormalRoutes = (app) => {
-  const apiPath = '/api';
-
   app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..', '..', 'index.html'));
   });
 
   app.post(apiPath, (req, res) => {
     persistStateToDiskService.persistState(req.body).then(() => {
+      c.l('test');
       res.send('{ "result": "success" }');
     });
   });

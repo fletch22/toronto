@@ -9,7 +9,7 @@
     "start": "ss.cmd",
     "lint": "eslint --ext .js,.jsx assets/**",
     "preinstall": "npm i -g node-gyp@3.3.0",
-    "test:server": "./node_modules/.bin/jest --config=jest.config.json --watch"
+    "test:server": "./node_modules/.bin/jest --config=./src/server/spec/jest.config.js --watch"
   },
   "author": "Chris Flesche",
   "license": "UNLICENSED",
