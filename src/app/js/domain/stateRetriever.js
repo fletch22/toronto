@@ -3,6 +3,7 @@ import RestService from '../service/restService';
 import stateSyncService from '../service/stateSyncService';
 import defaultState from '../state/defaultState';
 import deepDiff from 'deep-diff';
+import util from '../util/util';
 
 class StateRetriever {
 
@@ -28,6 +29,13 @@ class StateRetriever {
     const outerPromise = new Promise((resolve, reject) => {
       const promise = stateSyncService.getMostRecentHistoricalState();
 
+      stateSyncService.getMostRecentHistoricalStateFromNode().then((result) => {
+        if (result.foundState) {
+          const stateHashCode = util.hashCode(result.state);
+          c.l(`Node state: ${stateHashCode} ...`);
+        }
+      });
+
       promise.catch((error) => {
         console.error(error.stack);
         reject(error);
@@ -38,6 +46,9 @@ class StateRetriever {
 
         // NOTE: 10-17-2017: fleschec: This is for development only. In production this is unnecessary and might even be slow.
         if (!!stateRecent) {
+          const stateHashCode = util.hashCode(data.state);
+          c.l(`Java state: ${stateHashCode} ...`);
+
           this.deriveState().then((derivedState) => {
             const diff = deepDiff(derivedState.model, stateRecent.model);
             if (diff) {
@@ -49,13 +60,10 @@ class StateRetriever {
         }
 
         if (stateRecent === null) {
-          const promiseInner = this.deriveState();
-
-          promiseInner.then((stateInner) => {
+          this.deriveState().then((stateInner) => {
+            stateSyncService.saveSessionToNode(stateInner.serverStartupTimestamp);
             resolve(stateInner);
-          });
-
-          promiseInner.catch((error) => {
+          }).catch((error) => {
             reject(error);
           });
         } else {

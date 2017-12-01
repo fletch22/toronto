@@ -18,9 +18,7 @@ describe.only('PersistStateDiskService', () => {
     sandbox.restore();
   });
 
-  const countLines = (str) => {
-    return str.replace(/[^\n]/g, '').length;
-  };
+  const countLines = (str) => str.replace(/[^\n]/g, '').length;
 
   it('Should work correctly.', () => {
     // Arrange]
@@ -76,7 +74,7 @@ describe.only('PersistStateDiskService', () => {
     expect(keys[0]).toBe(timestamp1);
   });
 
-  test('Should get the most recent historical state', () => {
+  test('Should get the most recent historical file', () => {
     // Arrange
     const now1 = new Date(moment()).getTime();
 
@@ -93,7 +91,8 @@ describe.only('PersistStateDiskService', () => {
 
     // Assert
     expect(readdirSyncStub.callCount).toBe(1);
-    expect(mostRecent).toEqual(filesMockNew[filesMockNew.length - 1]);
+    expect(mostRecent.foundFile).toEqual(true);
+    expect(mostRecent.filename).toEqual(filesMockNew[filesMockNew.length - 1]);
   });
 
   test('Should get the most recent historical state from the session stored', () => {

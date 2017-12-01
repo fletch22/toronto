@@ -1,6 +1,7 @@
 import persistStateToDiskService from './service/persistStateToDiskService';
 import persistSessionService from './service/persistSessionService';
 import path from 'path';
+import { responseSuccess } from './util/responseConstants';
 
 export const apiPath = '/api';
 
@@ -35,22 +36,28 @@ export const setupNormalRoutes = (app) => {
     res.sendFile(path.resolve(__dirname, '..', '..', 'index.html'));
   });
 
-  app.post(apiPath, (req, res) => {
+  app.post(`${apiPath}/states/`, (req, res) => {
     persistStateToDiskService.persistState(req.body).then(() => {
-      c.l('test');
-      res.send('{ "result": "success" }');
+      res.send(responseSuccess);
     });
   });
 
-  app.get(`${apiPath}/sessions/mostRecentHistorical`, (req, res) => {
-    persistStateToDiskService.findMostRecentHistoricalFile().then(() => {
-      res.send('{ "result": "not yet implemented." }');
+  app.get(`${apiPath}/states/mostRecentHistoricalState`, (req, res) => {
+    persistStateToDiskService.findMostRecentStateInFile(req.body).then((state) => {
+      res.send(JSON.stringify({ foundState: !!state, state }));
     });
   });
 
-  app.post(`${apiPath}/sessions/:sessionKey`, (req, res) => {
+  app.get(`${apiPath}/sessions/mostRecentHistoricalFile`, (req, res) => {
+    const result = persistStateToDiskService.findMostRecentHistoricalFile();
+
+    res.send(JSON.stringify(result));
+  });
+
+  app.put(`${apiPath}/sessions/:sessionKey`, (req, res) => {
+    c.l(`Called save session: ${req.params.sessionKey}`);
     persistSessionService.ensureSessionPersisted(req.params.sessionKey).then(() => {
-      res.send('{ "result": "success" }');
+      res.send(responseSuccess);
     });
   });
 };

@@ -121,7 +121,11 @@ class PersistStateToDiskService {
     });
 
     keys.sort();
-    return matchingFiles[keys[keys.length - 1]];
+
+    return {
+      foundFile: (keys.length > 0),
+      filename: matchingFiles[keys[keys.length - 1]]
+    };
   }
 
   findMostRecentStateInFile() {

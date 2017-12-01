@@ -6,10 +6,6 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states?action=getEarliest`, 'post');
   }
 
-  rollbackToTransaction(transactionId) {
-    return this.fetch(`${this.getOrbServerRootUrl()}/transaction/${transactionId}?action=rollbackTo`, 'post');
-  }
-
   rollbackToStateId(stateId) {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states/${stateId}?action=rollbackTo`, 'post');
   }
@@ -19,15 +15,11 @@ class StateSyncService extends Service {
   }
 
   saveStateArrayToNode(stateArray) {
-    return this.fetch(`${this.getNodeServerRootUrl()}/`, 'post', stateArray);
+    return this.fetch(`${this.getNodeServerRootUrl()}/states`, 'post', stateArray);
   }
 
   saveState(statePackage) {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/statePackage`, 'put', statePackage);
-  }
-
-  saveStateSynchronous(statePackage) {
-    return this.fetchSynchronous(`${this.getOrbServerRootUrl()}/component/statePackage`, 'put', statePackage);
   }
 
   getHistoricalState(index) {
@@ -38,12 +30,20 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/mostRecentStateHistory`, 'get');
   }
 
+  getMostRecentHistoricalStateFromNode() {
+    return this.fetch(`${this.getNodeServerRootUrl()}/states/mostRecentHistoricalState`, 'get');
+  }
+
   getState(stateId) {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states/${stateId}`, 'get');
   }
 
   determineLastGoodState(mostRecentSubmittedBlocks) {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/determineLastGoodState/`, 'post', mostRecentSubmittedBlocks);
+  }
+
+  saveSessionToNode(serverStartupTimestamp) {
+    return this.fetch(`${this.getNodeServerRootUrl()}/sessions/${serverStartupTimestamp}`, 'put');
   }
 }
 

@@ -54,13 +54,13 @@ describe('routes', () => {
     const req = app.makeRequest({ host: 'foo' });
 
     // Act
-    app.invoke('post', `${apiPath}/`, req, res);
+    app.invoke('post', `${apiPath}/states/`, req, res);
 
     // Assert
     expect(pstdMock.calledOnce);
 
-    return promise.then((result) => {
-      expect(actualResult).toBe('{ "result": "success" }');
+    return promise.then(() => {
+      expect(actualResult).toBe('{"result":"success"}');
     });
   });
 });
