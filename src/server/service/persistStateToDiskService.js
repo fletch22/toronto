@@ -23,10 +23,12 @@ class PersistStateToDiskService {
     this.composeFilePathFromSessionKey = this.composeFilePathFromSessionKey.bind(this);
     this.saveDataToFile = this.saveDataToFile.bind(this);
     this.groupByTimestamp = this.groupByTimestamp.bind(this);
-    this.persistState = this.persistState.bind(this);
+    this.persistStateArrays = this.persistStateArrays.bind(this);
     this.persistSession = this.persistSession.bind(this);
     this.sortSessionKeys = this.sortSessionKeys.bind(this);
     this.createLineReadStream = this.createLineReadStream.bind(this);
+    this.writeStateToFile = this.writeStateToFile.bind(this);
+    this.persistStatePackage = this.persistStatePackage.bind(this);
   }
 
   getPersistFilenamePart(serverStartupTimestamp) {
@@ -45,10 +47,14 @@ class PersistStateToDiskService {
           const json = JSON.stringify(info.state); // NOTE: 2017-11-17: There should be no carriage returns here at this point.
           combinedData += `${json}\n`;
         });
-        allWrites.push(persistToDiskService.writeToFile(this.composeFilePathFromSessionKey(key), combinedData));
+        allWrites.push(this.writeStateToFile(key, combinedData));
       }
     }
     return Promise.all(allWrites);
+  }
+
+  writeStateToFile(key, stateString) {
+    return persistToDiskService.writeToFile(this.composeFilePathFromSessionKey(key), stateString);
   }
 
   composeFilePathFromSessionKey(key) {
@@ -88,21 +94,24 @@ class PersistStateToDiskService {
     return persistGrouping;
   }
 
-  persistState(stateArray) {
+  persistStateArrays(stateArray) {
     watch.reset();
     watch.start();
 
-    return this.saveDataToFile(stateArray.states).then((persistedSessionStateKeys) => this.persistSession(persistedSessionStateKeys));
+    return this.saveDataToFile(stateArray.states).then((data) => {
+      watch.stop();
+      const duration = watch.duration();
+      c.l(`Write duration: ${duration}`);
+      return Promise.resolve(data);
+    });
+  }
+
+  persistStatePackage(statePackage) {
+    return this.writeStateToFile(statePackage.serverStartupTimestamp, JSON.stringify(statePackage.state));
   }
 
   persistSession(persistedSessionStateKeys) {
-    return persistSessionService.ensureSessionPersisted(persistedSessionStateKeys)
-      .then((data) => {
-        watch.stop();
-        const duration = watch.duration();
-        c.l(`Write duration: ${duration}`);
-        return Promise.resolve(data);
-      });
+    return persistSessionService.ensureSessionPersisted(persistedSessionStateKeys);
   }
 
   findMostRecentHistoricalFile() {

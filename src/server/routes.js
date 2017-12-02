@@ -36,8 +36,14 @@ export const setupNormalRoutes = (app) => {
     res.sendFile(path.resolve(__dirname, '..', '..', 'index.html'));
   });
 
-  app.post(`${apiPath}/states/`, (req, res) => {
-    persistStateToDiskService.persistState(req.body).then(() => {
+  app.post(`${apiPath}/stateArrays/`, (req, res) => {
+    persistStateToDiskService.persistStateArrays(req.body).then(() => {
+      res.send(responseSuccess);
+    });
+  });
+
+  app.post(`${apiPath}/statePackages/`, (req, res) => {
+    persistStateToDiskService.persistStatePackage(req.body).then(() => {
       res.send(responseSuccess);
     });
   });

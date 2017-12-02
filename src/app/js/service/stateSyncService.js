@@ -2,6 +2,12 @@ import Service from './Service';
 
 class StateSyncService extends Service {
 
+  constructor() {
+    super();
+    this.saveState = this.saveState.bind(this);
+    this.saveStateToNode = this.saveStateToNode.bind(this);
+  }
+
   getEarliestState() {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states?action=getEarliest`, 'post');
   }
@@ -15,11 +21,16 @@ class StateSyncService extends Service {
   }
 
   saveStateArrayToNode(stateArray) {
-    return this.fetch(`${this.getNodeServerRootUrl()}/states`, 'post', stateArray);
+    return this.fetch(`${this.getNodeServerRootUrl()}/stateArrays`, 'post', stateArray);
   }
 
   saveState(statePackage) {
+    this.saveStateToNode(statePackage);
     return this.fetch(`${this.getOrbServerRootUrl()}/component/statePackage`, 'put', statePackage);
+  }
+
+  saveStateToNode(statePackage) {
+    return this.fetch(`${this.getNodeServerRootUrl()}/statePackages/`, 'post', statePackage);
   }
 
   getHistoricalState(index) {

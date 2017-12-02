@@ -49,16 +49,45 @@ describe('routes', () => {
 
     const promise = Promise.resolve();
 
-    const pstdMock = sandbox.stub(persistStateToDiskService, 'persistState').returns(promise);
+    const pstdMock = sandbox.stub(persistStateToDiskService, 'persistStateArrays').returns(promise);
 
     const req = app.makeRequest({ host: 'foo' });
 
     // Act
-    app.invoke('post', `${apiPath}/states/`, req, res);
+    app.invoke('post', `${apiPath}/stateArrays/`, req, res);
 
     // Assert
     expect(pstdMock.calledOnce);
 
+    return promise.then(() => {
+      expect(actualResult).toBe('{"result":"success"}');
+    });
+  });
+
+  it('should process sent statePackage correctly.', () => {
+    // Arrange
+    const res = app.makeResponse((err, data) => {
+
+    });
+
+    let actualResult = 'foo';
+
+    res.send = (result) => {
+      actualResult = result;
+      c.lo(actualResult);
+    };
+
+    const promise = Promise.resolve();
+
+    const pspMock = sandbox.stub(persistStateToDiskService, 'persistStatePackage').returns(promise);
+
+    const req = app.makeRequest({ host: 'foo' });
+
+    // Act
+    app.invoke('post', `${apiPath}/statePackages`, req, res);
+
+    // Assert
+    expect(pspMock.calledOnce);
     return promise.then(() => {
       expect(actualResult).toBe('{"result":"success"}');
     });

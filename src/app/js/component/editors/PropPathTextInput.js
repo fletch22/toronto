@@ -46,7 +46,7 @@ PropPathTextInput.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  const persistState = ownProps.persistState ? ownProps.persistState : false;
+  const persistState = ownProps.persistStateArrays ? ownProps.persistStateArrays : false;
 
   return {
     onChange: (event) => {
