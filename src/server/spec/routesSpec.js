@@ -1,7 +1,7 @@
 import { apiPath, setupNormalRoutes } from '../routes';
 import mockExpress from 'mock-express';
 import sinon from 'sinon';
-import persistStateToDiskService from '../service/persistStateToDiskService';
+import stateService from '../service/stateService';
 
 describe('routes', () => {
   let sandbox;
@@ -49,7 +49,7 @@ describe('routes', () => {
 
     const promise = Promise.resolve();
 
-    const pstdMock = sandbox.stub(persistStateToDiskService, 'persistStateArrays').returns(promise);
+    const pstdMock = sandbox.stub(stateService, 'persistStateArrays').returns(promise);
 
     const req = app.makeRequest({ host: 'foo' });
 
@@ -79,7 +79,7 @@ describe('routes', () => {
 
     const promise = Promise.resolve();
 
-    const pspMock = sandbox.stub(persistStateToDiskService, 'persistStatePackage').returns(promise);
+    const pspMock = sandbox.stub(stateService, 'persistStatePackage').returns(promise);
 
     const req = app.makeRequest({ host: 'foo' });
 
@@ -90,6 +90,37 @@ describe('routes', () => {
     expect(pspMock.calledOnce);
     return promise.then(() => {
       expect(actualResult).toBe('{"result":"success"}');
+    });
+  });
+
+  it('should process get state by index correctly.', () => {
+    // Arrange
+    const res = app.makeResponse((err, data) => {
+
+    });
+
+    let actualResult = 'foo';
+
+    res.send = (result) => {
+      actualResult = result;
+      c.lo(actualResult);
+    };
+
+    const expectedResult = { foo: 'bar' };
+
+    const promise = Promise.resolve(expectedResult);
+
+    const getStateByIndexStub = sandbox.stub(stateService, 'getStateByIndex').returns(promise);
+
+    const req = app.makeRequest({ host: 'foo' });
+
+    // Act
+    app.invoke('get', `${apiPath}/stateIndexes/1`, req, res);
+
+    // Assert
+    expect(getStateByIndexStub.calledOnce);
+    return promise.then(() => {
+      expect(actualResult).toBe(JSON.stringify(expectedResult));
     });
   });
 });

@@ -43,7 +43,11 @@ class PersistToDiskService {
   }
 
   getPersistRootPath() {
-    return path.resolve(srcRoot, '..', 'temp');
+    const rootPath = path.resolve(srcRoot, '..', 'temp');
+    if (!fs.existsSync(rootPath)) {
+      fs.mkdirSync(rootPath);
+    }
+    return rootPath;
   }
 }
 

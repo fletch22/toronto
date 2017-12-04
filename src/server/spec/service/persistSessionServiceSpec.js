@@ -43,12 +43,15 @@ describe('PersistSessionService', () => {
     };
 
     const readMock = sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(sessionExpected));
+    const existsMock = sandbox.stub(fs, 'exists').returns(true);
 
     // Act
-    const sessionKey = persistSessionService.getCurrentSessionKey();
+    const optionalSessionKey = persistSessionService.getCurrentSessionKey();
 
     // Assert
     expect(readMock.calledOnce);
-    expect(sessionKey).toBe(sessionExpected.lastSavedSessionKey);
+    expect(existsMock.calledOnce);
+    expect(optionalSessionKey.isPresent()).toBe(true);
+    expect(optionalSessionKey.get()).toBe(sessionExpected.lastSavedSessionKey);
   });
 });

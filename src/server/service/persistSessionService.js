@@ -1,6 +1,7 @@
 import persistToDiskService from './persistToDiskService';
 import path from 'path';
 import fs from 'fs';
+import Optional from 'optional-js';
 
 const persistRootPath = persistToDiskService.getPersistRootPath();
 export const sessionFilePath = path.join(persistRootPath, 'session.json');
@@ -17,10 +18,15 @@ class PersistSessionService {
   }
 
   getCurrentSessionKey() {
-    const contents = fs.readFileSync(sessionFilePath, defaultEncoding);
+    let optionalResult = Optional.empty();
+    if (fs.exists(sessionFilePath)) {
+      const contents = fs.readFileSync(sessionFilePath, defaultEncoding);
 
-    const session = JSON.parse(contents);
-    return session.lastSavedSessionKey;
+      const session = JSON.parse(contents);
+      optionalResult = Optional.ofNullable(session.lastSavedSessionKey);
+    }
+
+    return optionalResult;
   }
 }
 

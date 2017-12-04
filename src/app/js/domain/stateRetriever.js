@@ -28,14 +28,6 @@ class StateRetriever {
   getCurrent() {
     const outerPromise = new Promise((resolve, reject) => {
       const promise = stateSyncService.getMostRecentHistoricalState();
-
-      stateSyncService.getMostRecentHistoricalStateFromNode().then((result) => {
-        if (result.foundState) {
-          const stateHashCode = util.hashCode(result.state);
-          c.l(`Node state: ${stateHashCode} ...`);
-        }
-      });
-
       promise.catch((error) => {
         console.error(error.stack);
         reject(error);
@@ -82,10 +74,6 @@ class StateRetriever {
     });
 
     return outerPromise;
-  }
-
-  getState(stateId) {
-    return stateSyncService.getState(stateId);
   }
 }
 

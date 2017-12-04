@@ -1,4 +1,4 @@
-import persistStateToDiskService from './service/persistStateToDiskService';
+import stateService from './service/stateService';
 import persistSessionService from './service/persistSessionService';
 import path from 'path';
 import { responseSuccess } from './util/responseConstants';
@@ -37,25 +37,25 @@ export const setupNormalRoutes = (app) => {
   });
 
   app.post(`${apiPath}/stateArrays/`, (req, res) => {
-    persistStateToDiskService.persistStateArrays(req.body).then(() => {
+    stateService.persistStateArrays(req.body).then(() => {
       res.send(responseSuccess);
     });
   });
 
   app.post(`${apiPath}/statePackages/`, (req, res) => {
-    persistStateToDiskService.persistStatePackage(req.body).then(() => {
+    stateService.persistStatePackage(req.body).then(() => {
       res.send(responseSuccess);
     });
   });
 
   app.get(`${apiPath}/states/mostRecentHistoricalState`, (req, res) => {
-    persistStateToDiskService.findMostRecentStateInFile(req.body).then((state) => {
-      res.send(JSON.stringify({ foundState: !!state, state }));
+    stateService.findMostRecentStateInFile(req.body).then((optionalState) => {
+      res.send(JSON.stringify(optionalState));
     });
   });
 
   app.get(`${apiPath}/sessions/mostRecentHistoricalFile`, (req, res) => {
-    const result = persistStateToDiskService.findMostRecentHistoricalFile();
+    const result = stateService.findMostRecentHistoricalFile();
 
     res.send(JSON.stringify(result));
   });
@@ -64,6 +64,13 @@ export const setupNormalRoutes = (app) => {
     c.l(`Called save session: ${req.params.sessionKey}`);
     persistSessionService.ensureSessionPersisted(req.params.sessionKey).then(() => {
       res.send(responseSuccess);
+    });
+  });
+
+  app.get(`${apiPath}/stateIndexes/:index`, (req, res) => {
+    c.l(`Getting index: ${req.params.index}`);
+    stateService.getStateByIndex(req.params.index).then((result) => {
+      res.send(JSON.stringify(result));
     });
   });
 };

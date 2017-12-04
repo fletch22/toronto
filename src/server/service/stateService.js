@@ -7,6 +7,9 @@ import { stopwatch } from 'durations';
 import objectUtil from '../util/objectUtil';
 import fs from 'fs';
 import readline from 'readline';
+import Optional from 'optional-js';
+import 'babel-polyfill';
+import util from '../../util/util';
 
 const watch = stopwatch();
 const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';
@@ -15,7 +18,7 @@ export const stateLogPrefix = 'stateLog-';
 export const stateLogSuffix = '.txt';
 const filePathTemplate = path.join(persistRootPath, `${stateLogPrefix}{persistFilenamePart}${stateLogSuffix}`);
 
-class PersistStateToDiskService {
+class StateService {
 
   constructor() {
     this.getPersistFilenamePart = this.getPersistFilenamePart.bind(this);
@@ -138,21 +141,26 @@ class PersistStateToDiskService {
   }
 
   findMostRecentStateInFile() {
-    const sessionKey = persistSessionService.getCurrentSessionKey();
-    const filePath = this.composeFilePathFromSessionKey(sessionKey);
-
-    const lineReader = this.createLineReadStream(filePath);
-
-    let lastLine;
-
-    lineReader.on('line', (line) => {
-      lastLine = line;
-    });
+    const optionalFilePath = this.getFilePathOfCurrentSessionLog();
 
     return new Promise((resolve, reject) => {
-      lineReader.on('close', () => {
-        resolve(JSON.parse(lastLine));
-      });
+      let optionalResult = util.getOptionalLiteral(null);
+      if (optionalFilePath.isPresent()) {
+        const lineReader = this.createLineReadStream(optionalFilePath.get());
+        let lastLine;
+
+        lineReader.on('line', (line) => {
+          lastLine = line;
+        });
+
+
+        lineReader.on('close', () => {
+          optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
+          resolve(optionalResult);
+        });
+      } else {
+        resolve(optionalResult);
+      }
     });
   }
 
@@ -161,6 +169,69 @@ class PersistStateToDiskService {
       input: fs.createReadStream(filepath)
     });
   }
+
+  getFilePathOfCurrentSessionLog() {
+    const optionalSessionKey = persistSessionService.getCurrentSessionKey();
+
+    let optionalFilePath = Optional.empty();
+    if (optionalSessionKey.isPresent()) {
+      optionalFilePath = Optional.ofNullable(this.composeFilePathFromSessionKey(optionalSessionKey.get()));
+    }
+    return optionalFilePath;
+  }
+
+  getTotalStatesInSessionFile() {
+    const optionalFilePath = this.getFilePathOfCurrentSessionLog();
+
+    return new Promise((resolve, reject) => {
+      if (optionalFilePath.isPresent()) {
+        const lineReader = this.createLineReadStream(optionalFilePath.get());
+
+        let count = 0;
+        lineReader.on('line', () => {
+          count++;
+        });
+
+        lineReader.on('close', () => {
+          resolve(Optional.ofNullable(count));
+        });
+      } else {
+        reject(new Error('Session not found.'));
+      }
+    });
+  }
+
+  async getStateByIndex(index) {
+    const optionalTotalLines = await this.getTotalStatesInSessionFile();
+
+    if (!optionalTotalLines.isPresent()) {
+      throw new Error('There are not session states to get.');
+    }
+
+    const totalLines = optionalTotalLines.get();
+    const stopOnIndex = totalLines + index;
+
+    const filePath = this.getFilePathOfCurrentSessionLog();
+    const lineReader = this.createLineReadStream(filePath);
+
+    let stateLine;
+
+    let count = 0;
+    lineReader.on('line', (line) => {
+      if (stopOnIndex === count) {
+        stateLine = line;
+        lineReader.close();
+      }
+      count++;
+    });
+
+    return new Promise((resolve) => {
+      lineReader.on('close', () => {
+        c.l('Close called.');
+        resolve(Optional.ofNullable(stateLine));
+      });
+    });
+  }
 }
 
-export default new PersistStateToDiskService();
+export default new StateService();

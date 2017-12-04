@@ -35,6 +35,7 @@ const config = {
     fs: 'empty'
   },
   entry: [
+    'babel-polyfill',
     'webpack/hot/dev-server',
     'webpack-dev-server/client?http://localhost:8081',
     './src/app/index.js',
