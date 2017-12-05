@@ -141,10 +141,10 @@ class StateService {
   }
 
   findMostRecentStateInFile() {
-    const optionalFilePath = this.getFilePathOfCurrentSessionLog();
-
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let optionalResult = util.getOptionalLiteral(null);
+
+      const optionalFilePath = this.getFilePathOfCurrentSessionLog();
       if (optionalFilePath.isPresent()) {
         const lineReader = this.createLineReadStream(optionalFilePath.get());
         let lastLine;
@@ -152,7 +152,6 @@ class StateService {
         lineReader.on('line', (line) => {
           lastLine = line;
         });
-
 
         lineReader.on('close', () => {
           optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
@@ -164,28 +163,30 @@ class StateService {
     });
   }
 
-  createLineReadStream(filepath) {
-    return readline.createInterface({
-      input: fs.createReadStream(filepath)
-    });
-  }
-
   getFilePathOfCurrentSessionLog() {
     const optionalSessionKey = persistSessionService.getCurrentSessionKey();
 
     let optionalFilePath = Optional.empty();
     if (optionalSessionKey.isPresent()) {
       optionalFilePath = Optional.ofNullable(this.composeFilePathFromSessionKey(optionalSessionKey.get()));
+
+      console.log(optionalFilePath);
+
     }
     return optionalFilePath;
   }
 
-  getTotalStatesInSessionFile() {
-    const optionalFilePath = this.getFilePathOfCurrentSessionLog();
+  createLineReadStream(filepath) {
+    return readline.createInterface({
+      input: fs.createReadStream(filepath)
+    });
+  }
 
+  getTotalStatesInSessionFile() {
     return new Promise((resolve, reject) => {
-      if (optionalFilePath.isPresent()) {
-        const lineReader = this.createLineReadStream(optionalFilePath.get());
+      const sessionFilePath = persistSessionService.getSessionFilePath();
+      if (fs.existsSync(sessionFilePath)) {
+        const lineReader = this.createLineReadStream(sessionFilePath);
 
         let count = 0;
         lineReader.on('line', () => {

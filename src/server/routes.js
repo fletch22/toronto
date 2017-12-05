@@ -2,6 +2,7 @@ import stateService from './service/stateService';
 import persistSessionService from './service/persistSessionService';
 import path from 'path';
 import { responseSuccess } from './util/responseConstants';
+import c from '../util/c';
 
 export const apiPath = '/api';
 
@@ -13,6 +14,7 @@ export const setupDevelopmentBuildRoutes = (app) => {
   // it is only needed in a development environment. Later
   // you will see why this is a good idea
   const bundle = require('./bundle.js');
+
   bundle();
 
   // Any requests to localhost:3000/build is proxied

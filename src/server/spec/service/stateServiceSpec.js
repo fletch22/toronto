@@ -120,7 +120,7 @@ describe('StateService', () => {
       myEventEmitter.emit('line', null);
     };
 
-    const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('123456.txt'));
+    const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getSessionFilePath').returns('123456.txt');
     const createLineReadStreamMock = sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
 
     myEventEmitter.emit('line', null);
