@@ -1,8 +1,8 @@
 import moment from 'moment';
 import format from 'string-template';
 import path from 'path';
-import persistToDiskService from './persistToDiskService';
-import persistSessionService from './persistSessionService';
+import fileService from './fileService';
+import sessionService from './sessionService';
 import { stopwatch } from 'durations';
 import objectUtil from '../util/objectUtil';
 import fs from 'fs';
@@ -13,7 +13,7 @@ import util from '../../util/util';
 
 const watch = stopwatch();
 const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';
-export const persistRootPath = persistToDiskService.getPersistRootPath();
+export const persistRootPath = fileService.getPersistRootPath();
 export const stateLogPrefix = 'stateLog-';
 export const stateLogSuffix = '.txt';
 const filePathTemplate = path.join(persistRootPath, `${stateLogPrefix}{persistFilenamePart}${stateLogSuffix}`);
@@ -57,7 +57,7 @@ class StateService {
   }
 
   writeStateToFile(key, stateString) {
-    return persistToDiskService.writeToFile(this.composeFilePathFromSessionKey(key), stateString);
+    return fileService.writeToFile(this.composeFilePathFromSessionKey(key), stateString);
   }
 
   composeFilePathFromSessionKey(key) {
@@ -114,7 +114,7 @@ class StateService {
   }
 
   persistSession(persistedSessionStateKeys) {
-    return persistSessionService.ensureSessionPersisted(persistedSessionStateKeys);
+    return sessionService.ensureSessionPersisted(persistedSessionStateKeys);
   }
 
   findMostRecentHistoricalFile() {
@@ -164,14 +164,12 @@ class StateService {
   }
 
   getFilePathOfCurrentSessionLog() {
-    const optionalSessionKey = persistSessionService.getCurrentSessionKey();
+    const optionalSessionKey = sessionService.getCurrentSessionKey();
 
     let optionalFilePath = Optional.empty();
     if (optionalSessionKey.isPresent()) {
       optionalFilePath = Optional.ofNullable(this.composeFilePathFromSessionKey(optionalSessionKey.get()));
-
       console.log(optionalFilePath);
-
     }
     return optionalFilePath;
   }
@@ -184,7 +182,7 @@ class StateService {
 
   getTotalStatesInSessionFile() {
     return new Promise((resolve, reject) => {
-      const sessionFilePath = persistSessionService.getSessionFilePath();
+      const sessionFilePath = sessionService.getSessionFilePath();
       if (fs.existsSync(sessionFilePath)) {
         const lineReader = this.createLineReadStream(sessionFilePath);
 

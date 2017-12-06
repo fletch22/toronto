@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import srcRoot from '../../srcRoot';
 
-class PersistToDiskService {
+class FileService {
   writeToFile(filePath, data) {
     c.l(`fp: ${filePath}`);
     return new Promise((resolve, reject) => {
@@ -51,4 +51,4 @@ class PersistToDiskService {
   }
 }
 
-export default new PersistToDiskService();
+export default new FileService();

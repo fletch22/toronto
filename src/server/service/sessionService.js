@@ -1,20 +1,20 @@
-import persistToDiskService from './persistToDiskService';
+import fileService from './fileService';
 import path from 'path';
 import fs from 'fs';
 import Optional from 'optional-js';
 
-const persistRootPath = persistToDiskService.getPersistRootPath();
+const persistRootPath = fileService.getPersistRootPath();
 const sessionFilePath = path.join(persistRootPath, 'session.json');
 const defaultEncoding = 'utf8';
 
-class PersistSessionService {
+class SessionService {
   ensureSessionPersisted(sessionKey) {
     const session = {
       lastSavedSessionKey: sessionKey,
       sessionFileCreateDate: new Date().getTime()
     };
 
-    return persistToDiskService.persistByOverwriting(sessionFilePath, JSON.stringify(session));
+    return fileService.persistByOverwriting(sessionFilePath, JSON.stringify(session));
   }
 
   getCurrentSessionKey() {
@@ -34,4 +34,4 @@ class PersistSessionService {
   }
 }
 
-export default new PersistSessionService();
+export default new SessionService();

@@ -1,5 +1,5 @@
 import stateService from './service/stateService';
-import persistSessionService from './service/persistSessionService';
+import sessionService from './service/sessionService';
 import path from 'path';
 import { responseSuccess } from './util/responseConstants';
 import c from '../util/c';
@@ -64,7 +64,7 @@ export const setupNormalRoutes = (app) => {
 
   app.put(`${apiPath}/sessions/:sessionKey`, (req, res) => {
     c.l(`Called save session: ${req.params.sessionKey}`);
-    persistSessionService.ensureSessionPersisted(req.params.sessionKey).then(() => {
+    sessionService.ensureSessionPersisted(req.params.sessionKey).then(() => {
       res.send(responseSuccess);
     });
   });

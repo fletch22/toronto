@@ -1,6 +1,6 @@
 import stateService from '../../service/stateService';
-import persistToDiskService from '../../service/persistToDiskService';
-import persistSessionService from '../../service/persistSessionService';
+import fileService from '../../service/fileService';
+import sessionService from '../../service/sessionService';
 import sinon from 'sinon';
 import moment from 'moment';
 import fs from 'fs';
@@ -36,7 +36,7 @@ describe('StateService', () => {
       1234567891: states
     };
 
-    const writeToFileStub = sandbox.stub(persistToDiskService, 'writeToFile');
+    const writeToFileStub = sandbox.stub(fileService, 'writeToFile');
 
     // Act
     stateService.groupAndWrite(persistGrouping);
@@ -120,7 +120,7 @@ describe('StateService', () => {
       myEventEmitter.emit('line', null);
     };
 
-    const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getSessionFilePath').returns('123456.txt');
+    const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('123456.txt'));
     const createLineReadStreamMock = sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
 
     myEventEmitter.emit('line', null);
@@ -201,7 +201,7 @@ describe('StateService', () => {
   it('should return empty optional when session key absent.', () => {
     // Arrange
 
-    sandbox.stub(persistSessionService, 'getCurrentSessionKey').returns(Optional.empty());
+    sandbox.stub(sessionService, 'getCurrentSessionKey').returns(Optional.empty());
 
     // Act
     const optionalFilePath = stateService.getFilePathOfCurrentSessionLog();
@@ -213,7 +213,7 @@ describe('StateService', () => {
   it('should return optional file path when session key present.', () => {
     // Arrange
 
-    sandbox.stub(persistSessionService, 'getCurrentSessionKey').returns(Optional.ofNullable('12345'));
+    sandbox.stub(sessionService, 'getCurrentSessionKey').returns(Optional.ofNullable('12345'));
 
     // Act
     const optionalFilePath = stateService.getFilePathOfCurrentSessionLog();
