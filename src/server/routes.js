@@ -33,6 +33,10 @@ export const setupDevelopmentBuildRoutes = (app) => {
   });
 };
 
+stateService.reindexLogFile().then((result) => {
+  c.l('Finished.');
+});
+
 export const setupNormalRoutes = (app) => {
   app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..', '..', 'index.html'));
@@ -64,7 +68,7 @@ export const setupNormalRoutes = (app) => {
 
   app.put(`${apiPath}/sessions/:sessionKey`, (req, res) => {
     c.l(`Called save session: ${req.params.sessionKey}`);
-    sessionService.ensureSessionPersisted(req.params.sessionKey).then(() => {
+    sessionService.persistSession(req.params.sessionKey).then(() => {
       res.send(responseSuccess);
     });
   });

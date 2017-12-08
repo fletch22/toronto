@@ -3,7 +3,7 @@ import fileService from '../../service/fileService';
 import sinon from 'sinon';
 import fs from 'fs';
 
-describe('PersistSessionService', () => {
+describe('sessionService', () => {
   let sandbox;
   const expectedDate = new Date();
   let clock;
@@ -24,7 +24,7 @@ describe('PersistSessionService', () => {
     const sessionKey = 'foo';
 
     // Act
-    sessionService.ensureSessionPersisted(sessionKey).then((result) => {
+    sessionService.persistSession(sessionKey).then((result) => {
       // Assert
       expect(persistByOverwritingMock.calledOnce).toBe(true);
       const filePath = persistByOverwritingMock.getCall(0).args[0];

@@ -8,13 +8,19 @@ const sessionFilePath = path.join(persistRootPath, 'session.json');
 const defaultEncoding = 'utf8';
 
 class SessionService {
-  ensureSessionPersisted(sessionKey) {
+  persistSession(sessionKey) {
     const session = {
       lastSavedSessionKey: sessionKey,
       sessionFileCreateDate: new Date().getTime()
     };
 
     return fileService.persistByOverwriting(sessionFilePath, JSON.stringify(session));
+  }
+
+  persistSessionIfMissing(sessionKey) {
+    if (!fs.exists(sessionFilePath)) {
+      this.persistSession(sessionKey);
+    }
   }
 
   getCurrentSessionKey() {

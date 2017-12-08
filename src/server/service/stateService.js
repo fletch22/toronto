@@ -18,6 +18,8 @@ export const stateLogPrefix = 'stateLog-';
 export const stateLogSuffix = '.txt';
 const filePathTemplate = path.join(persistRootPath, `${stateLogPrefix}{persistFilenamePart}${stateLogSuffix}`);
 
+const STATE_KEY = 'dk89h22njkfdu90jo21kl231kl2199';
+
 class StateService {
 
   constructor() {
@@ -32,6 +34,8 @@ class StateService {
     this.createLineReadStream = this.createLineReadStream.bind(this);
     this.writeStateToFile = this.writeStateToFile.bind(this);
     this.persistStatePackage = this.persistStatePackage.bind(this);
+
+    this.stateIndex = [];
   }
 
   getPersistFilenamePart(serverStartupTimestamp) {
@@ -47,7 +51,8 @@ class StateService {
 
         const arrayStates = persistGrouping[key];
         arrayStates.forEach((info) => {
-          const json = JSON.stringify(info.state); // NOTE: 2017-11-17: There should be no carriage returns here at this point.
+          const stateInfo = this.transformToPersistState(info);
+          const json = JSON.stringify(stateInfo); // NOTE: 2017-11-17: There should be no carriage returns here at this point.
           combinedData += `${json}\n`;
         });
         allWrites.push(this.writeStateToFile(key, combinedData));
@@ -56,7 +61,17 @@ class StateService {
     return Promise.all(allWrites);
   }
 
+  transformToPersistState(statePackage) {
+    const stateInfo = {};
+    stateInfo[STATE_KEY] = statePackage.clientId;
+    stateInfo.state = statePackage.state;
+
+    return stateInfo;
+  }
+
   writeStateToFile(key, stateString) {
+    sessionService.persistSessionIfMissing(key);
+    this.saveToStateIndex(stateString);
     return fileService.writeToFile(this.composeFilePathFromSessionKey(key), stateString);
   }
 
@@ -110,11 +125,12 @@ class StateService {
   }
 
   persistStatePackage(statePackage) {
-    return this.writeStateToFile(statePackage.serverStartupTimestamp, JSON.stringify(statePackage.state));
+    const persistState = this.transformToPersistState(statePackage);
+    return this.writeStateToFile(statePackage.serverStartupTimestamp, JSON.stringify(persistState));
   }
 
   persistSession(persistedSessionStateKeys) {
-    return sessionService.ensureSessionPersisted(persistedSessionStateKeys);
+    return sessionService.persistSession(persistedSessionStateKeys);
   }
 
   findMostRecentHistoricalFile() {
@@ -230,6 +246,44 @@ class StateService {
         resolve(Optional.ofNullable(stateLine));
       });
     });
+  }
+
+  reindexLogFile() {
+    return new Promise((resolve) => {
+      let optionalResult = util.getOptionalLiteral(null);
+
+      const optionalFilePath = this.getFilePathOfCurrentSessionLog();
+      if (optionalFilePath.isPresent()) {
+        const lineReader = this.createLineReadStream(optionalFilePath.get());
+        let lastLine;
+
+        this.stateIndex = [];
+
+        lineReader.on('line', (line) => {
+          lastLine = line;
+          this.saveToStateIndex(line);
+        });
+
+        lineReader.on('close', () => {
+          optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
+          resolve(optionalResult);
+        });
+      } else {
+        resolve(optionalResult);
+      }
+    });
+  }
+
+  saveToStateIndex(stateString) {
+    const indexOfKey = stateString.indexOf(STATE_KEY);
+    if (indexOfKey > -1) {
+      const startIndex = indexOfKey + STATE_KEY.length + 1;
+      const quoteFirstIndex = stateString.indexOf('"', startIndex);
+      const nextQuoteIndex = stateString.indexOf('"', quoteFirstIndex + 1);
+      const clientId = stateString.substring(quoteFirstIndex + 1, nextQuoteIndex);
+      c.l(`clientId: ${clientId}`);
+      this.stateIndex.push(clientId);
+    }
   }
 }
 
