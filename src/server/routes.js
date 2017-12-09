@@ -29,12 +29,12 @@ export const setupDevelopmentBuildRoutes = (app) => {
   // server will crash. An example of this is connecting to the
   // server when webpack is bundling
   proxy.on('error', (e) => {
-    console.log('Could not connect to proxy, please try again...');
+    c.l('Could not connect to proxy, please try again...');
   });
 };
 
 stateService.reindexLogFile().then((result) => {
-  c.l('Finished.');
+  c.l('Finished reindexing log file.');
 });
 
 export const setupNormalRoutes = (app) => {
@@ -68,7 +68,7 @@ export const setupNormalRoutes = (app) => {
 
   app.put(`${apiPath}/sessions/:sessionKey`, (req, res) => {
     c.l(`Called save session: ${req.params.sessionKey}`);
-    sessionService.persistSession(req.params.sessionKey).then(() => {
+    sessionService.initializeSession(req.params.sessionKey).then(() => {
       res.send(responseSuccess);
     });
   });

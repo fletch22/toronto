@@ -17,6 +17,7 @@ export const persistRootPath = fileService.getPersistRootPath();
 export const stateLogPrefix = 'stateLog-';
 export const stateLogSuffix = '.txt';
 const filePathTemplate = path.join(persistRootPath, `${stateLogPrefix}{persistFilenamePart}${stateLogSuffix}`);
+import c from '../../util/c';
 
 const STATE_KEY = 'dk89h22njkfdu90jo21kl231kl2199';
 
@@ -29,7 +30,6 @@ class StateService {
     this.saveDataToFile = this.saveDataToFile.bind(this);
     this.groupByTimestamp = this.groupByTimestamp.bind(this);
     this.persistStateArrays = this.persistStateArrays.bind(this);
-    this.persistSession = this.persistSession.bind(this);
     this.sortSessionKeys = this.sortSessionKeys.bind(this);
     this.createLineReadStream = this.createLineReadStream.bind(this);
     this.writeStateToFile = this.writeStateToFile.bind(this);
@@ -113,6 +113,7 @@ class StateService {
   }
 
   persistStateArrays(stateArray) {
+    c.l('Persist state arrays.');
     watch.reset();
     watch.start();
 
@@ -125,15 +126,14 @@ class StateService {
   }
 
   persistStatePackage(statePackage) {
+    c.l('Persist package.');
+
     const persistState = this.transformToPersistState(statePackage);
     return this.writeStateToFile(statePackage.serverStartupTimestamp, JSON.stringify(persistState));
   }
 
-  persistSession(persistedSessionStateKeys) {
-    return sessionService.persistSession(persistedSessionStateKeys);
-  }
-
   findMostRecentHistoricalFile() {
+    c.l('Find most recent state file.');
     const matchingFiles = {};
     const keys = [];
 
@@ -157,22 +157,29 @@ class StateService {
   }
 
   findMostRecentStateInFile() {
+    c.l('Find most recent state in file.');
+
     return new Promise((resolve) => {
       let optionalResult = util.getOptionalLiteral(null);
 
       const optionalFilePath = this.getFilePathOfCurrentSessionLog();
       if (optionalFilePath.isPresent()) {
-        const lineReader = this.createLineReadStream(optionalFilePath.get());
-        let lastLine;
+        const filepath = optionalFilePath.get();
+        if (fs.exists(filepath)) {
+          const lineReader = this.createLineReadStream(optionalFilePath.get());
+          let lastLine;
 
-        lineReader.on('line', (line) => {
-          lastLine = line;
-        });
+          lineReader.on('line', (line) => {
+            lastLine = line;
+          });
 
-        lineReader.on('close', () => {
-          optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
+          lineReader.on('close', () => {
+            optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
+            resolve(optionalResult);
+          });
+        } else {
           resolve(optionalResult);
-        });
+        }
       } else {
         resolve(optionalResult);
       }
@@ -185,7 +192,7 @@ class StateService {
     let optionalFilePath = Optional.empty();
     if (optionalSessionKey.isPresent()) {
       optionalFilePath = Optional.ofNullable(this.composeFilePathFromSessionKey(optionalSessionKey.get()));
-      console.log(optionalFilePath);
+      c.l(`Session log: ${optionalFilePath.get()}`);
     }
     return optionalFilePath;
   }
@@ -217,6 +224,8 @@ class StateService {
   }
 
   async getStateByIndex(index) {
+    c.l(`getStateByIndex called.`);
+
     const optionalTotalLines = await this.getTotalStatesInSessionFile();
 
     if (!optionalTotalLines.isPresent()) {
@@ -227,49 +236,59 @@ class StateService {
     const stopOnIndex = totalLines + index;
 
     const filePath = this.getFilePathOfCurrentSessionLog();
-    const lineReader = this.createLineReadStream(filePath);
+    return new Promise((resolve, reject) => {
+      if (filePath.isPresent()) {
+        const lineReader = this.createLineReadStream(filePath);
+        let stateLine;
 
-    let stateLine;
+        let count = 0;
+        lineReader.on('line', (line) => {
+          if (stopOnIndex === count) {
+            stateLine = line;
+            lineReader.close();
+          }
+          count++;
+        });
 
-    let count = 0;
-    lineReader.on('line', (line) => {
-      if (stopOnIndex === count) {
-        stateLine = line;
-        lineReader.close();
+        lineReader.on('close', () => {
+          c.l('Close called.');
+          resolve(Optional.ofNullable(stateLine));
+        });
+      } else {
+        reject(new Error('Log file not found.'));
       }
-      count++;
-    });
-
-    return new Promise((resolve) => {
-      lineReader.on('close', () => {
-        c.l('Close called.');
-        resolve(Optional.ofNullable(stateLine));
-      });
     });
   }
 
   reindexLogFile() {
-    return new Promise((resolve) => {
-      let optionalResult = util.getOptionalLiteral(null);
+    return new Promise((resolve, reject) => {
+      try {
+        let optionalResult = util.getOptionalLiteral(null);
 
-      const optionalFilePath = this.getFilePathOfCurrentSessionLog();
-      if (optionalFilePath.isPresent()) {
-        const lineReader = this.createLineReadStream(optionalFilePath.get());
-        let lastLine;
+        const optionalFilePath = this.getFilePathOfCurrentSessionLog();
+        if (optionalFilePath.isPresent()) {
+          const logPath = optionalFilePath.get();
+          if (fs.exists(logPath)) {
+            const lineReader = this.createLineReadStream(logPath);
+            let lastLine;
 
-        this.stateIndex = [];
+            this.stateIndex = [];
 
-        lineReader.on('line', (line) => {
-          lastLine = line;
-          this.saveToStateIndex(line);
-        });
+            lineReader.on('line', (line) => {
+              lastLine = line;
+              this.saveToStateIndex(line);
+            });
 
-        lineReader.on('close', () => {
-          optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
+            lineReader.on('close', () => {
+              optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
+              resolve(optionalResult);
+            });
+          }
+        } else {
           resolve(optionalResult);
-        });
-      } else {
-        resolve(optionalResult);
+        }
+      } catch (error) {
+        reject(error);
       }
     });
   }
@@ -281,7 +300,6 @@ class StateService {
       const quoteFirstIndex = stateString.indexOf('"', startIndex);
       const nextQuoteIndex = stateString.indexOf('"', quoteFirstIndex + 1);
       const clientId = stateString.substring(quoteFirstIndex + 1, nextQuoteIndex);
-      c.l(`clientId: ${clientId}`);
       this.stateIndex.push(clientId);
     }
   }

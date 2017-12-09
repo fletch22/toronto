@@ -3,7 +3,7 @@ const WebpackDevServer = require('webpack-dev-server');
 const webpackConfig = require('../../webpack.config.js');
 
 module.exports = function () {
-  console.log('In bundler ...');
+  c.l('In bundler ...');
 
   // First we fire up Webpack an pass in the configuration we
   // created
@@ -13,14 +13,14 @@ module.exports = function () {
   // We give notice in the terminal when it starts bundling and
   // set the time it started
   compiler.plugin('compile', () => {
-    console.log('Bundling...');
+    c.l('Bundling...');
     bundleStart = Date.now();
   });
 
   // We also give notice when it is done compiling, including the
   // time it took. Nice to have
   compiler.plugin('done', () => {
-    console.log(`Bundled in ${(Date.now() - bundleStart)} ms!`);
+    c.l(`Bundled in ${(Date.now() - bundleStart)} ms!`);
   });
 
   const bundler = new WebpackDevServer(compiler, {

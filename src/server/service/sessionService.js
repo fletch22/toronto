@@ -2,6 +2,7 @@ import fileService from './fileService';
 import path from 'path';
 import fs from 'fs';
 import Optional from 'optional-js';
+import stateService from './stateService';
 
 const persistRootPath = fileService.getPersistRootPath();
 const sessionFilePath = path.join(persistRootPath, 'session.json');
@@ -15,6 +16,10 @@ class SessionService {
     };
 
     return fileService.persistByOverwriting(sessionFilePath, JSON.stringify(session));
+  }
+
+  initializeSession(sessionKey) {
+    return this.persistSession(sessionKey).then(() => stateService.reindexLogFile());
   }
 
   persistSessionIfMissing(sessionKey) {
