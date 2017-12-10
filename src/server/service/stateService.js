@@ -18,7 +18,6 @@ export const persistRootPath = fileService.getPersistRootPath();
 export const stateLogPrefix = 'stateLog-';
 export const stateLogSuffix = '.txt';
 const filePathTemplate = path.join(persistRootPath, `${stateLogPrefix}{persistFilenamePart}${stateLogSuffix}`);
-import c from '../../util/c';
 
 const STATE_KEY = 'dk89h22njkfdu90jo21kl231kl2199';
 
@@ -118,27 +117,27 @@ class StateService {
   }
 
   persistStateArrays(stateArray) {
-    c.l('Persist state arrays.');
+    winston.info('Persist state arrays.');
     watch.reset();
     watch.start();
 
     return this.saveDataToFile(stateArray.states).then((data) => {
       watch.stop();
       const duration = watch.duration();
-      c.l(`Write duration: ${duration}`);
+      winston.info(`Write duration: ${duration}`);
       return Promise.resolve(data);
     });
   }
 
   persistStatePackage(statePackage) {
-    c.l('Persist package.');
+    winston.info('Persist package.');
 
     const persistState = this.transformToPersistState(statePackage);
     return this.writeStateToFile(statePackage.serverStartupTimestamp, JSON.stringify(persistState));
   }
 
   findMostRecentHistoricalFile() {
-    c.l('Find most recent historical file.');
+    winston.info('Find most recent historical file.');
     const matchingFiles = {};
     const keys = [];
 
@@ -162,7 +161,7 @@ class StateService {
   }
 
   findMostRecentStateInFile() {
-    c.l('Find most recent state in file.');
+    winston.info('Find most recent state in file.');
 
     return new Promise((resolve) => {
       let optionalResult = util.getOptionalLiteral(null);
@@ -244,31 +243,31 @@ class StateService {
     }
 
     const totalLines = optionalTotalLines.get();
-    c.l(`Total lines: ${totalLines}: typeof: ${typeof totalLines}`);
+    winston.info(`Total lines: ${totalLines}: typeof: ${typeof totalLines}`);
     const stopOnIndex = totalLines + (index * -1);
 
     const optionalFilePath = this.getFilePathOfCurrentSessionLog();
     return new Promise((resolve) => {
       if (optionalFilePath.isPresent()) {
-        c.l(`Fp: ${optionalFilePath.get()}`);
+        winston.info(`Fp: ${optionalFilePath.get()}`);
         const filePath = optionalFilePath.get();
         if (fs.exists(filePath)) {
           const lineReader = this.createLineReadStream(optionalFilePath.get());
           let persistedState;
 
           let count = 0;
-          c.l(`soi: ${stopOnIndex}`);
+          winston.info(`soi: ${stopOnIndex}`);
           lineReader.on('line', (line) => {
             if (stopOnIndex === count) {
               persistedState = line;
               lineReader.close();
             }
             count++;
-            c.l(`count: ${count}`);
+            winston.info(`count: ${count}`);
           });
 
           lineReader.on('close', () => {
-            c.l('Close called.');
+            winston.info('Close called.');
             resolve(Optional.ofNullable(this.getStateFromPersistState(persistedState)));
           });
         } else {
@@ -322,6 +321,10 @@ class StateService {
       const clientId = stateString.substring(quoteFirstIndex + 1, nextQuoteIndex);
       this.stateIndex.push(clientId);
     }
+  }
+
+  getStateByClientId(clientId) {
+    return Promise.resolve(Optional.ofNullable(clientId));
   }
 }
 

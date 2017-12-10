@@ -4,6 +4,7 @@ import path from 'path';
 import { responseSuccess } from './util/responseConstants';
 import winston from 'winston';
 import util from '../util/util';
+import 'babel-core/register';
 import 'babel-polyfill';
 
 export const apiPath = '/api';
@@ -39,15 +40,6 @@ stateService.reindexLogFile().then((result) => {
   c.l('Finished reindexing log file.');
 });
 
-async function getStateIndex(index, res) {
-  const result = await stateService.getStateByIndex(index, 10);
-  let state = null;
-  if (result.isPresent()) {
-    state = result.get();
-  }
-  res.send(JSON.stringify(util.getOptionalLiteral(state)));
-}
-
 export const setupNormalRoutes = (app) => {
   app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..', '..', 'index.html'));
@@ -64,11 +56,11 @@ export const setupNormalRoutes = (app) => {
     });
   });
 
-  app.get(`${apiPath}/states/mostRecentHistoricalState`, (req, res) => {
-    stateService.findMostRecentStateInFile(req.body).then((optionalState) => {
-      res.send(JSON.stringify(optionalState));
-    });
-  });
+  // app.get(`${apiPath}/states/mostRecentHistoricalState`, (req, res) => {
+  //   stateService.findMostRecentStateInFile(req.body).then((optionalState) => {
+  //     res.send(JSON.stringify(optionalState));
+  //   });
+  // });
 
   app.get(`${apiPath}/sessions/mostRecentHistoricalFile`, (req, res) => {
     const result = stateService.findMostRecentHistoricalFile();
@@ -77,24 +69,44 @@ export const setupNormalRoutes = (app) => {
   });
 
   app.put(`${apiPath}/sessions/:sessionKey`, (req, res) => {
-    c.l(`Called save session: ${req.params.sessionKey}`);
+    winston.info(`Called save session: ${req.params.sessionKey}`);
     sessionService.initializeSession(req.params.sessionKey).then(() => {
       res.send(responseSuccess);
     });
   });
 
-  app.get(`${apiPath}/stateIndexes/:index`, (req, res) => {
+  app.get(`${apiPath}/stateIndexes/:index`, async (req, res) => {
     winston.info(`Getting index: ${req.params.index}`);
-    getStateIndex(parseInt(req.params.index, 10), res);
+    const index = parseInt(req.params.index, 10);
+    const result = await stateService.getStateByIndex(index, 10);
+    let state = null;
+    if (result.isPresent()) {
+      state = result.get();
+    }
+    res.send(JSON.stringify(util.getOptionalLiteral(state)));
   });
 
-  app.get(`${apiPath}/states/:stateId?action=:action`, (req, res) => {
-    winston.info(`Getting stateId: ${req.params.stateId}`);
-    c.l(`Getting action: ${req.params.action}`);
-    // stateService.getStateByIndex(parseInt(req.params.index, 10)).then((result) => {
-    //   res.send(JSON.stringify(result));
-    // });
-    res.send(JSON.stringify({ result: 'not implemented yet' }));
+  app.post(`${apiPath}/states/:clientId`, async (req, res) => {
+    winston.info(`Getting stateId: ${req.params.clientId}`);
+    winston.info(`Getting action: ${req.query.action}`);
+    const action = req.query.action;
+    winston.info(`action: ${action}`);
+    if (action === 'rollbackTo') {
+      const clientId = req.params.clientId;
+      const optionalState = await stateService.getStateByClientId(clientId);
+      res.send(JSON.stringify(util.convertOptionalForResponse(optionalState)));
+    }
+  });
+
+  app.post(`${apiPath}/states`, async (req, res) => {
+    winston.info(`Getting stateId: ${req.params.clientId}`);
+    winston.info(`Getting action: ${req.query.action}`);
+    const action = req.query.action;
+    winston.info(`action: ${action}`);
+    if (action === 'getMostRecentHistoricalState') {
+      const optionalState = await stateService.findMostRecentStateInFile(req.body);
+      res.send(JSON.stringify(optionalState));
+    }
   });
 };
 

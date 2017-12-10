@@ -76,7 +76,6 @@ describe('routes', () => {
 
     res.send = (result) => {
       actualResult = result;
-      c.lo(actualResult);
     };
 
     const promise = Promise.resolve();
@@ -107,7 +106,6 @@ describe('routes', () => {
 
     res.send = (result) => {
       actualResult = result;
-      winston.info(actualResult);
     };
 
     const expectedResult = Optional.ofNullable({ foo: 'bar' });
@@ -128,5 +126,38 @@ describe('routes', () => {
 
     expect(getStateByIndexStub.calledOnce).toEqual(true);
     expect('{"isPresent":true,"value":{"foo":"bar"}}').toBe(actualResult);
+  });
+
+  test.only('should process rollback by state ID (clientID) correctly.', async () => {
+    // Arrange
+    const res = app.makeResponse((err, data) => {
+
+    });
+
+    let actualResult = 'foo';
+
+    res.send = (result) => {
+      actualResult = result;
+    };
+
+    const expectedResult = Optional.ofNullable({ foo: 'bar' });
+
+    const promise = Promise.resolve(expectedResult);
+
+    const getStateByIndexStub = sandbox.stub(stateService, 'getStateByClientId').returns(promise);
+
+    const req = app.makeRequest({ host: 'foo' });
+
+    // Act
+    app.invoke('post', `${apiPath}/states/ASDRKECKLDLS?action=rollbackTo`, req, res);
+
+    // Assert
+    expect.assertions(2);
+
+    await promise;
+
+    expect(getStateByIndexStub.calledOnce).toEqual(true);
+    expect(actualResult).toBe('{"isPresent":true,"value":{"foo":"bar"}}');
+
   });
 });

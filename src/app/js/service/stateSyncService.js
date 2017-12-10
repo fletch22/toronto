@@ -69,7 +69,7 @@ class StateSyncService extends Service {
   }
 
   getMostRecentHistoricalStateFromNode() {
-    return this.fetch(`${this.getNodeServerRootUrl()}/states/mostRecentHistoricalState`, 'get');
+    return this.fetch(`${this.getNodeServerRootUrl()}/states?action=getMostRecentHistoricalState`, 'post');
   }
 
   // NOTE: 2017-12-02: Deprecated

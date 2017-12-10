@@ -24,7 +24,6 @@ describe('StateService', () => {
   it('Should work correctly.', () => {
     // Arrange]
     const timestamp = new Date().getTime();
-    console.log(timestamp);
     const states = [
       { foo: 'bar' },
       { foo: 'banana' },
