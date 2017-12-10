@@ -6,6 +6,11 @@ import { setupDevelopmentBuildRoutes, setupNormalRoutes } from './routes';
 
 global.c = c;
 
+import exitHook from 'exit-hook';
+exitHook(() => {
+  console.log('exiting');
+});
+
 const express = require('express');
 const path = require('path');
 

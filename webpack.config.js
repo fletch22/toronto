@@ -1,11 +1,8 @@
-var Webpack = require('webpack');
-var path = require('path');
+const Webpack = require('webpack');
+const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-var nodeModulesPath = path.resolve(__dirname, 'node_modules');
-var buildPath = path.resolve(__dirname, 'build');
-var mainPath = path.resolve(__dirname, 'src', 'app', 'index.js');
-
+const buildPath = path.resolve(__dirname, 'build');
 
 const PATHS = {
   app: path.join(__dirname, 'src/app'),
@@ -13,18 +10,6 @@ const PATHS = {
   build: path.join(__dirname, 'src/build'),
   worker: path.join(__dirname, 'src/app/js/worker')
 };
-
-// [
-//
-//   // For hot style updates
-//   'webpack/hot/dev-server',
-//
-//   // The script refreshing the browser on none hot updates
-//   'webpack-dev-server/client?http://localhost:8080',
-//
-//   // Our application mainPath
-//   mainPath
-// ],
 
 const config = {
 

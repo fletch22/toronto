@@ -10,6 +10,7 @@ import readline from 'readline';
 import Optional from 'optional-js';
 import 'babel-polyfill';
 import util from '../../util/util';
+import winston from 'winston';
 
 const watch = stopwatch();
 const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';
@@ -67,6 +68,10 @@ class StateService {
     stateInfo.state = statePackage.state;
 
     return stateInfo;
+  }
+
+  getStateFromPersistState(persistState) {
+    return persistState.state;
   }
 
   writeStateToFile(key, stateString) {
@@ -133,7 +138,7 @@ class StateService {
   }
 
   findMostRecentHistoricalFile() {
-    c.l('Find most recent state file.');
+    c.l('Find most recent historical file.');
     const matchingFiles = {};
     const keys = [];
 
@@ -192,7 +197,7 @@ class StateService {
     let optionalFilePath = Optional.empty();
     if (optionalSessionKey.isPresent()) {
       optionalFilePath = Optional.ofNullable(this.composeFilePathFromSessionKey(optionalSessionKey.get()));
-      c.l(`Session log: ${optionalFilePath.get()}`);
+      winston.info(`Session log: ${optionalFilePath.get()}`);
     }
     return optionalFilePath;
   }
@@ -205,57 +210,72 @@ class StateService {
 
   getTotalStatesInSessionFile() {
     return new Promise((resolve, reject) => {
-      const sessionFilePath = sessionService.getSessionFilePath();
-      if (fs.existsSync(sessionFilePath)) {
-        const lineReader = this.createLineReadStream(sessionFilePath);
+      const optionalFilePath = this.getFilePathOfCurrentSessionLog();
+      if (optionalFilePath.isPresent()) {
+        const filePath = optionalFilePath.get();
+        if (fs.existsSync(filePath)) {
+          const lineReader = this.createLineReadStream(filePath);
 
-        let count = 0;
-        lineReader.on('line', () => {
-          count++;
-        });
+          let count = 0;
+          lineReader.on('line', () => {
+            count++;
+          });
 
-        lineReader.on('close', () => {
-          resolve(Optional.ofNullable(count));
-        });
+          lineReader.on('close', () => {
+            resolve(Optional.ofNullable(count));
+          });
+        } else {
+          resolve(Optional.ofNullable(0));
+        }
       } else {
-        reject(new Error('Session not found.'));
+        resolve(Optional.ofNullable(0));
       }
     });
   }
 
   async getStateByIndex(index) {
-    c.l(`getStateByIndex called.`);
+    winston.info('getStateByIndex called.');
+    winston.info(`typeof index: ${typeof index}`);
 
     const optionalTotalLines = await this.getTotalStatesInSessionFile();
 
     if (!optionalTotalLines.isPresent()) {
-      throw new Error('There are not session states to get.');
+      throw new Error('There are no session states in the system.');
     }
 
     const totalLines = optionalTotalLines.get();
-    const stopOnIndex = totalLines + index;
+    c.l(`Total lines: ${totalLines}: typeof: ${typeof totalLines}`);
+    const stopOnIndex = totalLines + (index * -1);
 
-    const filePath = this.getFilePathOfCurrentSessionLog();
-    return new Promise((resolve, reject) => {
-      if (filePath.isPresent()) {
-        const lineReader = this.createLineReadStream(filePath);
-        let stateLine;
+    const optionalFilePath = this.getFilePathOfCurrentSessionLog();
+    return new Promise((resolve) => {
+      if (optionalFilePath.isPresent()) {
+        c.l(`Fp: ${optionalFilePath.get()}`);
+        const filePath = optionalFilePath.get();
+        if (fs.exists(filePath)) {
+          const lineReader = this.createLineReadStream(optionalFilePath.get());
+          let persistedState;
 
-        let count = 0;
-        lineReader.on('line', (line) => {
-          if (stopOnIndex === count) {
-            stateLine = line;
-            lineReader.close();
-          }
-          count++;
-        });
+          let count = 0;
+          c.l(`soi: ${stopOnIndex}`);
+          lineReader.on('line', (line) => {
+            if (stopOnIndex === count) {
+              persistedState = line;
+              lineReader.close();
+            }
+            count++;
+            c.l(`count: ${count}`);
+          });
 
-        lineReader.on('close', () => {
-          c.l('Close called.');
-          resolve(Optional.ofNullable(stateLine));
-        });
+          lineReader.on('close', () => {
+            c.l('Close called.');
+            resolve(Optional.ofNullable(this.getStateFromPersistState(persistedState)));
+          });
+        } else {
+          resolve(Optional.empty());
+        }
       } else {
-        reject(new Error('Log file not found.'));
+        resolve(Optional.empty());
       }
     });
   }

@@ -2,6 +2,8 @@ import { apiPath, setupNormalRoutes } from '../routes';
 import mockExpress from 'mock-express';
 import sinon from 'sinon';
 import stateService from '../service/stateService';
+import Optional from 'optional-js';
+import winston from 'winston';
 
 describe('routes', () => {
   let sandbox;
@@ -19,7 +21,6 @@ describe('routes', () => {
   it('should route home page correctly', () => {
     // Arrange
     const res = app.makeResponse((err, data) => {
-      expect(true).toBe(true);
     });
 
     let actualPath = '';
@@ -36,7 +37,7 @@ describe('routes', () => {
     expect(actualPath).toBe('D:\\workspaces\\toronto\\index.html');
   });
 
-  it('should process sent state correctly.', () => {
+  it('should process sent state correctly.', async () => {
     // Arrange
     const res = app.makeResponse((err, data) => {
 
@@ -57,14 +58,15 @@ describe('routes', () => {
     app.invoke('post', `${apiPath}/stateArrays/`, req, res);
 
     // Assert
-    expect(pstdMock.calledOnce);
+    expect.assertions(2);
 
-    return promise.then(() => {
-      expect(actualResult).toBe('{"result":"success"}');
-    });
+    await promise;
+
+    expect(pstdMock.calledOnce).toEqual(true);
+    expect(actualResult).toBe('{"result":"success"}');
   });
 
-  it('should process sent statePackage correctly.', () => {
+  it('should process sent statePackage correctly.', async () => {
     // Arrange
     const res = app.makeResponse((err, data) => {
 
@@ -87,13 +89,15 @@ describe('routes', () => {
     app.invoke('post', `${apiPath}/statePackages`, req, res);
 
     // Assert
-    expect(pspMock.calledOnce);
-    return promise.then(() => {
-      expect(actualResult).toBe('{"result":"success"}');
-    });
+    expect.assertions(2);
+
+    await promise;
+
+    expect(pspMock.calledOnce).toEqual(true);
+    expect(actualResult).toBe('{"result":"success"}');
   });
 
-  it('should process get state by index correctly.', () => {
+  it('should process get state by index correctly.', async () => {
     // Arrange
     const res = app.makeResponse((err, data) => {
 
@@ -103,10 +107,10 @@ describe('routes', () => {
 
     res.send = (result) => {
       actualResult = result;
-      c.lo(actualResult);
+      winston.info(actualResult);
     };
 
-    const expectedResult = { foo: 'bar' };
+    const expectedResult = Optional.ofNullable({ foo: 'bar' });
 
     const promise = Promise.resolve(expectedResult);
 
@@ -115,12 +119,14 @@ describe('routes', () => {
     const req = app.makeRequest({ host: 'foo' });
 
     // Act
-    app.invoke('get', `${apiPath}/stateIndexes/1`, req, res);
+    app.invoke('get', `${apiPath}/stateIndexes/1?action=get`, req, res);
 
     // Assert
-    expect(getStateByIndexStub.calledOnce);
-    return promise.then(() => {
-      expect(actualResult).toBe(JSON.stringify(expectedResult));
-    });
+    expect.assertions(2);
+
+    await promise;
+
+    expect(getStateByIndexStub.calledOnce).toEqual(true);
+    expect('{"isPresent":true,"value":{"foo":"bar"}}').toBe(actualResult);
   });
 });

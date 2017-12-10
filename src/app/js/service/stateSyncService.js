@@ -19,7 +19,12 @@ class StateSyncService extends Service {
   }
 
   rollbackToStateId(stateId) {
+    this.rollbackToStateIdOnNode(stateId);
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states/${stateId}?action=rollbackTo`, 'post');
+  }
+
+  rollbackToStateIdOnNode(stateId) {
+    return this.fetch(`${this.getNodeServerRootUrl()}/states/${stateId}?action=rollbackTo`, 'post');
   }
 
   saveStateArray(stateArray) {

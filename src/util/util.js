@@ -4,7 +4,7 @@ class Util {
   getOptionalLiteral(value) {
     return {
       isPresent: !!value,
-      value
+      value: value
     };
   }
 }

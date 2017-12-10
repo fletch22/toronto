@@ -87,6 +87,7 @@
     "eslint-config-airbnb": "^6.2.0",
     "eslint-config-rackt": "^1.1.1",
     "eslint-plugin-react": "^4.3.0",
+    "exit-hook": "^1.1.1",
     "exports-loader": "^0.6.3",
     "expose-loader": "^0.7.1",
     "express": "^4.16.2",
@@ -133,6 +134,7 @@
     "url-loader": "^0.5.7",
     "webpack-node-externals": "^1.6.0",
     "whatwg-fetch": "^0.11.0",
+    "winston": "^2.4.0",
     "yo": "^1.8.5"
   }
 }

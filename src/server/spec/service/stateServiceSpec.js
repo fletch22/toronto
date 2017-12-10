@@ -98,8 +98,6 @@ describe('StateService', () => {
 
   test('Should get the most recent historical state from the session stored', () => {
     // Arrange
-    const now1 = new Date(moment()).getTime();
-
     const expectedState1 = {
       foo: 'bar'
     };
@@ -122,23 +120,23 @@ describe('StateService', () => {
 
     const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('123456.txt'));
     const createLineReadStreamMock = sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
+    const fsExistsMock = sandbox.stub(fs, 'exists').returns(true);
 
     myEventEmitter.emit('line', null);
-    expect.assertions(3);
+    expect.assertions(4);
 
     // Act
     return stateService.findMostRecentStateInFile().then((optionalState) => {
       // Assert
       expect(getCurrentSessionKeyMock.callCount).toBe(1);
       expect(createLineReadStreamMock.callCount).toBe(1);
+      expect(fsExistsMock.callCount).toBe(1);
       expect(optionalState.value).toEqual(expectedState2);
     });
   });
 
   test('Should get the correct state', () => {
     // Arrange
-    const now1 = new Date(moment()).getTime();
-
     const expectedState1 = {
       foo: 'bar'
     };
@@ -161,9 +159,10 @@ describe('StateService', () => {
 
     const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('123456.txt'));
     const createLineReadStreamMock = sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
+    const fsExistsMock = sandbox.stub(fs, 'exists').returns(true);
 
     myEventEmitter.emit('line', null);
-    expect.assertions(3);
+    expect.assertions(4);
 
     // Act
     expect(getCurrentSessionKeyMock.calledOnce);
@@ -171,16 +170,14 @@ describe('StateService', () => {
       // Assert
       expect(getCurrentSessionKeyMock.callCount).toBe(1);
       expect(createLineReadStreamMock.callCount).toBe(1);
+      expect(fsExistsMock.callCount).toBe(1);
       expect(JSON.stringify(optionalState.value)).toEqual(JSON.stringify(expectedState2));
     });
   });
 
   it('should get the correct number of lines in the file.', () => {
     // Arrange
-
-    // const
-
-    // Act
+     // Act
     stateService.getTotalStatesInSessionFile().then((optional) => {
       // Assert
       expect(optional.isPresent()).toBe(true);
@@ -200,7 +197,6 @@ describe('StateService', () => {
 
   it('should return empty optional when session key absent.', () => {
     // Arrange
-
     sandbox.stub(sessionService, 'getCurrentSessionKey').returns(Optional.empty());
 
     // Act
@@ -212,7 +208,6 @@ describe('StateService', () => {
 
   it('should return optional file path when session key present.', () => {
     // Arrange
-
     sandbox.stub(sessionService, 'getCurrentSessionKey').returns(Optional.ofNullable('12345'));
 
     // Act
