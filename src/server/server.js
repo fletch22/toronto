@@ -2,13 +2,15 @@ import cors from 'cors';
 
 import bodyParser from 'body-parser';
 import c from '../util/c';
-import { setupDevelopmentBuildRoutes, setupNormalRoutes } from './routes';
+import { setupNormalRoutes } from './routes';
+import winston from 'winston';
+import proxyDevServer from './service/proxyDevServer';
 
 global.c = c;
 
 import exitHook from 'exit-hook';
 exitHook(() => {
-  console.log('exiting');
+  winston.info('exiting');
 });
 
 const express = require('express');
@@ -28,13 +30,14 @@ app.use(express.static(publicPath));
 
 // We only want to run the workflow when not in production
 if (!isProduction && !isTest) {
-  setupDevelopmentBuildRoutes(app);
+  proxyDevServer.initialize(app);
 }
 
 const server = app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  winston.info(`Server running on port ${port}`);
 });
 
 setupNormalRoutes(app);
+
 
 module.exports = server;

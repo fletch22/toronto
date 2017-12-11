@@ -59,9 +59,9 @@ class StateSyncService extends Service {
 
   getMostRecentHistoricalState() {
     this.getMostRecentHistoricalStateFromNode().then((result) => {
-      if (result.foundState) {
+      if (result.isPresent) {
         const stateHashCode = util.hashCode(result.state);
-        c.l(`Node state: ${stateHashCode} ...`);
+        c.l(`Nodes state: ${stateHashCode} ...`);
       }
     });
 

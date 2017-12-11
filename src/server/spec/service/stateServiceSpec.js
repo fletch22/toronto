@@ -1,5 +1,4 @@
 import stateService from '../../service/stateService';
-import fileService from '../../service/fileService';
 import sessionService from '../../service/sessionService';
 import sinon from 'sinon';
 import moment from 'moment';
@@ -7,6 +6,10 @@ import fs from 'fs';
 import path from 'path';
 import util from '../../util/util';
 import Optional from 'optional-js';
+import 'babel-core/register';
+import 'babel-polyfill';
+import EventEmitter from 'events';
+import winston from 'winston';
 
 describe('StateService', () => {
   let sandbox;
@@ -23,7 +26,6 @@ describe('StateService', () => {
 
   it('Should work correctly.', () => {
     // Arrange]
-    const timestamp = new Date().getTime();
     const states = [
       { foo: 'bar' },
       { foo: 'banana' },
@@ -35,15 +37,15 @@ describe('StateService', () => {
       1234567891: states
     };
 
-    const writeToFileStub = sandbox.stub(fileService, 'writeToFile');
+    const writeStateToFileStub = sandbox.stub(stateService, 'writeStateToFile');
 
     // Act
     stateService.groupAndWrite(persistGrouping);
 
     // Assert
-    expect(writeToFileStub.callCount).toBe(2);
+    expect(writeStateToFileStub.callCount).toBe(2);
 
-    const combinedLines = writeToFileStub.getCall(0).args[1];
+    const combinedLines = writeStateToFileStub.getCall(0).args[1];
 
     expect(countLines(combinedLines)).toBe(3);
   });
@@ -105,7 +107,6 @@ describe('StateService', () => {
       foo: 'banana'
     };
 
-    const EventEmitter = require('events');
     class MyEventEmitter extends EventEmitter {}
 
     const myEventEmitter = new MyEventEmitter();
@@ -119,7 +120,7 @@ describe('StateService', () => {
 
     const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('123456.txt'));
     const createLineReadStreamMock = sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
-    const fsExistsMock = sandbox.stub(fs, 'exists').returns(true);
+    const fsExistsMock = sandbox.stub(fs, 'existsSync').returns(true);
 
     myEventEmitter.emit('line', null);
     expect.assertions(4);
@@ -144,9 +145,7 @@ describe('StateService', () => {
       foo: 'banana'
     };
 
-    const EventEmitter = require('events');
     class MyEventEmitter extends EventEmitter {}
-
     const myEventEmitter = new MyEventEmitter();
 
     const arrayStates = [expectedState1, expectedState2];
@@ -158,7 +157,7 @@ describe('StateService', () => {
 
     const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('123456.txt'));
     const createLineReadStreamMock = sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
-    const fsExistsMock = sandbox.stub(fs, 'exists').returns(true);
+    const fsExistsMock = sandbox.stub(fs, 'existsSync').returns(true);
 
     myEventEmitter.emit('line', null);
     expect.assertions(4);
@@ -184,14 +183,48 @@ describe('StateService', () => {
     });
   });
 
-  it('should get the correct state from index.', () => {
+  it('should get the correct state from index.', async () => {
     // Arrange
+    const getStatesInFileStub = sandbox.stub(stateService, 'getTotalStatesInSessionFile').returns(Optional.ofNullable(2));
+    sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('1234.txt'));
+
+    const expectedState1 = {
+      foo: 'bar'
+    };
+
+    const expectedState2 = {
+      foo: 'banana'
+    };
+
+    class MyEventEmitter extends EventEmitter {}
+    const myEventEmitter = new MyEventEmitter();
+
+    const arrayStates = [expectedState1, expectedState2];
+
+    myEventEmitter.on = (value, fn) => {
+      winston.info('Received on event.');
+      fn(JSON.stringify(arrayStates.pop()));
+      if (arrayStates.length > 0) {
+        myEventEmitter.emit('line', 'foo');
+      }
+    };
+    myEventEmitter.close = () => {};
+
+    myEventEmitter.emit('line', 'foo');
+
+    sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
+    sandbox.stub(fs, 'existsSync').returns(true);
+
+    const expectedResult = { foo: 'bar' };
+    sandbox.stub(stateService, 'getStateFromPersistState').returns(expectedResult);
+
     // Act
-    stateService.getStateByIndex(-1).then((optional) => {
-      // Assert
-      c.l(`Value: ${optional.get()}`);
-      expect(optional.isPresent()).toBe(true);
-    });
+    const optional = await stateService.getStateByIndex(1);
+
+    expect(getStatesInFileStub.calledOnce).toEqual(true);
+
+    expect(optional.isPresent()).toBe(true);
+    expect(JSON.stringify(expectedResult)).toEqual(JSON.stringify(optional.get()));
   });
 
   it('should return empty optional when session key absent.', () => {

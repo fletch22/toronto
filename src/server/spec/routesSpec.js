@@ -117,7 +117,7 @@ describe('routes', () => {
     const req = app.makeRequest({ host: 'foo' });
 
     // Act
-    app.invoke('get', `${apiPath}/stateIndexes/1?action=get`, req, res);
+    app.invoke('get', `${apiPath}/stateIndexes/1`, req, res);
 
     // Assert
     expect.assertions(2);
@@ -128,7 +128,7 @@ describe('routes', () => {
     expect('{"isPresent":true,"value":{"foo":"bar"}}').toBe(actualResult);
   });
 
-  test.only('should process rollback by state ID (clientID) correctly.', async () => {
+  test('should process rollback by state ID (clientID) correctly.', async () => {
     // Arrange
     const res = app.makeResponse((err, data) => {
 
@@ -158,6 +158,5 @@ describe('routes', () => {
 
     expect(getStateByIndexStub.calledOnce).toEqual(true);
     expect(actualResult).toBe('{"isPresent":true,"value":{"foo":"bar"}}');
-
   });
 });

@@ -14,6 +14,10 @@ class Config {
   getTestOuputFolderName() {
     return 'dist';
   }
+
+  getWebDevServerPort() {
+    return 8081;
+  }
 }
 
 export default new Config();

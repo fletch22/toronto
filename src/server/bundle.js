@@ -1,14 +1,20 @@
-const Webpack = require('webpack');
+const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const webpackConfig = require('../../webpack.config.js');
+import c from '../util/c';
+import winston from 'winston';
+import config from './config/config';
 
-module.exports = function () {
+winston.info(`Environment is ${process.env.NODE_ENV}`);
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+const clientBundler = function () {
   c.l('In bundler ...');
 
   // First we fire up Webpack an pass in the configuration we
   // created
   let bundleStart = null;
-  const compiler = Webpack(webpackConfig);
+  const compiler = webpack(webpackConfig);
 
   // We give notice in the terminal when it starts bundling and
   // set the time it started
@@ -24,7 +30,6 @@ module.exports = function () {
   });
 
   const bundler = new WebpackDevServer(compiler, {
-
     // We need to tell Webpack to serve our bundled application
     // from the build path. When proxying:
     // http://localhost:3000/build -> http://localhost:8080/build
@@ -44,7 +49,14 @@ module.exports = function () {
   // We fire up the development server and give notice in the terminal
   // that we are starting the initial bundle
   console.log('About to call bundler listen...');
-  bundler.listen(8081, 'localhost', () => {
+  bundler.listen(config.getWebDevServerPort(), 'localhost', () => {
     console.log('Bundling project, please wait...');
   });
 };
+
+if (isDevelopment) {
+  clientBundler();
+}
+
+module.exports = clientBundler;
+

@@ -1,6 +1,7 @@
 const Webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+import { default as configServer } from './src/server/config/Config';
 
 const buildPath = path.resolve(__dirname, 'build');
 
@@ -22,7 +23,7 @@ const config = {
   entry: [
     'babel-polyfill',
     'webpack/hot/dev-server',
-    'webpack-dev-server/client?http://localhost:8081',
+    `webpack-dev-server/client?http://localhost:${configServer.getWebDevServerPort()}`,
     './src/app/index.js',
     'bootstrap-loader'
   ],

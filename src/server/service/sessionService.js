@@ -23,7 +23,7 @@ class SessionService {
   }
 
   persistSessionIfMissing(sessionKey) {
-    if (!fs.exists(sessionFilePath)) {
+    if (!fs.existsSync(sessionFilePath)) {
       this.persistSession(sessionKey);
     }
   }

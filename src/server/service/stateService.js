@@ -161,7 +161,7 @@ class StateService {
   }
 
   findMostRecentStateInFile() {
-    winston.info('Find most recent state in file.');
+    winston.debug('Find most recent state in file.');
 
     return new Promise((resolve) => {
       let optionalResult = util.getOptionalLiteral(null);
@@ -169,8 +169,9 @@ class StateService {
       const optionalFilePath = this.getFilePathOfCurrentSessionLog();
       if (optionalFilePath.isPresent()) {
         const filepath = optionalFilePath.get();
-        if (fs.exists(filepath)) {
-          const lineReader = this.createLineReadStream(optionalFilePath.get());
+        if (fs.existsSync(filepath)) {
+          winston.debug(`filepath found: ${filepath}`);
+          const lineReader = this.createLineReadStream(filepath);
           let lastLine;
 
           lineReader.on('line', (line) => {
@@ -178,6 +179,7 @@ class StateService {
           });
 
           lineReader.on('close', () => {
+            winston.debug(`Last line: ${lastLine}`);
             optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
             resolve(optionalResult);
           });
@@ -196,7 +198,7 @@ class StateService {
     let optionalFilePath = Optional.empty();
     if (optionalSessionKey.isPresent()) {
       optionalFilePath = Optional.ofNullable(this.composeFilePathFromSessionKey(optionalSessionKey.get()));
-      winston.info(`Session log: ${optionalFilePath.get()}`);
+      winston.debug(`Session log: ${optionalFilePath.get()}`);
     }
     return optionalFilePath;
   }
@@ -233,8 +235,8 @@ class StateService {
   }
 
   async getStateByIndex(index) {
-    winston.info('getStateByIndex called.');
-    winston.info(`typeof index: ${typeof index}`);
+    winston.debug('getStateByIndex called.');
+    winston.debug(`typeof index: ${typeof index}`);
 
     const optionalTotalLines = await this.getTotalStatesInSessionFile();
 
@@ -243,31 +245,36 @@ class StateService {
     }
 
     const totalLines = optionalTotalLines.get();
-    winston.info(`Total lines: ${totalLines}: typeof: ${typeof totalLines}`);
-    const stopOnIndex = totalLines + (index * -1);
+    winston.debug(`Total lines: ${totalLines}: typeof: ${typeof totalLines}`);
+    const stopOnIndex = (totalLines - 1) + (index * -1);
 
     const optionalFilePath = this.getFilePathOfCurrentSessionLog();
     return new Promise((resolve) => {
       if (optionalFilePath.isPresent()) {
-        winston.info(`Fp: ${optionalFilePath.get()}`);
         const filePath = optionalFilePath.get();
-        if (fs.exists(filePath)) {
+        winston.debug(`Fp: ${filePath}`);
+        if (fs.existsSync(filePath)) {
           const lineReader = this.createLineReadStream(optionalFilePath.get());
           let persistedState;
 
           let count = 0;
-          winston.info(`soi: ${stopOnIndex}`);
+          winston.debug(`${typeof stopOnIndex}`);
+
+          winston.debug(`soi: ${stopOnIndex}`);
           lineReader.on('line', (line) => {
+            winston.debug(`Count: ${count}`);
             if (stopOnIndex === count) {
               persistedState = line;
+              winston.info('Closing lr.');
               lineReader.close();
             }
             count++;
-            winston.info(`count: ${count}`);
+            winston.debug(`count: ${count}`);
           });
 
           lineReader.on('close', () => {
-            winston.info('Close called.');
+            winston.debug('Close called.');
+
             resolve(Optional.ofNullable(this.getStateFromPersistState(persistedState)));
           });
         } else {
@@ -287,7 +294,7 @@ class StateService {
         const optionalFilePath = this.getFilePathOfCurrentSessionLog();
         if (optionalFilePath.isPresent()) {
           const logPath = optionalFilePath.get();
-          if (fs.exists(logPath)) {
+          if (fs.existsSync(logPath)) {
             const lineReader = this.createLineReadStream(logPath);
             let lastLine;
 
