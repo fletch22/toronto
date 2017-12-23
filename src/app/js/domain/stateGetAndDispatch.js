@@ -76,7 +76,7 @@ class StateGetAndDispatch {
     return promise;
   }
 
-  rollbackToCurrentState(dispatch) {
+  rollbackToCurrentState(dispatch, state) {
     let promise;
     if (this.currentStateClientId === null) {
       const error = { message: 'No current state client ID found.' };
@@ -84,7 +84,7 @@ class StateGetAndDispatch {
       promise = Promise.reject(error);
     } else {
       const self = this;
-      promise = stateSyncService.rollbackToStateId(this.currentStateClientId);
+      promise = stateSyncService.rollbackToStateId(this.currentStateClientId, state);
       promise.then(() => {
         self.init();
         dispatch(actionHideTimeTravelNavBar());

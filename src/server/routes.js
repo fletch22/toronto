@@ -43,7 +43,7 @@ export const setupNormalRoutes = (app) => {
   });
 
   app.get(`${apiPath}/stateIndexes/:index`, async (req, res) => {
-    winston.debug(`Getting index: ${req.params.index}`);
+    winston.info(`Getting index: ${req.params.index}`);
     const index = parseInt(req.params.index, 10);
     const result = await stateService.getStateByIndex(index, 10);
     let state = null;

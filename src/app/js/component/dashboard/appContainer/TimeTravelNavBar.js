@@ -51,9 +51,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-function rollbackServerAndHideTimeTravelBar()  {
-  return (dispatch) => {
-    const promise = stateGetAndDispatch.rollbackToCurrentState(dispatch);
+function rollbackServerAndHideTimeTravelBar() {
+  return (dispatch, getState) => {
+    const promise = stateGetAndDispatch.rollbackToCurrentState(dispatch, getState());
 
     promise.catch((error) => {
       console.error(error.message);

@@ -75,6 +75,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
     case ACTIONS.types.MODAL.MODAL_PSEUDO_FORGET: {
       _.remove(stateNew.dom.pseudoModals, _.matches({ id: action.payload.id }));
 
+      borderScrivenerUtils.hideWhenSelectedElementAbsent(stateNew);
+
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
       return stateNew;

@@ -179,8 +179,14 @@ class StateService {
           });
 
           lineReader.on('close', () => {
-            winston.debug(`Last line: ${lastLine}`);
-            optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
+            let parsedLine = null;
+            try {
+              parsedLine = JSON.parse(lastLine);
+              optionalResult = util.getOptionalLiteral(parsedLine);
+            } catch (err) {
+              winston.error(err.message);
+            }
+
             resolve(optionalResult);
           });
         } else {
@@ -235,8 +241,8 @@ class StateService {
   }
 
   async getStateByIndex(index) {
-    winston.debug('getStateByIndex called.');
-    winston.debug(`typeof index: ${typeof index}`);
+    winston.info('getStateByIndex called.');
+    winston.info(`typeof index: ${typeof index}`);
 
     const optionalTotalLines = await this.getTotalStatesInSessionFile();
 
@@ -245,37 +251,39 @@ class StateService {
     }
 
     const totalLines = optionalTotalLines.get();
-    winston.debug(`Total lines: ${totalLines}: typeof: ${typeof totalLines}`);
+    winston.info(`Total lines: ${totalLines}: typeof: ${typeof totalLines}`);
     const stopOnIndex = (totalLines - 1) + (index * -1);
 
     const optionalFilePath = this.getFilePathOfCurrentSessionLog();
     return new Promise((resolve) => {
       if (optionalFilePath.isPresent()) {
         const filePath = optionalFilePath.get();
-        winston.debug(`Fp: ${filePath}`);
+        winston.info(`Fp: ${filePath}`);
         if (fs.existsSync(filePath)) {
           const lineReader = this.createLineReadStream(optionalFilePath.get());
           let persistedState;
 
           let count = 0;
-          winston.debug(`${typeof stopOnIndex}`);
+          winston.info(`${typeof stopOnIndex}`);
 
-          winston.debug(`soi: ${stopOnIndex}`);
+          winston.info(`soi: ${stopOnIndex}`);
           lineReader.on('line', (line) => {
-            winston.debug(`Count: ${count}`);
+            winston.info(`Count: ${count}`);
             if (stopOnIndex === count) {
               persistedState = line;
               winston.info('Closing lr.');
               lineReader.close();
             }
             count++;
-            winston.debug(`count: ${count}`);
           });
 
           lineReader.on('close', () => {
-            winston.debug('Close called.');
-
-            resolve(Optional.ofNullable(this.getStateFromPersistState(persistedState)));
+            if (!!persistedState) {
+              winston.info(`Close called. ${persistedState.length}`);
+              resolve(Optional.ofNullable(this.getStateFromPersistState(JSON.parse(persistedState))));
+            } else {
+              resolve(Optional.empty());
+            }
           });
         } else {
           resolve(Optional.empty());
@@ -306,7 +314,16 @@ class StateService {
             });
 
             lineReader.on('close', () => {
-              optionalResult = util.getOptionalLiteral(JSON.parse(lastLine));
+              winston.debug(`Last line: ${lastLine}`);
+
+              let parsedLine = null;
+              try {
+                parsedLine = JSON.parse(lastLine);
+                optionalResult = util.getOptionalLiteral(parsedLine);
+              } catch (err) {
+                winston.error(err.message);
+              }
+
               resolve(optionalResult);
             });
           }
@@ -319,6 +336,7 @@ class StateService {
     });
   }
 
+
   saveToStateIndex(stateString) {
     const indexOfKey = stateString.indexOf(STATE_KEY);
     if (indexOfKey > -1) {
@@ -330,9 +348,20 @@ class StateService {
     }
   }
 
-  getStateByClientId(clientId) {
-    return Promise.resolve(Optional.ofNullable(clientId));
+  async getStateByClientId(clientId) {
+    const stateIndex = this.stateIndex.indexOf(clientId);
+    const optionalTotalLines = await this.getTotalStatesInSessionFile();
+    winston.info(`Called getStateByClientId. Indexes: ${stateIndex}`);
+    const totalLines = optionalTotalLines.get();
+    winston.info(`Tot lines: ${totalLines}`);
+
+    const optionalState = await this.getStateByIndex((totalLines - 1) - stateIndex);
+
+    winston.info(`state found: ${JSON.stringify(optionalState.get()).length}`);
+
+    return Promise.resolve(optionalState);
   }
 }
 
 export default new StateService();
+

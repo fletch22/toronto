@@ -1,7 +1,8 @@
 import Service from './Service';
 import util from '../util/util';
 import c from '../../../util/c';
-
+import 'babel-core/register';
+import 'babel-polyfill';
 class StateSyncService extends Service {
 
   constructor() {
@@ -18,8 +19,15 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states?action=getEarliest`, 'post');
   }
 
-  rollbackToStateId(stateId) {
-    this.rollbackToStateIdOnNode(stateId);
+  async rollbackToStateId(stateId, state) {
+    const resultNew = await this.rollbackToStateIdOnNode(stateId);
+
+    if (resultNew.isPresent) {
+      const stateHashCode = util.hashCode(resultNew.value);
+      c.l(`Node Hash: ${stateHashCode}`);
+      const stateHashCodeOld = util.hashCode(JSON.stringify(state));
+      c.l(`local Hash: ${stateHashCodeOld}`);
+    }
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states/${stateId}?action=rollbackTo`, 'post');
   }
 
@@ -29,7 +37,7 @@ class StateSyncService extends Service {
 
   saveStateArray(stateArray) {
     this.saveStateArrayToNode(stateArray).then((nodeResponse) => {
-      c.l(nodeResponse);
+      c.lo(nodeResponse);
     });
 
     return this.fetch(`${this.getOrbServerRootUrl()}/component/statePallet`, 'put', stateArray);
@@ -48,9 +56,25 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getNodeServerRootUrl()}/statePackages/`, 'post', statePackage);
   }
 
-  getHistoricalState(index) {
-    this.getHistoricalStateFromNode(index);
-    return this.fetch(`${this.getOrbServerRootUrl()}/component/stateHistory/${index}`, 'get');
+  async getHistoricalState(index) {
+    try {
+      const optionResult = await this.getHistoricalStateFromNode(index);
+      if (optionResult.isPresent) {
+        const stateHashCode = util.hashCode(optionResult.value);
+        c.l(`Historical Nodes state: ${stateHashCode} ...`);
+      }
+    } finally {
+      // Do nothing
+    }
+
+    try {
+      const oldResult = await this.fetch(`${this.getOrbServerRootUrl()}/component/stateHistory/${index}`, 'get');
+      const stateHashCode = util.hashCode(oldResult.state);
+      c.l(`Java state: ${stateHashCode} ...`);
+      return Promise.resolve(oldResult);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   getHistoricalStateFromNode(index) {
@@ -58,9 +82,9 @@ class StateSyncService extends Service {
   }
 
   getMostRecentHistoricalState() {
-    this.getMostRecentHistoricalStateFromNode().then((result) => {
-      if (result.isPresent) {
-        const stateHashCode = util.hashCode(result.state);
+    this.getMostRecentHistoricalStateFromNode().then((optionResult) => {
+      if (optionResult.isPresent) {
+        const stateHashCode = util.hashCode(optionResult.value);
         c.l(`Nodes state: ${stateHashCode} ...`);
       }
     });

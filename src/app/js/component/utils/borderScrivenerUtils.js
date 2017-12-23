@@ -1,3 +1,4 @@
+import graphTraversal from "../../state/graphTraversal";
 
 class BorderScrivenerUtils {
 
@@ -61,6 +62,13 @@ class BorderScrivenerUtils {
 
   isSelected(state, id) {
     return state.borderScrivener.selectedElementId === id;
+  }
+
+  hideWhenSelectedElementAbsent(state) {
+    const element = graphTraversal.find(state.dom.pseudoModals, state.borderScrivener.selectedElementId);
+    if (!element) {
+      this.clearBorderScrivener(state);
+    }
   }
 }
 

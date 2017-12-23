@@ -11,10 +11,6 @@ import ComponentTypes from '../../../domain/component/ComponentTypes';
 import { actionUnsetCurrentBody } from '../../../actions/bodyChildrenEditor/index';
 
 class Body extends BodyChild {
-  componentWillUnmount() {
-    this.props.onWillUnmount();
-  }
-
   render() {
     const children = (this.props.children) ? this.props.children : [];
     const style = JSON.parse(this.props.viewModel.style) || {};
@@ -60,19 +56,11 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  const onWillUnmount = () => {
-    dispatch(actionUnsetCurrentBody());
-  };
-
-  return { ...DragAndDropUtils.mapDispatchToProps(dispatch), onWillUnmount };
-};
-
 Body = DragAndDropMaker.connectDrop(Body);
 
 Body = connect(
   mapStateToProps,
-  mapDispatchToProps
+  DragAndDropUtils.mapDispatchToProps
 )(Body);
 
 export default Body;
