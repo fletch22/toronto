@@ -19,10 +19,17 @@ class Body extends BodyChild {
     style.marginLeft = '4px';
     style.border = this.props.isHoveringOver ? '2px solid red' : style.border;
 
+    let selectedContextToolbar = null;
+    if (this.props.selectedViewModel) {
+      selectedContextToolbar = (<SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />);
+    }
+
     return DragAndDropMaker.connectDropRender(this.props, (
       <div className="flex-bc" style={{ height: '100%' }}>
         <div className="body-children-toolbar-col">
-          <SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />
+          {
+            selectedContextToolbar
+          }
         </div>
         <div id={this.props.id} style={style} onClick={this.componentSelect} data-f22-component={ComponentTypes.WebPage}>
           {

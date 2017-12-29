@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import Optional from 'optional-js';
 import stateService from './stateService';
+import 'babel-polyfill';
 
 const persistRootPath = fileService.getPersistRootPath();
 const sessionFilePath = path.join(persistRootPath, 'session.json');
@@ -19,12 +20,17 @@ class SessionService {
   }
 
   initializeSession(sessionKey) {
-    return this.persistSession(sessionKey).then(() => stateService.reindexLogFile());
+    c.l('About to persist session.');
+    return this.persistSession(sessionKey).then((result) => {
+      c.l('About to call reindex.');
+      return stateService.reindexLogFile();
+    });
   }
+
 
   persistSessionIfMissing(sessionKey) {
     if (!fs.existsSync(sessionFilePath)) {
-      this.persistSession(sessionKey);
+      this.initializeSession(sessionKey);
     }
   }
 

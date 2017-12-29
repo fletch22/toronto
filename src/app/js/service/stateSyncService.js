@@ -20,14 +20,19 @@ class StateSyncService extends Service {
   }
 
   async rollbackToStateId(stateId, state) {
-    const resultNew = await this.rollbackToStateIdOnNode(stateId);
-
-    if (resultNew.isPresent) {
-      const stateHashCode = util.hashCode(resultNew.value);
-      c.l(`Node Hash: ${stateHashCode}`);
-      const stateHashCodeOld = util.hashCode(JSON.stringify(state));
-      c.l(`local Hash: ${stateHashCodeOld}`);
+    c.l('Rolling back...');
+    try {
+      const resultNew = await this.rollbackToStateIdOnNode(stateId);
+      if (resultNew.isPresent) {
+        const stateHashCode = util.hashCode(resultNew.value);
+        c.l(`Node Hash: ${stateHashCode}`);
+        const stateHashCodeOld = util.hashCode(JSON.stringify(state));
+        c.l(`local Hash: ${stateHashCodeOld}`);
+      }
+    } catch (error) {
+      c.l(`Error from attempting to roll back on node: ${error.message}`);
     }
+
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states/${stateId}?action=rollbackTo`, 'post');
   }
 
@@ -57,8 +62,9 @@ class StateSyncService extends Service {
   }
 
   async getHistoricalState(index) {
+    let optionResult = null;
     try {
-      const optionResult = await this.getHistoricalStateFromNode(index);
+      optionResult = await this.getHistoricalStateFromNode(index);
       if (optionResult.isPresent) {
         const stateHashCode = util.hashCode(optionResult.value);
         c.l(`Historical Nodes state: ${stateHashCode} ...`);
@@ -68,10 +74,20 @@ class StateSyncService extends Service {
     }
 
     try {
-      const oldResult = await this.fetch(`${this.getOrbServerRootUrl()}/component/stateHistory/${index}`, 'get');
-      const stateHashCode = util.hashCode(oldResult.state);
-      c.l(`Java state: ${stateHashCode} ...`);
-      return Promise.resolve(oldResult);
+      // c.l(`hist node present: ${optionResult.isPresent}`);
+      // c.l(`hist node value: ${optionResult.value}`);
+      if (!optionResult || (optionResult && !optionResult.isPresent)) {
+        c.l('Returning null historical.');
+        return Promise.resolve({ state: null });
+      } else {
+        const oldResult = await this.fetch(`${this.getOrbServerRootUrl()}/component/stateHistory/${index}`, 'get');
+
+        if (!!oldResult && !!oldResult.state) {
+          const stateHashCode = util.hashCode(oldResult.state);
+          c.l(`Java state: ${stateHashCode} ...`);
+        }
+        return Promise.resolve(oldResult);
+      }
     } catch (error) {
       return Promise.reject(error);
     }

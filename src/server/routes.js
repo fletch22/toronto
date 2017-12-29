@@ -38,6 +38,7 @@ export const setupNormalRoutes = (app) => {
   app.put(`${apiPath}/sessions/:sessionKey`, (req, res) => {
     winston.info(`Called save session: ${req.params.sessionKey}`);
     sessionService.initializeSession(req.params.sessionKey).then(() => {
+      c.l(`State Index length: ${stateService.stateIndex.length}`);
       res.send(responseSuccess);
     });
   });
@@ -54,13 +55,12 @@ export const setupNormalRoutes = (app) => {
   });
 
   app.post(`${apiPath}/states/:clientId`, async (req, res) => {
-    winston.info(`Getting stateId: ${req.params.clientId}`);
-    winston.info(`Getting action: ${req.query.action}`);
+    winston.debug(`Getting stateId: ${req.params.clientId}`);
     const action = req.query.action;
-    winston.info(`action: ${action}`);
+    winston.info(`post action: ${action}`);
     if (action === 'rollbackTo') {
       const clientId = req.params.clientId;
-      const optionalState = await stateService.getStateByClientId(clientId);
+      const optionalState = await stateService.rollbackTo(clientId);
       res.send(JSON.stringify(util.convertOptionalForResponse(optionalState)));
     }
   });
@@ -69,7 +69,7 @@ export const setupNormalRoutes = (app) => {
     winston.info(`Getting stateId: ${req.params.clientId}`);
     winston.info(`Getting action: ${req.query.action}`);
     const action = req.query.action;
-    winston.info(`action: ${action}`);
+    winston.info(`Post states action: ${action}`);
     if (action === 'getMostRecentHistoricalState') {
       const optionalState = await stateService.findMostRecentStateInFile(req.body);
       res.send(JSON.stringify(optionalState));
