@@ -9,12 +9,11 @@ import fs from 'fs';
 import readline from 'readline';
 import Optional from 'optional-js';
 import 'babel-core/register';
-import 'babel-polyfill';
 import util from '../../util/util';
 import winston from 'winston';
-import c from '../../util/c';
 import _ from 'lodash';
 import randomstring from 'randomstring';
+import 'babel-polyfill';
 
 const watch = stopwatch();
 const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';

@@ -82,6 +82,8 @@ describe('Queue', () => {
     const saveStateArray = sandbox.spy(stateSyncService, 'saveStateArray');
     const fetch = sandbox.stub(stateSyncService, 'fetch').returns(Promise.resolve());
     const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
+    const getMostRecentHistoricalStateFromNode = sandbox.stub(stateSyncService, 'getMostRecentHistoricalStateFromNode');
+
     expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
 
     const queue = new Queue();
@@ -96,11 +98,12 @@ describe('Queue', () => {
       expect(0).to.equal(queueArray.length);
       expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
       expect(saveStateArray.callCount).to.equal(1);
-      expect(fetch.callCount).to.equal(3);
+      c.l(`Call count: ${fetch.callCount}`);
+      expect(fetch.callCount).to.equal(2);
       queueArray = queue.getAccumulator();
       expect(queue.getQueueArrayIsPaused()).to.equal(false);
       expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
-      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+      expect(getMostRecentHistoricalStateFromNode.callCount).to.equal(0);
       done();
     });
   });

@@ -1,5 +1,8 @@
-import path from 'path';
-import srcRoot from '../../srcRoot';
+require('babel-core/register');
+// import path from 'path';
+const path = require('path');
+// import srcRoot from '../../srcRoot';
+const srcRoot = require('../../srcRoot');
 
 class Config {
   constructor() {

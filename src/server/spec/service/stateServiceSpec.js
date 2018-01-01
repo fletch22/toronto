@@ -7,9 +7,7 @@ import path from 'path';
 import util from '../../util/util';
 import Optional from 'optional-js';
 import 'babel-core/register';
-import 'babel-polyfill';
 import EventEmitter from 'events';
-import winston from 'winston';
 
 describe('StateService', () => {
   let sandbox;
@@ -173,12 +171,29 @@ describe('StateService', () => {
     });
   });
 
-  it('should get the correct number of lines in the file.', async () => {
+  it('should get the correct number of lines in the file.', (done) => {
     // Arrange
+    const optionalSessionFilePath = Optional.ofNullable('foo.txt');
+
+    class MyEventEmitter extends EventEmitter {}
+
+    sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(optionalSessionFilePath);
+    sandbox.stub(fs, 'existsSync').returns(true);
+
+    const myEventEmitter = new MyEventEmitter();
+
+    myEventEmitter.on = (value, fn) => {
+      fn(null);
+      myEventEmitter.emit('line', null);
+    };
+    sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
+
     // Act
-    const optional = await stateService.getTotalStatesInSessionFile();
-    expect(optional.isPresent()).toBe(true);
-    expect(optional.get() > 0).toBe(true);
+    stateService.getTotalStatesInSessionFile().then((optional) => {
+      expect(optional.isPresent()).toBe(true);
+      expect(optional.get() > 0).toBe(true);
+      done();
+    });
   });
 
   it('should get the correct state from index.', async () => {

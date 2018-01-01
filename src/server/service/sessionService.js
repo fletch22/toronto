@@ -3,7 +3,6 @@ import path from 'path';
 import fs from 'fs';
 import Optional from 'optional-js';
 import stateService from './stateService';
-import 'babel-polyfill';
 import winston from 'winston';
 
 const persistRootPath = fileService.getPersistRootPath();

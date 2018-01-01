@@ -4,6 +4,8 @@
   "description": "Build system for node and react",
   "main": "gulpfile.js",
   "scripts": {
+    "babel": "./node_modules/.bin/babel-node --presets es2015",
+    "foo": "npm run babel -- ./node_modules/karma/bin/karma start karma.conf.babel.js",
     "test": "karma start",
     "test:int": "set EXECUTE_INTEGRATION_TESTS=true && karma start",
     "start": "ss.cmd",

@@ -2,7 +2,6 @@ import Service from './Service';
 import util from '../util/util';
 import c from '../../../util/c';
 import 'babel-core/register';
-import 'babel-polyfill';
 class StateSyncService extends Service {
 
   constructor() {
@@ -111,13 +110,12 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getNodeServerRootUrl()}/stateIndexes/${index}`, 'get');
   }
 
-  getMostRecentHistoricalState() {
-    this.getMostRecentHistoricalStateFromNode().then((optionResult) => {
-      if (optionResult.isPresent) {
-        const stateHashCode = util.hashCode(optionResult.value);
-        c.l(`Nodes state: ${stateHashCode} ...`);
-      }
-    });
+  async getMostRecentHistoricalState() {
+    const optionResult = await this.getMostRecentHistoricalStateFromNode();
+    if (optionResult.isPresent) {
+      const stateHashCode = util.hashCode(optionResult.value);
+      c.l(`Nodes state: ${stateHashCode} ...`);
+    }
 
     return this.fetch(`${this.getOrbServerRootUrl()}/component/mostRecentStateHistory`, 'get');
   }

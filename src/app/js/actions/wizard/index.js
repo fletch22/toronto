@@ -8,6 +8,11 @@ export const ActionTypes = {
   }
 };
 
+c.l(`ConfigDllActionFoo is defined: ${!!ConfigDllActionTypes}`);
+c.l(`Object.assign is defined: ${!!Object.assign}`);
+
+const foo = Object.assign({ bar: 'bar' }, { banana: 'tastesGood' });
+
 Object.assign(ActionTypes.WIZARD, ConfigDllActionTypes);
 
 export const actionCarouselSlideRight = (id) => ({

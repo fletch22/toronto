@@ -21,7 +21,6 @@ const config = {
     fs: 'empty'
   },
   entry: [
-    'babel-polyfill',
     'webpack/hot/dev-server',
     `webpack-dev-server/client?http://localhost:${configServer.getWebDevServerPort()}`,
     './src/app/index.js',

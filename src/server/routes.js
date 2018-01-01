@@ -5,7 +5,6 @@ import { responseSuccess } from './util/responseConstants';
 import winston from 'winston';
 import util from '../util/util';
 import 'babel-core/register';
-import 'babel-polyfill';
 
 export const apiPath = '/api';
 
