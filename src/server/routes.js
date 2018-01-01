@@ -9,7 +9,7 @@ import 'babel-polyfill';
 
 export const apiPath = '/api';
 
-stateService.reindexLogFile().then((result) => {
+stateService.reindexLogFile().then(() => {
   winston.info('Finished reindexing log file.');
 });
 
@@ -31,20 +31,19 @@ export const setupNormalRoutes = (app) => {
 
   app.get(`${apiPath}/sessions/mostRecentHistoricalFile`, (req, res) => {
     const result = stateService.findMostRecentHistoricalFile();
-
     res.send(JSON.stringify(result));
   });
 
   app.put(`${apiPath}/sessions/:sessionKey`, (req, res) => {
-    winston.info(`Called save session: ${req.params.sessionKey}`);
+    winston.debug(`Called save session: ${req.params.sessionKey}`);
     sessionService.initializeSession(req.params.sessionKey).then(() => {
-      c.l(`State Index length: ${stateService.stateIndex.length}`);
+      winston.debug(`State Index length: ${stateService.stateIndex.length}`);
       res.send(responseSuccess);
     });
   });
 
   app.get(`${apiPath}/stateIndexes/:index`, async (req, res) => {
-    winston.info(`Getting index: ${req.params.index}`);
+    winston.debug(`Getting index: ${req.params.index}`);
     const index = parseInt(req.params.index, 10);
     const result = await stateService.getStateByIndex(index);
     let state = null;
@@ -57,7 +56,7 @@ export const setupNormalRoutes = (app) => {
   app.post(`${apiPath}/states/:clientId`, async (req, res) => {
     winston.debug(`Getting stateId: ${req.params.clientId}`);
     const action = req.query.action;
-    winston.info(`post action: ${action}`);
+    winston.debug(`post action: ${action}`);
     if (action === 'rollbackTo') {
       const clientId = req.params.clientId;
       const optionalState = await stateService.rollbackTo(clientId);
@@ -66,8 +65,8 @@ export const setupNormalRoutes = (app) => {
   });
 
   app.post(`${apiPath}/states`, async (req, res) => {
-    winston.info(`Getting stateId: ${req.params.clientId}`);
-    winston.info(`Getting action: ${req.query.action}`);
+    winston.debug(`Getting stateId: ${req.params.clientId}`);
+    winston.debug(`Getting action: ${req.query.action}`);
     const action = req.query.action;
     winston.info(`Post states action: ${action}`);
     switch (action) {

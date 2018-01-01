@@ -1,5 +1,6 @@
 import httpProxy from 'http-proxy';
 import config from '../config/Config';
+import winston from 'winston';
 
 class ProxyDevServer {
   initialize(app) {
@@ -15,7 +16,7 @@ class ProxyDevServer {
     // server will crash. An example of this is connecting to the
     // server when webpack is bundling
     proxy.on('error', (e) => {
-      c.l('Could not connect to proxy, please try again...');
+      winston.error('Could not connect to proxy, please try again...');
     });
   }
 }

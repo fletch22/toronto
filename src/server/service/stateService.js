@@ -275,7 +275,7 @@ class StateService {
     }
 
     const totalLines = optionalTotalLines.get();
-    winston.info(`Total lines: ${totalLines}: typeof: ${typeof totalLines}; index: ${index}`);
+    winston.debug(`Total lines: ${totalLines}: typeof: ${typeof totalLines}; index: ${index}`);
     const stopOnIndex = this.toggleIndexStartPoint(totalLines, index);
 
     const optionalFilePath = this.getFilePathOfCurrentSessionLog();
@@ -290,9 +290,9 @@ class StateService {
           let count = 0;
           winston.debug(`${typeof stopOnIndex}`);
 
-          winston.info(`soi: ${stopOnIndex}`);
+          winston.debug(`soi: ${stopOnIndex}`);
           lineReader.on('line', (line) => {
-            winston.info(`Count: ${count}`);
+            winston.debug(`Count: ${count}`);
             if (stopOnIndex === count) {
               persistedState = line;
               winston.debug('Closing lr.');
@@ -303,7 +303,7 @@ class StateService {
 
           lineReader.on('close', () => {
             if (!!persistedState) {
-              winston.info(`Close called. ${persistedState.length}`);
+              winston.debug(`Close called. ${persistedState.length}`);
               resolve(Optional.ofNullable(this.getStateFromPersistState(JSON.parse(persistedState))));
             } else {
               resolve(Optional.empty());
@@ -329,7 +329,7 @@ class StateService {
       const optionalFilePath = this.getFilePathOfCurrentSessionLog();
       if (optionalFilePath.isPresent()) {
         const logPath = optionalFilePath.get();
-        c.l(`Log path: ${logPath}`);
+        winston.debug(`Log path: ${logPath}`);
         this.stateIndex = [];
         if (fs.existsSync(logPath)) {
           this.getTotalStatesInSessionFile().then((optionalTotalLines) => {
@@ -380,7 +380,7 @@ class StateService {
   async rollbackTo(clientId) {
     let optionalState = Optional.empty();
     optionalState = await this.getStateByClientId(clientId);
-    winston.info(`Index to rollback to: ${optionalState.get().stateIndex}`);
+    winston.debug(`Index to rollback to: ${optionalState.get().stateIndex}`);
 
     if (optionalState.isPresent()) {
       const result = optionalState.get();
@@ -408,7 +408,7 @@ class StateService {
 
       let count = 0;
 
-      c.l(`Rolling back to ${index}`);
+      winston.debug(`Rolling back to ${index}`);
 
       lineReader.on('line', (line) => {
         if (count > index) {
@@ -439,15 +439,12 @@ class StateService {
   async getStateByClientId(clientId) {
     const stateIndex = this.stateIndex.indexOf(clientId);
     if (stateIndex === -1) {
-      this.stateIndex.forEach((item) => {
-        winston.info(item);
-      });
       throw new Error(`Could not find clientID ${clientId} in State Index array; State index length: ${this.stateIndex.length}.`);
     }
     const optionalTotalLines = await this.getTotalStatesInSessionFile();
-    winston.info(`Called getStateByClientId. Indexes: ${stateIndex}`);
+    winston.debug(`Called getStateByClientId. Indexes: ${stateIndex}`);
     const totalLines = optionalTotalLines.get();
-    winston.info(`Tot lines: ${totalLines}`);
+    winston.debug(`Tot lines: ${totalLines}`);
 
     const index = this.toggleIndexStartPoint(totalLines, stateIndex);
     const optionalState = await this.getStateByIndex(index);
@@ -460,7 +457,7 @@ class StateService {
         stateIndex,
         totalLines
       };
-      winston.info(`state found: ${JSON.stringify(state).length}`);
+      winston.debug(`state found: ${JSON.stringify(state).length}`);
 
       optionalResult = Optional.ofNullable(result);
     }

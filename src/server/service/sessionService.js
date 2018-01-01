@@ -4,6 +4,7 @@ import fs from 'fs';
 import Optional from 'optional-js';
 import stateService from './stateService';
 import 'babel-polyfill';
+import winston from 'winston';
 
 const persistRootPath = fileService.getPersistRootPath();
 const sessionFilePath = path.join(persistRootPath, 'session.json');
@@ -20,9 +21,9 @@ class SessionService {
   }
 
   initializeSession(sessionKey) {
-    c.l('About to persist session.');
+    winston.debug('About to persist session.');
     return this.persistSession(sessionKey).then(() => {
-      c.l('About to call reindex.');
+      winston.debug('About to call reindex.');
       return stateService.reindexLogFile();
     });
   }

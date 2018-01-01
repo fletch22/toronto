@@ -9,7 +9,7 @@ winston.info(`Environment is ${process.env.NODE_ENV}`);
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 const clientBundler = function () {
-  c.l('In bundler ...');
+  winston.info('In bundler ...');
 
   // First we fire up Webpack an pass in the configuration we
   // created
@@ -19,14 +19,14 @@ const clientBundler = function () {
   // We give notice in the terminal when it starts bundling and
   // set the time it started
   compiler.plugin('compile', () => {
-    c.l('Bundling...');
+    winston.info('Bundling...');
     bundleStart = Date.now();
   });
 
   // We also give notice when it is done compiling, including the
   // time it took. Nice to have
   compiler.plugin('done', () => {
-    c.l(`Bundled in ${(Date.now() - bundleStart)} ms!`);
+    winston.info(`Bundled in ${(Date.now() - bundleStart)} ms!`);
   });
 
   const bundler = new WebpackDevServer(compiler, {

@@ -144,7 +144,7 @@ describe('routes', () => {
 
     const promise = Promise.resolve(expectedResult);
 
-    const getStateByIndexStub = sandbox.stub(stateService, 'getStateByClientId').returns(promise);
+    const getStateByIndexStub = sandbox.stub(stateService, 'rollbackTo').returns(promise);
 
     const req = app.makeRequest({ host: 'foo' });
 

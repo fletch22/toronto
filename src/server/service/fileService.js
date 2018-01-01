@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import srcRoot from '../../srcRoot';
-import winston from 'winston/lib/winston';
+import winston from 'winston';
 import readline from 'readline';
 
 class FileService {

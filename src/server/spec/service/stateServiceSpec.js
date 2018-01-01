@@ -173,10 +173,10 @@ describe('StateService', () => {
     });
   });
 
-  it('should get the correct number of lines in the file.', () => {
+  it('should get the correct number of lines in the file.', async () => {
     // Arrange
     // Act
-    const optional = stateService.getTotalStatesInSessionFile();
+    const optional = await stateService.getTotalStatesInSessionFile();
     expect(optional.isPresent()).toBe(true);
     expect(optional.get() > 0).toBe(true);
   });
@@ -200,7 +200,6 @@ describe('StateService', () => {
     const arrayStates = [expectedState1, expectedState2];
 
     myEventEmitter.on = (value, fn) => {
-      winston.info('Received on event.');
       fn(JSON.stringify(arrayStates.pop()));
       if (arrayStates.length > 0) {
         myEventEmitter.emit('line', 'foo');
