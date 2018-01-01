@@ -15,8 +15,14 @@ class StateSyncService extends Service {
     this.saveStateArrayToNode = this.saveStateArrayToNode.bind(this);
   }
 
-  getEarliestState() {
+  async getEarliestState() {
+    const stateFromNode = await this.getEarliestStateFromNode();
+
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states?action=getEarliest`, 'post');
+  }
+
+  getEarliestStateFromNode() {
+    return this.fetch(`${this.getNodeServerRootUrl()}/states?action=getEarliest`, 'post');
   }
 
   async rollbackToStateId(stateId, state) {
@@ -24,10 +30,13 @@ class StateSyncService extends Service {
     try {
       const resultNew = await this.rollbackToStateIdOnNode(stateId);
       if (resultNew.isPresent) {
+        c.l(`RB result.value: ${resultNew.value}`);
         const stateHashCode = util.hashCode(resultNew.value);
-        c.l(`Node Hash: ${stateHashCode}`);
-        const stateHashCodeOld = util.hashCode(JSON.stringify(state));
-        c.l(`local Hash: ${stateHashCodeOld}`);
+        c.l(`RB Node Hash: ${stateHashCode}`);
+        const stringState = JSON.stringify(state);
+        c.l(`RB Stringstate: ${stringState}`);
+        const stateHashCodeOld = util.hashCode(stringState);
+        c.l(`RB local Hash: ${stateHashCodeOld}`);
       }
     } catch (error) {
       c.l(`Error from attempting to roll back on node: ${error.message}`);
@@ -52,9 +61,13 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getNodeServerRootUrl()}/stateArrays`, 'post', stateArray);
   }
 
-  saveState(statePackage) {
-    this.saveStateToNode(statePackage);
-    return this.fetch(`${this.getOrbServerRootUrl()}/component/statePackage`, 'put', statePackage);
+  async saveState(statePackage) {
+    const javaState = await this.fetch(`${this.getOrbServerRootUrl()}/component/statePackage`, 'put', statePackage);
+
+    const nodeStatePackage = { ...statePackage, ...{ state: JSON.stringify(javaState) } };
+    await this.saveStateToNode(nodeStatePackage);
+
+    return javaState;
   }
 
   saveStateToNode(statePackage) {
@@ -66,6 +79,7 @@ class StateSyncService extends Service {
     try {
       optionResult = await this.getHistoricalStateFromNode(index);
       if (optionResult.isPresent) {
+        c.l(optionResult.value);
         const stateHashCode = util.hashCode(optionResult.value);
         c.l(`Historical Nodes state: ${stateHashCode} ...`);
       }
@@ -84,7 +98,7 @@ class StateSyncService extends Service {
 
         if (!!oldResult && !!oldResult.state) {
           const stateHashCode = util.hashCode(oldResult.state);
-          c.l(`Java state: ${stateHashCode} ...`);
+          c.l(`Historical Java state: ${stateHashCode} ...`);
         }
         return Promise.resolve(oldResult);
       }

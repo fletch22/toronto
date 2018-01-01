@@ -46,7 +46,7 @@ export const setupNormalRoutes = (app) => {
   app.get(`${apiPath}/stateIndexes/:index`, async (req, res) => {
     winston.info(`Getting index: ${req.params.index}`);
     const index = parseInt(req.params.index, 10);
-    const result = await stateService.getStateByIndex(index, 10);
+    const result = await stateService.getStateByIndex(index);
     let state = null;
     if (result.isPresent()) {
       state = result.get();
@@ -70,9 +70,20 @@ export const setupNormalRoutes = (app) => {
     winston.info(`Getting action: ${req.query.action}`);
     const action = req.query.action;
     winston.info(`Post states action: ${action}`);
-    if (action === 'getMostRecentHistoricalState') {
-      const optionalState = await stateService.findMostRecentStateInFile(req.body);
-      res.send(JSON.stringify(optionalState));
+    switch (action) {
+      case 'getMostRecentHistoricalState': {
+        const optionalState = await stateService.findMostRecentStateInFile(req.body);
+        res.send(JSON.stringify(optionalState));
+        break;
+      }
+      case 'getEarliest': {
+        const state = await stateService.findEarliestStateInFile(req.body);
+        res.send(JSON.stringify(state));
+        break;
+      }
+      default: {
+        throw new Error('Did not recognized action passed to POST state.');
+      }
     }
   });
 };

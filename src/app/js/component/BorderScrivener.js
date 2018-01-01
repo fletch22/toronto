@@ -19,8 +19,7 @@ class BorderScrivener extends React.Component {
     if (this.props.top !== prevProps.top
       || this.props.left !== prevProps.left
       || this.props.width !== prevProps.width
-      || this.props.height !== prevProps.height
-      || this.props.lastUpdateRequest !== prevProps.lastUpdateRequest) {
+      || this.props.height !== prevProps.height) {
       this.drawSelectionRectangle();
     }
   }
@@ -119,8 +118,7 @@ BorderScrivener.propTypes = {
   width: PropTypes.number,
   onChange: PropTypes.func,
   selectedElementId: PropTypes.string,
-  selectedElementIndex: PropTypes.number,
-  lastUpdateRequest: PropTypes.number
+  selectedElementIndex: PropTypes.number
 };
 
 const mapDispatchToProps = (dispatch) => {

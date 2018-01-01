@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import srcRoot from '../../srcRoot';
+import winston from 'winston/lib/winston';
+import readline from 'readline';
 
 class FileService {
   writeToFile(filePath, data) {
@@ -47,6 +49,43 @@ class FileService {
       fs.mkdirSync(rootPath);
     }
     return rootPath;
+  }
+
+  readFirstLine(filepath) {
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(filepath)) {
+        winston.info(`filepath found: ${filepath}`);
+        const lineReader = this.createLineReadStream(filepath);
+
+        let firstLine;
+        lineReader.on('line', (line) => {
+          if (!firstLine) {
+            firstLine = line;
+            lineReader.close();
+          }
+        });
+
+        lineReader.on('close', () => {
+          resolve(firstLine);
+        });
+      } else {
+        reject(new Error(`Encountered problem trying to find file at '${filepath}'.`));
+      }
+    });
+  }
+
+  createLineReadStream(filepath) {
+    return readline.createInterface({
+      input: fs.createReadStream(filepath)
+    });
+  }
+
+  rename(originalPath, newPath) {
+    fs.renameSync(originalPath, newPath);
+  }
+
+  delete(filePath) {
+    fs.unlinkSync(filePath);
   }
 }
 

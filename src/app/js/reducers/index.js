@@ -27,6 +27,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
   borderScrivenerUtils.domActionSyncer(stateNew);
 
+  c.l(`Action type: ${action.type}`);
+
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
       const node = graphTraversal.find(appContainerDom, action.modelId);
@@ -48,9 +50,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.SET_STATE: {
-      const borderScrivener = action.state.borderScrivener;
-      borderScrivener.lastUpdateRequest = new Date().getMilliseconds();
-
       return action.state;
     }
     case ACTIONS.types.SET_STATE_AND_PERSIST: {

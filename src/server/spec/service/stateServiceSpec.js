@@ -175,12 +175,10 @@ describe('StateService', () => {
 
   it('should get the correct number of lines in the file.', () => {
     // Arrange
-     // Act
-    stateService.getTotalStatesInSessionFile().then((optional) => {
-      // Assert
-      expect(optional.isPresent()).toBe(true);
-      expect(optional.get() > 0).toBe(true);
-    });
+    // Act
+    const optional = stateService.getTotalStatesInSessionFile();
+    expect(optional.isPresent()).toBe(true);
+    expect(optional.get() > 0).toBe(true);
   });
 
   it('should get the correct state from index.', async () => {

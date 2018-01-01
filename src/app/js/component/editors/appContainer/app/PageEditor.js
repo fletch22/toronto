@@ -12,7 +12,7 @@ class PageEditor extends React.Component {
   render() {
     return (
       <div style={{ height: '100%' }}>
-        <Body { ... this.props.viewModel }
+        <Body { ...this.props.viewModel }
           selectedChildViewId={this.props.selectedChildViewId}
           canBeDroppedOn
           isSelected={this.props.isBodySelected}

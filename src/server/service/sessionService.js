@@ -21,7 +21,7 @@ class SessionService {
 
   initializeSession(sessionKey) {
     c.l('About to persist session.');
-    return this.persistSession(sessionKey).then((result) => {
+    return this.persistSession(sessionKey).then(() => {
       c.l('About to call reindex.');
       return stateService.reindexLogFile();
     });

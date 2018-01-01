@@ -8,10 +8,13 @@ import objectUtil from '../util/objectUtil';
 import fs from 'fs';
 import readline from 'readline';
 import Optional from 'optional-js';
+import 'babel-core/register';
 import 'babel-polyfill';
 import util from '../../util/util';
 import winston from 'winston';
 import c from '../../util/c';
+import _ from 'lodash';
+import randomstring from 'randomstring';
 
 const watch = stopwatch();
 const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';
@@ -19,6 +22,7 @@ export const persistRootPath = fileService.getPersistRootPath();
 export const stateLogPrefix = 'stateLog-';
 export const stateLogSuffix = '.txt';
 const filePathTemplate = path.join(persistRootPath, `${stateLogPrefix}{persistFilenamePart}${stateLogSuffix}`);
+
 
 const STATE_KEY = 'dk89h22njkfdu90jo21kl231kl2199';
 
@@ -77,7 +81,7 @@ class StateService {
   writeStateToFile(key, stateString) {
     sessionService.persistSessionIfMissing(key);
     this.saveToStateIndex(stateString);
-    return fileService.writeToFile(this.composeFilePathFromSessionKey(key), stateString);
+    return fileService.writeToFile(this.composeFilePathFromSessionKey(key), `${_.trim(stateString)}\n`);
   }
 
   composeFilePathFromSessionKey(key) {
@@ -131,8 +135,6 @@ class StateService {
   }
 
   persistStatePackage(statePackage) {
-    winston.info('Persist package.');
-
     const persistState = this.transformToPersistState(statePackage);
     return this.writeStateToFile(statePackage.serverStartupTimestamp, JSON.stringify(persistState));
   }
@@ -199,6 +201,27 @@ class StateService {
     });
   }
 
+  async findEarliestStateInFile() {
+    winston.debug('Find most recent state in file.');
+
+    return new Promise((resolve, reject) => {
+      const optionalFilePath = this.getFilePathOfCurrentSessionLog();
+      if (optionalFilePath.isPresent()) {
+        const filepath = optionalFilePath.get();
+        if (fs.existsSync(filepath)) {
+          winston.debug(`filepath found: ${filepath}`);
+          fileService.readFirstLine(filepath).then((line) => {
+            resolve(line);
+          });
+        } else {
+          reject(new Error('Encountered error. Could not find session log.'));
+        }
+      } else {
+        reject(new Error('Encountered error. Could not determine session log path.'));
+      }
+    });
+  }
+
   getFilePathOfCurrentSessionLog() {
     const optionalSessionKey = sessionService.getCurrentSessionKey();
 
@@ -253,7 +276,7 @@ class StateService {
 
     const totalLines = optionalTotalLines.get();
     winston.info(`Total lines: ${totalLines}: typeof: ${typeof totalLines}; index: ${index}`);
-    const stopOnIndex = (totalLines - 1) + (index * -1);
+    const stopOnIndex = this.toggleIndexStartPoint(totalLines, index);
 
     const optionalFilePath = this.getFilePathOfCurrentSessionLog();
     return new Promise((resolve) => {
@@ -295,8 +318,12 @@ class StateService {
     });
   }
 
+  toggleIndexStartPoint(totalLines, endIndex) {
+    return (totalLines - 1) + (endIndex * -1);
+  }
+
   async reindexLogFile() {
-    try {
+    return new Promise((resolve, reject) => {
       let optionalResult = util.getOptionalLiteral(null);
 
       const optionalFilePath = this.getFilePathOfCurrentSessionLog();
@@ -305,40 +332,38 @@ class StateService {
         c.l(`Log path: ${logPath}`);
         this.stateIndex = [];
         if (fs.existsSync(logPath)) {
-          const optionalTotalLines = await this.getTotalStatesInSessionFile();
-          const lineReader = this.createLineReadStream(logPath);
-          let lastLine;
+          this.getTotalStatesInSessionFile().then((optionalTotalLines) => {
+            const lineReader = this.createLineReadStream(logPath);
+            let lastLine;
 
-          if (optionalTotalLines.get() > 0) {
-            lineReader.on('line', (line) => {
-              lastLine = line;
-              this.saveToStateIndex(line);
-            });
-          } else {
-            lineReader.close();
-          }
-
-          lineReader.on('close', () => {
-            winston.debug(`Last line: ${lastLine}`);
-
-            let parsedLine = null;
-            try {
-              parsedLine = JSON.parse(lastLine);
-              optionalResult = util.getOptionalLiteral(parsedLine);
-            } catch (err) {
-              winston.error(err.message);
+            if (optionalTotalLines.get() > 0) {
+              lineReader.on('line', (line) => {
+                lastLine = line;
+                this.saveToStateIndex(line);
+              });
+            } else {
+              lineReader.close();
             }
 
-            return Promise.resolve(optionalResult);
+            lineReader.on('close', () => {
+              winston.debug(`Last line: ${lastLine}`);
+
+              let parsedLine = null;
+              try {
+                parsedLine = JSON.parse(lastLine);
+                optionalResult = util.getOptionalLiteral(parsedLine);
+              } catch (err) {
+                winston.error(err.message);
+              }
+
+              resolve(optionalResult);
+            });
           });
+        } else {
+          resolve(optionalResult);
         }
-      } else {
-        return Promise.resolve(optionalResult);
       }
-    } catch (error) {
-      c.l(`Error: ${error.message}`);
-      return Promise.reject(error);
-    }
+    });
   }
 
   saveToStateIndex(stateString) {
@@ -354,16 +379,14 @@ class StateService {
 
   async rollbackTo(clientId) {
     let optionalState = Optional.empty();
-    try {
-      optionalState = await this.getStateByClientId(clientId);
-    } catch (error) {
-      winston.info(error.message);
-    }
-    winston.info(`State to rollback to is present: ${optionalState.isPresent()}`);
+    optionalState = await this.getStateByClientId(clientId);
+    winston.info(`Index to rollback to: ${optionalState.get().stateIndex}`);
 
     if (optionalState.isPresent()) {
       const result = optionalState.get();
-      await this.truncateLog(result.stateIndex);
+      const index = result.stateIndex;
+      await this.truncateLog(index);
+      this.reindexLogFile();
       return Promise.resolve(Optional.ofNullable(result.state));
     }
 
@@ -371,36 +394,63 @@ class StateService {
   }
 
   truncateLog(index) {
-    return new Promise((resolve) => {
-      const logPath = this.getFilePathOfCurrentSessionLog();
+    return new Promise((resolve, reject) => {
+      const optionalLogPath = this.getFilePathOfCurrentSessionLog();
+      if (!optionalLogPath.isPresent()) {
+        reject('Could not find session log.');
+      }
+
+      const logPath = optionalLogPath.get();
       const tmpPath = `${logPath}.tmp`;
       const lineReader = this.createLineReadStream(logPath);
 
       this.stateIndex = [];
 
       let count = 0;
+
+      c.l(`Rolling back to ${index}`);
+
       lineReader.on('line', (line) => {
-        if (count < index) {
-          fileService.writeToFile(tmpPath, line);
+        if (count > index) {
           lineReader.close();
+        } else {
+          fileService.writeToFile(tmpPath, `${line}\n`);
         }
         count++;
       });
 
       lineReader.on('close', () => {
         // Rename tmp file to actual log file.
+        const suffix = randomstring.generate({
+          length: 4,
+          charset: 'alphabetic',
+          capitalization: 'lowercase'
+        });
+
+        const renamedOriginal = `${logPath}.old.${suffix}`;
+        fileService.rename(logPath, renamedOriginal);
+        fileService.rename(tmpPath, logPath);
+        //fileService.delete(renamedOriginal);
+        resolve('Success');
       });
     });
   }
 
   async getStateByClientId(clientId) {
     const stateIndex = this.stateIndex.indexOf(clientId);
+    if (stateIndex === -1) {
+      this.stateIndex.forEach((item) => {
+        winston.info(item);
+      });
+      throw new Error(`Could not find clientID ${clientId} in State Index array; State index length: ${this.stateIndex.length}.`);
+    }
     const optionalTotalLines = await this.getTotalStatesInSessionFile();
     winston.info(`Called getStateByClientId. Indexes: ${stateIndex}`);
     const totalLines = optionalTotalLines.get();
     winston.info(`Tot lines: ${totalLines}`);
 
-    const optionalState = await this.getStateByIndex((totalLines - 1) - stateIndex);
+    const index = this.toggleIndexStartPoint(totalLines, stateIndex);
+    const optionalState = await this.getStateByIndex(index);
 
     let optionalResult = Optional.empty();
     if (optionalState.isPresent()) {
