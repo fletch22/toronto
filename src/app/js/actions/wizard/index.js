@@ -1,3 +1,6 @@
+import 'babel-core/register';
+import 'babel-polyfill';
+
 import { ActionTypes as ConfigDllActionTypes } from './configureDdl/index';
 
 export const ActionTypes = {
@@ -7,11 +10,6 @@ export const ActionTypes = {
     SLIDE_TO_INDEX: 'SLIDE_TO_INDEX'
   }
 };
-
-c.l(`ConfigDllActionFoo is defined: ${!!ConfigDllActionTypes}`);
-c.l(`Object.assign is defined: ${!!Object.assign}`);
-
-const foo = Object.assign({ bar: 'bar' }, { banana: 'tastesGood' });
 
 Object.assign(ActionTypes.WIZARD, ConfigDllActionTypes);
 

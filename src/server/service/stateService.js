@@ -2,7 +2,6 @@ import moment from 'moment';
 import format from 'string-template';
 import path from 'path';
 import fileService from './fileService';
-import sessionService from './sessionService';
 import { stopwatch } from 'durations';
 import objectUtil from '../util/objectUtil';
 import fs from 'fs';
@@ -14,6 +13,8 @@ import winston from 'winston';
 import _ from 'lodash';
 import randomstring from 'randomstring';
 import 'babel-polyfill';
+import { sessionFilename, default as sessionService } from './sessionService';
+import serializerService from './serializerService';
 
 const watch = stopwatch();
 const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';
@@ -21,7 +22,9 @@ export const persistRootPath = fileService.getPersistRootPath();
 export const stateLogPrefix = 'stateLog-';
 export const stateLogSuffix = '.txt';
 const filePathTemplate = path.join(persistRootPath, `${stateLogPrefix}{persistFilenamePart}${stateLogSuffix}`);
-
+const backupRootPath = path.join(persistRootPath, 'backups');
+const backupDataPath = path.join(backupRootPath, 'backupData.json');
+const backupFilePathTemplate = path.join(backupRootPath, '{backupFolderName}');
 
 const STATE_KEY = 'dk89h22njkfdu90jo21kl231kl2199';
 
@@ -38,6 +41,7 @@ class StateService {
     this.createLineReadStream = this.createLineReadStream.bind(this);
     this.writeStateToFile = this.writeStateToFile.bind(this);
     this.persistStatePackage = this.persistStatePackage.bind(this);
+    this.persistToDisk = this.persistToDisk.bind(this);
 
     this.stateIndex = [];
   }
@@ -70,6 +74,9 @@ class StateService {
     stateInfo[STATE_KEY] = statePackage.clientId;
     stateInfo.state = statePackage.state;
 
+    // winston.info(JSON.stringify(statePackage.originalState));
+    // fileService.persistByOverwriting('D:\\workspaces\\toronto\\temp\\stuntDoubleState.json', JSON.stringify(statePackage.originalState));
+
     return stateInfo;
   }
 
@@ -80,7 +87,7 @@ class StateService {
   writeStateToFile(key, stateString) {
     sessionService.persistSessionIfMissing(key);
     this.saveToStateIndex(stateString);
-    return fileService.writeToFile(this.composeFilePathFromSessionKey(key), `${_.trim(stateString)}\n`);
+    return fileService.persistByAppending(this.composeFilePathFromSessionKey(key), `${_.trim(stateString)}\n`);
   }
 
   composeFilePathFromSessionKey(key) {
@@ -413,7 +420,7 @@ class StateService {
         if (count > index) {
           lineReader.close();
         } else {
-          fileService.writeToFile(tmpPath, `${line}\n`);
+          fileService.persistByAppending(tmpPath, `${line}\n`);
         }
         count++;
       });
@@ -429,6 +436,7 @@ class StateService {
         const renamedOriginal = `${logPath}.old.${suffix}`;
         fileService.rename(logPath, renamedOriginal);
         fileService.rename(tmpPath, logPath);
+        // TODO: 2017-01-15: Uncomment when ready.
         //fileService.delete(renamedOriginal);
         resolve('Success');
       });
@@ -462,6 +470,118 @@ class StateService {
     }
 
     return Promise.resolve(optionalResult);
+  }
+
+  persistToDisk() {
+    const optionalSessionKey = sessionService.getCurrentSessionKey();
+
+    if (!optionalSessionKey.isPresent()) {
+      throw new Error('Encountered error when trying to persist state to disk. Could not get session key. If there is no session, nothing can be saved.');
+    }
+    const sessionKey = optionalSessionKey.get();
+
+    const backupFolderPath = format(backupFilePathTemplate, { backupFolderName: sessionKey });
+    if (fileService.exists(backupFolderPath)) {
+      fileService.removeFolder(backupFolderPath);
+    }
+    fileService.makeFolder(backupFolderPath);
+
+    this.saveFilesToBackupFolder(backupFolderPath, sessionKey);
+
+    return backupFolderPath;
+  }
+
+  saveFilesToBackupFolder(backupFolderPath, sessionKey) {
+    const sessionFilePath = sessionService.getSessionFilePath();
+    const optionalSessionLogPath = this.getFilePathOfCurrentSessionLog();
+
+    const sessionBackupPath = path.join(backupFolderPath, sessionFilename);
+    fileService.copy(sessionFilePath, sessionBackupPath);
+
+    this.saveOptionalLog(optionalSessionLogPath, backupFolderPath);
+
+    this.saveBackupData(sessionKey);
+  }
+
+  saveOptionalLog(optionalSessionLogPath, backupFolderPath) {
+    if (optionalSessionLogPath.isPresent()) {
+      const currentLogPath = optionalSessionLogPath.get();
+      const logFilename = path.basename(currentLogPath);
+      const logBackupPath = path.join(backupFolderPath, logFilename);
+      fileService.copy(currentLogPath, logBackupPath);
+    }
+  }
+
+  saveBackupData(backupFolderName) {
+    const body = {
+      currentBackupFolder: backupFolderName
+    };
+
+    serializerService.toDisk(backupDataPath, body);
+  }
+
+  restoreFromDisk() {
+    const backupFolder = this.getCurrentBackupFolder();
+
+    const pathBackupFolder = path.join(backupRootPath, backupFolder);
+
+    this.copyBackupLogToStateFolder(pathBackupFolder);
+    this.copyBackupSessionToStateFolder(pathBackupFolder);
+  }
+
+  copyBackupSessionToStateFolder(pathBackupFolder) {
+    const pathSession = path.join(pathBackupFolder, sessionFilename);
+    const destinationSessionPath = path.join(fileService.getPersistRootPath(), sessionFilename);
+    fileService.copy(pathSession, destinationSessionPath);
+  }
+
+  copyBackupLogToStateFolder(pathBackupFolder) {
+    const stateLogFilename = this.getLogFilenameInFolder(pathBackupFolder);
+    const pathBackupLog = path.join(pathBackupFolder, stateLogFilename);
+    const destinationLogPath = path.join(fileService.getPersistRootPath(), stateLogFilename);
+    fileService.copy(pathBackupLog, destinationLogPath);
+  }
+
+  getCurrentBackupFolder() {
+    const backup = serializerService.fromDisk(backupDataPath);
+    return backup.currentBackupFolder;
+  }
+
+  getLogFilenameInFolder(pathBackupFolder) {
+    const dirItems = fileService.getFolderContentNames(pathBackupFolder);
+
+    const stateLogNames = dirItems.filter((item) => item.startsWith(stateLogPrefix));
+    if (stateLogNames.length > 1) {
+      throw new Error(`Encountered error while trying to get log name. Got more than one log name starting with ${stateLogPrefix}`);
+    }
+
+    return stateLogNames[0];
+  }
+
+  mapStuntDoubles(model) {
+    const idToken = '"id":';
+    const modelString = JSON.stringify(model);
+
+    let currentIndex = 0;
+    const maxLength = modelString.length;
+
+    const mapIds = {};
+    while (currentIndex < (maxLength - 1)) {
+      const nextIdPos = modelString.indexOf(idToken, currentIndex);
+      if (nextIdPos > -1) {
+        const valueStartPos = nextIdPos + idToken.length;
+        const valueEndPos = modelString.indexOf(',', valueStartPos);
+        const idValue = modelString.substring(valueStartPos, valueEndPos);
+
+        mapIds[valueStartPos] = idValue;
+
+        currentIndex = nextIdPos + idValue.length;
+      } else {
+        break;
+      }
+    }
+
+    return mapIds;
   }
 }
 

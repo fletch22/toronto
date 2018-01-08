@@ -27,8 +27,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
   borderScrivenerUtils.domActionSyncer(stateNew);
 
-  c.l(`Action type: ${action.type}`);
-
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
       const node = graphTraversal.find(appContainerDom, action.modelId);
@@ -172,7 +170,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       break;
     }
     case ACTIONS.types.RESTORE_FROM_DISK: {
-      c.l('Got signal to restore from disk.');
+      c.l('Will now restore from disk.');
       restService.restoreFromDisk()
         .then(() => {
           window.document.location.reload();

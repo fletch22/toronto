@@ -3,9 +3,10 @@ import path from 'path';
 import srcRoot from '../../srcRoot';
 import winston from 'winston';
 import readline from 'readline';
+import rimraf from 'rimraf';
 
 class FileService {
-  writeToFile(filePath, data) {
+  persistByAppending(filePath, data) {
     return new Promise((resolve, reject) => {
       fs.open(filePath, 'a', (errOpen, fd) => {
         if (!errOpen) {
@@ -41,6 +42,10 @@ class FileService {
         resolve(data);
       });
     });
+  }
+
+  persistByOverwritingSync(filepath, dataString) {
+    fs.writeFileSync(filepath, dataString);
   }
 
   getPersistRootPath() {
@@ -86,6 +91,35 @@ class FileService {
 
   delete(filePath) {
     fs.unlinkSync(filePath);
+  }
+
+  exists(thingPath) {
+    return fs.existsSync(thingPath);
+  }
+
+  removeFolder(thingPath) {
+    return rimraf.sync(thingPath);
+  }
+
+  makeFolder(thingPath) {
+    return fs.mkdirSync(thingPath);
+  }
+
+  copy(sourcePath, destinationPath) {
+    console.log(`About to attempt to copy ${destinationPath}`);
+    fs.copyFileSync(sourcePath, destinationPath);
+  }
+
+  readFile(filepath) {
+    return fs.readFileSync(filepath);
+  }
+
+  getFolderName(pathThing) {
+    return path.dirname(pathThing).split(path.sep).pop();
+  }
+
+  getFolderContentNames(pathThing) {
+    return fs.readdirSync(pathThing);
   }
 }
 

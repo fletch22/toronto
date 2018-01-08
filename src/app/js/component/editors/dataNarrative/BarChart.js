@@ -72,7 +72,7 @@ class BarChart extends React.Component {
   }
 
   zoomed() {
-    console.log(event);
+    console.log(`BarChart: ${JSON.stringify(event)}`);
   }
 
   selectSvgRef(ref) {

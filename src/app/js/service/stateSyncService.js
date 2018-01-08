@@ -2,6 +2,8 @@ import Service from './Service';
 import util from '../util/util';
 import c from '../../../util/c';
 import 'babel-core/register';
+import 'babel-polyfill';
+
 class StateSyncService extends Service {
 
   constructor() {
@@ -63,7 +65,7 @@ class StateSyncService extends Service {
   async saveState(statePackage) {
     const javaState = await this.fetch(`${this.getOrbServerRootUrl()}/component/statePackage`, 'put', statePackage);
 
-    const nodeStatePackage = { ...statePackage, ...{ state: JSON.stringify(javaState) } };
+    const nodeStatePackage = { ...statePackage, ...{ state: JSON.stringify(javaState) }, ...{ originalState: statePackage.state } };
     await this.saveStateToNode(nodeStatePackage);
 
     return javaState;
@@ -78,7 +80,7 @@ class StateSyncService extends Service {
     try {
       optionResult = await this.getHistoricalStateFromNode(index);
       if (optionResult.isPresent) {
-        c.l(optionResult.value);
+        c.l(`getHistoricalStateFromNode: ${optionResult.value}`);
         const stateHashCode = util.hashCode(optionResult.value);
         c.l(`Historical Nodes state: ${stateHashCode} ...`);
       }
@@ -87,8 +89,6 @@ class StateSyncService extends Service {
     }
 
     try {
-      // c.l(`hist node present: ${optionResult.isPresent}`);
-      // c.l(`hist node value: ${optionResult.value}`);
       if (!optionResult || (optionResult && !optionResult.isPresent)) {
         c.l('Returning null historical.');
         return Promise.resolve({ state: null });
@@ -113,7 +113,7 @@ class StateSyncService extends Service {
   async getMostRecentHistoricalState() {
     const optionResult = await this.getMostRecentHistoricalStateFromNode();
     if (optionResult.isPresent) {
-      const stateHashCode = util.hashCode(optionResult.value);
+      const stateHashCode = util.hashCode(optionResult.value.state);
       c.l(`Nodes state: ${stateHashCode} ...`);
     }
 

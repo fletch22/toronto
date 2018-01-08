@@ -1,4 +1,4 @@
-import stateService from '../../service/stateService';
+import { default as stateService, stateLogPrefix } from '../../service/stateService';
 import sessionService from '../../service/sessionService';
 import sinon from 'sinon';
 import moment from 'moment';
@@ -8,6 +8,8 @@ import util from '../../util/util';
 import Optional from 'optional-js';
 import 'babel-core/register';
 import EventEmitter from 'events';
+import fileService from '../../service/fileService';
+import winston from 'winston';
 
 describe('StateService', () => {
   let sandbox;
@@ -260,6 +262,128 @@ describe('StateService', () => {
     // Assert
     expect(optionalFilePath.isPresent()).toBe(true);
     expect(optionalFilePath.get()).toBe('D:\\workspaces\\toronto\\temp\\stateLog-1969-12-31-18-00-12-PM.txt');
+  });
+
+  it('should persist session files to disk (one file) successfully.', () => {
+    // Arrange
+    const expectedSessionKey = 'testSessionKey-foo';
+    const getCurrentSessionKeyStub = sandbox.stub(sessionService, 'getCurrentSessionKey').returns(Optional.ofNullable(expectedSessionKey));
+    const existsStub = sandbox.stub(fileService, 'exists').returns(true);
+    const removeFolderStub = sandbox.stub(fileService, 'removeFolder');
+    const makeFolderStub = sandbox.stub(fileService, 'makeFolder');
+    const saveFilesToBackupFolderStub = sandbox.stub(stateService, 'saveFilesToBackupFolder');
+
+    // Act
+    const backupFolderPath = stateService.persistToDisk();
+
+    // Assert
+    expect(getCurrentSessionKeyStub.calledOnce).toBe(true);
+    expect(existsStub.calledOnce).toBe(true);
+    expect(removeFolderStub.calledOnce).toBe(true);
+    expect(saveFilesToBackupFolderStub.calledOnce).toBe(true);
+    expect(makeFolderStub.calledOnce).toBe(true);
+    expect(backupFolderPath.endsWith(`\\temp\\backups\\${expectedSessionKey}`)).toBe(true);
+  });
+
+  it('should save files to backup folder successfully', () => {
+    // Arrange
+    const backupFolderPath = 'somePath/foo.txt';
+
+    const expectedSessionPath = 'somePath/foo.txt';
+    const expectedSessionLogPath = 'somePath/session.txt';
+    const getSessionFilepathStub = sandbox.stub(sessionService, 'getSessionFilePath').returns(expectedSessionPath);
+    const getFilePathOfCurrentSessionLogStub = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable(expectedSessionLogPath));
+    const saveBackupDataStub = sandbox.stub(stateService, 'saveBackupData');
+
+    const copyStub = sandbox.stub(fileService, 'copy');
+
+    // Act
+    stateService.saveFilesToBackupFolder(backupFolderPath);
+
+    // Assert
+    expect(copyStub.callCount === 2).toBe(true);
+    expect(getSessionFilepathStub.calledOnce).toBe(true);
+    expect(getFilePathOfCurrentSessionLogStub.calledOnce).toBe(true);
+    expect(saveBackupDataStub.calledOnce).toBe(true);
+  });
+
+  it('should restore files from backup folder successfully.', () => {
+    // Arrange
+    const rootPathExpected = 'mary/someRootPath';
+    const getPersistRootPathStub = sandbox.stub(fileService, 'getPersistRootPath').returns(rootPathExpected);
+
+    const backupFolderExpected = path.join(rootPathExpected, 'somePath/backupFolder');
+    const getCurrentBackupFolderStub = sandbox.stub(stateService, 'getCurrentBackupFolder').returns(backupFolderExpected);
+    const getLogFilenameInFolderStub = sandbox.stub(stateService, 'getLogFilenameInFolder').returns('foo.txt');
+    const copyStub = sandbox.stub(fileService, 'copy');
+
+    // Act
+    stateService.restoreFromDisk();
+
+    // Assert
+    expect(getPersistRootPathStub.calledOnce);
+    expect(getCurrentBackupFolderStub.calledOnce);
+    expect(getLogFilenameInFolderStub.calledOnce);
+    expect(copyStub.callCount === 2);
+  });
+
+  it('should get the log filename in the folder successfully.', () => {
+    // Arrange
+    const pathBackupFolder = 'somePath/foo';
+    const stateLogFilenameExpected = `${stateLogPrefix}-banana.log`;
+    const contentsExpected = ['foo.json', stateLogFilenameExpected];
+    const getFolderContentNamesStub = sandbox.stub(fileService, 'getFolderContentNames').returns(contentsExpected);
+
+    // Act
+    const logFilenameActual = stateService.getLogFilenameInFolder(pathBackupFolder);
+
+    // Assert
+    expect(stateLogFilenameExpected).toEqual(logFilenameActual);
+    expect(getFolderContentNamesStub.calledOnce).toBe(true);
+  });
+
+  it.only('should replace stunt doubles with actuals successfully.', () => {
+    // Arrange
+    const stateString = fileService.readFile('D:\\workspaces\\toronto\\temp\\stuntDoubleState.json');
+
+    const state = JSON.parse(JSON.parse(stateString));
+
+    const model = state.model;
+
+    let modelString = JSON.stringify(model);
+
+    const stuntDoubles = stateService.mapStuntDoubles(model);
+
+    let highestId = 0;
+    const idsToReplace = [];
+    /* eslint-disable guard-for-in */
+    for (const key in stuntDoubles) {
+      const idValue = stuntDoubles[key];
+      const isNumber = idValue.indexOf('-') === -1;
+      if (isNumber) {
+        const id = parseInt(idValue, 10);
+        if (id > highestId) {
+          highestId = id;
+        }
+      } else {
+        idsToReplace.push(idValue);
+      }
+    }
+
+    idsToReplace.sort();
+
+    idsToReplace.forEach((idOriginal) => {
+      winston.info(`idOriginal: ${idOriginal}`);
+      const nextId = highestId + 1;
+      modelString = modelString.replace(idOriginal, nextId);
+      highestId = nextId;
+    });
+
+    winston.info(modelString);
+
+    // Act
+
+    // Assert
   });
 });
 

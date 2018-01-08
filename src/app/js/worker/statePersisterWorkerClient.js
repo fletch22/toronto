@@ -22,15 +22,6 @@ class StatePersisterWorkerClient {
     this.persistState(jsonStateOld, jsonStateNew, WorkerMessageTypes.PersistMessageNoGuaranteedResponse);
   }
 
-  persistStateExpectResponse(jsonStateOld, jsonStateNew) {
-
-    this.worker.addEventListener('message', (event) => {
-      console.debug(event);
-    });
-
-    this.persistState(jsonStateOld, jsonStateNew, WorkerMessageTypes.PersistMessageGuaranteedResponse);
-  }
-
   persistState(jsonStateOld, jsonStateNew, workerMessageType) {
     const statePackage = this.statePackager.package(jsonStateOld, jsonStateNew);
     this.worker.postMessage(new WorkerMessage(statePackage, workerMessageType));

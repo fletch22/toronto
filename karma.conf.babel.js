@@ -63,7 +63,6 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     pattern = 'src/app/js/__integrationTests__/test-context.js';
   } else {
     console.log('Running UNIT tests only ...');
-    config.files.unshift({ pattern: 'node_modules/babel-polyfill/dist/polyfill.js', watched: false }); // Needed for Promise to be recognized. Note 'unshift'. Needs to be first element.
     pattern = 'src/app/js/__tests__/test-context.js';
   }
 

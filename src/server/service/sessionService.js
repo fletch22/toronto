@@ -6,7 +6,8 @@ import stateService from './stateService';
 import winston from 'winston';
 
 const persistRootPath = fileService.getPersistRootPath();
-const sessionFilePath = path.join(persistRootPath, 'session.json');
+export const sessionFilename = 'session.json';
+const sessionFilePath = path.join(persistRootPath, sessionFilename);
 const defaultEncoding = 'utf8';
 
 class SessionService {

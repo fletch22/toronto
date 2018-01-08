@@ -17,25 +17,6 @@ describe('Worker service', () => {
     sandbox.restore();
   });
 
-  it('should execute save ideal messages correctly.', (done) => {
-    worker = new Worker();
-
-    worker.addEventListener('message', (event) => {
-      done();
-    });
-
-    const str = getString(1000);
-    worker.postMessage(new WorkerMessage(`Test 1: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-    worker.postMessage(new WorkerMessage(`Test 2: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-    worker.postMessage(new WorkerMessage(`Test 3: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-    worker.postMessage(new WorkerMessage(`Test 4: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-    worker.postMessage(new WorkerMessage(`Test 5: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-    worker.postMessage(new WorkerMessage(`Test 6: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-    worker.postMessage(new WorkerMessage(`Test 7: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-    worker.postMessage(new WorkerMessage(`Test 8: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-    worker.postMessage(new WorkerMessage(`Test 9: ${str}`, WorkerMessageTypes.PersistMessageNoGuaranteedResponse));
-  });
-
   it('should execute pause and drain.', (done) => {
 
     worker = new Worker();

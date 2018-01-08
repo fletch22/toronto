@@ -79,6 +79,16 @@ export const setupNormalRoutes = (app) => {
         res.send(JSON.stringify(state));
         break;
       }
+      case 'persistToDisk': {
+        await stateService.persistToDisk();
+        res.send(JSON.stringify({ result: 'Success' }));
+        break;
+      }
+      case 'restoreFromDisk': {
+        stateService.restoreFromDisk();
+        res.send(JSON.stringify({ result: 'Success' }));
+        break;
+      }
       default: {
         throw new Error('Did not recognized action passed to POST state.');
       }
