@@ -5,6 +5,7 @@ import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
 import util from '../../util/util';
+import { default as utilHashCode } from '../../../app/js/util/util';
 import Optional from 'optional-js';
 import 'babel-core/register';
 import EventEmitter from 'events';
@@ -342,48 +343,53 @@ describe('StateService', () => {
     expect(getFolderContentNamesStub.calledOnce).toBe(true);
   });
 
-  it.only('should replace stunt doubles with actuals successfully.', () => {
+  it('should map stunt doubles successfully.', () => {
     // Arrange
     const stateString = fileService.readFile('D:\\workspaces\\toronto\\temp\\stuntDoubleState.json');
-
     const state = JSON.parse(JSON.parse(stateString));
 
-    const model = state.model;
-
-    let modelString = JSON.stringify(model);
-
-    const stuntDoubles = stateService.mapStuntDoubles(model);
-
-    let highestId = 0;
-    const idsToReplace = [];
-    /* eslint-disable guard-for-in */
-    for (const key in stuntDoubles) {
-      const idValue = stuntDoubles[key];
-      const isNumber = idValue.indexOf('-') === -1;
-      if (isNumber) {
-        const id = parseInt(idValue, 10);
-        if (id > highestId) {
-          highestId = id;
-        }
-      } else {
-        idsToReplace.push(idValue);
-      }
-    }
-
-    idsToReplace.sort();
-
-    idsToReplace.forEach((idOriginal) => {
-      winston.info(`idOriginal: ${idOriginal}`);
-      const nextId = highestId + 1;
-      modelString = modelString.replace(idOriginal, nextId);
-      highestId = nextId;
-    });
-
-    winston.info(modelString);
-
     // Act
+    const stuntDoubles = stateService.mapStuntDoubles(state.model);
 
     // Assert
+    const keys = Object.keys(stuntDoubles);
+    expect(keys.length).toEqual(16);
+    const stuntMen = keys.filter((item) => {
+      const idValue = stuntDoubles[item];
+      return idValue.indexOf('-') > -1;
+    });
+    expect(stuntMen.length).toEqual(1);
+  });
+
+  it('should get stunt double info successfully.', () => {
+    // Arrange
+    const stuntDoubles = {
+      1234: '2345',
+      2553: '21345-fadsjksdafkjl-14322134',
+      3245: '2343'
+    };
+
+    // Act
+    const result = stateService.getStuntDoubleInfo(stuntDoubles);
+
+    // Assert
+    const idsToReplace = result.idsToReplace;
+    expect(idsToReplace.length).toEqual(1);
+    expect(idsToReplace[0]).toEqual(stuntDoubles[2553]);
+    expect(result.highestId).toEqual(2345);
+  });
+
+  it('should replace stunt doubles successfully.', () => {
+    // Arrange
+    const stateString = fileService.readFile('D:\\workspaces\\toronto\\temp\\stuntDoubleState.json');
+    const state = JSON.parse(JSON.parse(stateString));
+
+    // Act
+    const stateNew = stateService.replaceStuntDoubles(state);
+    const hashCode = utilHashCode.hashCode(JSON.stringify(stateNew));
+
+    // Assert
+    expect(hashCode).toEqual(1728154470);
   });
 });
 

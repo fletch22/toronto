@@ -558,6 +558,50 @@ class StateService {
     return stateLogNames[0];
   }
 
+  replaceStuntDoubles(state) {
+    const model = state.model;
+    let modelString = JSON.stringify(model);
+    const stuntDoubles = this.mapStuntDoubles(model);
+
+    const result = this.getStuntDoubleInfo(stuntDoubles);
+    const idsToReplace = result.idsToReplace;
+    let highestId = result.highestId;
+
+    idsToReplace.forEach((idOriginal) => {
+      const nextId = highestId + 1;
+      modelString = modelString.replace(idOriginal, nextId);
+      highestId = nextId;
+    });
+
+    // return { ...state, ...{ model: JSON.parse(modelString) } };
+    return { ...state, ...{ model: JSON.parse(modelString) } };
+  }
+
+  getStuntDoubleInfo(stuntDoubles) {
+    let highestId = 0;
+    const idsToReplace = [];
+    /* eslint-disable guard-for-in */
+    for (const key in stuntDoubles) {
+      const idValue = stuntDoubles[key];
+      const isNumber = idValue.indexOf('-') === -1;
+      if (isNumber) {
+        const id = parseInt(idValue, 10);
+        if (id > highestId) {
+          highestId = id;
+        }
+      } else {
+        idsToReplace.push(idValue);
+      }
+    }
+
+    idsToReplace.sort();
+
+    return {
+      idsToReplace,
+      highestId
+    };
+  }
+
   mapStuntDoubles(model) {
     const idToken = '"id":';
     const modelString = JSON.stringify(model);
@@ -570,7 +614,10 @@ class StateService {
       const nextIdPos = modelString.indexOf(idToken, currentIndex);
       if (nextIdPos > -1) {
         const valueStartPos = nextIdPos + idToken.length;
-        const valueEndPos = modelString.indexOf(',', valueStartPos);
+        let valueEndPos = modelString.indexOf(',', valueStartPos);
+        if (valueEndPos === -1) {
+          valueEndPos = modelString.indexOf('}', valueStartPos);
+        }
         const idValue = modelString.substring(valueStartPos, valueEndPos);
 
         mapIds[valueStartPos] = idValue;
