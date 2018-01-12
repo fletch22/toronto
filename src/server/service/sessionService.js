@@ -37,8 +37,8 @@ class SessionService {
 
   getCurrentSessionKey() {
     let optionalResult = Optional.empty();
-    if (fs.existsSync(sessionFilePath)) {
-      const contents = fs.readFileSync(sessionFilePath, defaultEncoding);
+    if (fileService.exists(sessionFilePath)) {
+      const contents = fileService.readFile(sessionFilePath);
 
       const session = JSON.parse(contents);
       optionalResult = Optional.ofNullable(session.lastSavedSessionKey);

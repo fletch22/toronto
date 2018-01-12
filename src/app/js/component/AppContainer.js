@@ -27,6 +27,7 @@ class AppContainer extends React.Component {
           width={this.props.borderScrivener.width}
           selectedElementId={this.props.borderScrivener.selectedElementId}
           selectedElementIndex={this.props.borderScrivener.selectedElementIndex}
+          lastUpdateRequest={this.props.borderScrivener.lastUpdateRequest}
         />
         <DropMarker dragNDrop={this.props.dragNDrop} />
       </div>

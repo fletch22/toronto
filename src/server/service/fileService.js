@@ -5,6 +5,8 @@ import winston from 'winston';
 import readline from 'readline';
 import rimraf from 'rimraf';
 
+const defaultEncoding = 'utf8';
+
 class FileService {
   persistByAppending(filePath, data) {
     return new Promise((resolve, reject) => {
@@ -111,7 +113,7 @@ class FileService {
   }
 
   readFile(filepath) {
-    return fs.readFileSync(filepath);
+    return fs.readFileSync(filepath, defaultEncoding);
   }
 
   getFolderName(pathThing) {

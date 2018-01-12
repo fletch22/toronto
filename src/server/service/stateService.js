@@ -15,6 +15,7 @@ import randomstring from 'randomstring';
 import 'babel-polyfill';
 import { sessionFilename, default as sessionService } from './sessionService';
 import serializerService from './serializerService';
+import initialState from '../config/initialState';
 
 const watch = stopwatch();
 const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';
@@ -74,8 +75,10 @@ class StateService {
     stateInfo[STATE_KEY] = statePackage.clientId;
     stateInfo.state = statePackage.state;
 
-    // winston.info(JSON.stringify(statePackage.originalState));
-    // fileService.persistByOverwriting('D:\\workspaces\\toronto\\temp\\stuntDoubleState.json', JSON.stringify(statePackage.originalState));
+    if (!!statePackage.originalState) {
+      const state = JSON.parse(statePackage.originalState);
+      stateInfo.stuntDoubleReplacedState = this.replaceStuntDoubles(state);
+    }
 
     return stateInfo;
   }
@@ -169,17 +172,21 @@ class StateService {
     };
   }
 
+  getInitialState() {
+    return util.getOptionalLiteral({ state: initialState });
+  }
+
   findMostRecentStateInFile() {
     winston.debug('Find most recent state in file.');
 
     return new Promise((resolve) => {
-      let optionalResult = util.getOptionalLiteral(null);
+      let optionalResult = this.getInitialState();
 
       const optionalFilePath = this.getFilePathOfCurrentSessionLog();
       if (optionalFilePath.isPresent()) {
         const filepath = optionalFilePath.get();
+        winston.info(`filepath found: ${filepath}`);
         if (fs.existsSync(filepath)) {
-          winston.debug(`filepath found: ${filepath}`);
           const lineReader = this.createLineReadStream(filepath);
           let lastLine;
 
@@ -195,7 +202,7 @@ class StateService {
             } catch (err) {
               winston.error(err.message);
             }
-
+            console.log('Returning thing.' + JSON.stringify(parsedLine).length);
             resolve(optionalResult);
           });
         } else {
@@ -560,20 +567,20 @@ class StateService {
 
   replaceStuntDoubles(state) {
     const model = state.model;
-    let modelString = JSON.stringify(model);
+
     const stuntDoubles = this.mapStuntDoubles(model);
 
     const result = this.getStuntDoubleInfo(stuntDoubles);
     const idsToReplace = result.idsToReplace;
     let highestId = result.highestId;
 
+    let modelString = JSON.stringify(model);
     idsToReplace.forEach((idOriginal) => {
       const nextId = highestId + 1;
       modelString = modelString.replace(idOriginal, nextId);
       highestId = nextId;
     });
 
-    // return { ...state, ...{ model: JSON.parse(modelString) } };
     return { ...state, ...{ model: JSON.parse(modelString) } };
   }
 

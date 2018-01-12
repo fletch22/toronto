@@ -42,8 +42,8 @@ describe('sessionService', () => {
       lastSavedSessionKey: '1234567890'
     };
 
-    const readMock = sandbox.stub(fs, 'readFileSync').returns(JSON.stringify(sessionExpected));
-    const existsMock = sandbox.stub(fs, 'exists').returns(true);
+    const existsMock = sandbox.stub(fileService, 'exists').returns(true);
+    const readMock = sandbox.stub(fileService, 'readFile').returns(JSON.stringify(sessionExpected));
 
     // Act
     const optionalSessionKey = sessionService.getCurrentSessionKey();
