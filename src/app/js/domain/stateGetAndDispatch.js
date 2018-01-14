@@ -15,7 +15,9 @@ class StateGetAndDispatch {
 
   successHandler(data, dispatch) {
     const promise = new Promise((resolve) => {
-      const state = JSON.parse(data.state);
+      const state = data.state;
+      c.l(`IoRS: ${data.indexOfReturnedState}`);
+      c.l(`CID: ${data.clientId}`);
       if (state !== null) {
         this.currentStateClientId = data.clientId;
         this.index = data.indexOfReturnedState;
@@ -66,6 +68,7 @@ class StateGetAndDispatch {
   }
 
   getMostRecentState(dispatch) {
+    c.l('Getting most recent state...');
     const promise = stateSyncService.getMostRecentHistoricalState();
 
     promise.then((data) => {

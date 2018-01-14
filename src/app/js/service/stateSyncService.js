@@ -16,17 +16,21 @@ class StateSyncService extends Service {
     this.saveStateArrayToNode = this.saveStateArrayToNode.bind(this);
   }
 
-  async getEarliestState() {
-    const stateFromNode = await this.getEarliestStateFromNode();
+  async getEarliestStateOld() {
+    await this.getEarliestStateFromNode();
 
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states?action=getEarliest`, 'post');
+  }
+
+  getEarliestState() {
+    return this.getEarliestStateFromNode();
   }
 
   getEarliestStateFromNode() {
     return this.fetch(`${this.getNodeServerRootUrl()}/states?action=getEarliest`, 'post');
   }
 
-  async rollbackToStateId(stateId, state) {
+  async rollbackToStateIdOld(stateId, state) {
     c.l('Rolling back...');
     try {
       const resultNew = await this.rollbackToStateIdOnNode(stateId);
@@ -46,16 +50,24 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getOrbServerRootUrl()}/component/states/${stateId}?action=rollbackTo`, 'post');
   }
 
+  async rollbackToStateId(stateId, state) {
+    return this.rollbackToStateIdOnNode(stateId);
+  }
+
   rollbackToStateIdOnNode(stateId) {
     return this.fetch(`${this.getNodeServerRootUrl()}/states/${stateId}?action=rollbackTo`, 'post');
   }
 
-  saveStateArray(stateArray) {
+  saveStateArrayOld(stateArray) {
     this.saveStateArrayToNode(stateArray).then((nodeResponse) => {
       c.lo(nodeResponse);
     });
 
     return this.fetch(`${this.getOrbServerRootUrl()}/component/statePallet`, 'put', stateArray);
+  }
+
+  saveStateArray(stateArray) {
+    return this.saveStateArrayToNode(stateArray);
   }
 
   saveStateArrayToNode(stateArray) {
@@ -75,7 +87,7 @@ class StateSyncService extends Service {
     return this.fetch(`${this.getNodeServerRootUrl()}/statePackages/`, 'post', statePackage);
   }
 
-  async getHistoricalState(index) {
+  async getHistoricalStateOld(index) {
     let optionResult = null;
     try {
       optionResult = await this.getHistoricalStateFromNode(index);
@@ -106,11 +118,36 @@ class StateSyncService extends Service {
     }
   }
 
+  async getHistoricalState(index) {
+    const optionResult = await this.getHistoricalStateFromNode(index);
+
+    if (!optionResult.isPresent) {
+      throw new Error('Encountered problem getting moset recent historical state. No state found.');
+    }
+    return optionResult.value;
+  }
+
   getHistoricalStateFromNode(index) {
     return this.fetch(`${this.getNodeServerRootUrl()}/stateIndexes/${index}`, 'get');
   }
 
   async getMostRecentHistoricalState() {
+    const optionResult = await this.getMostRecentHistoricalStateFromNode();
+
+    return this.unwrapState(optionResult);
+  }
+
+  unwrapState(optionalResult) {
+    if (!optionalResult.isPresent) {
+      throw new Error('Encountered problem getting moset recent historical state. No state found.');
+    }
+
+    c.l(`Unwrapped State: ${JSON.stringify(optionalResult.value)}`);
+
+    return optionalResult.value;
+  }
+
+  async getMostRecentHistoricalStateOld() {
     const optionResult = await this.getMostRecentHistoricalStateFromNode();
     if (optionResult.isPresent) {
       const stateHashCode = util.hashCode(optionResult.value.state);

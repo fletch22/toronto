@@ -34,42 +34,44 @@ class StateRetriever {
       });
 
       promise.then((data) => {
-        const stateRecent = JSON.parse(data.state);
+        const stateRecent = data.state;
 
         // NOTE: 10-17-2017: fleschec: This is for development only. In production this is unnecessary and might even be slow.
-        if (!!stateRecent) {
-          const stateHashCode = util.hashCode(data.state);
-          c.l(`Java state: ${stateHashCode} ...`);
+        // if (!!stateRecent) {
+        //   const stateHashCode = util.hashCode(data.state);
+        //   c.l(`Java state: ${stateHashCode} ...`);
+        //
+        //   this.deriveState().then((derivedState) => {
+        //     const diff = deepDiff(derivedState.model, stateRecent.model);
+        //     if (diff) {
+        //       c.lo(derivedState.model, 'derivedState.model :');
+        //       c.lo(diff, 'diff: ');
+        //       throw new Error('Encountered error when comparing derived state with rush state. Your logic is incorrect.');
+        //     }
+        //   });
+        // }
 
-          this.deriveState().then((derivedState) => {
-            const diff = deepDiff(derivedState.model, stateRecent.model);
-            if (diff) {
-              c.lo(derivedState.model, 'derivedState.model :');
-              c.lo(diff, 'diff: ');
-              throw new Error('Encountered error when comparing derived state with rush state. Your logic is incorrect.');
-            }
-          });
-        }
+        // if (stateRecent === null) {
+        //   this.deriveState().then((stateInner) => {
+        //     stateSyncService.saveSessionToNode(stateInner.serverStartupTimestamp);
+        //     resolve(stateInner);
+        //   }).catch((error) => {
+        //     reject(error);
+        //   });
+        // } else {
+        //   c.l(stateRecent.serverStartupTimestamp, 'state.serverStartupTimestamp: ');
 
-        if (stateRecent === null) {
-          this.deriveState().then((stateInner) => {
-            stateSyncService.saveSessionToNode(stateInner.serverStartupTimestamp);
-            resolve(stateInner);
-          }).catch((error) => {
-            reject(error);
-          });
-        } else {
-          c.l(stateRecent.serverStartupTimestamp, 'state.serverStartupTimestamp: ');
+        // c.l(stateRecent.serverStartupTimestamp);
 
-          const startupTimestamp = data.startupTimestamp;
-          if (stateRecent.serverStartupTimestamp !== startupTimestamp) {
-            console.debug('It appears that the server timestamp and the state timestamp are out of sync. This can happen if the state has been restored from backup.' +
-              'To fix this, the system will set the current startup timestamp to the server timestamp.');
-            stateRecent.serverStartupTimestamp = startupTimestamp;
-          }
+        // const startupTimestamp = data.startupTimestamp;
+        // if (stateRecent.serverStartupTimestamp !== startupTimestamp) {
+        //   console.info('It appears that the server timestamp and the state timestamp are out of sync. This can happen if the state has been restored from backup.' +
+        //     'To fix this, the system will set the current startup timestamp to the server timestamp.');
+        //   stateRecent.serverStartupTimestamp = startupTimestamp;
+        // }
 
-          resolve(stateRecent);
-        }
+        resolve(stateRecent);
+        // }
       });
     });
 

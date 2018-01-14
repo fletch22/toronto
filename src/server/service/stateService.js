@@ -27,7 +27,7 @@ const backupRootPath = path.join(persistRootPath, 'backups');
 const backupDataPath = path.join(backupRootPath, 'backupData.json');
 const backupFilePathTemplate = path.join(backupRootPath, '{backupFolderName}');
 
-const STATE_KEY = 'dk89h22njkfdu90jo21kl231kl2199';
+const CLIENT_ID_MARKER = 'CLIENT_ID_dk89h22njkfdu90jo21kl231kl2199';
 
 class StateService {
 
@@ -55,6 +55,7 @@ class StateService {
   groupAndWrite(persistGrouping) {
     const allWrites = [];
     for (const key in persistGrouping) {
+      winston.info(`Persist key from persistGrouping: ${key}`);
       if (persistGrouping.hasOwnProperty(key)) {
         let combinedData = '';
 
@@ -72,7 +73,7 @@ class StateService {
 
   transformToPersistState(statePackage) {
     const stateInfo = {};
-    stateInfo[STATE_KEY] = statePackage.clientId;
+    stateInfo[CLIENT_ID_MARKER] = statePackage.clientId;
     stateInfo.state = statePackage.state;
 
     if (!!statePackage.originalState) {
@@ -83,23 +84,34 @@ class StateService {
     return stateInfo;
   }
 
-  getStateFromPersistState(persistState) {
-    return persistState.state;
+  transformIndexSearchResult(searchResult, totalLines) {
+    const persistedState = JSON.parse(searchResult.line);
+
+    return {
+      state: JSON.parse(persistedState.state),
+      clientId: persistedState[CLIENT_ID_MARKER],
+      indexOfReturnedState: this.toggleIndexStartPoint(totalLines, searchResult.stopOnIndex)
+    };
   }
 
   writeStateToFile(key, stateString) {
+    winston.info('In writeStateToFile.');
     sessionService.persistSessionIfMissing(key);
     this.saveToStateIndex(stateString);
     return fileService.persistByAppending(this.composeFilePathFromSessionKey(key), `${_.trim(stateString)}\n`);
   }
 
   composeFilePathFromSessionKey(key) {
+    winston.info(`Session key to be used for timestamp filename. ${key}`);
     return format(filePathTemplate, { persistFilenamePart: this.getPersistFilenamePart(key) });
   }
 
   saveDataToFile(statesArray) {
+    winston.info('About to groupByTimestamp.');
+    // c.lo(statesArray, 'statesArray: ');
     const persistGrouping = this.groupByTimestamp(statesArray);
 
+    winston.info('About to groupAndWrite...');
     return this.groupAndWrite(persistGrouping).then(() => {
       let sessionKeys = objectUtil.getPropertyKeys(persistGrouping);
       sessionKeys = this.sortSessionKeys(sessionKeys);
@@ -121,6 +133,9 @@ class StateService {
   groupByTimestamp(statesArray) {
     const persistGrouping = {};
     statesArray.forEach((state) => {
+      if (!state.serverStartupTimestamp) {
+        throw new Error('Encountered error when checking for serverStartupTimestamp. Found no key.');
+      }
       const serverStartTimestamp = state.serverStartupTimestamp;
       if (!persistGrouping[serverStartTimestamp]) {
         persistGrouping[serverStartTimestamp] = [];
@@ -173,11 +188,11 @@ class StateService {
   }
 
   getInitialState() {
-    return util.getOptionalLiteral({ state: initialState });
+    return util.getOptionalLiteral({ state: initialState, clientId: '12345', indexOfReturnedState: 0 });
   }
 
   findMostRecentStateInFile() {
-    winston.debug('Find most recent state in file.');
+    winston.info('Find most recent state in file.');
 
     return new Promise((resolve) => {
       let optionalResult = this.getInitialState();
@@ -195,14 +210,14 @@ class StateService {
           });
 
           lineReader.on('close', () => {
-            let parsedLine = null;
+            let persistedState = null;
             try {
-              parsedLine = JSON.parse(lastLine);
-              optionalResult = util.getOptionalLiteral(parsedLine);
+              persistedState = JSON.parse(lastLine);
+              optionalResult = util.getOptionalLiteral({ state: JSON.parse(persistedState.state), clientId: persistedState[CLIENT_ID_MARKER], indexOfReturnedState: 0 });
             } catch (err) {
               winston.error(err.message);
             }
-            console.log('Returning thing.' + JSON.stringify(parsedLine).length);
+            console.log('Returning thing.' + JSON.stringify(persistedState).length);
             resolve(optionalResult);
           });
         } else {
@@ -278,8 +293,8 @@ class StateService {
   }
 
   async getStateByIndex(index) {
-    winston.debug('getStateByIndex called.');
-    winston.debug(`typeof index: ${typeof index}`);
+    winston.info('getStateByIndex called.');
+    winston.info(`typeof index: ${typeof index}`);
 
     const optionalTotalLines = await this.getTotalStatesInSessionFile();
 
@@ -288,7 +303,7 @@ class StateService {
     }
 
     const totalLines = optionalTotalLines.get();
-    winston.debug(`Total lines: ${totalLines}: typeof: ${typeof totalLines}; index: ${index}`);
+    winston.info(`Total lines: ${totalLines}: typeof: ${typeof totalLines}; index: ${index}`);
     const stopOnIndex = this.toggleIndexStartPoint(totalLines, index);
 
     const optionalFilePath = this.getFilePathOfCurrentSessionLog();
@@ -298,7 +313,7 @@ class StateService {
         winston.debug(`Fp: ${filePath}`);
         if (fs.existsSync(filePath)) {
           const lineReader = this.createLineReadStream(optionalFilePath.get());
-          let persistedState;
+          let indexSearchResult;
 
           let count = 0;
           winston.debug(`${typeof stopOnIndex}`);
@@ -307,7 +322,10 @@ class StateService {
           lineReader.on('line', (line) => {
             winston.debug(`Count: ${count}`);
             if (stopOnIndex === count) {
-              persistedState = line;
+              indexSearchResult = {
+                line,
+                stopOnIndex
+              };
               winston.debug('Closing lr.');
               lineReader.close();
             }
@@ -315,28 +333,34 @@ class StateService {
           });
 
           lineReader.on('close', () => {
-            if (!!persistedState) {
-              winston.debug(`Close called. ${persistedState.length}`);
-              resolve(Optional.ofNullable(this.getStateFromPersistState(JSON.parse(persistedState))));
+            if (!!indexSearchResult) {
+              winston.info(`Close called. ${indexSearchResult.line.length}`);
+              resolve(Optional.ofNullable(this.transformIndexSearchResult(indexSearchResult, totalLines)));
             } else {
               resolve(Optional.empty());
             }
           });
         } else {
+          winston.info(`file not found: ${filePath}`);
           resolve(Optional.empty());
         }
       } else {
+        winston.info('No log file path found:');
         resolve(Optional.empty());
       }
     });
   }
 
   toggleIndexStartPoint(totalLines, endIndex) {
-    return (totalLines - 1) + (endIndex * -1);
+    let index = endIndex;
+    if (totalLines - 1 < index) {
+      index = totalLines - 1;
+    }
+    return (totalLines - 1) + (index * -1) - 1;
   }
 
   async reindexLogFile() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let optionalResult = util.getOptionalLiteral(null);
 
       const optionalFilePath = this.getFilePathOfCurrentSessionLog();
@@ -380,9 +404,9 @@ class StateService {
   }
 
   saveToStateIndex(stateString) {
-    const indexOfKey = stateString.indexOf(STATE_KEY);
+    const indexOfKey = stateString.indexOf(CLIENT_ID_MARKER);
     if (indexOfKey > -1) {
-      const startIndex = indexOfKey + STATE_KEY.length + 1;
+      const startIndex = indexOfKey + CLIENT_ID_MARKER.length + 1;
       const quoteFirstIndex = stateString.indexOf('"', startIndex);
       const nextQuoteIndex = stateString.indexOf('"', quoteFirstIndex + 1);
       const clientId = stateString.substring(quoteFirstIndex + 1, nextQuoteIndex);

@@ -45,11 +45,11 @@ export const setupNormalRoutes = (app) => {
     winston.debug(`Getting index: ${req.params.index}`);
     const index = parseInt(req.params.index, 10);
     const result = await stateService.getStateByIndex(index);
-    let state = null;
+    let stateAndMeta = null;
     if (result.isPresent()) {
-      state = result.get();
+      stateAndMeta = result.get();
     }
-    res.send(JSON.stringify(util.getOptionalLiteral(state)));
+    res.send(JSON.stringify(util.getOptionalLiteral(stateAndMeta)));
   });
 
   app.post(`${apiPath}/states/:clientId`, async (req, res) => {

@@ -22,19 +22,27 @@ class RestService extends Service {
     return this.fetch(`${this.url}/component/nukeAndPave`, 'POST');
   }
 
-  async persistToDisk() {
+  async persistToDiskOld() {
     await this.persistToDiskNode();
 
     return this.fetch(`${this.url}/component/persistToDisk`, 'POST');
+  }
+
+  persistToDisk() {
+    return this.persistToDiskNode();
   }
 
   persistToDiskNode() {
     return this.fetch(`${this.getNodeServerRootUrl()}/states?action=persistToDisk`, 'POST');
   }
 
-  async restoreFromDisk() {
+  async restoreFromDiskOld() {
     await this.restoreFromDiskNode();
     return this.fetch(`${this.url}/component/restoreFromDisk`, 'POST');
+  }
+
+  restoreFromDisk() {
+    return this.restoreFromDiskNode();
   }
 
   restoreFromDiskNode() {
