@@ -98,7 +98,7 @@ describe('StateService', () => {
     expect(mostRecent.filename).toEqual(filesMockNew[filesMockNew.length - 1]);
   });
 
-  test('Should get the most recent historical state from the session stored', () => {
+  test('Should get the most recent historical state from the session stored', async () => {
     // Arrange
     const expectedState1 = {
       foo: 'bar'
@@ -121,26 +121,30 @@ describe('StateService', () => {
 
     const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('123456.txt'));
     const createLineReadStreamMock = sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
-    const fsExistsMock = sandbox.stub(fs, 'existsSync').returns(true);
+    const tranformStub = sandbox.stub(stateService, 'transformMostRecentPersistedState').returns(expectedState2);
+    const fsExistsMock = sandbox.stub(fileService, 'exists').returns(true);
 
     myEventEmitter.emit('line', null);
-    expect.assertions(4);
 
     // Act
-    return stateService.findMostRecentStateInFile().then((optionalState) => {
-      // Assert
-      expect(getCurrentSessionKeyMock.callCount).toBe(1);
-      expect(createLineReadStreamMock.callCount).toBe(1);
-      expect(fsExistsMock.callCount).toBe(1);
-      expect(optionalState.value).toEqual(expectedState2);
-    });
+    const optionalState = await stateService.findMostRecentStateInFile();
+    // Assert
+    expect(getCurrentSessionKeyMock.callCount).toBe(1);
+    expect(createLineReadStreamMock.callCount).toBe(1);
+    expect(tranformStub.callCount).toBe(1);
+    expect(fsExistsMock.callCount).toBe(1);
+    expect(optionalState.value).toEqual(expectedState2);
   });
 
-  test('Should get the correct state', () => {
+  it('Should get the correct state', async () => {
     // Arrange
     const expectedState1 = {
       foo: 'bar'
     };
+    // const persistedState1 = {
+    //   state: JSON.stringify(expectedState1)
+    // };
+    // persistedState1[stateService.CLIENT_ID_MARKER] = 'abcde';
 
     const expectedState2 = {
       foo: 'banana'
@@ -155,23 +159,25 @@ describe('StateService', () => {
       fn(JSON.stringify(arrayStates.pop()));
       myEventEmitter.emit('line', null);
     };
+    myEventEmitter.close = () => {};
 
     const getCurrentSessionKeyMock = sandbox.stub(stateService, 'getFilePathOfCurrentSessionLog').returns(Optional.ofNullable('123456.txt'));
+    const fsExistsMock = sandbox.stub(fileService, 'exists').returns(true);
     const createLineReadStreamMock = sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
-    const fsExistsMock = sandbox.stub(fs, 'existsSync').returns(true);
+    const transformMock = sandbox.stub(stateService, 'transformMostRecentPersistedState').returns(expectedState2);
 
     myEventEmitter.emit('line', null);
-    expect.assertions(4);
 
     // Act
+    const optionalState = await stateService.findMostRecentStateInFile();
+
+    // Assert
     expect(getCurrentSessionKeyMock.calledOnce);
-    return stateService.findMostRecentStateInFile().then((optionalState) => {
-      // Assert
-      expect(getCurrentSessionKeyMock.callCount).toBe(1);
-      expect(createLineReadStreamMock.callCount).toBe(1);
-      expect(fsExistsMock.callCount).toBe(1);
-      expect(JSON.stringify(optionalState.value)).toEqual(JSON.stringify(expectedState2));
-    });
+    expect(getCurrentSessionKeyMock.callCount).toBe(1);
+    expect(createLineReadStreamMock.callCount).toBe(1);
+    expect(transformMock.callCount).toBe(1);
+    expect(fsExistsMock.callCount).toBe(1);
+    expect(JSON.stringify(optionalState.value)).toEqual(JSON.stringify(expectedState2));
   });
 
   it('should get the correct number of lines in the file.', (done) => {
@@ -218,9 +224,13 @@ describe('StateService', () => {
     const arrayStates = [expectedState1, expectedState2];
 
     myEventEmitter.on = (value, fn) => {
-      fn(JSON.stringify(arrayStates.pop()));
-      if (arrayStates.length > 0) {
-        myEventEmitter.emit('line', 'foo');
+      if (value === 'line') {
+        fn(JSON.stringify(arrayStates.pop()));
+        if (arrayStates.length > 0) {
+          myEventEmitter.emit('line', 'foo');
+        }
+      } else if (value === 'close') {
+        fn();
       }
     };
     myEventEmitter.close = () => {};
@@ -229,15 +239,15 @@ describe('StateService', () => {
 
     sandbox.stub(stateService, 'createLineReadStream').returns(myEventEmitter);
     sandbox.stub(fs, 'existsSync').returns(true);
+    sandbox.stub(stateService, 'toggleIndexStartPoint').returns(0);
 
     const expectedResult = { foo: 'bar' };
-    sandbox.stub(stateService, 'getStateFromPersistState').returns(expectedResult);
+    sandbox.stub(stateService, 'transformIndexSearchResult').returns(expectedResult);
 
     // Act
     const optional = await stateService.getStateByIndex(1);
 
     expect(getStatesInFileStub.calledOnce).toEqual(true);
-
     expect(optional.isPresent()).toBe(true);
     expect(JSON.stringify(expectedResult)).toEqual(JSON.stringify(optional.get()));
   });

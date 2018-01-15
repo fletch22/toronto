@@ -114,5 +114,5 @@ export default {
       'selected_value'
     ]
   },
-  hasInitialStateBeenSaved: true
+  hasInitialStateBeenSaved: false
 };

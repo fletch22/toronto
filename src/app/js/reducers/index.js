@@ -27,6 +27,8 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
   borderScrivenerUtils.domActionSyncer(stateNew);
 
+  c.l(`Action Type: ${action.type}`);
+
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
       const node = graphTraversal.find(appContainerDom, action.modelId);
@@ -142,15 +144,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.INITIALIZE_F22_APP: {
+      const islandView = dashboardIslandViewFactory.createInstance(stateNew.model.appContainer);
+      stateNew.views.push(islandView);
+
       if (!stateNew.hasInitialStateBeenSaved) {
         stateNew.hasInitialStateBeenSaved = true;
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-      }
-
-      if (stateNew.model.appContainer.id !== -1) {
-        viewUtils.removeAllViewsByType(ViewTypes.Dashboard.Island, stateNew);
-        const islandView = dashboardIslandViewFactory.createInstance(stateNew.model.appContainer);
-        stateNew.views.push(islandView);
       }
 
       return stateNew;

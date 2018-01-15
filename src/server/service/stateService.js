@@ -102,7 +102,7 @@ class StateService {
   }
 
   composeFilePathFromSessionKey(key) {
-    winston.info(`Session key to be used for timestamp filename. ${key}`);
+    winston.debug(`Session key to be used for timestamp filename. ${key}`);
     return format(filePathTemplate, { persistFilenamePart: this.getPersistFilenamePart(key) });
   }
 
@@ -201,7 +201,7 @@ class StateService {
       if (optionalFilePath.isPresent()) {
         const filepath = optionalFilePath.get();
         winston.info(`filepath found: ${filepath}`);
-        if (fs.existsSync(filepath)) {
+        if (fileService.exists(filepath)) {
           const lineReader = this.createLineReadStream(filepath);
           let lastLine;
 
@@ -213,11 +213,10 @@ class StateService {
             let persistedState = null;
             try {
               persistedState = JSON.parse(lastLine);
-              optionalResult = util.getOptionalLiteral({ state: JSON.parse(persistedState.state), clientId: persistedState[CLIENT_ID_MARKER], indexOfReturnedState: 0 });
+              optionalResult = util.getOptionalLiteral(this.transformMostRecentPersistedState(persistedState));
             } catch (err) {
               winston.error(err.message);
             }
-            console.log('Returning thing.' + JSON.stringify(persistedState).length);
             resolve(optionalResult);
           });
         } else {
@@ -227,6 +226,10 @@ class StateService {
         resolve(optionalResult);
       }
     });
+  }
+
+  transformMostRecentPersistedState(persistedState) {
+    return { state: JSON.parse(persistedState.state), clientId: persistedState[CLIENT_ID_MARKER], indexOfReturnedState: 0 };
   }
 
   async findEarliestStateInFile() {
@@ -337,6 +340,7 @@ class StateService {
               winston.info(`Close called. ${indexSearchResult.line.length}`);
               resolve(Optional.ofNullable(this.transformIndexSearchResult(indexSearchResult, totalLines)));
             } else {
+              c.l('No index search results.');
               resolve(Optional.empty());
             }
           });
@@ -356,7 +360,10 @@ class StateService {
     if (totalLines - 1 < index) {
       index = totalLines - 1;
     }
-    return (totalLines - 1) + (index * -1) - 1;
+    index = (totalLines - 1) + (index * -1) - 1;
+    index = index < 0 ? 0 : index;
+
+    return index;
   }
 
   async reindexLogFile() {
