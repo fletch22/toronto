@@ -668,6 +668,14 @@ class StateService {
 
     return mapIds;
   }
+
+  async nukeAndPave() {
+    if (this.stateIndex.length > 0) {
+      await this.rollbackTo(this.stateIndex[0]);
+    }
+
+    return { result: 'Success' };
+  }
 }
 
 export default new StateService();

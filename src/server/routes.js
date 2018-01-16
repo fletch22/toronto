@@ -85,7 +85,12 @@ export const setupNormalRoutes = (app) => {
         break;
       }
       case 'restoreFromDisk': {
-        stateService.restoreFromDisk();
+        await stateService.restoreFromDisk();
+        res.send(JSON.stringify({ result: 'Success' }));
+        break;
+      }
+      case 'nukeAndPave': {
+        stateService.nukeAndPave();
         res.send(JSON.stringify({ result: 'Success' }));
         break;
       }

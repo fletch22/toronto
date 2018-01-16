@@ -18,8 +18,12 @@ class RestService extends Service {
     return this.fetch(`${this.url}/component/getExceptionForTesting`, 'GET', value);
   }
 
-  nukeAndPave() {
+  nukeAndPaveOld() {
     return this.fetch(`${this.url}/component/nukeAndPave`, 'POST');
+  }
+
+  nukeAndPave() {
+    return this.fetch(`${this.getNodeServerRootUrl()}/states?action=nukeAndPave`, 'POST');
   }
 
   async persistToDiskOld() {

@@ -401,5 +401,31 @@ describe('StateService', () => {
     // Assert
     expect(hashCode).toEqual(1728154470);
   });
+
+  it('should destroy everything when nuke and pave is called.', async () => {
+    // Arrange
+    const rollbackToStub = sandbox.stub(stateService, 'rollbackTo').returns(Promise.resolve());
+
+    stateService.stateIndex = ['123'];
+
+    // Act
+    const result = await stateService.nukeAndPave();
+
+    // Assert
+    expect(rollbackToStub.callCount).toBe(1);
+  });
+
+  it('should not call nukeAndPave if nothing is in the stateIndex.', async () => {
+    // Arrange
+    const rollbackToStub = sandbox.stub(stateService, 'rollbackTo').returns(Promise.resolve());
+
+    stateService.stateIndex = [];
+
+    // Act
+    const result = await stateService.nukeAndPave();
+
+    // Assert
+    expect(rollbackToStub.callCount).toBe(0);
+  });
 });
 
