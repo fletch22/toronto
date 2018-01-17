@@ -74,12 +74,8 @@ class StateService {
   transformToPersistState(statePackage) {
     const stateInfo = {};
     stateInfo[CLIENT_ID_MARKER] = statePackage.clientId;
-    stateInfo.state = statePackage.state;
 
-    if (!!statePackage.originalState) {
-      const state = JSON.parse(statePackage.originalState);
-      stateInfo.stuntDoubleReplacedState = this.replaceStuntDoubles(state);
-    }
+    stateInfo.state = this.replaceStuntDoubles(JSON.parse(statePackage.state));
 
     return stateInfo;
   }
@@ -88,7 +84,7 @@ class StateService {
     const persistedState = JSON.parse(searchResult.line);
 
     return {
-      state: JSON.parse(persistedState.state),
+      state: persistedState.state,
       clientId: persistedState[CLIENT_ID_MARKER],
       indexOfReturnedState: this.toggleIndexStartPoint(totalLines, searchResult.stopOnIndex)
     };
@@ -229,7 +225,7 @@ class StateService {
   }
 
   transformMostRecentPersistedState(persistedState) {
-    return { state: JSON.parse(persistedState.state), clientId: persistedState[CLIENT_ID_MARKER], indexOfReturnedState: 0 };
+    return { state: persistedState.state, clientId: persistedState[CLIENT_ID_MARKER], indexOfReturnedState: 0 };
   }
 
   async findEarliestStateInFile() {

@@ -23,8 +23,8 @@ export const setupNormalRoutes = (app) => {
   });
 
   app.post(`${apiPath}/statePackages/`, (req, res) => {
-    stateService.persistStatePackage(req.body).then(() => {
-      res.send(responseSuccess);
+    stateService.persistStatePackage(req.body).then((result) => {
+      res.send(result);
     });
   });
 

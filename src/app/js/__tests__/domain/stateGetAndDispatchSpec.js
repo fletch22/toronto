@@ -73,26 +73,4 @@ describe('Current state retriever', () => {
       })
       .catch(done);
   });
-
-  it('should reset state to currently selected state when invoked', (done) => {
-
-    stateGetAndDispatch.index = 2;
-    const deriveState = sandbox.stub(stateRetriever, 'deriveState').returns(Promise.resolve({}));
-    const dispatch = sandbox.mock();
-
-    const data = {
-      state: '{}',
-      isEarliestState: false,
-      transactionId: 123
-    };
-
-    const promiseTest = stateGetAndDispatch.successHandler(data, dispatch, 2);
-
-    promiseTest.then(() => {
-      expect(deriveState.called).to.equal(false);
-      done();
-    });
-
-    promiseTest.catch(done);
-  });
 });

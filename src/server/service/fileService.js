@@ -17,7 +17,7 @@ class FileService {
             if (!err) {
               fs.fdatasync(fd, () => {
                 fs.close(fd, () => {
-                  resolve();
+                  resolve(data);
                 });
               });
             } else {

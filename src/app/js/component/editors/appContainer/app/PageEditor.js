@@ -1,12 +1,7 @@
 import React, { PropTypes } from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Tabs, Tab } from 'react-bootstrap';
-import MetaData from '../../../dashboard/app/website/page/MetaData';
-import graphTraversal from '../../../../state/graphTraversal';
-import { actionUpdateViewPropertyValue } from '../../../../actions/index';
 import Body from '../../../../component/bodyChildren/body/Body';
-import borderScrivenerUtils from "../../../utils/borderScrivenerUtils";
+import borderScrivenerUtils from '../../../utils/borderScrivenerUtils';
 
 class PageEditor extends React.Component {
   render() {

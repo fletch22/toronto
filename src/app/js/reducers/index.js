@@ -144,10 +144,10 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.INITIALIZE_F22_APP: {
-      const islandView = dashboardIslandViewFactory.createInstance(stateNew.model.appContainer);
-      stateNew.views.push(islandView);
-
       if (!stateNew.hasInitialStateBeenSaved) {
+        const islandView = dashboardIslandViewFactory.createInstance(stateNew.model.appContainer);
+        stateNew.views.push(islandView);
+
         stateNew.hasInitialStateBeenSaved = true;
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       }
@@ -355,9 +355,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.WIZARD.ConfigureDdl.SelectCollectionSlide.SELECT_DATA_MODEL: {
+      c.l('SELECT_DATA_MODEL ...');
       const payload = action.payload;
 
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardId);
+
+      c.lo(viewModelWizard.viewModel.viewModel, 'vMW: ');
 
       viewModelWizard.dataModelId = payload.selectedDataModelId;
       viewModelWizard.dataModelLabel = payload.selectedDataModelLabel;

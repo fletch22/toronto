@@ -7,7 +7,6 @@ import StatePackager from '../service/StatePackager';
 import actionComponentCreator from '../reducers/viewModelFactory';
 import ComponentTypes from '../domain/component/ComponentTypes';
 import dancePartnerSynchronizer from '../views/dancePartnerSynchronizer';
-import deepDiff from 'deep-diff';
 
 class ViewModelCreatorService {
 
@@ -63,7 +62,7 @@ class ViewModelCreatorService {
           return stateSyncService.saveState(statePackage)
             .then((result) => {
               console.debug('Success Callback.');
-              return Promise.resolve(result);
+              return Promise.resolve(result.state);
             })
             .catch((error) => {
               console.debug('Failure Callback.');

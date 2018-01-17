@@ -2,54 +2,15 @@ import Service from './Service';
 
 class RestService extends Service {
 
-  getAppContainer() {
-    return this.fetch(`${this.url}/appContainer/`, 'get');
-  }
-
-  getRoot() {
-    return this.fetch(`${this.url}/root/`, 'get');
-  }
-
-  addComponent(object) {
-    return this.fetch(`${this.url}/component`, 'POST', object);
-  }
-
-  getExceptionForTesting(value) {
-    return this.fetch(`${this.url}/component/getExceptionForTesting`, 'GET', value);
-  }
-
-  nukeAndPaveOld() {
-    return this.fetch(`${this.url}/component/nukeAndPave`, 'POST');
-  }
-
   nukeAndPave() {
     return this.fetch(`${this.getNodeServerRootUrl()}/states?action=nukeAndPave`, 'POST');
   }
 
-  async persistToDiskOld() {
-    await this.persistToDiskNode();
-
-    return this.fetch(`${this.url}/component/persistToDisk`, 'POST');
-  }
-
   persistToDisk() {
-    return this.persistToDiskNode();
-  }
-
-  persistToDiskNode() {
     return this.fetch(`${this.getNodeServerRootUrl()}/states?action=persistToDisk`, 'POST');
   }
 
-  async restoreFromDiskOld() {
-    await this.restoreFromDiskNode();
-    return this.fetch(`${this.url}/component/restoreFromDisk`, 'POST');
-  }
-
   restoreFromDisk() {
-    return this.restoreFromDiskNode();
-  }
-
-  restoreFromDiskNode() {
     return this.fetch(`${this.getNodeServerRootUrl()}/states?action=restoreFromDisk`, 'POST');
   }
 

@@ -12,6 +12,7 @@ class AppContainerService extends ComponentService {
     this.statePackager = new StatePackager();
   }
 
+  // TODO: Child ID is not passed in some invocations.
   addAppToState(state, label, childId) {
     const modelAppContainer = state.model.appContainer;
 
