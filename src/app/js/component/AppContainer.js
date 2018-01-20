@@ -49,7 +49,11 @@ const mapStateToProps = (state) => {
     const dashboardIslandView = _.find(state.views, (view) => {
       return view.viewType === ViewTypes.Dashboard.Island;
     });
-    if (dashboardIslandView) {
+    if (dashboardIslandView
+      && dashboardIslandView.viewModel
+      && Array.isArray(dashboardIslandView.viewModel.children)
+      && dashboardIslandView.viewModel.children.length > 0
+      && !!dashboardIslandView.viewModel.children[0]) {
       children = [].concat(dashboardIslandView.viewModel.children[0].viewModel.children);
     }
   }

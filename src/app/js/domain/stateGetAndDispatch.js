@@ -16,8 +16,6 @@ class StateGetAndDispatch {
   successHandler(data, dispatch) {
     const promise = new Promise((resolve) => {
       const state = data.state;
-      c.l(`IoRS: ${data.indexOfReturnedState}`);
-      c.l(`CID: ${data.clientId}`);
       if (state !== null) {
         this.currentStateClientId = data.clientId;
         this.index = data.indexOfReturnedState;

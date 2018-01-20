@@ -81,10 +81,9 @@ describe('Queue', () => {
 
     const saveStateArray = sandbox.spy(stateSyncService, 'saveStateArray');
     const fetch = sandbox.stub(stateSyncService, 'fetch').returns(Promise.resolve());
-    const rollbackAndFetchStateHistory = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
-    const getMostRecentHistoricalStateFromNode = sandbox.stub(stateSyncService, 'getMostRecentHistoricalStateFromNode');
+    const getMostRecentHistoricalState = sandbox.stub(stateSyncService, 'getMostRecentHistoricalState');
 
-    expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
+    expect(getMostRecentHistoricalState.callCount).to.equal(0);
 
     const queue = new Queue();
 
@@ -96,18 +95,16 @@ describe('Queue', () => {
 
     promise.then(() => {
       expect(0).to.equal(queueArray.length);
-      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
       expect(saveStateArray.callCount).to.equal(1);
-      expect(fetch.callCount).to.equal(2);
+      expect(fetch.callCount).to.equal(1);
       queueArray = queue.getAccumulator();
       expect(queue.getQueueArrayIsPaused()).to.equal(false);
-      expect(rollbackAndFetchStateHistory.callCount).to.equal(0);
-      expect(getMostRecentHistoricalStateFromNode.callCount).to.equal(0);
+      expect(getMostRecentHistoricalState.callCount).to.equal(0);
       done();
     });
   });
 
-  it('should get an queue error event emitted when processing.', (done) => {
+  it('should get a queue error event emitted when processing.', (done) => {
 
     const error = {
       url: 'http:/goldilocks.ccc',

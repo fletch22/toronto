@@ -146,20 +146,6 @@ class Queue {
           })
           .catch((error) => {
             queue.blockadeAndObliterate();
-
-            // Note this is complex, but there exists scenarios of defaultState saves unintentionally submitting and saving
-            // after a failed defaultState. To mitigate this risk we send a log to the server. The log is exhaustive (100+ items at least) so we are somewhat sure
-            // the server can tell us the last known good save defaultState.
-            stateSyncService.determineLastGoodState(this.gatherFromAuditLog())
-              .then((result) => {
-                queue.emitEventRollbackState(result.clientId, JSON.parse(result.stateJson));
-              })
-              .catch((errorInner) => {
-                const errorObject = ServerErrorTransformer.transform(errorInner);
-
-                queue.emitEventError(errorObject);
-              });
-
             reject(error);
           });
       });

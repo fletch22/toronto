@@ -25,7 +25,7 @@ describe('StateService', () => {
 
   const countLines = (str) => str.replace(/[^\n]/g, '').length;
 
-  it('Should work correctly.', () => {
+  test.only('Should work correctly.', () => {
     // Arrange]
     const states = [
       { foo: 'bar' },
@@ -39,12 +39,14 @@ describe('StateService', () => {
     };
 
     const writeStateToFileStub = sandbox.stub(stateService, 'writeStateToFile');
+    const transformToPersistStateStub = sandbox.stub(stateService, 'transformToPersistState');
 
     // Act
     stateService.groupAndWrite(persistGrouping);
 
     // Assert
     expect(writeStateToFileStub.callCount).toBe(2);
+    expect(transformToPersistStateStub.callCount).toBe(6);
 
     const combinedLines = writeStateToFileStub.getCall(0).args[1];
 

@@ -68,17 +68,16 @@ describe('routes', () => {
 
   it('should process sent statePackage correctly.', async () => {
     // Arrange
-    const res = app.makeResponse((err, data) => {
-
-    });
+    const res = app.makeResponse((err, data) => {});
 
     let actualResult = 'foo';
-
     res.send = (result) => {
       actualResult = result;
     };
 
-    const promise = Promise.resolve();
+    const expectedResult = { foo: 'bar' };
+
+    const promise = Promise.resolve(expectedResult);
 
     const pspMock = sandbox.stub(stateService, 'persistStatePackage').returns(promise);
 
@@ -93,7 +92,7 @@ describe('routes', () => {
     await promise;
 
     expect(pspMock.calledOnce).toEqual(true);
-    expect(actualResult).toBe('{"result":"success"}');
+    expect(JSON.stringify(actualResult)).toBe('{"foo":"bar"}');
   });
 
   it('should process get state by index correctly.', async () => {

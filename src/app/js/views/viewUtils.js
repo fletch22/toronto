@@ -8,10 +8,6 @@ class ViewUtils {
   }
 
   findSingle(viewType, state) {
-
-    c.lo(state.views, 'state.views: ');
-    c.l(`ViewType: ${viewType}`);
-
     const collection = _.filter(state.views, (view) => {
       return view.viewType === viewType;
     });

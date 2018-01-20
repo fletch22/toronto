@@ -26,8 +26,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
   const appContainerDom = stateNew.dom.view.appContainer;
 
   borderScrivenerUtils.domActionSyncer(stateNew);
-
-  c.l(`Action Type: ${action.type}`);
+  // c.l(`Action Type: ${action.type}`);
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
@@ -355,12 +354,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.WIZARD.ConfigureDdl.SelectCollectionSlide.SELECT_DATA_MODEL: {
-      c.l('SELECT_DATA_MODEL ...');
       const payload = action.payload;
 
       const viewModelWizard = graphTraversal.find(stateNew, payload.wizardId);
-
-      c.lo(viewModelWizard.viewModel.viewModel, 'vMW: ');
 
       viewModelWizard.dataModelId = payload.selectedDataModelId;
       viewModelWizard.dataModelLabel = payload.selectedDataModelLabel;
