@@ -38,7 +38,8 @@ class Island extends React.Component {
 }
 
 Island.propTypes = {
-  child: PropTypes.object.isRequired
+  child: PropTypes.object.isRequired,
+  parentId: PropTypes.string
 };
 
 export default Island;

@@ -30,7 +30,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
-      const node = graphTraversal.find(appContainerDom, action.modelId);
+      const node = graphTraversal.find(state, action.modelId);
 
       if (!node) {
         console.error('Could not find node to toggle header menu.');

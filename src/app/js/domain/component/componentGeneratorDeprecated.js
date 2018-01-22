@@ -15,7 +15,8 @@ import divModelFactory from './divModelFactory';
 import dataModelFactory from './dataModelModelFactory';
 import dataFieldModelFactory from './dataFieldModelFactory';
 
-class ComponentGenerator {
+
+class ComponentGeneratorDeprecated {
 
   createAppContainer(model) {
     const modelChild = appContainerModelFactory.createInstance(model);
@@ -175,5 +176,5 @@ class ComponentGenerator {
   }
 }
 
-export default new ComponentGenerator();
+export default new ComponentGeneratorDeprecated();
 

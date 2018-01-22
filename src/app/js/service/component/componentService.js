@@ -3,6 +3,8 @@ import graphTraversal from '../../state/graphTraversal';
 import _ from 'lodash';
 import StatePackager from '../../service/StatePackager';
 import dancePartnerSynchronizer from '../../views/dancePartnerSynchronizer';
+import dashboardIslandViewFactory from "../../views/DashboardIslandViewModelFactory";
+import stateTraversal from "../../state/stateTraversal";
 
 // NOTE: Deprecated. Do not use parallel dom anymore.
 class ComponentService {
@@ -19,10 +21,11 @@ class ComponentService {
     const parent = graphTraversal.find(appContainerModel, parentId);
     this.removeChildFromParent(parent, childId);
 
-    dancePartnerSynchronizer.update(stateNew);
+    const island = stateTraversal.findIslandWithId(stateNew, parentId);
+    dashboardIslandViewFactory.syncModelToViewModel(stateNew, island);
 
-    const statePackage = this.statePackager.package(JSON.stringify(stateOld), JSON.stringify(stateNew));
-    return stateSyncService.saveState(statePackage);
+    // const statePackage = this.statePackager.package(JSON.stringify(stateOld), JSON.stringify(stateNew));
+    // return stateSyncService.saveState(statePackage);
   }
 
   removeChildFromParent(parent, childId) {
@@ -51,11 +54,11 @@ class ComponentService {
     return stateSyncService.saveState(statePackage);
   }
 
-  stateInjector(parentModel, parentDom, component) {
+  stateInjector(parentModel, viewParentNode, component) {
     parentModel.children.push(component.model);
 
     if (component.dom !== null) {
-      parentDom.children.push(component.dom);
+      viewParentNode.children.push(component.dom);
     }
   }
 }

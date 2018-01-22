@@ -64,7 +64,6 @@ class DashboardIslandViewModelFactory {
   syncModelToViewModel(state, viewModel) {
     const appContainer = state.model.appContainer;
 
-    /* eslint-disable  no-param-reassign */
     this.updatePropertiesInVmBase(viewModel, appContainer);
 
     this.addNewChildren(appContainer, viewModel);

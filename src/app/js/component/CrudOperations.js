@@ -3,26 +3,34 @@ import crudActionCreator from '../actions/crudActionCreator';
 import ComponentService from '../service/component/componentService';
 import modalDispatcher from './modals/modalDispatcher';
 import graphTraversal from '../state/graphTraversal';
+import { actionSetState } from '../actions';
+import stateSyncService from '../service/stateSyncService';
+import StatePackager from '../service/StatePackager';
 
 class CrudOperations {
 
-  removeNode(id, successCallback) {
+  removeNode(viewModel) {
     const removeAppCallback = (dispatch, state) => {
-      const model = graphTraversal.find(state.model, id);
-
       const stateNew = _.cloneDeep(state);
 
+      const model = graphTraversal.find(stateNew.model, viewModel.viewModel.id);
+
+      const viewModelActual = graphTraversal.find(stateNew, viewModel.id);
+      if (!viewModelActual) {
+        console.error('Could not find node to toggle header menu.');
+        return stateNew;
+      }
+      viewModelActual.isShowingHeaderMenu = !viewModelActual.isShowingHeaderMenu;
+
       const componentService = new ComponentService();
-      const promise = componentService.delete(stateNew, state, model.parentId, model.id);
+      componentService.delete(stateNew, state, model.parentId, model.id);
 
-      promise.then((obj) => {
-        if (successCallback) successCallback();
-        Promise.resolve(obj);
-      }).catch((error) => {
-        modalDispatcher.dispatchErrorModal(error, `There was an error removing the ${model.typeLabel}.`, dispatch);
-      });
-
-      return promise;
+      const statePackager = new StatePackager();
+      const statePackage = statePackager.package(JSON.stringify(state), JSON.stringify(stateNew));
+      return stateSyncService.saveState(statePackage)
+        .then((result) => {
+          return result.state;
+        });
     };
 
     return crudActionCreator.invoke(removeAppCallback);

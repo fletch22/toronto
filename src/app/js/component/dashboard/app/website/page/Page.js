@@ -6,11 +6,8 @@ import crudComponentOperations from '../../../../CrudOperations';
 import viewModelCreator from '../../../../../component/utils/viewModelCreator';
 
 class Page extends React.Component {
-
   render() {
     const children = (this.props.children) ? this.props.children : [];
-
-    // <Header headerTextValue={this.props.pageName} modelNodeId={this.props.id} parentModelNodeId={this.parentId} onClickClose={this.props.onClickRemove} onChangeLabel={this.props.onChangeLabel} />
 
     return (
       <div>
@@ -33,16 +30,11 @@ class Page extends React.Component {
 Page.propTypes = {
   id: PropTypes.any.isRequired,
   viewModel: PropTypes.object,
-  parentId: PropTypes.string,
   pageName: PropTypes.string,
   children: PropTypes.arrayOf(React.PropTypes.object),
   onClickRemove: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
-
-function remove(component) {
-  return crudComponentOperations.removeNode(component);
-}
 
 function changePageName(dispatch, ownProps) {
   viewModelCreator.update(dispatch, ownProps.viewModel);
@@ -56,9 +48,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClickMarkAsDisplayField: () => {
-      dispatch(remove(ownProps));
-    },
     onChangeLabel: () => {
       changePageName(dispatch, ownProps);
     }

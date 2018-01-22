@@ -25,7 +25,7 @@ describe('StateService', () => {
 
   const countLines = (str) => str.replace(/[^\n]/g, '').length;
 
-  test.only('Should work correctly.', () => {
+  test('Should work correctly.', () => {
     // Arrange]
     const states = [
       { foo: 'bar' },

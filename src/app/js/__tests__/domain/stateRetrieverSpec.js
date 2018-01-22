@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import stateRetriever from '../../domain/stateRetriever';
-import RestService from '../../service/restService';
 import stateSyncService from '../../service/stateSyncService';
 
 describe('Current state retriever', () => {

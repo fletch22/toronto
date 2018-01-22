@@ -73,7 +73,7 @@ describe('GraphTraversal', () => {
     const endDate = new Date().getTime();
 
     expect(object.id).to.equal('seed');
-    expect(endDate - startDate < 10).to.equal(true);
+    expect(endDate - startDate < 15).to.equal(true);
   });
 
   it('should find an object correctly..', () => {

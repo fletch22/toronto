@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Header from './header/Header';
 import crudComponentOperations from '../../../CrudOperations';
 import viewModelCreator from '../../../../component/utils/viewModelCreator';
+import graphTraversal from "../../../../state/graphTraversal";
 
 class Website extends React.Component {
 
@@ -12,7 +13,6 @@ class Website extends React.Component {
     return (
       <div className="dashboard-item dashboard-website col-lg-12">
         <Header viewModel={this.props.viewModel}
-          onClickClose={this.props.onClickRemoveApp}
           onChangeLabel={this.props.onChangeLabel}
         />
         {
@@ -28,13 +28,8 @@ class Website extends React.Component {
 Website.propTypes = {
   viewModel: PropTypes.object,
   children: PropTypes.array,
-  onClickRemoveApp: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
-
-function remove(component) {
-  return crudComponentOperations.removeNode(component);
-}
 
 function changeLabel(dispatch, ownProps) {
   viewModelCreator.update(dispatch, ownProps.viewModel);
@@ -43,15 +38,12 @@ function changeLabel(dispatch, ownProps) {
 const mapStateToProps = (state, ownProps) => {
   return {
     label: ownProps.viewModel.label,
-    children: ownProps.viewModel.viewModel.children
+    children: [].concat(ownProps.viewModel.viewModel.children)
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClickRemoveApp: () => {
-      dispatch(remove(ownProps));
-    },
     onChangeLabel: () => {
       changeLabel(dispatch, ownProps);
     }

@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import '../../../../../../../css/modules/container.scss';  // ''font-awesome/scss/font-awesome.scss';
 import ModelPropTextInput from '../../../../../editors/ModelPropTextInput';
 import 'rc-menu/assets/index.css';
 import HeaderMenu from './HeaderMenu';
@@ -28,6 +27,7 @@ class Header extends React.Component {
             viewModelId={this.props.viewModel.id}
             modelId={this.props.viewModel.viewModel.id}
             parentModelNodeId={this.props.viewModel.viewModel.parentId}
+            viewModel={this.props.viewModel}
           />
         </div>
       </div>

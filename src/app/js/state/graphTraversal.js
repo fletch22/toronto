@@ -45,16 +45,15 @@ class GraphTraversal {
   traverseAndCollect(o, propertyName) {
     let foundObjects = [];
 
+    if (o.hasOwnProperty(propertyName)) {
+      foundObjects.push(o);
+    }
+
     for (const key in o) {
-      if (o[key] !== null) {
-        const found = o[key].hasOwnProperty(propertyName);
-        if (found) {
-          foundObjects.push(o[key]);
-        } else {
-          if (typeof(o[key]) === 'object') {
-            const foundObjectsFromChildren = this.traverseAndCollect(o[key], propertyName);
-            foundObjects = foundObjects.concat(foundObjectsFromChildren);
-          }
+      if (!!o[key]) {
+        if (typeof(o[key]) === 'object') {
+          const foundObjectsFromChildren = this.traverseAndCollect(o[key], propertyName);
+          foundObjects = foundObjects.concat(foundObjectsFromChildren);
         }
       }
     }

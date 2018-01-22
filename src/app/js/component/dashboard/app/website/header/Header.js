@@ -36,7 +36,6 @@ Header.propTypes = {
   headerTextValue: PropTypes.string,
   isShowingHeaderMenu: PropTypes.bool,
   isTextInputFieldVisible: PropTypes.bool,
-  onClickClose: PropTypes.func,
   onChangeLabel: PropTypes.func,
   onClickOpenMenu: PropTypes.func
 };

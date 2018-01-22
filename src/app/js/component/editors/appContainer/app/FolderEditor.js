@@ -1,14 +1,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import containerService from '../../../../service/component/containerService';
-import graphTraversal from '../../../../state/graphTraversal';
 import ViewModelCopyEditor from '../../ViewModelCopyEditor';
 import PropPathTextInput from '../../PropPathTextInput';
 import EditorIdDisplay from '../../EditorIdDisplay';
 import EditorButtons from '../../EditorButtons';
 
-class FolderEditor extends ViewModelCopyEditor {
+import editorValuesPersistence from '../../../../views/dashboard/editorValuesPersistence';
 
+class FolderEditor extends ViewModelCopyEditor {
   render() {
     return (
       <div>
@@ -36,16 +35,17 @@ FolderEditor.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const view = graphTraversal.find(state, ownProps.id);
+  const model = { ...ownProps.model };
 
   return {
-    label: view.model.label
+    label: ownProps.model.label,
+    model
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSaveClick: () => {
-    ViewModelCopyEditor.createUpdate(dispatch, ownProps, containerService.createOrUpdate);
+    editorValuesPersistence.persist(dispatch, ownProps);
   }
 });
 

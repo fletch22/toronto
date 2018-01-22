@@ -42,7 +42,7 @@ AppContainer.propTypes = {
   dragNDrop: PropTypes.object
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   let children = [];
 
   if (state.views) {
@@ -54,6 +54,14 @@ const mapStateToProps = (state) => {
       && Array.isArray(dashboardIslandView.viewModel.children)
       && dashboardIslandView.viewModel.children.length > 0
       && !!dashboardIslandView.viewModel.children[0]) {
+
+      // c.lo(`ViewModel: ${JSON.stringify(dashboardIslandView.viewModel.children[0])}`);
+      // dashboardIslandView = { ...dashboardIslandView };
+      // dashboardIslandView.viewModel = { ...dashboardIslandView.viewModel };
+      // dashboardIslandView.viewModel.children = [].concat(dashboardIslandView.viewModel.children);
+      // dashboardIslandView.viewModel.children[0] = { ...dashboardIslandView.viewModel.children[0] };
+      // dashboardIslandView.viewModel.children[0].viewModel = { ...dashboardIslandView.viewModel.children[0].viewModel };
+
       children = [].concat(dashboardIslandView.viewModel.children[0].viewModel.children);
     }
   }

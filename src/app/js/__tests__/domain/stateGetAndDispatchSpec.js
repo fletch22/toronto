@@ -1,8 +1,6 @@
 import { expect } from 'chai';
-import RestService from '../../service/restService';
 import stateSyncService from '../../service/stateSyncService';
 import stateGetAndDispatch from '../../domain/stateGetAndDispatch';
-import stateRetriever from '../../domain/stateRetriever';
 
 
 describe('Current state retriever', () => {

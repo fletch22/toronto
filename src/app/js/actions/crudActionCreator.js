@@ -1,6 +1,8 @@
 import { actionSetState } from '../actions';
 import statePersisterWorkerClient from '../worker/statePersisterWorkerClient';
 import GenericListener from '../domain/message/genericListener';
+import ViewTypes from "../views/ViewTypes";
+import _ from 'lodash';
 
 class CrudActionCreator {
 
@@ -21,9 +23,10 @@ class CrudActionCreator {
 
           service(dispatch, getState())
             .then((response) => {
+              c.l('Setting state...');
               dispatch(actionSetState(response));
               statePersisterWorkerClient.unblockade();
-              if (successCallback !== undefined) {
+              if (!!successCallback) {
                 successCallback();
               }
               return Promise.resolve();

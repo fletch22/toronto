@@ -14,12 +14,11 @@ class Folder extends React.Component {
       <div>
         <div className="dashboard-item dashboard-webfolder col-sm-12">
           <Header viewModel={this.props.viewModel}
-            onClickClose={this.props.onClickRemove}
             onChangeLabel={this.props.onChangeLabel}
           />
           {
             children.map((child) =>
-              <Island key={child.id} child={child} />
+              <Island key={child.id} child={child} parentId={this.props.viewModel.id} />
             )
           }
         </div>
@@ -32,13 +31,8 @@ Folder.propTypes = {
   viewModel: PropTypes.object,
   label: PropTypes.string.isRequired,
   children: PropTypes.arrayOf(React.PropTypes.object),
-  onClickRemove: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
-
-function remove(component) {
-  return crudComponentOperations.removeNode(component);
-}
 
 function changeLabel(dispatch, ownProps) {
   viewModelCreator.update(dispatch, ownProps.viewModel);
@@ -53,9 +47,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClickRemoveApp: () => {
-      dispatch(remove(ownProps));
-    },
     onChangeLabel: () => {
       changeLabel(dispatch, ownProps);
     }

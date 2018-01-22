@@ -1,7 +1,7 @@
 import ComponentService from './componentService';
 import StatePackager from '../StatePackager';
 import stateSyncService from '../stateSyncService';
-import componentGenerator from '../../domain/component/componentGenerator';
+import componentGenerator from '../../domain/component/componentGeneratorDeprecated';
 import graphTraversal from '../../../js/state/graphTraversal';
 import dancePartnerSynchronizer from '../../views/dancePartnerSynchronizer';
 

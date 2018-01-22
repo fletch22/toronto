@@ -20,6 +20,7 @@ class HeaderMenu extends React.Component {
 
   render() {
     let menu;
+
     if (this.props.isShowingHeaderMenu) {
       menu = (<Menu onClick={this.props.onMenuClick} className="f22-menu">
         <MenuItem key={HeaderMenu.menuKeys().EDIT} className="menu-item">Edit</MenuItem>
@@ -41,18 +42,15 @@ class HeaderMenu extends React.Component {
 HeaderMenu.propTypes = {
   modelId: PropTypes.any,
   parentModelNodeId: PropTypes.number,
+  parentViewModelId: PropTypes.any,
   isShowingHeaderMenu: PropTypes.bool,
   onMenuClick: PropTypes.func,
-  onMouseLeave: PropTypes.func
+  onMouseLeave: PropTypes.func,
+  viewModel: PropTypes.object
 };
 
-const remove = (dispatch, id) => {
-
-  const successCallback = () => {
-    dispatch(actionAppToggleMenu(id));
-  };
-
-  return crudComponentOperations.removeNode(id, successCallback);
+const remove = (dispatch, viewModel) => {
+  return crudComponentOperations.removeNode(viewModel);
 };
 
 const toggleMenu = (dispatch, ownProps) => {
@@ -64,22 +62,26 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onMenuClick: (info) => {
     switch (info.key) {
       case HeaderMenu.menuKeys().ADD_FOLDER: {
-        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebFolder, { parentModelId: ownProps.modelId }));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebFolder, { parentModelId: ownProps.modelId, parentViewModelId: ownProps.parentViewModelId }));
         toggleMenu(dispatch, ownProps);
         break;
       }
       case HeaderMenu.menuKeys().EDIT: {
-        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebFolder, { modelNodeId: ownProps.modelId, parentModelNodeId: ownProps.parentModelNodeId }));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebFolder, { modelNodeId: ownProps.modelId, parentModelNodeId: ownProps.parentModelNodeId, parentViewModelId: ownProps.parentViewModelId }));
         toggleMenu(dispatch, ownProps);
         break;
       }
       case HeaderMenu.menuKeys().ADD_PAGE: {
-        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebPage, { parentModelId: ownProps.modelId }));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebPage, { parentModelId: ownProps.modelId, parentViewModelId: ownProps.parentViewModelId }));
         toggleMenu(dispatch, ownProps);
         break;
       }
       case HeaderMenu.menuKeys().REMOVE: {
-        dispatch(remove(dispatch, ownProps.modelId));
+
+        c.l('xxx');
+        c.lo(ownProps, 'ownProps: ');
+
+        dispatch(remove(dispatch, ownProps.viewModel));
         toggleMenu(dispatch, ownProps);
         break;
       }

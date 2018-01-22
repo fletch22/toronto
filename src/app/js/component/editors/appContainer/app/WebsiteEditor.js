@@ -6,6 +6,7 @@ import ViewModelCopyEditor from '../../ViewModelCopyEditor';
 import PropPathTextInput from '../../PropPathTextInput';
 import EditorIdDisplay from '../../EditorIdDisplay';
 import EditorButtons from '../../EditorButtons';
+import editorValuesPersistence from '../../../../views/dashboard/editorValuesPersistence';
 
 class WebsiteEditor extends ViewModelCopyEditor {
 
@@ -46,7 +47,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSaveClick: () => {
-    ViewModelCopyEditor.createUpdate(dispatch, ownProps, containerService.createOrUpdate);
+    editorValuesPersistence.persist(dispatch, ownProps);
   }
 });
 
