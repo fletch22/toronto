@@ -13,7 +13,6 @@ class Page extends React.Component {
       <div>
         <div className="dashboard-item dashboard-webpage col-sm-12">
           <Header viewModel={this.props.viewModel}
-            onClickClose={this.props.onClickRemove}
             onChangeLabel={this.props.onChangeLabel}
           />
           {
@@ -32,7 +31,6 @@ Page.propTypes = {
   viewModel: PropTypes.object,
   pageName: PropTypes.string,
   children: PropTypes.arrayOf(React.PropTypes.object),
-  onClickRemove: PropTypes.func,
   onChangeLabel: PropTypes.func
 };
 

@@ -41,11 +41,12 @@ HeaderMenu.propTypes = {
   isShowingHeaderMenu: PropTypes.bool,
   onMenuClick: PropTypes.func,
   modelNodeId: PropTypes.any,
-  onMouseLeave: PropTypes.func
+  onMouseLeave: PropTypes.func,
+  viewModel: PropTypes.object
 };
 
-function removeApp(id) {
-  return crudComponentOperations.removeNode(id);
+function removeApp(viewModel) {
+  return crudComponentOperations.removeNode(viewModel);
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -57,8 +58,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         break;
       }
       case HeaderMenu.menuKeys().REMOVE: {
-        dispatch(removeApp(ownProps.modelId));
-        dispatch(actionAppToggleMenu(ownProps.modelId));
+        dispatch(removeApp(ownProps.viewModel));
         break;
       }
       default:

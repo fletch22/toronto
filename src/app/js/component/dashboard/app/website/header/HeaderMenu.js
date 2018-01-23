@@ -46,16 +46,12 @@ HeaderMenu.propTypes = {
   parentModelNodeId: PropTypes.number,
   isShowingHeaderMenu: PropTypes.bool,
   onMenuClick: PropTypes.func,
-  onMouseLeave: PropTypes.func
+  onMouseLeave: PropTypes.func,
+  viewModel: PropTypes.object
 };
 
-const remove = (dispatch, id) => {
-
-  const successCallback = () => {
-    dispatch(actionAppToggleMenu(id));
-  };
-
-  return crudComponentOperations.removeNode(id, successCallback);
+const remove = (viewModel) => {
+  return crudComponentOperations.removeNode(viewModel);
 };
 
 const toggleMenu = (dispatch, ownProps) => {
@@ -81,7 +77,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         break;
       }
       case HeaderMenu.menuKeys().REMOVE: {
-        dispatch(remove(dispatch, ownProps.modelId));
+        dispatch(remove(ownProps.viewModel));
         break;
       }
       default:

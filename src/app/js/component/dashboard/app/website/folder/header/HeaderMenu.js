@@ -49,7 +49,7 @@ HeaderMenu.propTypes = {
   viewModel: PropTypes.object
 };
 
-const remove = (dispatch, viewModel) => {
+const remove = (viewModel) => {
   return crudComponentOperations.removeNode(viewModel);
 };
 
@@ -77,12 +77,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         break;
       }
       case HeaderMenu.menuKeys().REMOVE: {
-
-        c.l('xxx');
-        c.lo(ownProps, 'ownProps: ');
-
         dispatch(remove(dispatch, ownProps.viewModel));
-        toggleMenu(dispatch, ownProps);
         break;
       }
       default:

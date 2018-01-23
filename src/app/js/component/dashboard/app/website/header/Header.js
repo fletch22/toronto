@@ -24,6 +24,7 @@ class Header extends React.Component {
             viewModelId={this.props.viewModel.id}
             modelId={this.props.viewModel.viewModel.id}
             parentModelNodeId={this.props.viewModel.viewModel.parentId}
+            viewModel={this.props.viewModel}
           />
         </div>
       </div>
