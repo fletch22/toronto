@@ -26,7 +26,7 @@ class CrudActionCreator {
               c.l('Setting state...');
               dispatch(actionSetState(response));
               statePersisterWorkerClient.unblockade();
-              if (!!successCallback) {
+              if (successCallback !== undefined) {
                 successCallback();
               }
               return Promise.resolve();

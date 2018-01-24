@@ -1,5 +1,6 @@
 import viewModelFactory from '../reducers/viewModelFactory';
 import viewModelCreatorService from './viewModelCreatorService';
+import { actionSetCurrentBodyTool } from '../actions/bodyChildrenEditor/index';
 
 class BodyChildrenCreatorService {
 

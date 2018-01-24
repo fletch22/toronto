@@ -17,6 +17,7 @@ class DashboardIslandViewModelFactory {
     const appContainerClone = _.cloneDeep(appContainer);
 
     const children = [this.generateViewModel(viewModelId, appContainerClone)];
+    c.l(`Number of children in appContainerClone: ${children.length}`);
 
     return {
       id: viewModelId,

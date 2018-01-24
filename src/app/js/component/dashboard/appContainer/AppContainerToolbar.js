@@ -48,16 +48,18 @@ class AppContainerToolbar extends React.Component {
 
 function addAppLocal() {
   const addApp = (dispatch, state) => {
+
+    c.lo(state.dom, 'state.dom: ');
+
     const label = state.dom.view.appContainer.section.addNew.appLabel;
     const jsonStateOld = JSON.stringify(state);
     const stateNew = JSON.parse(jsonStateOld);
-    const promise = appContainerService.addAppAsync(stateNew, jsonStateOld, label);
 
-    promise.catch((error) => {
-      modalDispatch.dispatchErrorModal(error, 'There was an error creating the app.', dispatch);
-    });
-
-    return promise;
+    return appContainerService.addAppAsync(stateNew, jsonStateOld, label)
+      .then((result) => result.state)
+      .catch((error) => {
+        modalDispatch.dispatchErrorModal(error, 'There was an error creating the app.', dispatch);
+      });
   };
 
   return crudActionCreator.invoke(addApp);

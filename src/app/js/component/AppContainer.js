@@ -10,16 +10,21 @@ import DropMarker from '../component/bodyChildren/DropMarker';
 
 class AppContainer extends React.Component {
   render() {
+    const islands = this.props.islands.map((island) => {
+      const children = island.viewModel.children[0].viewModel.children;
+      return children.map((child) =>
+        <div className="container-fluid app-container">
+          <Island key={child.id} child={child} model="" />
+        </div>
+      );
+    });
+
     return (
       <div>
         <AppContainerToolbar />
-        <div className="container-fluid app-container">
-          {
-            this.props.children.map((child) =>
-              <Island key={child.id} child={child} model="" />
-            )
-          }
-        </div>
+        {
+          islands
+        }
         <PseudoModalWrangler />
         <BorderScrivener top={this.props.borderScrivener.top}
           left={this.props.borderScrivener.left}
@@ -36,43 +41,27 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.object).isRequired,
   appContainerChildren: PropTypes.arrayOf(PropTypes.object),
   borderScrivener: PropTypes.object,
-  dragNDrop: PropTypes.object
+  dragNDrop: PropTypes.object,
+  islands: PropTypes.array
 };
 
 const mapStateToProps = (state, ownProps) => {
-  let children = [];
-
+  let islands;
   if (state.views) {
-    const dashboardIslandView = _.find(state.views, (view) => {
+    islands = state.views.filter((view) => {
       return view.viewType === ViewTypes.Dashboard.Island;
     });
-    if (dashboardIslandView
-      && dashboardIslandView.viewModel
-      && Array.isArray(dashboardIslandView.viewModel.children)
-      && dashboardIslandView.viewModel.children.length > 0
-      && !!dashboardIslandView.viewModel.children[0]) {
-
-      // c.lo(`ViewModel: ${JSON.stringify(dashboardIslandView.viewModel.children[0])}`);
-      // dashboardIslandView = { ...dashboardIslandView };
-      // dashboardIslandView.viewModel = { ...dashboardIslandView.viewModel };
-      // dashboardIslandView.viewModel.children = [].concat(dashboardIslandView.viewModel.children);
-      // dashboardIslandView.viewModel.children[0] = { ...dashboardIslandView.viewModel.children[0] };
-      // dashboardIslandView.viewModel.children[0].viewModel = { ...dashboardIslandView.viewModel.children[0].viewModel };
-
-      children = [].concat(dashboardIslandView.viewModel.children[0].viewModel.children);
-    }
   }
 
   const borderScrivener = state.borderScrivener;
   const dragNDrop = state.dragNDrop;
 
   return {
-    children,
     borderScrivener,
-    dragNDrop
+    dragNDrop,
+    islands
   };
 };
 

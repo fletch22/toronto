@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import viewUtils from './viewUtils';
 import ViewTypes from '../views/ViewTypes';
 import dashboardIslandViewModelFactory from '../views/DashboardIslandViewModelFactory';

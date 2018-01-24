@@ -1,8 +1,11 @@
 import ComponentService from './componentService';
 import StatePackager from '../StatePackager';
 import stateSyncService from '../stateSyncService';
-import componentGenerator from '../../domain/component/componentGeneratorDeprecated';
-import dancePartnerSynchronizer from '../../views/dancePartnerSynchronizer';
+import ComponentTypes from '../../domain/component/ComponentTypes';
+import stateTraversal from '../../state/stateTraversal';
+import appModelFactory from '../../domain/component/appModelFactory';
+import DomFactory from "../../domain/component/DomFactory";
+import dashboardIslandViewFactory from "../../views/DashboardIslandViewModelFactory";
 
 // NOTE: Deprecated. Do not use parallel dom anymore.
 class AppContainerService extends ComponentService {
@@ -12,25 +15,28 @@ class AppContainerService extends ComponentService {
     this.statePackager = new StatePackager();
   }
 
-  // TODO: Child ID is not passed in some invocations.
-  addAppToState(state, label, childId) {
-    const modelAppContainer = state.model.appContainer;
+  addAppToState(state, label) {
+    const appContainer = state.model.appContainer;
 
-    const app = {
-      parentId: modelAppContainer.id,
-      label,
-      id: childId
+    const id = stateTraversal.getNextId(state.model);
+
+    let app = {
+      id,
+      parentId: appContainer.id,
+      label
     };
 
-    const component = componentGenerator.createApp(app);
-    const domAppContainer = state.dom.view.appContainer;
-    this.stateInjector(modelAppContainer, domAppContainer, component);
+    app = appModelFactory.createInstance(app);
+    appContainer.children.push(app);
+
+    const islandView = dashboardIslandViewFactory.createInstance(appContainer);
+
+    /* eslint-disable no-param-reassign */
+    state.views = [islandView];
   }
 
   addAppAsync(stateNew, jsonStateOld, label) {
     this.addAppToState(stateNew, label);
-
-    dancePartnerSynchronizer.update(stateNew);
 
     const statePackage = this.statePackager.package(jsonStateOld, JSON.stringify(stateNew));
     return stateSyncService.saveState(statePackage);

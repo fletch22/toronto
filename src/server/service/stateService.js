@@ -601,14 +601,15 @@ class StateService {
     const idsToReplace = result.idsToReplace;
     let highestId = result.highestId;
 
-    let modelString = JSON.stringify(model);
+    let stateString = JSON.stringify(state);
     idsToReplace.forEach((idOriginal) => {
       const nextId = highestId + 1;
-      modelString = modelString.replace(idOriginal, nextId);
+      c.l(`Replacing ${idOriginal} with ${nextId}`);
+      stateString = stateString.replace(new RegExp(idOriginal, 'g'), nextId);
       highestId = nextId;
     });
 
-    return { ...state, ...{ model: JSON.parse(modelString) } };
+    return JSON.parse(stateString);
   }
 
   getStuntDoubleInfo(stuntDoubles) {

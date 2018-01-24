@@ -35,6 +35,9 @@ const addDiv = (parentModelId, viewModelId, modelFactory) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addDiv: () => {
+
+      c.l(`ownProps.viewModel.viewModel.id: ${ownProps.viewModel.viewModel.id}`);
+
       dispatch(addDiv(ownProps.viewModel.viewModel.id, ownProps.viewModel.id, divModelFactory));
     }
   };

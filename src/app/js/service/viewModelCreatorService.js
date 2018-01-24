@@ -27,7 +27,7 @@ class ViewModelCreatorService {
           // might be synced without regard to ordinal impacts. Before finishing syncing a particular viewModel, it syncs with the global state model.
           viewModelChildren.forEach((viewModel) => {
             if (stateParentViewModel) {
-              const stateViewModel = _.find(stateParentViewModel.viewModel.children, {id: viewModel.id});
+              const stateViewModel = _.find(stateParentViewModel.viewModel.children, { id: viewModel.id });
               if (stateViewModel) {
                 Object.assign(stateViewModel, viewModel);
               } else {
