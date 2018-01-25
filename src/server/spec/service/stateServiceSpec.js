@@ -401,7 +401,7 @@ describe('StateService', () => {
     const hashCode = utilHashCode.hashCode(JSON.stringify(stateNew));
 
     // Assert
-    expect(hashCode).toEqual(1728154470);
+    expect(hashCode).toEqual(-496524590);
   });
 
   it('should destroy everything when nuke and pave is called.', async () => {
@@ -424,7 +424,7 @@ describe('StateService', () => {
     stateService.stateIndex = [];
 
     // Act
-    const result = await stateService.nukeAndPave();
+    await stateService.nukeAndPave();
 
     // Assert
     expect(rollbackToStub.callCount).toBe(0);

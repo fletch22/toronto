@@ -13,7 +13,7 @@ describe('The test rendered app', () => {
     sandbox.restore();
   });
 
-  it('should return the correct object', (done) => {
+  it('a should return the correct object', (done) => {
     const testRenderedApp = new TestRenderedApp(sandbox);
     const promise = testRenderedApp.setup(sandbox);
 
@@ -25,3 +25,4 @@ describe('The test rendered app', () => {
     });
   });
 });
+

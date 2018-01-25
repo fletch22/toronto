@@ -11,12 +11,19 @@ import DropMarker from '../component/bodyChildren/DropMarker';
 class AppContainer extends React.Component {
   render() {
     const islands = this.props.islands.map((island) => {
-      const children = island.viewModel.children[0].viewModel.children;
-      return children.map((child) =>
-        <div className="container-fluid app-container">
-          <Island key={child.id} child={child} model="" />
-        </div>
-      );
+      if (island.viewModel
+      && island.viewModel.children
+      && Array.isArray(island.viewModel.children)
+      && island.viewModel.children[0]
+      && island.viewModel.children[0].viewModel
+      && island.viewModel.children[0].viewModel.children) {
+        const children = island.viewModel.children[0].viewModel.children;
+        return children.map((child) =>
+          <div className="container-fluid app-container">
+            <Island key={child.id} child={child} model="" />
+          </div>
+        );
+      }
     });
 
     return (
