@@ -4,7 +4,7 @@ import Menu, { MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import { actionAppToggleMenu } from '../../../../../../actions/dashboard/app/index';
 import { actionCreatePseudoModalComponent, actionUpdateViewPropertyValue } from '../../../../../../actions/index';
-import ComponentTypes from '../../../../../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../../../../../common/domain/component/ComponentTypes';
 import '../../../../../../../css/modules/menu.scss';
 import crudComponentOperations from '../../../../../CrudOperations';
 

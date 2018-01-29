@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import modalDispatcher from '../component/modals/modalDispatcher';
 import crudActionCreator from '../actions/crudActionCreator';
-import graphTraversal from '../state/graphTraversal';
+import graphTraversal from '../../../common/state/graphTraversal';
 import stateSyncService from '../service/stateSyncService';
 import StatePackager from '../service/StatePackager';
 import actionComponentCreator from '../reducers/viewModelFactory';
-import ComponentTypes from '../domain/component/ComponentTypes';
+import ComponentTypes from '../../../common/domain/component/ComponentTypes';
 import dancePartnerSynchronizer from '../views/dancePartnerSynchronizer';
 
 class ViewModelCreatorService {

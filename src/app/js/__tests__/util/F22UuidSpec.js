@@ -1,4 +1,4 @@
-import F22Uuid from '../../util/f22Uuid';
+import F22Uuid from '../../../../common/util/f22Uuid';
 import { expect } from 'chai';
 import uuid from 'node-uuid';
 import _ from 'lodash';

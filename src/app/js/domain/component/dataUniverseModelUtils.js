@@ -1,4 +1,4 @@
-import ComponentTypes from './ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import _ from 'lodash';
 
 export const DataUniverseModelConstants = {

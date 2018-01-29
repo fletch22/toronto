@@ -1,5 +1,5 @@
 import deepDiff from 'deep-diff';
-import F22Uuid from '../util/f22Uuid';
+import F22Uuid from '../../../common/util/f22Uuid';
 
 class StatePackager {
 

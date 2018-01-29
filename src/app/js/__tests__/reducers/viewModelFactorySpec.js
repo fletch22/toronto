@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import layoutModelFactory from '../../domain/component/layoutModelFactory';
 import actionComponentCreator from '../../reducers/viewModelFactory';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 describe('viewModelFactory', () => {
   it('create a faithful model out of a view model', () => {

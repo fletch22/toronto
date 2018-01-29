@@ -5,6 +5,11 @@ import modalDispatcher from '../component/modals/modalDispatcher';
 import gridHelper from '../domain/collection/gridHelper';
 import { actionGridRowSaved, actionGridRowDelete } from '../actions/grid';
 import _ from 'lodash';
+import graphTraversal from '../../../common/state/graphTraversal';
+import ComponentTypes from '../../../common/domain/component/ComponentTypes';
+import StatePackager from '../service/StatePackager';
+import stateSyncService from '../service/stateSyncService';
+import crudActionCreator from "../actions/crudActionCreator";
 
 class GridService extends Service {
 
@@ -57,12 +62,13 @@ class GridService extends Service {
     dispatch(dispatchHelper());
   }
 
-  persist(dispatch, ownProps, rowIdsUpdated, updatePropAndVals) {
+  persist(state, dispatch, ownProps, rowIdsUpdated, updatePropAndVals) {
+    const stateOld = _.cloneDeep(state);
     const grid = ownProps.gridViewModel;
 
     let rawRows = null;
     if (rowIdsUpdated.length === 0) {
-      const rows = gridHelper.addNewRow(grid.data.columns, []);
+      const rows = gridHelper.addNewRow(state, grid.data.columns, []);
       rawRows = [rows[0]];
     } else {
       rawRows = rowIdsUpdated.map((id) => {
@@ -80,42 +86,56 @@ class GridService extends Service {
       return;
     }
 
-    const rowsToPersist = rawRows.map((rawRow) => {
-      return gridHelper.convertRowToPersist(rawRow);
+    // c.lo(rawRows, 'rawRows: ');
+
+    const rowsToPersist = rawRows.map((row) => {
+      return gridHelper.convertRowToPersist(row);
     });
 
+    // c.lo(rowsToPersist, 'rowsToPersist: ');
+
     const persistObject = {
-      collectionId: grid.data.collectionId,
+      collectionId: grid.data.dataModelId,
       rows: rowsToPersist
     };
 
-    const successCallback = (result) => {
-      result.persistedIds.forEach((id, index) => {
-        gridHelper.setId(rawRows[index], id);
+    const dataModel = graphTraversal.find(state.model, grid.data.collectionId);
+    const row = [];
+    const dataFields = dataModel.children.filter((child) => child.typeLabel === ComponentTypes.DataField);
+
+    // c.lo(dataFields, 'dataFields: ');
+
+    persistObject.rows.forEach((persistRow) => {
+      // c.lo(persistRow, 'persistRow: ');
+      row[0] = persistRow[gridHelper.CONSTANTS.IDENTITY_KEY_NAME];
+      dataFields.forEach((field) => {
+        row.push(persistRow[field.label]);
       });
-      dispatch(actionGridRowSaved(ownProps.gridViewModel.id, rawRows));
-    };
+      // c.l('inserting row to beginning of array.');
+      // row.unshift(persistRow[gridHelper.CONSTANTS.IDENTITY_KEY_NAME]);
+    });
+
+    dataModel.userData.unshift(row);
+    c.lo(dataModel.userData, 'dataModel.userData in persist: ');
+
+    // const successCallback = (result) => {
+    //   result.persistedIds.forEach((id, index) => {
+    //     gridHelper.setId(rawRows[index], id);
+    //   });
+    //   dispatch(actionGridRowSaved(ownProps.gridViewModel.id, rawRows));
+    // };
+    //
+    // c.lo(persistObject, 'persistObject: ');
 
     const dispatchHelper = () => {
-      const createUpdate = (cuDispatch) => {
-        try {
-          return collectionService.saveOrb(persistObject)
-            .then((result) => {
-              console.debug('Success Callback.');
-              return Promise.resolve(result);
-            })
-            .catch((error) => {
-              console.debug('Failure Callback.');
-              modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to create/update record.', cuDispatch);
-              return Promise.reject(error);
-            });
-        } catch (error) {
-          console.error(error);
-          return Promise.reject(error);
-        }
+      const persist = () => {
+        const statePackager = new StatePackager();
+        const statePack = statePackager.package(JSON.stringify(stateOld), JSON.stringify(state));
+        return stateSyncService.saveState(statePack)
+          .then((result) => result.state);
       };
 
-      return blockadeAndDrainService.invoke(createUpdate, successCallback);
+      return crudActionCreator.invoke(persist);
     };
 
     dispatch(dispatchHelper());

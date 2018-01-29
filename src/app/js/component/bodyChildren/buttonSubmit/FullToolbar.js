@@ -9,8 +9,8 @@ import { actionSetPageNeedsSaving } from '../../../actions/bodyChildrenEditor/in
 import validationUtils from '../../../util/validationUtil';
 import Button from '../../../component/bodyChildren/toolbar/Button';
 import stateUtil from '../../../util/stateUtil';
-import graphTraversal from '../../../state/graphTraversal';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
+import graphTraversal from '../../../../../common/state/graphTraversal';
+import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 import actionBodyChildSelectorHandler from '../../../reducers/actionBodyChildSelectorHandler';
 import _ from 'lodash';
 

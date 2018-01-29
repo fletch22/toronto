@@ -66,7 +66,6 @@ class StateGetAndDispatch {
   }
 
   getMostRecentState(dispatch) {
-    c.l('Getting most recent state...');
     const promise = stateSyncService.getMostRecentHistoricalState();
 
     promise.then((data) => {

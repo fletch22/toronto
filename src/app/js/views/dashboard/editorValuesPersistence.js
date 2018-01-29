@@ -1,6 +1,6 @@
 import stateSyncService from '../../service/stateSyncService';
 import webFolderModelFactory from '../../domain/component/webFolderModelFactory';
-import graphTraversal from '../../state/graphTraversal';
+import graphTraversal from '../../../../common/state/graphTraversal';
 import ViewModelCopyEditor from '../../component/editors/ViewModelCopyEditor';
 import dashboardIslandViewFactory from '../DashboardIslandViewModelFactory';
 import StatePackager from '../../service/StatePackager';

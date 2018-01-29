@@ -4,8 +4,8 @@ import Button from '../toolbar/Button';
 import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
 import buttonSubmitModelFactory from '../../../domain/component/buttonSubmitModelFactory';
 import stateUtil from '../../../util/stateUtil';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
-import graphTraversal from '../../../state/graphTraversal';
+import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
+import graphTraversal from '../../../../../common/state/graphTraversal';
 
 class AddButtonSubmit extends React.Component {
   render() {

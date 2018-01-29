@@ -2,7 +2,8 @@ import React from 'react';
 import '../../../../css/f22-react-grid-layout.css';
 import BodyChild from '../BodyChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
+// import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 class DropDownListbox extends BodyChild {
   render() {

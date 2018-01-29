@@ -6,7 +6,7 @@ import webPageModelFactory from './webPageModelFactory';
 import datastoreModelFactory from './datastoreModelFactory';
 import dataUniverseModelFactory from './dataUniverseModelFactory';
 import DomFactory from './DomFactory';
-import ComponentTypes from '../component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import layoutModelFactory from './layoutModelFactory';
 import layoutMinionModelFactory from './layoutMinionModelFactory';
 import ddlModelFactory from './ddlModelFactory';

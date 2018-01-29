@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import containerService from '../../../../service/component/containerService';
-import graphTraversal from '../../../../state/graphTraversal';
+import graphTraversal from '../../../../../../common/state/graphTraversal';
 import ViewModelCopyEditor from '../../ViewModelCopyEditor';
 import PropPathTextInput from '../../PropPathTextInput';
 import EditorIdDisplay from '../../EditorIdDisplay';

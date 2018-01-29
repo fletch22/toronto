@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { expect } from 'chai';
 import actionBodyChildSelectorHandler from '../../reducers/actionBodyChildSelectorHandler';
 import viewModelFactory from '../../reducers/viewModelFactory';
-import graphTraversal from '../../state/graphTraversal';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import graphTraversal from '../../../../common/state/graphTraversal';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 describe('actionBodySelector', () => {
 

@@ -1,4 +1,4 @@
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import stateUtil from '../../util/stateUtil';
 
 class DdlModelUtils {

@@ -14,8 +14,12 @@ class RestService extends Service {
     return this.fetch(`${this.getNodeServerRootUrl()}/states?action=restoreFromDisk`, 'POST');
   }
 
-  getCollection(id) {
+  getCollectionOld(id) {
     return this.fetch(`${this.url}/userData/collections/${id}`, 'GET');
+  }
+
+  getCollection(id) {
+    return this.fetch(`${this.getNodeServerRootUrl()}/userData/collections/${id}`, 'GET');
   }
 
   saveOrb(object) {

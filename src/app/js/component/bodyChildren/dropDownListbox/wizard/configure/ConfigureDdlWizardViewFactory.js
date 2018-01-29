@@ -1,4 +1,4 @@
-import f22Uuid from '../../../../../util/f22Uuid';
+import f22Uuid from '../../../../../../../common/util/f22Uuid';
 import PseudoModalTypes from '../../../../../component/modals/PseudoModalTypes';
 import gridViewModelFactory from '../../../../../domain/collection/gridViewModelFactory';
 import dataUniverseModelUtils from '../../../../../domain/component/dataUniverseModelUtils';

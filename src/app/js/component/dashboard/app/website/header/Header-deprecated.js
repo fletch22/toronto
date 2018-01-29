@@ -4,7 +4,7 @@ import ModelPropTextInput from '../../../../editors/ModelPropTextInput';
 import 'rc-menu/assets/index.css';
 import HeaderMenu from './HeaderMenu';
 import { actionAppToggleMenu } from '../../../../../actions/dashboard/app';
-import graphTraversal from '../../../../../state/graphTraversal';
+import graphTraversal from '../../../../../../../common/state/graphTraversal';
 
 class Header extends React.Component {
 

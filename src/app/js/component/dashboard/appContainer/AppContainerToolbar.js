@@ -49,8 +49,6 @@ class AppContainerToolbar extends React.Component {
 function addAppLocal() {
   const addApp = (dispatch, state) => {
 
-    c.lo(state.dom, 'state.dom: ');
-
     const label = state.dom.view.appContainer.section.addNew.appLabel;
     const jsonStateOld = JSON.stringify(state);
     const stateNew = JSON.parse(jsonStateOld);

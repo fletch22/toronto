@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
 import modelGenerator from '../../../domain/component/modelGenerator';
 

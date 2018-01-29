@@ -1,6 +1,6 @@
 import ModelFactory from './ModelFactory';
-import f22Uuid from '../../util/f22Uuid';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import f22Uuid from '../../../../common/util/f22Uuid';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 class LayoutMinionFactory extends ModelFactory {
 

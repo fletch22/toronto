@@ -1,5 +1,5 @@
 import stateSyncService from '../stateSyncService';
-import graphTraversal from '../../state/graphTraversal';
+import graphTraversal from '../../../../common/state/graphTraversal';
 import _ from 'lodash';
 import StatePackager from '../../service/StatePackager';
 import dancePartnerSynchronizer from '../../views/dancePartnerSynchronizer';

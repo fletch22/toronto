@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import PseudoModalTypes from '../component/modals/PseudoModalTypes';
 import EditorNames from '../component/editors/EditorNames';
-import graphTraversal from '../state/graphTraversal';
-import f22Uuid from '../util/f22Uuid';
+import graphTraversal from '../../../common/state/graphTraversal';
+import f22Uuid from '../../../common/util/f22Uuid';
 import viewModelFactory from './viewModelFactory';
 
 class ActionPseudoModalEditorCreator {
@@ -11,18 +11,23 @@ class ActionPseudoModalEditorCreator {
     this.WEB_PAGE_ROOT = 'WEB_PAGE_ROOT';
   }
 
-  create(state, action) {
-    const type = action.payload.componentType;
+  createFromAction(state, action) {
+    const payload = action.payload;
+
+    return this.create(state, payload.options, payload.componentType);
+  }
+
+  create(state, options, type) {
     let viewName;
     let viewModel;
 
-    const options = _.cloneDeep(action.payload.options);
-    const modelNodeId = options.modelNodeId;
+    const optionsClone = _.cloneDeep(options);
+    const modelNodeId = optionsClone.modelNodeId;
     let model;
     if (modelNodeId) {
       model = _.cloneDeep(graphTraversal.find(state.model, modelNodeId));
     } else {
-      model = { parentId: action.payload.options.parentModelId, typeLabel: type };
+      model = { parentId: options.parentModelId, typeLabel: type };
     }
 
     if (!model.children) model.children = [];
@@ -60,7 +65,7 @@ class ActionPseudoModalEditorCreator {
       }
     }
 
-    const data = Object.assign({}, options, { id: f22Uuid.generate() }, { model }, { viewModel });
+    const data = Object.assign({}, optionsClone, { id: f22Uuid.generate() }, { model }, { viewModel });
 
     return {
       viewName,

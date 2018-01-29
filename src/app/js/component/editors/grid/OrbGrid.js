@@ -7,18 +7,20 @@ import collectionToGridDataTransformer from '../../../domain/collection/collecti
 
 class OrbGrid extends React.Component {
 
-  componentDidUpdate() {
-    const self = this;
-    if (this.props.needsToMakeDataRequest && !!this.props.collectionId && this.props.collectionId !== -1) {
-      collectionService.get(this.props.collectionId).then((result) => {
-        const data = collectionToGridDataTransformer.transform(result);
+  // componentDidUpdate() {
+  //   const self = this;
+  //   if (this.props.needsToMakeDataRequest && !!this.props.collectionId && this.props.collectionId !== -1) {
+  //     // collectionService.get(this.props.collectionId).then((result) => {
+  //     //   const data = collectionToGridDataTransformer.transform(result);
+  //     //
+  //     //   const props = self.props;
+  //     //   const dispatch = props.dispatch;
+  //     //   dispatch(actionShowModelData(props.gridViewModel.id, data));
+  //     // });
+  //   }
+  // }
 
-        const props = self.props;
-        const dispatch = props.dispatch;
-        dispatch(actionShowModelData(props.gridViewModel.id, data));
-      });
-    }
-  }
+  //
 
   render() {
     return (

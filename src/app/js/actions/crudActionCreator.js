@@ -23,7 +23,6 @@ class CrudActionCreator {
 
           service(dispatch, getState())
             .then((response) => {
-              c.l('Setting state...');
               dispatch(actionSetState(response));
               statePersisterWorkerClient.unblockade();
               if (successCallback !== undefined) {

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import Div from './div/Div';
 import DropDownListbox from './dropDownListbox/DropDownListbox';
 import ButtonSubmit from './buttonSubmit/ButtonSubmit';

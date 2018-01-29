@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import stateTraversal from '../../state/stateTraversal';
 
 class GridHelper {
 
@@ -11,13 +12,16 @@ class GridHelper {
     };
   }
 
-  addNewRow(columns, rows) {
+  addNewRow(state, columns, rows) {
     const newRow = {};
     columns.forEach((col) => {
       this.addPropAndValueToRow(newRow, col.key, '');
     });
-    this.addPropAndValueToRow(newRow, this.CONSTANTS.IDENTITY_KEY_NAME, this.CONSTANTS.NEW_ID_VALUE);
+
+    this.addPropAndValueToRow(newRow, this.CONSTANTS.IDENTITY_KEY_NAME, stateTraversal.getNextId(state.model));
+
     rows.unshift(newRow);
+
     return rows;
   }
 
@@ -50,20 +54,22 @@ class GridHelper {
 
   convertRowToPersist(row) {
     return {
-      id: row.id,
-      attributes: this.getAttributesForPersist(row)
+      id: row[this.CONSTANTS.IDENTITY_KEY_NAME],
+      fields: this.getFieldsForPersist(row)
     };
   }
 
-  getAttributesForPersist(row) {
+  getFieldsForPersist(row) {
     const clone = _.cloneDeep(row);
     delete clone[this.CONSTANTS.IDENTITY_KEY_NAME];
 
     const keys = Object.keys(clone);
     const attributes = {};
     keys.forEach((key) => {
-      const unprefixed = key.replace(new RegExp(this.CONSTANTS.COLUMN_SAFETY_PREFIX, 'g'), '');
-      attributes[unprefixed] = clone[key];
+      if (key !== this.CONSTANTS.IDENTITY_KEY_NAME) {
+        const unprefixed = key.replace(new RegExp(this.CONSTANTS.COLUMN_SAFETY_PREFIX, 'g'), '');
+        attributes[unprefixed] = clone[key];
+      }
     });
     return attributes;
   }

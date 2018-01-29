@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Button from '../toolbar/Button';
 import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
-import graphTraversal from '../../../state/graphTraversal';
+import graphTraversal from '../../../../../common/state/graphTraversal';
 import divModelFactory from '../../../domain/component/divModelFactory';
 
 class AddDiv extends React.Component {
@@ -35,9 +35,6 @@ const addDiv = (parentModelId, viewModelId, modelFactory) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addDiv: () => {
-
-      c.l(`ownProps.viewModel.viewModel.id: ${ownProps.viewModel.viewModel.id}`);
-
       dispatch(addDiv(ownProps.viewModel.viewModel.id, ownProps.viewModel.id, divModelFactory));
     }
   };

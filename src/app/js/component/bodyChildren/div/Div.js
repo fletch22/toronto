@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import '../../../../css/f22-react-grid-layout.css';
 import ComponentChild from '../ComponentChild';
 import DragAndDropMaker from '../../dragAndDrop/DragAndDropMaker';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 
 class Div extends BodyChild {
   render() {

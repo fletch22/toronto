@@ -1,8 +1,7 @@
 import ModelFactory from './ModelFactory';
-import ComponentTypes from '../../domain/component/ComponentTypes';
-import f22Uuid from '../../util/f22Uuid';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
-class DataModelFieldFactory extends ModelFactory {
+class DataModelModelFactory extends ModelFactory {
 
   createInstanceFromModel(model) {
     const id = this.ensureId(model);
@@ -12,6 +11,7 @@ class DataModelFieldFactory extends ModelFactory {
       id,
       label: model.label,
       typeLabel: ComponentTypes.DataModel,
+      userData: [],
       children: []
     };
 
@@ -19,5 +19,5 @@ class DataModelFieldFactory extends ModelFactory {
   }
 }
 
-export default new DataModelFieldFactory();
+export default new DataModelModelFactory();
 

@@ -8,6 +8,7 @@ import { actionSetPageNeedsSaving } from '../../../actions/bodyChildrenEditor/in
 import _ from 'lodash';
 import Button from '../toolbar/Button';
 import actionBodyChildSelectorHandler from '../../../reducers/actionBodyChildSelectorHandler';
+import stateTraversal from '../../../state/stateTraversal';
 
 class FullToolbar extends React.Component {
   render() {
@@ -85,7 +86,7 @@ const mapStateToProps = (state, ownProps) => {
   const needsSaving = getIsNeedsSaving(ownProps);
   const pageName = ownProps.selectedViewModel.pageName;
 
-  const selectedViewModel = (ownProps.selectedViewModel) ? ownProps.selectedViewModel : ownProps;
+  const selectedViewModel = (!!ownProps.selectedViewModel) ? ownProps.selectedViewModel : ownProps;
 
   return {
     selectedViewModel,
@@ -95,36 +96,45 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const selectFlowDirection = (ownProps, event) => {
-  return (dispatch) => {
-    const selectViewModel = ownProps.selectedViewModel;
-    const viewModel = selectViewModel.viewModel;
+const ensureId = (model, getState) => {
+  let id = model.id;
+  if (!id) {
+    id = stateTraversal.getNextId(getState().model);
+  }
+  return id;
+};
 
-    let styleString = viewModel.style;
+const selectFlowDirection = (ownProps, event) => {
+  return (dispatch, getState) => {
+    const selectViewModel = ownProps.selectedViewModel;
+    const model = selectViewModel.viewModel;
+    model.id = ensureId(model, getState);
+
+    let styleString = model.style;
     const style = JSON.parse(styleString) || {};
 
     style.flexDirection = event.target.value;
 
     styleString = JSON.stringify(style);
-    viewModel.style = styleString;
+    model.style = styleString;
 
     viewModelCreator.update(dispatch, selectViewModel);
   };
 };
 
 const clickSavePageName = (ownProps) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     const selectViewModel = ownProps.selectedViewModel;
-    const viewModel = selectViewModel.viewModel;
+    const model = selectViewModel.viewModel;
+    model.id = ensureId(model, getState);
 
-    viewModel.pageName = selectViewModel.pageName;
+    model.pageName = selectViewModel.pageName;
+    // const setPageDoesNotNeedSaving = (stateThing) => {
+    //   const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(stateThing, ownProps.selectedViewModel.id);
+    //   pageAndSelected.pageViewModel.needsSaving = false;
+    // };
 
-    const setPageDoesNotNeedSaving = (stateThing) => {
-      const pageAndSelected = actionBodyChildSelectorHandler.getPageViewModelAndSelectedViewModel(stateThing, ownProps.selectedViewModel.id);
-      pageAndSelected.pageViewModel.needsSaving = false;
-    };
-
-    viewModelCreator.update(dispatch, selectViewModel, undefined, setPageDoesNotNeedSaving);
+    viewModelCreator.update(dispatch, selectViewModel);
   };
 };
 

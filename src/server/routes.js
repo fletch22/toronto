@@ -71,7 +71,8 @@ export const setupNormalRoutes = (app) => {
     switch (action) {
       case 'getMostRecentHistoricalState': {
         const optionalState = await stateService.findMostRecentStateInFile(req.body);
-        res.send(JSON.stringify(optionalState));
+        const optionalResponse = util.convertOptionalForResponse(optionalState);
+        res.send(JSON.stringify(optionalResponse));
         break;
       }
       case 'getEarliest': {
@@ -86,18 +87,23 @@ export const setupNormalRoutes = (app) => {
       }
       case 'restoreFromDisk': {
         await stateService.restoreFromDisk();
-        res.send(JSON.stringify({ result: 'Success' }));
+        res.send(responseSuccess);
         break;
       }
       case 'nukeAndPave': {
         stateService.nukeAndPave();
-        res.send(JSON.stringify({ result: 'Success' }));
+        res.send(responseSuccess);
         break;
       }
       default: {
         throw new Error('Did not recognized action passed to POST state.');
       }
     }
+  });
+
+  app.get(`${apiPath}/userData/collections/:id`, (req, res) => {
+    const id = req.params.id;
+    res.send(userDataService.getCollection(id));
   });
 };
 

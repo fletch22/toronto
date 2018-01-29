@@ -1,5 +1,5 @@
 import ModelFactory from './ModelFactory';
-import ComponentTypes from './ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 class ButtonSubmitModelFactory extends ModelFactory {
 

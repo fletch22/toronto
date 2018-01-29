@@ -12,8 +12,8 @@ import { actionPageDoesNotNeedSaving } from '../../../actions/bodyChildrenEditor
 import validationUtils from '../../../util/validationUtil';
 import Button from '../../../component/bodyChildren/toolbar/Button';
 import stateUtil from '../../../util/stateUtil';
-import graphTraversal from '../../../state/graphTraversal';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
+import graphTraversal from '../../../../../common/state/graphTraversal';
+import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 import ActionInvoker from '../../../actions/ActionInvoker';
 import stateFixer from '../../../domain/stateFixer';
 import actionBodyChildSelectorHandler from '../../../reducers/actionBodyChildSelectorHandler';

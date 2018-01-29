@@ -3,7 +3,7 @@ import WizardSlides from '../WizardSlides';
 import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
 import viewModelCreator from '../../../../../../component/utils/viewModelCreator';
-import graphTraversal from '../../../../../../state/graphTraversal';
+import graphTraversal from '../../../../../../../../common/state/graphTraversal';
 
 class SlideSaveDdlInfo extends React.Component {
 

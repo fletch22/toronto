@@ -3,7 +3,7 @@ import { connect as reduxConnect } from 'react-redux';
 import DragAndDropMaker from '../dragAndDrop/DragAndDropMaker';
 import DropMarker from '../../component/bodyChildren/DropMarker';
 import DragAndDropUtils from './DragAndDropUtils';
-import f22Uuid from '../../util/f22Uuid';
+import f22Uuid from '../../../../common/util/f22Uuid';
 
 /* eslint-disable react/prefer-stateless-function */
 class DragCorner extends React.Component {

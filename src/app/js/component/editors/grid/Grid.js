@@ -13,7 +13,7 @@ class Grid extends React.Component {
   }
 
   componentDidUpdate() {
-    window.dispatchEvent(new Event('resize'));
+    // window.dispatchEvent(new Event('resize'));
   }
 
   rowGetter(i) {
@@ -87,16 +87,29 @@ const getSelectedIndexes = (selectedRows) => {
   return selectedIndexes;
 };
 
+const addRow = (ownProps) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    gridService.persist(state, dispatch, ownProps, [], null);
+  };
+};
+
+const updateGridRows = (ownProps, rows) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    return gridService.persist(state, dispatch, ownProps, rows.rowIds, rows.updated);
+  };
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickAddRow: () => {
-      const updatedPropAndVals = null;
-      gridService.persist(dispatch, ownProps, [], updatedPropAndVals);
+      dispatch(addRow(ownProps));
     },
     onGridRowsUpdated: (rows) => {
       const action = rows.action;
       if (action === 'CELL_UPDATE' || action === 'CELL_DRAG') {
-        gridService.persist(dispatch, ownProps, rows.rowIds, rows.updated);
+        dispatch(updateGridRows(ownProps, rows));
       } else {
         console.error(`Encountered grid cell update action '${action}'. Code to handle this action is not yet implemented.`);
       }

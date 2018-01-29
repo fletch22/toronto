@@ -4,7 +4,7 @@ import websiteModelFactory from './websiteModelFactory';
 import webFolderModelFactory from './webFolderModelFactory';
 import webPageModelFactory from './webPageModelFactory';
 import layoutModelFactory from './layoutModelFactory';
-import ComponentTypes from '../component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import divModelFactory from '../component/divModelFactory';
 
 class ModelGenerator {

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import _ from 'lodash';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import validationUtil from '../../util/validationUtil';
 
 describe('validationUtils', () => {

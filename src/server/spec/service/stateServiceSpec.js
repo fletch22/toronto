@@ -12,7 +12,7 @@ import EventEmitter from 'events';
 import fileService from '../../service/fileService';
 import winston from 'winston';
 
-describe('StateService', () => {
+describe.only('StateService', () => {
   let sandbox;
 
   beforeEach(() => {
@@ -135,7 +135,7 @@ describe('StateService', () => {
     expect(createLineReadStreamMock.callCount).toBe(1);
     expect(tranformStub.callCount).toBe(1);
     expect(fsExistsMock.callCount).toBe(1);
-    expect(optionalState.value).toEqual(expectedState2);
+    expect(optionalState.get()).toEqual(expectedState2);
   });
 
   it('Should get the correct state', async () => {
@@ -179,7 +179,7 @@ describe('StateService', () => {
     expect(createLineReadStreamMock.callCount).toBe(1);
     expect(transformMock.callCount).toBe(1);
     expect(fsExistsMock.callCount).toBe(1);
-    expect(JSON.stringify(optionalState.value)).toEqual(JSON.stringify(expectedState2));
+    expect(JSON.stringify(optionalState.get())).toEqual(JSON.stringify(expectedState2));
   });
 
   it('should get the correct number of lines in the file.', (done) => {

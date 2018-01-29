@@ -1,5 +1,5 @@
-import graphTraversal from '../../state/graphTraversal';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import graphTraversal from '../../../../common/state/graphTraversal';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 class DndActionHandler {
   static handleHover(state, stateNew, hoverOveredId, draggedId, measurements) {

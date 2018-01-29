@@ -3,7 +3,7 @@ import { default as DropDownListboxToolbar } from './dropDownListbox/FullToolbar
 import { default as ButtonSubmitToolbar } from './buttonSubmit/FullToolbar';
 import { default as DivToolbar } from './div/FullToolbar';
 import { default as BodyToolbar } from './body/FullToolbar';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import FlagSelContextToolbar from './FlagSelContextToolbar';
 
 class SelectedContextToolbar extends React.Component {

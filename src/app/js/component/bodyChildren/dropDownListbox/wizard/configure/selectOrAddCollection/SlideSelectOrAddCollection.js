@@ -10,6 +10,7 @@ import viewModelCreator from '../../../../../utils/viewModelCreator';
 import { actionUpdatePropertyWithPersist } from '../../../../../../actions/index';
 import dataUniverseModelUtils from '../../../../../../domain/component/dataUniverseModelUtils';
 import dataStoreModelUtils from '../../../../../../domain/component/dataStoreModelUtils';
+import graphTraversal from '../../../../../../../../common/state/graphTraversal';
 
 class SlideSelectOrAddCollection extends React.Component {
 
@@ -127,21 +128,20 @@ const doCollectionFocusAction = (event, ownProps) => {
   };
 };
 
-const doSaveCollectionAction = (event, ownProps) => {
-  return (dispatch, getState) => {
+const doSaveCollectionAction = (event, ownProps) => (
+  (dispatch, getState) => {
     const state = getState();
-
     const props = partialFlatten(state, ownProps);
+
     const model = dataModelModelFactory.createInstanceFromModel({ parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value });
 
-    const successCallback = () => {
-      dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
-      dispatch(actionToggleNewItemNameInput(props.newItemNameInput.id));
-    };
+    const newItemNameInput = graphTraversal.find(state, props.newItemNameInput.id);
+    newItemNameInput.value = '';
+    newItemNameInput.visible = false;
 
-    viewModelCreator.create(dispatch, model, props.viewModel.id, successCallback);
-  };
-};
+    return viewModelCreator.create(dispatch, model, props.viewModel.id);
+  }
+);
 
 const doAddCollectionAction = (ownProps) => {
   return (dispatch, getState) => {

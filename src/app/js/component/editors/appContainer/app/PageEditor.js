@@ -13,6 +13,7 @@ class PageEditor extends React.Component {
           isSelected={this.props.isBodySelected}
           children={this.props.viewModel.viewModel.children}
           isHoveringOver={this.props.isHoveringOver}
+          viewModel={this.props.viewModel}
         />
       </div>
     );

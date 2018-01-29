@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Header from './header/Header';
 import crudComponentOperations from '../../../CrudOperations';
 import viewModelCreator from '../../../../component/utils/viewModelCreator';
-import graphTraversal from "../../../../state/graphTraversal";
+import graphTraversal from "../../../../../../common/state/graphTraversal";
 
 class Website extends React.Component {
 

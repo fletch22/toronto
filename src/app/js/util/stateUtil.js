@@ -1,4 +1,4 @@
-import graphTraversal from '../state/graphTraversal';
+import graphTraversal from '../../../common/state/graphTraversal';
 
 
 class StateUtil {

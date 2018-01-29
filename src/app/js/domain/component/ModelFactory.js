@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import f22Uuid from '../../util/f22Uuid';
+import f22Uuid from '../../../../common/util/f22Uuid';
 
 class ModelViewFactory {
 

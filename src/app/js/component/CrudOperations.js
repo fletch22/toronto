@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import crudActionCreator from '../actions/crudActionCreator';
 import ComponentService from '../service/component/componentService';
-import graphTraversal from '../state/graphTraversal';
+import graphTraversal from '../../../common/state/graphTraversal';
 import stateSyncService from '../service/stateSyncService';
 import StatePackager from '../service/StatePackager';
 

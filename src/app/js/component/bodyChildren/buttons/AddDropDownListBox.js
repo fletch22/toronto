@@ -4,7 +4,7 @@ import Button from '../toolbar/Button';
 import bodyChildrenCreatorService from '../../../service/bodyChildrenCreatorService';
 import ddlModelFactory from '../../../domain/component/ddlModelFactory';
 import ddlModelUtils from '../../../domain/component/ddlModelUtils';
-import graphTraversal from '../../../state/graphTraversal';
+import graphTraversal from '../../../../../common/state/graphTraversal';
 
 class AddDropDownListbox extends React.Component {
   render() {

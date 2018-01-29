@@ -1,4 +1,4 @@
-import graphTraversal from './graphTraversal';
+import graphTraversal from '../../../common/state/graphTraversal';
 import _ from 'lodash';
 import ViewTypes from "../views/ViewTypes";
 

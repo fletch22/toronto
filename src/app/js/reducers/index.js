@@ -6,7 +6,7 @@ import ErrorModalDtoFactory from '../component/modals/ErrorModalDtoFactory';
 import standardModalDtoFactory from '../component/modals/StandardModalDtoFactory';
 import modalDtoFactory from '../component/modals/ModalDtoFactory';
 import stateSyncService from '../service/stateSyncService';
-import graphTraversal from '../state/graphTraversal';
+import graphTraversal from '../../../common/state/graphTraversal';
 import ModalTypes from '../component/modals/ModalTypes';
 import restService from '../service/restService';
 import actionComponentCreator from './viewModelFactory';
@@ -228,11 +228,11 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.CREATE_PSEUDO_MODAL_COMPONENT: {
-      const component = actionPseudoModalEditorCreator.create(stateNew, action);
+      const component = actionPseudoModalEditorCreator.createFromAction(stateNew, action);
 
-      const viewData = modalDtoFactory.getPseudoModalInstance(component);
+      const pseudoModal = modalDtoFactory.getPseudoModalInstance(component);
 
-      stateNew.dom.pseudoModals.push(viewData);
+      stateNew.dom.pseudoModals.push(pseudoModal);
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 

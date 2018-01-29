@@ -52,7 +52,7 @@ const config = {
       {
         test: /\.ico$/,
         loader: 'file?name=[name].[ext]',
-        include: PATHS.images
+        include: [PATHS.images]
       },
       {
         test: /\.(scss|css)$/,

@@ -1,5 +1,5 @@
 import React from 'react';
-import graphTraversal from '../../state/graphTraversal';
+import graphTraversal from '../../../../common/state/graphTraversal';
 import modalDispatcher from '../modals/modalDispatcher';
 import crudActionCreator from '../../actions/crudActionCreator';
 

@@ -1,4 +1,4 @@
-import ComponentTypes from './ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import ModelFactory from './ModelFactory';
 
 class WebsiteModelFactory extends ModelFactory {

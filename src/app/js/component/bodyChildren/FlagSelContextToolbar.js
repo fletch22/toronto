@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { default as DropDownListboxToolbar } from './dropDownListbox/Toolbar';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import HierNavButtonToolbar from '../../component/bodyChildren/HierNavButtonToolbar';
 
 class FlagSelContextToolbar extends React.Component {

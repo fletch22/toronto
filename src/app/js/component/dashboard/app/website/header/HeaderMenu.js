@@ -4,7 +4,7 @@ import Menu, { MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import { actionAppToggleMenu } from '../../../../../actions/dashboard/app/index';
 import { actionCreatePseudoModalComponent } from '../../../../../actions/index';
-import ComponentTypes from '../../../../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../../../../common/domain/component/ComponentTypes';
 import crudComponentOperations from '../../../../CrudOperations';
 import { actionUpdateViewPropertyValue } from '../../../../../actions/index';
 import '../../../../../../css/modules/menu.scss';
@@ -67,7 +67,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         break;
       }
       case HeaderMenu.menuKeys().ADD_PAGE: {
-        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebPage, { parentModelId: ownProps.modelId }));
+        dispatch(actionCreatePseudoModalComponent(ComponentTypes.WebPage, { parentModelId: ownProps.modelId, style: '{ "flexDirection": "column" }' }));
         toggleMenu(dispatch, ownProps);
         break;
       }

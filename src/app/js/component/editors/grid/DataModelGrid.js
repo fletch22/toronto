@@ -7,25 +7,25 @@ import { GridViewModelConstants } from '../../../domain/collection/gridViewModel
 
 class DataModelGrid extends React.Component {
 
-  componentDidMount() {
-    this.updateGrid();
-  }
+  // componentDidMount() {
+  //   this.updateGrid();
+  // }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.dataModelId !== this.props.dataModelId) {
-      this.updateGrid();
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.dataModelId !== this.props.dataModelId) {
+  //     this.updateGrid();
+  //   }
+  // }
 
-  updateGrid() {
-    if (this.props.dataModelId !== null) {
-      gridService.lookupCollectionIdFromDataModelId(this.props.dataModelId)
-        .then((result) => {
-          const collectionId = result.collectionId;
-          this.context.store.dispatch(actionSetCollectionId(this.props.gridViewModel.id, collectionId));
-        });
-    }
-  }
+  // updateGrid() {
+    // if (this.props.dataModelId !== null) {
+    //   gridService.lookupCollectionIdFromDataModelId(this.props.dataModelId)
+    //     .then((result) => {
+    //       const collectionId = result.collectionId;
+    //       this.context.store.dispatch(actionSetCollectionId(this.props.gridViewModel.id, collectionId));
+    //     });
+    // }
+  // }
 
   render() {
     let grid = null;
@@ -46,7 +46,7 @@ class DataModelGrid extends React.Component {
 DataModelGrid.propTypes = {
   gridViewModel: PropTypes.object,
   dataModelId: PropTypes.any,
-  collectionId: PropTypes.any,
+  collectionId: PropTypes.any
 };
 
 DataModelGrid.contextTypes = { store: PropTypes.object };

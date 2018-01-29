@@ -184,7 +184,7 @@ class StateService {
   }
 
   getInitialState() {
-    return util.getOptionalLiteral({ state: initialState, clientId: '12345', indexOfReturnedState: 0 });
+    return Optional.ofNullable({ state: initialState, clientId: '12345', indexOfReturnedState: 0 });
   }
 
   findMostRecentStateInFile() {
@@ -209,7 +209,8 @@ class StateService {
             let persistedState = null;
             try {
               persistedState = JSON.parse(lastLine);
-              optionalResult = util.getOptionalLiteral(this.transformMostRecentPersistedState(persistedState));
+              optionalResult = Optional.ofNullable(this.transformMostRecentPersistedState(persistedState));
+              // optionalResult = util.getOptionalLiteral(this.transformMostRecentPersistedState(persistedState));
             } catch (err) {
               winston.error(err.message);
             }
@@ -336,7 +337,6 @@ class StateService {
               winston.info(`Close called. ${indexSearchResult.line.length}`);
               resolve(Optional.ofNullable(this.transformIndexSearchResult(indexSearchResult, totalLines)));
             } else {
-              c.l('No index search results.');
               resolve(Optional.empty());
             }
           });

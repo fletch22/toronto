@@ -1,5 +1,5 @@
 import ModelFactory from './ModelFactory';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 class LayoutModelFactory extends ModelFactory {
 

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import stateUtils from '../../util/stateUtil';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 describe('stateUtils', () => {
 

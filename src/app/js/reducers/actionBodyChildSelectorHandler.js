@@ -1,6 +1,5 @@
-import graphTraversal from '../state/graphTraversal';
-import actionComponentCreator from './viewModelFactory';
-import ComponentTypes from '../domain/component/ComponentTypes';
+import graphTraversal from '../../../common/state/graphTraversal';
+import ComponentTypes from '../../../common/domain/component/ComponentTypes';
 
 class ActionBodyChildSelectorHandler {
 
@@ -47,7 +46,6 @@ class ActionBodyChildSelectorHandler {
       pageViewModel = selectedViewModel;
       let parentNodeId = selectedViewModel.parentId;
       let typeLabel = selectedViewModel.viewModel.typeLabel;
-      // while (parentNodeId !== actionComponentCreator.WEB_PAGE_ROOT) {
       while (typeLabel !== ComponentTypes.WebPage) {
         const parentNode = graphTraversal.find(state, parentNodeId);
         if (!parentNode) {

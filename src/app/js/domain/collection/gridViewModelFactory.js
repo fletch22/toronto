@@ -1,4 +1,4 @@
-import f22uuid from '../../util/f22Uuid';
+import f22uuid from '../../../../common/util/f22Uuid';
 import _ from 'lodash';
 
 export const GridViewModelConstants = {

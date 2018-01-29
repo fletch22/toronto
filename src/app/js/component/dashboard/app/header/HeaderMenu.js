@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { default as RcMenu, MenuItem, Divider } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import { actionCreatePseudoModalComponent } from '../../../../actions/index';
-import ComponentTypes from '../../../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../../../common/domain/component/ComponentTypes';
 import { actionAppToggleMenu } from '../../../../actions/dashboard/app/index';
 import '../../../../../css/modules/menu.scss';
 import crudComponentOperations from '../../../CrudOperations';

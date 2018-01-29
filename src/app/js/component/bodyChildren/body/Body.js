@@ -1,19 +1,20 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ComponentChild from '../ComponentChild';
-import graphTraversal from '../../../state/graphTraversal';
+import graphTraversal from '../../../../../common/state/graphTraversal';
 import '../../../../css/modules/time-travel-toolbar.scss';
 import SelectedContextToolbar from '../SelectedContextToolbar';
 import DragAndDropMaker from '../../../component/dragAndDrop/DragAndDropMaker';
 import DragAndDropUtils from '../../../component/dragAndDrop/DragAndDropUtils';
 import BodyChild from '../../bodyChildren/BodyChild';
-import ComponentTypes from '../../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 import { actionUnsetCurrentBody } from '../../../actions/bodyChildrenEditor/index';
 
 class Body extends BodyChild {
   render() {
     const children = (this.props.children) ? this.props.children : [];
-    const style = JSON.parse(this.props.viewModel.style) || {};
+
+    const style = typeof this.props.viewModel.style === 'object' ? JSON.parse(this.props.viewModel.style) : {};
 
     style.flexGrow = 1;
     style.marginLeft = '4px';
@@ -46,12 +47,14 @@ class Body extends BodyChild {
 Body.propTypes = BodyChild.mergePropTypes({
   selectedViewModel: PropTypes.object,
   selectedChildViewId: PropTypes.string,
-  onWillUnmount: PropTypes.func
+  onWillUnmount: PropTypes.func,
+  viewModel: PropTypes.object
 });
 
 const mapStateToProps = (state, ownProps) => {
   let selectedViewModel;
-  const selectedChildViewId = (ownProps.selectedChildViewId) ? ownProps.selectedChildViewId : ownProps.id;
+
+  const selectedChildViewId = (!!ownProps.selectedChildViewId) ? ownProps.selectedChildViewId : ownProps.id;
   if (selectedChildViewId) {
     selectedViewModel = graphTraversal.find(state, selectedChildViewId);
   }
@@ -59,7 +62,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     selectedChildViewId,
     selectedViewModel,
-    canBeDroppedOn: ownProps.canBeDroppedOn
+    canBeDroppedOn: ownProps.canBeDroppedOn,
+    viewModel: ownProps.viewModel
   };
 };
 

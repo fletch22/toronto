@@ -1,4 +1,4 @@
-import graphTraversal from '../../state/graphTraversal';
+import graphTraversal from '../../../../common/state/graphTraversal';
 import { actionHoverOver } from '../../actions/dnd/index.js';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 import ActionInvoker from '../../actions/ActionInvoker';

@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { expect } from 'chai';
 import dashboardIslandViewModelFactory from '../../views/DashboardIslandViewModelFactory';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import defaultState from '../../state/defaultState';
-import graphTraversal from '../../state/graphTraversal';
+import graphTraversal from '../../../../common/state/graphTraversal';
 
 
 describe('DashboardIslandViewModelFactory', () => {

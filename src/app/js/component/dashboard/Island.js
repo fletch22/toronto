@@ -3,7 +3,7 @@ import App from './app/App';
 import Website from './app/website/Website';
 import WebFolder from './app/website/folder/Folder';
 import Page from './app/website/page/Page';
-import ComponentTypes from '../../domain/component/ComponentTypes';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 class Island extends React.Component {
   render() {
