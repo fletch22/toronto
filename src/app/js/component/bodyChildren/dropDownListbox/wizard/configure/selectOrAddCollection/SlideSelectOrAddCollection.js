@@ -11,11 +11,14 @@ import { actionUpdatePropertyWithPersist } from '../../../../../../actions/index
 import dataUniverseModelUtils from '../../../../../../domain/component/dataUniverseModelUtils';
 import dataStoreModelUtils from '../../../../../../domain/component/dataStoreModelUtils';
 import graphTraversal from '../../../../../../../../common/state/graphTraversal';
+import stateTraversal from '../../../../../../state/stateTraversal';
 
 class SlideSelectOrAddCollection extends React.Component {
 
   render() {
     let choices = this.props.collections;
+
+    c.lo(choices, 'choices: ');
 
     if (choices.length > 0) {
       choices = choices.map((choice, index) => {
@@ -133,7 +136,7 @@ const doSaveCollectionAction = (event, ownProps) => (
     const state = getState();
     const props = partialFlatten(state, ownProps);
 
-    const model = dataModelModelFactory.createInstanceFromModel({ parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value });
+    const model = dataModelModelFactory.createInstanceFromModel({ id: stateTraversal.getNextId(state.model), parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value });
 
     const newItemNameInput = graphTraversal.find(state, props.newItemNameInput.id);
     newItemNameInput.value = '';

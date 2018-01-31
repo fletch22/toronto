@@ -361,6 +361,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
       viewModelWizard.dataModelId = payload.selectedDataModelId;
       viewModelWizard.dataModelLabel = payload.selectedDataModelLabel;
 
+      c.l(`viewModelWizard.dataModelLabel: ${viewModelWizard.dataModelLabel}`);
+      c.l(`viewModelWizard.dataModelId: ${viewModelWizard.dataModelId}`);
+
       const collections = viewModelWizard.viewModel.viewModel.children;
       const collection = _.find(collections, (coll) => {
         return coll.viewModel.id === viewModelWizard.dataModelId;

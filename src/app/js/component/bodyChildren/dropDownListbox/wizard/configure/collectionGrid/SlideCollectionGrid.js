@@ -62,17 +62,19 @@ const partialFlatten = (state, ownProps) => {
 
   if (!!wizardData.dataModelId && wizardData.dataModelId !== -1) {
     const dataModel = graphTraversal.find(state.model, wizardData.dataModelId);
-    // c.lo(dataModel, 'dataModel in pf: ');
+    // c.lo(wizardData.dataModelId, 'dataModel in pf: ');
 
-    const gridModelData = collectionToGridDataTransformer.transform(dataModel);
-    // c.lo(gridModelData, 'gridModelData: ');
-    // c.lo(gridModelData, 'gridModelData: ');
-    // c.lo(wizardData.dataModelId, 'wizardData.dataModelId: ');
+    if (!!dataModel) {
+      const gridModelData = collectionToGridDataTransformer.transform(dataModel);
+      // c.lo(gridModelData, 'gridModelData: ');
+      // c.lo(gridModelData, 'gridModelData: ');
+      // c.lo(wizardData.dataModelId, 'wizardData.dataModelId: ');
 
-    // slide.gridView.data = gridModelData;
-    slide.gridView.data.collectionId = gridModelData.collectionId;
-    slide.gridView.data.rows = gridModelData.rows;
-    slide.gridView.data.columns = gridModelData.columns;
+      // slide.gridView.data = gridModelData;
+      slide.gridView.data.collectionId = gridModelData.collectionId;
+      slide.gridView.data.rows = gridModelData.rows;
+      slide.gridView.data.columns = gridModelData.columns;
+    }
   } else {
     slide.gridView.data.collectionId = wizardData.dataModelId;
   }
