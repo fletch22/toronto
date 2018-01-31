@@ -65,16 +65,20 @@ class GridService extends Service {
   persist(state, dispatch, ownProps, rowIdsUpdated, updatePropAndVals) {
     const stateOld = _.cloneDeep(state);
     const grid = ownProps.gridViewModel;
+    const isNew = (rowIdsUpdated.length === 0);
 
     let rawRows = null;
-    if (rowIdsUpdated.length === 0) {
+    if (isNew) {
       const rows = gridHelper.addNewRow(state, grid.data.columns, []);
       rawRows = [rows[0]];
     } else {
+      // c.l('About to update rows ...');
       rawRows = rowIdsUpdated.map((id) => {
         const rawSingleRow = _.find(grid.data.rows, (gridRow) => gridRow.id === id);
+        // c.lo(rawSingleRow, 'rawSingleRows: ');
         return Object.assign(rawSingleRow, updatePropAndVals);
       });
+      // c.lo(rawRows, 'rawRows: ');
     }
 
     if (!rawRows) {
@@ -85,8 +89,6 @@ class GridService extends Service {
       modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to save/update grid row.', dispatch);
       return;
     }
-
-    // c.lo(rawRows, 'rawRows: ');
 
     const rowsToPersist = rawRows.map((row) => {
       return gridHelper.convertRowToPersist(row);
@@ -109,14 +111,25 @@ class GridService extends Service {
       // c.lo(persistRow, 'persistRow: ');
       row[0] = persistRow[gridHelper.CONSTANTS.IDENTITY_KEY_NAME];
       dataFields.forEach((field) => {
-        row.push(persistRow[field.label]);
+        row.push(persistRow.fields[field.label]);
       });
-      // c.l('inserting row to beginning of array.');
-      // row.unshift(persistRow[gridHelper.CONSTANTS.IDENTITY_KEY_NAME]);
+      if (isNew) {
+        dataModel.userData.unshift(row);
+      } else {
+        c.lo(row, 'Updating...');
+        const rowIndex = _.findIndex(dataModel.userData, (rowUserData) => {
+          // c.lo(rowUserData, 'rowUserData...');
+          return rowUserData[0] === row[0];
+        });
+
+        // c.l(`RowIndex: ${rowIndex}`);
+
+        dataModel.userData.splice(rowIndex, 1, row);
+      }
     });
 
-    dataModel.userData.unshift(row);
-    c.lo(dataModel.userData, 'dataModel.userData in persist: ');
+
+    // c.lo(dataModel.userData, 'dataModel.userData in persist: ');
 
     // const successCallback = (result) => {
     //   result.persistedIds.forEach((id, index) => {

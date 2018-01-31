@@ -25,10 +25,6 @@ class GridHelper {
     return rows;
   }
 
-  setId(row, id) {
-    this.addPropAndValueToRow(row, this.CONSTANTS.IDENTITY_KEY_NAME, id);
-  }
-
   addPropAndValueToRow(row, columnName, value) {
     /* eslint-disable no-param-reassign */
     row[columnName] = value;

@@ -62,7 +62,7 @@ const partialFlatten = (state, ownProps) => {
 
   if (!!wizardData.dataModelId && wizardData.dataModelId !== -1) {
     const dataModel = graphTraversal.find(state.model, wizardData.dataModelId);
-    c.lo(dataModel, 'dataModel in pf: ');
+    // c.lo(dataModel, 'dataModel in pf: ');
 
     const gridModelData = collectionToGridDataTransformer.transform(dataModel);
     // c.lo(gridModelData, 'gridModelData: ');

@@ -16,8 +16,8 @@ class CollectionToGridDataTransformer {
     const userData = dataModel.userData;
     const dataFields = dataModel.children.filter((child) => child.typeLabel === ComponentTypes.DataField);
 
-    c.lo(dataFields, 'dataFields: ');
-    c.lo(userData, 'userData: ');
+    // c.lo(dataFields, 'dataFields: ');
+    // c.lo(userData, 'userData: ');
 
     return {
       collectionId: dataModel.id,
@@ -66,7 +66,7 @@ class CollectionToGridDataTransformer {
     if (Array.isArray(rowsRaw)) {
       rowsRaw.forEach((singleRowRaw) => {
         let row = {};
-        c.l(`singleRowRaw: ${JSON.stringify(singleRowRaw)}`);
+        // c.l(`singleRowRaw: ${JSON.stringify(singleRowRaw)}`);
         dataFields.forEach((field, index) => {
           const columnNameRaw = field.label;
           row = gridHelper.addPropAndValueToRow(row, gridHelper.constructColumnName(columnNameRaw), singleRowRaw[index + 1]);

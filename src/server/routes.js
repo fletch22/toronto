@@ -101,9 +101,9 @@ export const setupNormalRoutes = (app) => {
     }
   });
 
-  app.get(`${apiPath}/userData/collections/:id`, (req, res) => {
-    const id = req.params.id;
-    res.send(userDataService.getCollection(id));
-  });
+  // app.get(`${apiPath}/userData/collections/:id`, (req, res) => {
+  //   const id = req.params.id;
+  //   res.send(userDataService.getCollection(id));
+  // });
 };
 

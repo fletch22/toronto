@@ -97,6 +97,9 @@ const addRow = (ownProps) => {
 const updateGridRows = (ownProps, rows) => {
   return (dispatch, getState) => {
     const state = getState();
+
+    c.lo(rows, 'row in ugr: ');
+
     return gridService.persist(state, dispatch, ownProps, rows.rowIds, rows.updated);
   };
 };

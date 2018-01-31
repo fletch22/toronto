@@ -16,6 +16,7 @@ import 'babel-polyfill';
 import { sessionFilename, default as sessionService } from './sessionService';
 import serializerService from './serializerService';
 import initialState from '../config/initialState';
+import f22Uuid from '../../common/util/f22Uuid';
 
 const watch = stopwatch();
 const persistDateFormat = 'YYYY-MM-DD-HH-mm-ss-A';
@@ -40,7 +41,7 @@ class StateService {
     this.persistStateArrays = this.persistStateArrays.bind(this);
     this.sortSessionKeys = this.sortSessionKeys.bind(this);
     this.createLineReadStream = this.createLineReadStream.bind(this);
-    this.writeStateToFile = this.writeStateToFile.bind(this);
+    this.writePersistStateToFile = this.writePersistStateToFile.bind(this);
     this.persistStatePackage = this.persistStatePackage.bind(this);
     this.persistToDisk = this.persistToDisk.bind(this);
 
@@ -65,19 +66,22 @@ class StateService {
           const json = JSON.stringify(stateInfo); // NOTE: 2017-11-17: There should be no carriage returns here at this point.
           combinedData += `${json}\n`;
         });
-        allWrites.push(this.writeStateToFile(key, combinedData));
+        allWrites.push(this.writePersistStateToFile(key, combinedData));
       }
     }
     return Promise.all(allWrites);
   }
 
   transformToPersistState(statePackage) {
-    const stateInfo = {};
-    stateInfo[CLIENT_ID_MARKER] = statePackage.clientId;
+    return this.createPersistState(JSON.parse(statePackage.state), statePackage.clientId);
+  }
 
-    stateInfo.state = this.replaceStuntDoubles(JSON.parse(statePackage.state));
+  createPersistState(state, clientId) {
+    const persistState = {};
+    persistState[CLIENT_ID_MARKER] = clientId;
+    persistState.state = state;
 
-    return stateInfo;
+    return persistState;
   }
 
   transformIndexSearchResult(searchResult, totalLines) {
@@ -90,7 +94,7 @@ class StateService {
     };
   }
 
-  writeStateToFile(key, stateString) {
+  writePersistStateToFile(key, stateString) {
     winston.info('In writeStateToFile.');
     sessionService.persistSessionIfMissing(key);
     this.saveToStateIndex(stateString);
@@ -156,7 +160,11 @@ class StateService {
 
   persistStatePackage(statePackage) {
     const persistState = this.transformToPersistState(statePackage);
-    return this.writeStateToFile(statePackage.serverStartupTimestamp, JSON.stringify(persistState));
+    return this.persistPersistState(statePackage.serverStartupTimestamp, persistState);
+  }
+
+  persistPersistState(serverStartupTimestamp, persistState) {
+    return this.writePersistStateToFile(serverStartupTimestamp, JSON.stringify(persistState));
   }
 
   findMostRecentHistoricalFile() {
@@ -293,9 +301,6 @@ class StateService {
   }
 
   async getStateByIndex(index) {
-    winston.info('getStateByIndex called.');
-    winston.info(`typeof index: ${typeof index}`);
-
     const optionalTotalLines = await this.getTotalStatesInSessionFile();
 
     if (!optionalTotalLines.isPresent()) {
@@ -316,9 +321,6 @@ class StateService {
           let indexSearchResult;
 
           let count = 0;
-          winston.debug(`${typeof stopOnIndex}`);
-
-          winston.debug(`soi: ${stopOnIndex}`);
           lineReader.on('line', (line) => {
             winston.debug(`Count: ${count}`);
             if (stopOnIndex === count) {
@@ -442,6 +444,7 @@ class StateService {
 
       const logPath = optionalLogPath.get();
       const tmpPath = `${logPath}.tmp`;
+      fileService.persistByAppending(tmpPath, '');
       const lineReader = this.createLineReadStream(logPath);
 
       this.stateIndex = [];
@@ -667,9 +670,11 @@ class StateService {
   }
 
   async nukeAndPave() {
-    if (this.stateIndex.length > 0) {
-      await this.rollbackTo(this.stateIndex[0]);
-    }
+    this.truncateLog(-1);
+
+    const persistState = this.createPersistState(initialState, f22Uuid.generate());
+
+    await this.persistPersistState(persistState.state.serverStartupTimestamp, persistState);
 
     return { result: 'Success' };
   }
