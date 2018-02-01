@@ -2,23 +2,20 @@ import ModelFactory from './ModelFactory';
 import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import f22Uuid from '../../../../common/util/f22Uuid';
 
-class DataModelModelFactory extends ModelFactory {
+class DataModelFieldFactory extends ModelFactory {
+  createInstanceFromModel(model) {
+    this.validateNotBlank(model.label, 'label');
 
-  createInstance(parentId, label) {
-    this.validateNotBlank(label, 'label');
+    const id = this.ensureId(model);
 
-    const id = f22Uuid.generate();
-
-    const instance = {
-      parentId,
+    return {
+      parentId: model.parentId,
       id,
-      label,
+      label: model.label,
       typeLabel: ComponentTypes.DataField,
       children: []
     };
-
-    return instance;
   }
 }
 
-export default new DataModelModelFactory();
+export default new DataModelFieldFactory();

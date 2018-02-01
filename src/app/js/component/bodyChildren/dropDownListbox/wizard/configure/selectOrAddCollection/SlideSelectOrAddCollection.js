@@ -136,7 +136,8 @@ const doSaveCollectionAction = (event, ownProps) => (
     const state = getState();
     const props = partialFlatten(state, ownProps);
 
-    const model = dataModelModelFactory.createInstanceFromModel({ id: stateTraversal.getNextId(state.model), parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value });
+    const protoModel = { id: stateTraversal.getNextId(state.model), parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value };
+    const model = dataModelModelFactory.createInstanceFromModel(protoModel);
 
     const newItemNameInput = graphTraversal.find(state, props.newItemNameInput.id);
     newItemNameInput.value = '';

@@ -10,6 +10,9 @@ import { actionToggleNewItemNameInput, actionSelectField } from '../../../../../
 import dataModelFieldFactory from '../../../../../../domain/component/dataModelFieldFactory';
 import viewModelCreator from '../../../../../utils/viewModelCreator';
 import { actionUpdatePropertyWithPersist } from '../../../../../../actions/index';
+import graphTraversal from "../../../../../../../../common/state/graphTraversal";
+import dataModelModelFactory from "../../../../../../domain/component/dataModelModelFactory";
+import stateTraversal from "../../../../../../state/stateTraversal";
 
 class SlideSelectFields extends React.Component {
 
@@ -148,6 +151,28 @@ const mapStateToProps = (state, ownProps) => {
   return partialFlatten(ownProps);
 };
 
+const doSaveFieldAction = (ownProps) => (
+  (dispatch, getState) => {
+    const state = getState();
+    const props = partialFlatten(ownProps);
+
+    const vmDataStore = props.viewModel;
+    const vmDataModel = vmDataStore.viewModel.children.find((child) => child.viewModel.id === props.wizardData.dataModelId);
+    c.lo(vmDataModel, 'vmDataModel: ');
+
+    const parentId = props.wizardData.dataModelId;
+    const protoModel = { id: stateTraversal.getNextId(state.model), parentId, label: props.newItemNameInput.value };
+    const model = dataModelFieldFactory.createInstanceFromModel(protoModel);
+
+    const newItemNameInput = graphTraversal.find(state, props.newItemNameInput.id);
+    newItemNameInput.value = '';
+    newItemNameInput.visible = false;
+
+    c.lo(vmDataModel.id, 'vmDataModel.id: ');
+    return viewModelCreator.create(dispatch, model, vmDataModel.id);
+  }
+);
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickAddField: () => {
@@ -172,18 +197,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onClickSaveField: () => {
       const props = partialFlatten(ownProps);
 
-      const model = dataModelFieldFactory.createInstance(props.wizardData.dataModelId, props.newItemNameInput.value);
-
-      const successCallback = () => {
-        dispatch(actionUpdatePropertyWithPersist(props.newItemNameInput.id, 'value', ''));
-        dispatch(actionUpdatePropertyWithPersist(props.wizardData.slides.createCollection.gridView.id, 'needsToMakeDataRequest', true));
-        dispatch(actionToggleNewItemNameInput(props.newItemNameInput.id));
-      };
-
-      const collections = props.wizardData.viewModel.viewModel.children;
-      const collection = _.find(collections, (coll) => coll.viewModel.id === props.wizardData.dataModelId);
-
-      viewModelCreator.create(dispatch, model, collection.id, successCallback);
+      dispatch(doSaveFieldAction(props));
     }
   };
 };

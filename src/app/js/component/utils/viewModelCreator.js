@@ -5,6 +5,9 @@ class ViewModelCreator {
   create(dispatch, model, parentViewId, successCallback, fnAdditionalStateMutator) {
     const viewModel = viewModelFactory.generateViewModel(parentViewId, model);
 
+    c.l(`parentViewId: ${parentViewId}`);
+    c.lo(viewModel, 'viewModelsss: ');
+
     this.persistArrayOfChildren(dispatch, [viewModel], parentViewId, successCallback, fnAdditionalStateMutator);
   }
 
