@@ -99,7 +99,7 @@ const mapStateToProps = (state, ownProps) => {
 const ensureId = (model, getState) => {
   let id = model.id;
   if (!id) {
-    id = stateTraversal.getNextId(getState().model);
+    id = stateTraversal.getNextId(getState());
   }
   return id;
 };

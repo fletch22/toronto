@@ -18,7 +18,7 @@ class AppContainerService extends ComponentService {
   addAppToState(state, label) {
     const appContainer = state.model.appContainer;
 
-    const id = stateTraversal.getNextId(state.model);
+    const id = stateTraversal.getNextId(state);
 
     let app = {
       id,

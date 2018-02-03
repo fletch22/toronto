@@ -158,17 +158,15 @@ const doSaveFieldAction = (ownProps) => (
 
     const vmDataStore = props.viewModel;
     const vmDataModel = vmDataStore.viewModel.children.find((child) => child.viewModel.id === props.wizardData.dataModelId);
-    c.lo(vmDataModel, 'vmDataModel: ');
 
     const parentId = props.wizardData.dataModelId;
-    const protoModel = { id: stateTraversal.getNextId(state.model), parentId, label: props.newItemNameInput.value };
+    const protoModel = { id: stateTraversal.getNextId(state), parentId, label: props.newItemNameInput.value };
     const model = dataModelFieldFactory.createInstanceFromModel(protoModel);
 
     const newItemNameInput = graphTraversal.find(state, props.newItemNameInput.id);
     newItemNameInput.value = '';
     newItemNameInput.visible = false;
 
-    c.lo(vmDataModel.id, 'vmDataModel.id: ');
     return viewModelCreator.create(dispatch, model, vmDataModel.id);
   }
 );

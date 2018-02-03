@@ -18,7 +18,7 @@ class GridHelper {
       this.addPropAndValueToRow(newRow, col.key, '');
     });
 
-    this.addPropAndValueToRow(newRow, this.CONSTANTS.IDENTITY_KEY_NAME, stateTraversal.getNextId(state.model));
+    this.addPropAndValueToRow(newRow, this.CONSTANTS.IDENTITY_KEY_NAME, stateTraversal.getNextId(state));
 
     rows.unshift(newRow);
 

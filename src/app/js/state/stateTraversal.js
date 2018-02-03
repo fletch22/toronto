@@ -4,11 +4,24 @@ import ViewTypes from "../views/ViewTypes";
 
 class StateTraversal {
   findHighestId(node) {
-    return _.max(graphTraversal.collectPropValuesByPropName(node, 'id'));
+    return _.max(graphTraversal.collectPropValuesByPropName(node, 'id').filter((value) => typeof value !== typeof ''));
   }
 
   getNextId(node) {
-    return this.findHighestId(node) + 1;
+    let highestId = node.currentId;
+
+    c.l(`highestId: ${highestId}`);
+
+    if (!highestId) {
+      highestId = this.findHighestId(node) + 1;
+    } else {
+      highestId += 1;
+    }
+    /* eslint-disable no-param-reassign */
+    node.currentId = highestId;
+
+    c.l(`CurrentId: ${node.currentId}`);
+    return node.currentId;
   }
 
   findIslandWithId(state, id) {

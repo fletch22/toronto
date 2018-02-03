@@ -25,7 +25,7 @@ class EditorValuesPersistence {
           }
         }
       } else {
-        model.id = stateTraversal.getNextId(state.model);
+        model.id = stateTraversal.getNextId(state);
         model = webFolderModelFactory.createInstance(model);
         parentModel.children.push(model);
       }

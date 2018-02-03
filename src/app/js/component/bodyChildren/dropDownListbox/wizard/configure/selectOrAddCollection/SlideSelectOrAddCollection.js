@@ -18,7 +18,7 @@ class SlideSelectOrAddCollection extends React.Component {
   render() {
     let choices = this.props.collections;
 
-    c.lo(choices, 'choices: ');
+    // c.lo(choices, 'choices: ');
 
     if (choices.length > 0) {
       choices = choices.map((choice, index) => {
@@ -97,6 +97,8 @@ const partialFlatten = (state, ownProps) => {
   const dataStores = dataStoreModelUtils.getDataStores(dataUniverse);
   const selectedDataStore = dataStoreModelUtils.findById(dataStores, wizardData.dataStoreId);
 
+  // c.lo(selectedDataStore, 'selectedDataStore: ');
+
   let collections = [];
   if (selectedDataStore) {
     collections = selectedDataStore.children;
@@ -136,7 +138,10 @@ const doSaveCollectionAction = (event, ownProps) => (
     const state = getState();
     const props = partialFlatten(state, ownProps);
 
-    const protoModel = { id: stateTraversal.getNextId(state.model), parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value };
+    const protoModel = { id: stateTraversal.getNextId(state), parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value };
+
+    c.lo(protoModel, 'protoModel: ');
+
     const model = dataModelModelFactory.createInstanceFromModel(protoModel);
 
     const newItemNameInput = graphTraversal.find(state, props.newItemNameInput.id);
