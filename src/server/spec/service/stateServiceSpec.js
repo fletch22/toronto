@@ -38,7 +38,7 @@ describe.only('StateService', () => {
       1234567891: states
     };
 
-    const writeStateToFileStub = sandbox.stub(stateService, 'writeStateToFile');
+    const writeStateToFileStub = sandbox.stub(stateService, 'writePersistStateToFile');
     const transformToPersistStateStub = sandbox.stub(stateService, 'transformToPersistState');
 
     // Act
@@ -406,7 +406,7 @@ describe.only('StateService', () => {
 
   it('should destroy everything when nuke and pave is called.', async () => {
     // Arrange
-    const rollbackToStub = sandbox.stub(stateService, 'rollbackTo').returns(Promise.resolve());
+    const rollbackToStub = sandbox.stub(stateService, 'truncateLog').returns(Promise.resolve());
 
     stateService.stateIndex = ['123'];
 
