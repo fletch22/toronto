@@ -1,0 +1,53 @@
+1. Modify website label uniqueness test for only those with the same parent ID (app)
+
+2. Add background border to test rendering. Better layering?
+
+3. Add New Dashboard Component Steps: 
+
+	Adding New Component to Dashboard Tree
+
+	1. Create Menu Item.
+
+		i. Find parent. Go to Header Menu. Add item.
+		ii. Goto mapPropsToDispatch. Add handler.
+
+	2. Goto reducer/index.js. Find CREATE_COMPONENT. Add handler to get viewName.
+
+	3. Goto PseudoModal add handler to component handler.
+
+
+4. How to Add a new Body Child
+
+	a. Add the item to ComponentTypes.js.
+	b. Add the item to SelectedContextToolbar.js.
+	c. Create the <Component> Toolbar class.
+	d. Add button to create <Component>.
+	e. Add case to modelGenerator.js
+	f. Add <Component> model factory class.
+	g. Add view creator to case section in actionComponentCreatorHandler.js.
+	h. Add view creator in viewFactory.js.
+
+
+Adding New Domain Component to Vancouver
+
+	4. Go to Vancouver Project
+
+		i. Add Child, Domain model, Dao, Service and Transformer
+		ii. Add the following in order:
+			ServiceJunction
+			ServiceFactory
+			DaoJunction
+			AppDesignerDao
+			AppDesignerModule
+			ReferenceResolverService // Code works without until you add a second sibling to 	//parent's children.
+
+	5. If renderable on an dashboard island, add to Island component.
+	6. If renderable in a bodyChild component, add to the bodyChild generator.
+
+Adding a New Domain Component to Toronto
+
+	1. Add to componentGenerator.js.
+	2. Add <Foo>ModelFactory.js
+
+5. Remove ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU
+

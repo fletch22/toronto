@@ -1,0 +1,522 @@
+@import 'css/config/colors';
+@import 'css/modules/z-index';
+$fa-font-path: '~font-awesome/fonts' !default;
+@import '../../node_modules/font-awesome/scss/font-awesome';
+
+.f22-app-root.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.modal-content {
+	top: 20px;
+}
+
+.button-close {
+	font-size: .7em;
+	top: -1px;
+	padding: 0;
+	position: relative;
+}
+
+.button-ellipses-v {
+  border: 1px solid darkgray;
+  background: transparent;
+  margin: 2px 0 0 0;
+}
+
+#main .container-app {
+	background-color: $gray;
+	margin: 10px;
+	border-radius: 5px;
+	padding: 0 0 0 0;
+}
+
+.container-app > .header-left {
+	float:left
+}
+
+.container-app > .header-right {
+	float:right
+}
+
+.container-app  .header-menu {
+  position: absolute;
+  top: 0;
+}
+
+#main .container-orb {
+  border-radius: 5px;
+  padding: 0 5px 0 5px;
+  margin: 0;
+}
+
+.container-orb > .header-left {
+  float:left;
+  padding: 0;
+  margin: 0;
+}
+
+.container-orb > .header-right {
+  float:right;
+  padding: 0;
+  margin: 0;
+  text-align: right;
+}
+
+.darkTextbox {
+	border: none;
+    background: transparent;
+    width: 95%;
+}
+
+.darkTextbox:focus {
+  border: none;
+  background: silver;
+}
+
+.time-travel {
+	font-size: 18px;
+	font-weight: 900;
+	margin-right: 10px;
+}
+
+.menu-item {
+	cursor: pointer;
+}
+
+.vertical-center {
+  display: inline-block;
+  vertical-align: baseline;
+  float: none;
+}
+
+/**
+
+Begin Dashboard
+
+ */
+
+.dashboard-app:hover {
+  background-color: $gray0;
+  color: #000;
+}
+
+.dashboard-item.col-sm-12 {
+  padding-right: 0;
+}
+
+#main .dashboard-item.dashboard-website {
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-item.dashboard-webfolder:hover  {
+  background-color: $gray2;
+  color: #000;
+}
+
+.dashboard-canvas {
+  position: absolute;
+  width: 100%;
+  top: 45px;
+  justify-content: center;
+}
+
+.scrim {
+  position: absolute;
+  top: 0;
+  @include alpha-background-color(rgba(black, 0.3), white);
+  color: orangered;
+  height: 100%;
+  width: 100%;
+}
+
+.flex-pseudo-modal {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch
+}
+
+.dashboard-canvas .pseudo-modal-content {
+  background-color: white;
+  padding: 0 0 0 7px;
+  box-shadow: 0 0 30px black;
+}
+
+.dashboard-canvas .pseudo-modal-title {
+  flex: 1 100%;
+}
+
+.dashboard-canvas .pseudo-modal-close {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.dashboard-canvas .pseudo-modal-component {
+  width: 100%;
+}
+
+.pseudo-modal-edit-website-page {
+  min-width: 1500px;
+  min-height: 530px;
+}
+
+.pseudo-modal-edit-configureddl {
+  width: 700px;
+  height: 530px;
+}
+
+.pseudo-modal-edit-data-narrative {
+  width: 1500px;
+  height: 600px;
+}
+
+.container-table {
+  width: 100%;
+  display: table;
+}
+.vertical-center-row {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.body-children-toolbar-col {
+  width: 230px;
+}
+
+.body-children-toolbar-col > .btn-f22-create-layout {
+  background-image: url('../../images/police-box.svg');
+  background-size: 18px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px;
+  display: inline-block;
+}
+
+:root .btn-f22-sys {
+  width: 26px;
+  height: 26px;
+  margin: 2px;
+  padding: 3px 4px 4px;
+}
+
+.body-child-selected {
+  box-shadow: inset 0px 0px 0px 1px red !important;
+  box-sizing: border-box;
+}
+
+.bc-outline-border {
+  position: absolute;
+  z-index: 30000;
+}
+
+.bc-toolbar-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.bc-toolbar-col-1 {
+  width: 100%;
+}
+
+.bc-toolbar-title-label {
+  padding: 3px 0 0 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.bc-toolbar-description {
+  float: left;
+  display: inline-block;
+  font-size: 9px;
+  font-style: italic;
+  padding: 3px 0 0 0;
+}
+
+.bc-toolbar-col-2 {
+}
+
+#main .full-toolbar-data {
+  margin: 20px 0 0 0;
+}
+
+#main .full-toolbar-data LABEL {
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+}
+
+#main .full-toolbar-data SELECT {
+  max-width: 150px;
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+}
+
+#main .full-toolbar-data INPUT {
+  font-size: 12px;
+  max-width: 90px;
+  padding: 0;
+  margin: 0;
+}
+
+#main .move-minion {
+  background-image: url('../../images/move-minion.svg');
+  background-size: 18px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px;
+  display: inline-block;
+}
+
+.grid-layout {
+  position: relative;
+  z-index: 3000;
+  margin: 0;
+  padding: 0;
+  //transform: scale(.994) !important;
+}
+
+/**
+
+End Dashboard
+
+**/
+
+.editor-label-container {
+  margin: 4px 0 0 0;
+}
+
+.tab-content {
+  margin: 5px 1.5px;
+  height: 100%;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.display-none {
+  display: none;
+}
+
+// Bootstrap Carousel Begin
+
+#main .carousel-control.left {
+  background-image: none;
+}
+
+#main .carousel-control.right {
+  background-image: none;
+}
+
+$carousel-transition: 0.2s ease-in-out;
+#main .carousel-inner > .item {
+  -webkit-transition: -webkit-transform $carousel-transition;
+  -moz-transition: -moz-transform $carousel-transition;
+  -o-transition: -o-transform $carousel-transition;
+  transition: transform $carousel-transition;
+}
+
+// Bootstrap Carousel Ends
+
+// Wizards Begin
+
+#main .wizard-data-source-buttons {
+  margin: 20px 0 0 0;
+}
+
+#main .wizard-data-source-buttons > .btn {
+  margin: 20px 0;
+}
+
+.wizard-config-ddl {
+  height: 500px;
+}
+
+.wizard-config-ddl .row {
+  height: 90%;
+}
+
+.wizard-config-ddl.sel_view_coll-flex {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 20px 20px 25px;
+}
+
+.sel_view_row_main {
+  flex-grow: 9;
+  flex-shrink: 1;
+}
+
+.sel_view_row_edit_controls {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.sel_view_toolbar {
+  display: flex;
+  float: left;
+  margin: 0 0 0 -2px;
+}
+
+.sel_view_row_foot_nav {
+  border: solid 1px blue;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.create-item-for-collection {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  transition: opacity 350ms;
+  opacity: 0;
+}
+
+.create-item-for-collection-visible {
+  opacity: 100;
+  transition: opacity 350ms;
+}
+
+#main .wiz-sel-coll-no-sel-coll {
+  padding: 10px 0 0 30px;
+}
+
+#main .wiz-sel-coll-selected-collection {
+  border: 2px solid blue;
+}
+
+#main .wiz-config-ddl-sel-field {
+  text-align: right;
+  padding: 0 10px 0 0;
+}
+
+#main .list-group.wiz-sel-coll {
+  border: 1px solid $gray1;
+  overflow-y: scroll;
+  max-width: 98%;
+  min-height: 200px;
+  max-height: 300px;
+  margin: 0 0 1px 0;
+}
+
+#main .sel-view-row-foot-name BUTTON {
+  margin: 0 10px 0 0;
+}
+
+#main .sel-view-row-foot-name BUTTON:last-child {
+  margin: 0 10px 0 0;
+}
+
+#main .save-ddl-field-info {
+  margin: 10px;
+  display: flex;
+  flex-direction: row
+}
+
+#main .save-ddl-info-form-label {
+  width: 150px;
+}
+
+#main .save-ddl-field-info LABEL {
+  font-weight: normal;
+}
+
+#main .save-ddl-field-paren {
+  font-style: italic;
+  font-size: 8pt;
+}
+
+#main .save-ddl-field-value {
+  font-size: 12pt;
+  font-weight: bold;
+  padding: 0 5px 0 0;
+}
+
+// Wizards End
+
+#main .no-padding {
+  padding: 0;
+}
+
+#main .f22-grid {
+  padding: 0 0 0 1px;
+  margin: 0 10px 0 0;
+}
+
+#main .button-submit {
+  height: 25px;
+  padding: 0;
+  margin: 0;
+  align-content: center;
+  white-space: nowrap
+}
+
+.flex-normal {
+  display: flex;
+}
+
+.flex-bc {
+  display: flex;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.data-narrative-button-menu {
+  width: 100%;
+}
+
+/* Drop N Drag Stuff */
+.pricetag {
+  white-space: nowrap;
+  position: fixed;
+  margin: 0 5px 0 10px;
+  height: 25px;
+  border-radius: 0 5px 5px 0;
+  padding: 0 25px 0 15px;
+  background: #E8EDF0;
+  border-style: solid;
+  border-color: #C7D2D4;
+  border-width: 1px 1px 1px 0;
+  color: red;
+  line-height: 23px;
+  z-index: $zIndexTopMostBodyChildren;
+  transform: rotate(-41deg);
+}
+
+.pricetag:before {
+  position: absolute;
+  content: "\25CF";
+  color: white;
+  text-shadow: 0 0 1px #333;
+  font-size: 11px;
+  line-height: 0;
+  text-indent: 12px;
+  left: -14px;
+  top: -1px;
+  width: 1px;
+  height: 0;
+  border-right: 14px solid #E8EDF0;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
+  transform: matrix(1, 0, 0, .93, .5, -.5);
+}
+
+
+
+
+

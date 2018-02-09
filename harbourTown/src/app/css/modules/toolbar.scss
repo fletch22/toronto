@@ -1,0 +1,79 @@
+@import 'css/config/colors';
+@import 'css/modules/z-index';
+
+.toolbar-container {
+  background: $gray;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.toolbar-button {
+  color: $darkText;
+  margin: 2px;
+  display: inline-block;
+}
+
+.button-application-toolbar {
+ position: relative;
+ z-index: $zIndexApplicationToolbar;
+}
+
+#police-box {
+  background-image: url('../../images/police-box.svg');
+  background-size: 18px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px;
+  display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
+}
+
+#nuke-and-pave {
+  background-image: url('../../images/mushroom-cloud.svg');
+  background-size: 17px 15px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px;
+  display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
+}
+
+#save-system-to-disk {
+  background-image: url('../../images/cloud-upload.svg');
+  background-size: 18px 16px;
+  background-position: bottom 2px right 3px;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px 2px 2px 2px;
+  display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
+}
+
+#restore-system-from-disk {
+  background-image: url('../../images/cloud-download.svg');
+  background-size: 18px 16px;
+  background-position: bottom 2px right 3px;
+  background-repeat: no-repeat;
+  width: 26px;
+  height: 24px;
+  margin: 2px 2px 2px 2px;
+  display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
+}
+
+.toolbar-label {
+  color: $darkText;
+  line-height: 25px;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+.toolbar-label-value {
+  @extend .toolbar-label;
+  font-weight: bolder;
+}

@@ -1,0 +1,35 @@
+@import 'css/config/colors';
+@import 'css/modules/z-index';
+
+.time-travel-toolbar {
+  position: absolute;
+  top: 0;
+}
+
+.time-travel-toolbar .modal-backdrop {
+  z-index: $zIndexTimeTravelToolbarScrim;
+  opacity: 0.3;
+}
+
+.time-travel-toolbar-body {
+  color: black;
+  padding: 10px 0 10px 15px;
+  z-index: $zIndexTimeTravelToolbar;
+  position: relative;
+  background-color: whitesmoke;
+  width: 230px;
+}
+
+.time-travel-toolbar-body > .close-button {
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  position: relative;
+  top: -10px;
+}
+
+.toolbar-buttons {
+  display: inline-block;
+  z-index: $zIndexTimeTravelToolbar;
+  margin: 0 3px 0 3px;
+}
