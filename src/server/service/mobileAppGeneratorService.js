@@ -7,7 +7,7 @@ export const targetProjectRoot = 'D:\\workspaces\\temp\\AwesomeProject';
 export const templateRoot = path.join(targetProjectRoot, 'templates');
 export const templateFilePath = path.join(templateRoot, 'Foo.js.template');
 
-class AppGeneratorService {
+class MobileAppGeneratorService {
   genenerate() {
     const body = {
       body: 'banana'
@@ -48,4 +48,4 @@ class AppGeneratorService {
   }
 }
 
-export default new AppGeneratorService();
+export default new MobileAppGeneratorService();

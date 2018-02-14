@@ -1,12 +1,12 @@
 import { expect } from 'chai';
-import appGeneratorService, { templateRoot, templateFilePath } from '../../service/appGeneratorService';
+import mobileAppGeneratorService, { templateRoot, templateFilePath } from '../../service/mobileAppGeneratorService';
 import path from 'path';
 
-describe('appGeneratorService', () => {
+describe('mobileAppGeneratorService', () => {
   it('should generate a template correctly.', () => {
     // Arrange
     // Act
-    const text = appGeneratorService.genenerate();
+    const text = mobileAppGeneratorService.genenerate();
 
     // Assert
     expect(!!text).to.equal(true);
@@ -17,7 +17,7 @@ describe('appGeneratorService', () => {
     const templateBarPath = path.join(templateRoot, 'bar', 'banana.js.template');
 
     // Act
-    const outputPath = appGeneratorService.getOutputPath(templateBarPath);
+    const outputPath = mobileAppGeneratorService.getOutputPath(templateBarPath);
 
     // Assert
     expect('D:\\workspaces\\temp\\AwesomeProject\\bar\\banana.js').to.equal(outputPath);
@@ -25,9 +25,9 @@ describe('appGeneratorService', () => {
 
   it('should write to output correctly.', () => {
     // Arrange
-    const content = appGeneratorService.genenerate();
+    const content = mobileAppGeneratorService.genenerate();
     // Act
-    appGeneratorService.sendOutput(templateFilePath, content);
+    mobileAppGeneratorService.sendOutput(templateFilePath, content);
 
     // Assert
   });

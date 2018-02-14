@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "env", {
+        "targets": { "browsers": ["last 1 versions"] },
+        "modules": false
+      }
+    ],
+    "react-hmre",
+    "react",
+    "es2015",
+    "stage-0"
+  ],
+  "plugins": ["transform-object-rest-spread"]
+}

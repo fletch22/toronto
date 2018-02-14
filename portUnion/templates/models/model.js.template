@@ -1,0 +1,6 @@
+import sequelize from 'sequelize';
+
+const {{l-value-name}} = sequelize.define('{{tableName}}', {
+  title: Sequelize.STRING,
+  description: Sequelize.TEXT
+});
