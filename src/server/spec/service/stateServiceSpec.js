@@ -12,7 +12,7 @@ import EventEmitter from 'events';
 import fileService from '../../service/fileService';
 import winston from 'winston';
 
-describe.only('StateService', () => {
+describe('StateService', () => {
   let sandbox;
 
   beforeEach(() => {

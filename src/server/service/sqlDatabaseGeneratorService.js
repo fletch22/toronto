@@ -2,25 +2,15 @@ import Handlebars from 'handlebars';
 import fileService from './fileService';
 import path from 'path';
 import winston from 'winston';
-import randomstring from 'randomstring';
 
 export const targetProjectRoot = 'D:\\workspaces\\toronto\\portUnion';
 export const templateRoot = path.join(targetProjectRoot, 'templates');
-export const templateFilePath = path.join(templateRoot, 'config', 'config.json.template');
+export const configJsonTemplatePath = path.join(templateRoot, 'config', 'config.json.template');
+export const modelTemplatePath = path.join(templateRoot, 'models', 'model.js.template');
 
 class SqlDatabaseGeneratorService {
-  genenerate() {
-    const databaseName = randomstring.generate({
-      length: 6,
-      charset: 'alphabetic',
-      capitalization: 'lowercase'
-    });
-
-    const state = {
-      databaseName
-    };
-
-    const source = this.readFile(templateFilePath);
+  genenerate(state, filePath) {
+    const source = this.readFile(filePath);
     const template = Handlebars.compile(source);
 
     return template(state);
@@ -35,15 +25,14 @@ class SqlDatabaseGeneratorService {
     return path.join(targetProjectRoot, shortPath, outputFilename);
   }
 
-  sendOutput(sourceTemplateFile, content) {
-    const destinationPath = this.getOutputPath(sourceTemplateFile);
+  sendOutput(destinationPath, content) {
     return fileService.persistByOverwriting(destinationPath, content)
       .then(() => {
         return destinationPath;
       })
       .catch((error) => {
         winston.error(error.message);
-        throw new Error(`Encountered error while trying to write '${sourceTemplateFile}'.`);
+        throw new Error(`Encountered error while trying to write '${destinationPath}'.`);
       });
   }
 
@@ -57,8 +46,10 @@ class SqlDatabaseGeneratorService {
     return source;
   }
 
-  createDatabase() {
-
+  collectFiles() {
+    return fileService.dir(templateRoot, (filename) => {
+      return filename.endsWith('.template');
+    });
   }
 }
 

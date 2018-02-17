@@ -123,6 +123,28 @@ class FileService {
   getFolderContentNames(pathThing) {
     return fs.readdirSync(pathThing);
   }
+
+  dir(folderPath, fnFilter) {
+    const list = fs.readdirSync(folderPath);
+
+    let matchList = [];
+    if (Array.isArray(list)) {
+      list.forEach((item) => {
+        const itemPath = path.join(folderPath, item);
+        const stat = fs.statSync(itemPath);
+        if (stat && stat.isDirectory()) {
+          const resultList = this.dir(itemPath, fnFilter);
+          matchList = matchList.concat(resultList);
+        } else {
+          if (!!fnFilter && fnFilter(itemPath)) {
+            matchList.push(itemPath);
+          }
+        }
+      });
+    }
+
+    return matchList;
+  }
 }
 
 export default new FileService();
