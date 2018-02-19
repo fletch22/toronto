@@ -1,12 +1,21 @@
 import Sequelize from 'sequelize';
 
-
 class DatabaseService {
   constructor() {
-    this.sequelize = new Sequelize('mysql', 'root', 'rumgen999', {
+    this.openConnection('mysql');
+  }
+
+  closeConnection() {
+    if (!!this.sequelize) {
+      this.sequelize.close();
+    }
+  }
+
+  openConnection(databaseName) {
+    this.sequelize = new Sequelize(databaseName, 'root', 'rumgen999', {
       host: 'localhost',
       dialect: 'mysql',
-
+      logging: console.log,
       pool: {
         max: 5,
         min: 0,
@@ -16,29 +25,33 @@ class DatabaseService {
     });
   }
 
-  // constructor() {
-  //   this.sequelize = new Sequelize('sakila', 'root', 'rumgen999', {
-  //     host: 'localhost',
-  //     dialect: 'mysql',
-  //
-  //     pool: {
-  //       max: 5,
-  //       min: 0,
-  //       acquire: 30000,
-  //       idle: 10000
-  //     }
-  //   });
-  // }
+  async testConnection() {
+    return await this.sequelize.authenticate();
+  }
 
-  getTest() {
-    // this.sequelize
-    //   .query(
-    //     'SELECT * FROM actor WHERE last_name = :lastName',
-    //     { raw: true, replacements: { lastName: 'WAHLBERG' } }
-    //   )
-    //   .then(projects => {
-    //     console.log(projects);
-    //   });
+  async listTables() {
+    return await this.sequelize.queryInterface.showAllSchemas({});
+  }
+
+  async createDatabase(databaseName) {
+    return await this.sequelize.query(`CREATE DATABASE IF NOT EXISTS ${databaseName}`, { type: this.sequelize.QueryTypes.RAW });
+  }
+
+  async listDatabases() {
+    const result = await this.sequelize.query('SHOW DATABASES', { type: this.sequelize.QueryTypes.RAW });
+    return result[0].map((databaseObj) => databaseObj.Database);
+  }
+
+  async dropDatabase(databaseName) {
+    return await this.sequelize.query(`DROP DATABASE IF EXISTS ${databaseName}`, { type: this.sequelize.QueryTypes.RAW });
+  }
+
+  async sync() {
+    return await this.sequelize.sync();
+  }
+
+  define(modelName, obj) {
+    this.sequelize.define(modelName, obj);
   }
 }
 

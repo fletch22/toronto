@@ -10,7 +10,9 @@
     "start": "ss.cmd",
     "lint": "eslint --ext .js,.jsx assets/**",
     "preinstall": "npm i -g node-gyp@3.3.0",
-    "test:server": "./node_modules/.bin/jest --config=./src/server/spec/jest.config.js --watch"
+    "test:server:unit": "./node_modules/.bin/jest --config=./src/server/spec/jest.config.unit.js --watch",
+    "test:server:integration": "./node_modules/.bin/jest --config=./src/server/spec/jest.config.integration.js --watch",
+    "test:db": "npm run babel -- ./foo.js"
   },
   "author": "Chris Flesche",
   "license": "UNLICENSED",
@@ -134,14 +136,14 @@
     "redux-thunk": "^2.0.1",
     "resolve-url-loader": "^1.4.3",
     "rimraf": "^2.6.2",
-    "sequelize": "^4.33.3",
+    "sequelize": "4.33.4",
     "shelljs": "^0.8.1",
     "start-server-webpack-plugin": "^2.2.0",
     "string-template": "^1.0.0",
     "url-loader": "^0.5.7",
     "webpack-node-externals": "^1.6.0",
     "whatwg-fetch": "^0.11.0",
-    "winston": "^2.4.0",
+    "winston": "2.4.0",
     "yo": "^1.8.5"
   }
 }

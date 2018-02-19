@@ -1,5 +1,5 @@
-import userDataService from '../../service/userDataService';
-import ComponentTypes from '../../../common/domain/component/ComponentTypes';
+import userDataService from '../../../service/userDataService';
+import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 describe('userDataService', () => {
   const state = {

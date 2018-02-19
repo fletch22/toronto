@@ -21,10 +21,6 @@ class Config {
   getWebDevServerPort() {
     return 8081;
   }
-
-  getTemplateProjectFolder() {
-    return 'D:\\workspaces\\temp\\AwesomeProject\\templates\\Foo.js.template';
-  }
 }
 
 export default new Config();

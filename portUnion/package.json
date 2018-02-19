@@ -8,7 +8,7 @@
     "start": "s.cmd",
     "preinstall": "npm i -g node-gyp@3.3.0",
     "test": "./node_modules/.bin/jest --config=./src/server/spec/jest.config.js --watch",
-    "createDatabase": "D:\\workspaces\\toronto\\portUnion\\node_modules\\.bin\\sequelize db:create"
+    "createDatabase": "node_modules\\.bin\\sequelize db:create"
   },
   "author": "Chris Flesche",
   "license": "UNLICENSED",

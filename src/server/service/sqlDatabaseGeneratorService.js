@@ -2,8 +2,9 @@ import Handlebars from 'handlebars';
 import fileService from './fileService';
 import path from 'path';
 import winston from 'winston';
+import { rootDir } from '../../../root';
 
-export const targetProjectRoot = 'D:\\workspaces\\toronto\\portUnion';
+export const targetProjectRoot = path.resolve(rootDir, 'portUnion');
 export const templateRoot = path.join(targetProjectRoot, 'templates');
 export const configJsonTemplatePath = path.join(templateRoot, 'config', 'config.json.template');
 export const modelTemplatePath = path.join(templateRoot, 'models', 'model.js.template');

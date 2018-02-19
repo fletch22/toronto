@@ -1,5 +1,5 @@
-import sessionService from '../../service/sessionService';
-import fileService from '../../service/fileService';
+import sessionService from '../../../service/sessionService';
+import fileService from '../../../service/fileService';
 import sinon from 'sinon';
 import fs from 'fs';
 

@@ -1,6 +1,6 @@
-import serializerService from '../../service/serializerService';
+import serializerService from '../../../service/serializerService';
 import sinon from 'sinon';
-import fileService from '../../service/fileService';
+import fileService from '../../../service/fileService';
 import path from 'path';
 
 describe('SerializerService', () => {

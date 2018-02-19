@@ -1,16 +1,16 @@
-import { default as stateService, stateLogPrefix } from '../../service/stateService';
-import sessionService from '../../service/sessionService';
+import { default as stateService, stateLogPrefix } from '../../../service/stateService';
+import sessionService from '../../../service/sessionService';
 import sinon from 'sinon';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
-import util from '../../util/util';
-import { default as utilHashCode } from '../../../app/js/util/util';
+import util from '../../../util/util';
+import { default as utilHashCode } from '../../../../app/js/util/util';
 import Optional from 'optional-js';
 import 'babel-core/register';
 import EventEmitter from 'events';
-import fileService from '../../service/fileService';
-import winston from 'winston';
+import fileService from '../../../service/fileService';
+import { rootDir } from '../../../../../root';
 
 describe('StateService', () => {
   let sandbox;
@@ -274,7 +274,7 @@ describe('StateService', () => {
 
     // Assert
     expect(optionalFilePath.isPresent()).toBe(true);
-    expect(optionalFilePath.get()).toBe('D:\\workspaces\\toronto\\temp\\stateLog-1969-12-31-18-00-12-PM.txt');
+    expect(optionalFilePath.get().endsWith('\\temp\\stateLog-1969-12-31-18-00-12-PM.txt')).toBe(true);
   });
 
   it('should persist session files to disk (one file) successfully.', () => {
@@ -357,15 +357,17 @@ describe('StateService', () => {
 
   it('should map stunt doubles successfully.', () => {
     // Arrange
-    const stateString = fileService.readFile('D:\\workspaces\\toronto\\temp\\stuntDoubleState.json');
-    const state = JSON.parse(JSON.parse(stateString));
+    const pathFile = path.resolve(rootDir, 'temp', 'stuntDoubleState.json');
+    const stateString = fileService.readFile(pathFile);
+    const statePackage = JSON.parse(stateString);
+    const state = statePackage.state;
 
     // Act
     const stuntDoubles = stateService.mapStuntDoubles(state.model);
 
     // Assert
     const keys = Object.keys(stuntDoubles);
-    expect(keys.length).toEqual(16);
+    expect(keys.length).toEqual(6);
     const stuntMen = keys.filter((item) => {
       const idValue = stuntDoubles[item];
       return idValue.indexOf('-') > -1;
@@ -393,15 +395,15 @@ describe('StateService', () => {
 
   it('should replace stunt doubles successfully.', () => {
     // Arrange
-    const stateString = fileService.readFile('D:\\workspaces\\toronto\\temp\\stuntDoubleState.json');
-    const state = JSON.parse(JSON.parse(stateString));
+    const stateString = fileService.readFile('C:\\Users\\chris\\Documents\\workspaces\\toronto\\temp\\stuntDoubleState.json');
+    const state = JSON.parse(stateString).state;
 
     // Act
     const stateNew = stateService.replaceStuntDoubles(state);
     const hashCode = utilHashCode.hashCode(JSON.stringify(stateNew));
 
     // Assert
-    expect(hashCode).toEqual(-496524590);
+    expect(495834514).toEqual(hashCode);
   });
 
   it('should destroy everything when nuke and pave is called.', async () => {
