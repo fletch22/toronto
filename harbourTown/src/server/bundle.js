@@ -3,7 +3,7 @@ const WebpackDevServer = require('webpack-dev-server');
 const webpackConfig = require('../../webpack.config.js');
 import c from '../util/c';
 import winston from 'winston';
-import config from './config/config';
+import config from './config/serverConfig';
 
 winston.info(`Environment is ${process.env.NODE_ENV}`);
 const isDevelopment = process.env.NODE_ENV === 'development';

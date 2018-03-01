@@ -1,7 +1,7 @@
 const Webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-import { default as configServer } from './src/server/config/Config';
+import { default as configServer } from './src/server/config/serverConfig';
 
 const buildPath = path.resolve(__dirname, 'build');
 

@@ -1,4 +1,4 @@
-import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
+import ComponentTypes from './ComponentTypes';
 import _ from 'lodash';
 
 

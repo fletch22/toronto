@@ -21,6 +21,9 @@ class DatabaseService {
         min: 0,
         acquire: 30000,
         idle: 10000
+      },
+      define: {
+        freezeTableName: true
       }
     });
   }
@@ -51,7 +54,7 @@ class DatabaseService {
   }
 
   define(modelName, obj) {
-    this.sequelize.define(modelName, obj);
+    return this.sequelize.define(modelName, obj);
   }
 }
 

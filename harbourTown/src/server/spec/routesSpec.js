@@ -34,7 +34,7 @@ describe('routes', () => {
     app.invoke('get', '/');
 
     // Assert
-    expect(actualPath).toBe('D:\\workspaces\\toronto\\index.html');
+    expect(actualPath.endsWith('toronto\\index.html')).toBe(true);
   });
 
   it('should process sent state correctly.', async () => {

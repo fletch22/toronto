@@ -1,11 +1,16 @@
-import Sequelize from 'sequelize';
-import databaseService from '../../service/databaseService';
-import stringUtils from '../../../common/util/stringUtils';
+import sequelize from 'sequelize';
+import _ from 'lodash';
+import databaseService from '../../../service/databaseService';
+import stringUtils from '../../../../common/util/stringUtils';
+import { statePackageTest } from '../../statePackageTest';
+import databaseConstructionService from '../../../service/databaseConstructionService';
+import stateTransformer from '../../../codeGeneration/stateTranformer';
+import stateToSqlModelTransformer from '../../../codeGeneration/sql/stateToSqlModelTransformer';
 
 const getDefine = () => {
   return {
     columnA: {
-      type: Sequelize.BOOLEAN,
+      type: sequelize.BOOLEAN,
       validate: {
         is: ['[a-z]', 'i'],        // will only allow letters
         max: 23,                  // only allow values <= 23
@@ -17,8 +22,8 @@ const getDefine = () => {
       field: 'column_a'
       // Other attributes here
     },
-    columnB: Sequelize.STRING,
-    columnC: Sequelize.STRING
+    columnB: sequelize.STRING,
+    columnC: sequelize.STRING
   };
 };
 
@@ -107,6 +112,25 @@ describe('databaseServiceSpec', () => {
 
     // Assert
     databaseService.openConnection('mysql');
+  });
+
+  test('should transform state to create database model successfully.', async () => {
+    // Arrange
+    const stateModel = stateTransformer.transform(statePackageTest);
+
+    const databaseModel = stateModel.database;
+
+    // Act
+    await databaseService.dropDatabase(databaseModel.databaseName);
+    await databaseConstructionService.createDatabase(databaseModel);
+
+    // Assert
+  });
+
+  test('should insert a record.', () => {
+    // Arrange
+    // Act
+    // Assert
   });
 });
 

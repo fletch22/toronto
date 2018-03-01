@@ -291,7 +291,7 @@ describe('StateService', () => {
 
     // Assert
     expect(getCurrentSessionKeyStub.calledOnce).toBe(true);
-    expect(existsStub.calledOnce).toBe(true);
+    expect(existsStub.called).toBe(true);
     expect(removeFolderStub.calledOnce).toBe(true);
     expect(saveFilesToBackupFolderStub.calledOnce).toBe(true);
     expect(makeFolderStub.calledOnce).toBe(true);
@@ -403,7 +403,7 @@ describe('StateService', () => {
     const hashCode = utilHashCode.hashCode(JSON.stringify(stateNew));
 
     // Assert
-    expect(495834514).toEqual(hashCode);
+    expect(-396027093).toEqual(hashCode);
   });
 
   it('should destroy everything when nuke and pave is called.', async () => {

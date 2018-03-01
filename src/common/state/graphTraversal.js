@@ -49,15 +49,29 @@ class GraphTraversal {
       foundObjects.push(o);
     }
 
+    const gatherByTraverse = (item) => {
+      const foundObjectsFromChildren = this.traverseAndCollect(item, propertyName);
+      foundObjects = foundObjects.concat(foundObjectsFromChildren);
+    };
+
     for (const key in o) {
       if (!!o[key]) {
         if (typeof(o[key]) === 'object') {
-          const foundObjectsFromChildren = this.traverseAndCollect(o[key], propertyName);
-          foundObjects = foundObjects.concat(foundObjectsFromChildren);
+          if (Array.isArray(o[key])) {
+            o[key].forEach(gatherByTraverse);
+          } else {
+            const foundObjectsFromChildren = this.traverseAndCollect(o[key], propertyName);
+            foundObjects = foundObjects.concat(foundObjectsFromChildren);
+          }
         }
       }
     }
     return foundObjects;
+  }
+
+  findByPropNameAndValue(o, propertyName, value) {
+    const collection = this.traverseAndCollect(o, propertyName);
+    return collection.filter((item) => item[propertyName] === value);
   }
 
   find(node, propertyValue) {
@@ -94,6 +108,8 @@ class GraphTraversal {
       return child.id === id;
     });
   }
+
+  findAll
 }
 
 export default new GraphTraversal();

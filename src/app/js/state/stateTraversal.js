@@ -1,6 +1,6 @@
 import graphTraversal from '../../../common/state/graphTraversal';
 import _ from 'lodash';
-import ViewTypes from "../views/ViewTypes";
+import ViewTypes from '../views/ViewTypes';
 
 class StateTraversal {
   findHighestId(node) {

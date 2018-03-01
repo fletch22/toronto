@@ -1,0 +1,6 @@
+{{#each database.dbModels}}
+app.get('/{{this.tableName}}', (req, res) => {
+  res.send(JSON.stringify({ foo: 'bar' }));
+});
+{{iteratedBreak @root.database.dbModels @index ~}}
+{{/each}}

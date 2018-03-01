@@ -1,0 +1,15 @@
+
+class ModelsFactory {
+    constructor() {
+    {{#each dbModels}}
+        this.{{tableName}} = sequelize.define('{{tableName}}', {
+        {{#each definedModel}}
+            {{@key}}: {{this.type}}{{iteratedCommaSeparator ../definedModel @index}}
+        {{/each}}
+        });
+    {{iteratedBreak @root.dbModels @index ~}}
+    {{/each}}
+}
+}
+
+export default new ModelsFactory();

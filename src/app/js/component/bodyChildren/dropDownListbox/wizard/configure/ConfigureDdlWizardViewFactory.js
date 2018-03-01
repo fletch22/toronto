@@ -1,9 +1,9 @@
 import f22Uuid from '../../../../../../../common/util/f22Uuid';
 import PseudoModalTypes from '../../../../../component/modals/PseudoModalTypes';
 import gridViewModelFactory from '../../../../../domain/collection/gridViewModelFactory';
-import dataUniverseModelUtils from '../../../../../domain/component/dataUniverseModelUtils';
-import dataStoreModelUtils from '../../../../../domain/component/dataStoreModelUtils';
-import dataModelModelUtils from '../../../../../domain/component/dataModelModelUtils';
+import dataUniverseModelUtils from '../../../../../../../common/domain/component/dataUniverseModelUtils';
+import dataStoreModelUtils from '../../../../../../../common/domain/component/dataStoreModelUtils';
+import dataModelModelUtils from '../../../../../../../common/domain/component/dataModelModelUtils';
 import dataFieldModelUtils from '../../../../../domain/component/dataFieldModelUtils';
 
 class ConfigureDdlWizardViewFactory {

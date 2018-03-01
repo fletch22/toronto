@@ -72,13 +72,10 @@ class GridService extends Service {
       const rows = gridHelper.addNewRow(state, grid.data.columns, []);
       rawRows = [rows[0]];
     } else {
-      // c.l('About to update rows ...');
       rawRows = rowIdsUpdated.map((id) => {
         const rawSingleRow = _.find(grid.data.rows, (gridRow) => gridRow.id === id);
-        // c.lo(rawSingleRow, 'rawSingleRows: ');
         return Object.assign(rawSingleRow, updatePropAndVals);
       });
-      // c.lo(rawRows, 'rawRows: ');
     }
 
     if (!rawRows) {
@@ -94,18 +91,15 @@ class GridService extends Service {
       return gridHelper.convertRowToPersist(row);
     });
 
-    // c.lo(rowsToPersist, 'rowsToPersist: ');
-
     const persistObject = {
       collectionId: grid.data.dataModelId,
       rows: rowsToPersist
     };
 
     const dataModel = graphTraversal.find(state.model, grid.data.collectionId);
+
     const row = [];
     const dataFields = dataModel.children.filter((child) => child.typeLabel === ComponentTypes.DataField);
-
-    // c.lo(dataFields, 'dataFields: ');
 
     persistObject.rows.forEach((persistRow) => {
       // c.lo(persistRow, 'persistRow: ');

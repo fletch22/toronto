@@ -159,8 +159,11 @@ class StateService {
   }
 
   persistStatePackage(statePackage) {
-    const persistState = this.transformToPersistState(statePackage);
-    return this.persistPersistState(statePackage.serverStartupTimestamp, persistState);
+    const statePackageStunted = { ... statePackage };
+    statePackageStunted.state = this.replaceStuntDoubles(JSON.parse(statePackage.state));
+
+    const persistState = this.transformToPersistState(statePackageStunted);
+    return this.persistPersistState(statePackageStunted.serverStartupTimestamp, persistState);
   }
 
   persistPersistState(serverStartupTimestamp, persistState) {
@@ -521,6 +524,12 @@ class StateService {
     if (fileService.exists(backupFolderPath)) {
       fileService.removeFolder(backupFolderPath);
     }
+
+    if (!fileService.exists(backupRootPath)) {
+      console.debug('Creating backupRootPath.');
+      fileService.makeFolder(backupRootPath);
+    }
+
     fileService.makeFolder(backupFolderPath);
 
     this.saveFilesToBackupFolder(backupFolderPath, sessionKey);
@@ -611,8 +620,10 @@ class StateService {
       stateString = stateString.replace(new RegExp(idOriginal, 'g'), nextId);
       highestId = nextId;
     });
+    const newState = JSON.parse(stateString);
+    newState.currentId = highestId;
 
-    return JSON.parse(stateString);
+    return JSON.stringify(newState);
   }
 
   getStuntDoubleInfo(stuntDoubles) {

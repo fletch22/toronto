@@ -1,13 +1,12 @@
 import _ from 'lodash';
 import ComponentTypes from '../../../common/domain/component/ComponentTypes';
 import PseudoModalTypes from '../component/modals/PseudoModalTypes';
-import EditorNames from '../component/editors/EditorNames';
 import graphTraversal from '../../../common/state/graphTraversal';
 import viewFactory from '../domain/component/view/viewFactory';
 import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
 import dataNarrativeViewFactory from '../component/editors/dataNarrative/dataNarrativeViewFactory';
-import { DatastoreModelConstants } from '../domain/component/datastoreModelFactory';
-import dataUniverseUtils from '../domain/component/dataUniverseModelUtils';
+import { DatastoreModelConstants } from '../../../common/domain/component/dataStoreModelUtils';
+import dataUniverseUtils from '../../../common/domain/component/dataUniverseModelUtils';
 
 class ViewModelFactory {
 

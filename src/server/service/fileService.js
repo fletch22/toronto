@@ -136,7 +136,11 @@ class FileService {
           const resultList = this.dir(itemPath, fnFilter);
           matchList = matchList.concat(resultList);
         } else {
-          if (!!fnFilter && fnFilter(itemPath)) {
+          if (!!fnFilter) {
+            if (fnFilter(itemPath)) {
+              matchList.push(itemPath);
+            }
+          } else {
             matchList.push(itemPath);
           }
         }

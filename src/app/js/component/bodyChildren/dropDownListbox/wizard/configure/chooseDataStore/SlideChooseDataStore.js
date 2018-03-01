@@ -2,11 +2,10 @@ import React, { PropTypes } from 'react';
 import WizardSlides from '../WizardSlides';
 import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
-import { actionUpdateViewPropertyValue } from '../../../../../../actions/index';
-import ConfigureDdlWizardViewFactory from '../ConfigureDdlWizardViewFactory';
-import dataUniverseModelUtils from '../../../../../../domain/component/dataUniverseModelUtils';
-import dataStoreModelUtils from '../../../../../../domain/component/dataStoreModelUtils';
+import dataUniverseModelUtils from '../../../../../../../../common/domain/component/dataUniverseModelUtils';
+import dataStoreModelUtils from '../../../../../../../../common/domain/component/dataStoreModelUtils';
 import { actionSelectDataStore } from '../../../../../../actions/wizard/configureDdl/index';
+
 
 class SlideChooseDataStore extends React.Component {
 

@@ -87,7 +87,7 @@ describe('GraphTraversal', () => {
 
     const elapsed = end - start;
 
-    expect(elapsed).is.lessThan(35);
+    expect(elapsed).is.lessThan(70);
     expect(object).is.not.equal(null);
     expect(typeof object).is.equal('object');
     expect(object.id).to.equal('section0');

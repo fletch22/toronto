@@ -53,4 +53,15 @@ describe('graphTraversal', () => {
     expect(nodeFound).to.not.be.equal(null);
     expect(nodeFound.typeLabel).to.be.equal(ComponentTypes.WebPage);
   });
+
+  it('should find the all Div correctly.', () => {
+    // Arrange
+    // Act
+    const divs = graphTraversal.findByPropNameAndValue(model, 'typeLabel', ComponentTypes.Div);
+
+    // Assert
+    expect(divs).to.not.be.equal(null);
+    expect(Array.isArray(divs)).to.be.equal(true);
+    expect(divs.length).to.be.equal(2);
+  });
 });

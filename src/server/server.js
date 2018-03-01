@@ -40,5 +40,4 @@ const server = app.listen(port, () => {
 
 setupNormalRoutes(app);
 
-
 module.exports = server;

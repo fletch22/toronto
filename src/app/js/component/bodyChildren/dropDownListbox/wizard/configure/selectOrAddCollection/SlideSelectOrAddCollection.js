@@ -7,9 +7,8 @@ import { actionToggleNewItemNameInput, actionSelectDataModel } from '../../../..
 import CreateNewItem from '../CreateNewItem';
 import dataModelModelFactory from '../../../../../../domain/component/dataModelModelFactory';
 import viewModelCreator from '../../../../../utils/viewModelCreator';
-import { actionUpdatePropertyWithPersist } from '../../../../../../actions/index';
-import dataUniverseModelUtils from '../../../../../../domain/component/dataUniverseModelUtils';
-import dataStoreModelUtils from '../../../../../../domain/component/dataStoreModelUtils';
+import dataUniverseModelUtils from '../../../../../../../../common/domain/component/dataUniverseModelUtils';
+import dataStoreModelUtils from '../../../../../../../../common/domain/component/dataStoreModelUtils';
 import graphTraversal from '../../../../../../../../common/state/graphTraversal';
 import stateTraversal from '../../../../../../state/stateTraversal';
 

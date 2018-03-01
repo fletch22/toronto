@@ -1,5 +1,5 @@
 import httpProxy from 'http-proxy';
-import config from '../config/Config';
+import config from '../config/serverConfig';
 import winston from 'winston';
 
 class ProxyDevServer {

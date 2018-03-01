@@ -1,0 +1,12 @@
+import modelFactory from '../models/modelFactory';
+
+class EntityService {
+{{#each dbModels}}
+  get{{capitalize tableName}}Collection() {
+    return ['AAA', 'BBB'];
+  }
+{{iteratedBreak ../dbModels @index ~}}
+{{/each}}
+}
+
+export default new EntityService();
