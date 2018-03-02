@@ -1,3 +1,5 @@
+import 'babel-core/register';
+import 'babel-polyfill';
 import cors from 'cors';
 
 import bodyParser from 'body-parser';

@@ -1,3 +1,5 @@
-export const config = {
+const config = {
   databaseName: '{{databaseName}}'
 };
+
+export default config;

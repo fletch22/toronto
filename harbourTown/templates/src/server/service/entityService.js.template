@@ -3,7 +3,7 @@ import modelFactory from '../models/modelFactory';
 class EntityService {
 {{#each dbModels}}
   get{{capitalize tableName}}Collection() {
-    return ['AAA', 'BBB'];
+    return modelFactory.{{capitalize tableName}}.findAll();
   }
 {{iteratedBreak ../dbModels @index ~}}
 {{/each}}

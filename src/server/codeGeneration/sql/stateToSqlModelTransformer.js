@@ -24,7 +24,8 @@ class StateToSqlTransformer {
     const definedModel = {};
     dataModel.children.forEach((field) => {
       definedModel[field.label] = {
-        type: sequelize.STRING
+        type: sequelize.STRING,
+        sequelizeType: 'sequelize.STRING'
       };
     });
 
@@ -33,6 +34,9 @@ class StateToSqlTransformer {
 
   transformRecordArray(recordArray: Array<string>, dataFieldArray: Array<Object>) {
     const instance = {};
+
+    c.lo(recordArray, 'recordArray: ');
+
     recordArray.forEach((fieldValue, ndxRecord) => {
       if (ndxRecord === 0) {
         instance.id = fieldValue;

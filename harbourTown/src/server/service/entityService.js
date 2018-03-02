@@ -2,7 +2,7 @@ import modelFactory from '../models/modelFactory';
 
 class EntityService {
   getC1Collection() {
-    return ['AAA', 'BBB'];
+    return modelFactory.C1.findAll();
   }
 }
 

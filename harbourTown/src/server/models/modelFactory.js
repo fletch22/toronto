@@ -1,9 +1,11 @@
+import sequelize from 'sequelize';
+import databaseService from '../service/databaseService';
 
 class ModelsFactory {
     constructor() {
-        this.c1 = sequelize.define('c1', {
-            f1: VARCHAR(255),
-            f2: VARCHAR(255)
+        this.C1 = databaseService.define('c1', {
+            f1: sequelize.STRING,
+            f2: sequelize.STRING
         });
     }
 }

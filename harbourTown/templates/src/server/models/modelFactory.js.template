@@ -1,10 +1,12 @@
+import sequelize from 'sequelize';
+import databaseService from '../service/databaseService';
 
 class ModelsFactory {
     constructor() {
     {{#each dbModels}}
-        this.{{tableName}} = sequelize.define('{{tableName}}', {
+        this.{{capitalize tableName}} = databaseService.define('{{tableName}}', {
         {{#each definedModel}}
-            {{@key}}: {{this.type}}{{iteratedCommaSeparator ../definedModel @index}}
+            {{@key}}: {{this.sequelizeType}}{{iteratedCommaSeparator ../definedModel @index}}
         {{/each}}
         });
     {{iteratedBreak @root.dbModels @index ~}}

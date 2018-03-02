@@ -1,6 +1,7 @@
 import path from 'path';
 import winston from 'winston';
 import 'babel-core/register';
+import entityService from './service/entityService';
 
 export const apiPath = '/api';
 

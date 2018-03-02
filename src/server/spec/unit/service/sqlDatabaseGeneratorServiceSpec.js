@@ -77,18 +77,18 @@ describe('sqlDatabaseGeneratorService', () => {
     expect(!!outputPath).to.equal(true);
   });
 
-  it('should execute the shell command successfully.', () => {
-    // Arrange
-    // Active
-    shell.cd(targetProjectRoot);
-    shell.env.NODE_ENV = 'development';
-
-    if (shell.exec('npm run createDatabase').code !== 0) {
-      shell.echo('Encountered failure while trying to create database.');
-    }
-
-    // Assert
-  });
+  // it('should execute the shell command successfully.', () => {
+  //   // Arrange
+  //   // Active
+  //   shell.cd(targetProjectRoot);
+  //   shell.env.NODE_ENV = 'development';
+  //
+  //   if (shell.exec('npm run createDatabase').code !== 0) {
+  //     shell.echo('Encountered failure while trying to create database.');
+  //   }
+  //
+  //   // Assert
+  // });
 
   test('should list the files.', () => {
     // Arrange
