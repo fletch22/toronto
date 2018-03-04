@@ -9,7 +9,12 @@ import graphTraversal from '../../../common/state/graphTraversal';
 import ComponentTypes from '../../../common/domain/component/ComponentTypes';
 import StatePackager from '../service/StatePackager';
 import stateSyncService from '../service/stateSyncService';
-import crudActionCreator from "../actions/crudActionCreator";
+import crudActionCreator from '../actions/crudActionCreator';
+import actionBodyChildSelectorHandler from "../reducers/actionBodyChildSelectorHandler";
+import {actionHideCurrentModal, actionShowErrorModal} from "../actions";
+import validationUtils from "../util/validationUtil";
+import stateUtil from "../util/stateUtil";
+import viewModelCreator from "../component/utils/viewModelCreator";
 
 class GridService extends Service {
 
@@ -18,48 +23,26 @@ class GridService extends Service {
   }
 
   delete(dispatch, ownProps, rowIndexes) {
-    const grid = ownProps.gridViewModel;
 
-    const rowIds = rowIndexes.map((index) => {
-      return grid.data.rows[index].id;
-    });
+    const helper = () => {
+      const persist = (dispatchInner, state) => {
+        const stateOld = JSON.stringify(state);
 
-    if (rowIds.length === 0) {
-      const error = {
-        name: 'Save Error',
-        message: 'Encountered error while trying to delete grid row(s). No rows selected.'
-      };
-      modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to save/update grid row.', dispatch);
-      return;
-    }
+        const collection = graphTraversal.find(state.model, ownProps.collectionId);
+        rowIndexes.sort().reverse().forEach((item) => {
+          collection.userData.splice(item, 1);
+        });
 
-    const successCallback = () => {
-      dispatch(actionGridRowDelete(ownProps.gridViewModel.id, rowIds));
-    };
-
-    const dispatchHelper = () => {
-      const deleteRows = (cuDispatch) => {
-        try {
-          return collectionService.delete(rowIds)
-            .then((result) => {
-              console.debug('Success Callback.');
-              return Promise.resolve(result);
-            })
-            .catch((error) => {
-              console.debug('Failure Callback.');
-              modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to create/update record.', cuDispatch);
-              return Promise.reject(error);
-            });
-        } catch (error) {
-          console.error(error);
-          return Promise.reject(error);
-        }
+        const statePackager = new StatePackager();
+        const statePack = statePackager.package(stateOld, JSON.stringify(state));
+        return stateSyncService.saveState(statePack)
+          .then((result) => result.state);
       };
 
-      return blockadeAndDrainService.invoke(deleteRows, successCallback);
+      return crudActionCreator.invoke(persist);
     };
 
-    dispatch(dispatchHelper());
+    dispatch(helper());
   }
 
   persist(state, dispatch, ownProps, rowIdsUpdated, updatePropAndVals) {
@@ -102,7 +85,6 @@ class GridService extends Service {
     const dataFields = dataModel.children.filter((child) => child.typeLabel === ComponentTypes.DataField);
 
     persistObject.rows.forEach((persistRow) => {
-      // c.lo(persistRow, 'persistRow: ');
       row[0] = persistRow[gridHelper.CONSTANTS.IDENTITY_KEY_NAME];
       dataFields.forEach((field) => {
         row.push(persistRow.fields[field.label]);
@@ -112,34 +94,22 @@ class GridService extends Service {
       } else {
         c.lo(row, 'Updating...');
         const rowIndex = _.findIndex(dataModel.userData, (rowUserData) => {
-          // c.lo(rowUserData, 'rowUserData...');
           return rowUserData[0] === row[0];
         });
-
-        // c.l(`RowIndex: ${rowIndex}`);
-
         dataModel.userData.splice(rowIndex, 1, row);
       }
     });
 
-
-    // c.lo(dataModel.userData, 'dataModel.userData in persist: ');
-
-    // const successCallback = (result) => {
-    //   result.persistedIds.forEach((id, index) => {
-    //     gridHelper.setId(rawRows[index], id);
-    //   });
-    //   dispatch(actionGridRowSaved(ownProps.gridViewModel.id, rawRows));
-    // };
-    //
-    // c.lo(persistObject, 'persistObject: ');
-
     const dispatchHelper = () => {
       const persist = () => {
         const statePackager = new StatePackager();
+        c.l(`State current ID ap: ${state.currentId}`);
         const statePack = statePackager.package(JSON.stringify(stateOld), JSON.stringify(state));
         return stateSyncService.saveState(statePack)
-          .then((result) => result.state);
+          .then((result) => {
+            c.l(`result.state current ID ap: ${result.state.currentId}`);
+            return result.state;
+          });
       };
 
       return crudActionCreator.invoke(persist);

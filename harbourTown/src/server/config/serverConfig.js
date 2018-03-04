@@ -1,7 +1,7 @@
 require('babel-core/register');
 const path = require('path');
 const srcRoot = require('../../srcRoot');
-import { config } from './config.js';
+import config from './config.js';
 
 class ServerConfig {
   constructor() {

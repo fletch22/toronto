@@ -387,10 +387,8 @@ describe('StateService', () => {
     const result = stateService.getStuntDoubleInfo(stuntDoubles);
 
     // Assert
-    const idsToReplace = result.idsToReplace;
-    expect(idsToReplace.length).toEqual(1);
-    expect(idsToReplace[0]).toEqual(stuntDoubles[2553]);
-    expect(result.highestId).toEqual(2345);
+    expect(result.length).toEqual(1);
+    expect(result[0]).toEqual(stuntDoubles[2553]);
   });
 
   it('should replace stunt doubles successfully.', () => {

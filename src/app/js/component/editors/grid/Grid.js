@@ -90,6 +90,9 @@ const getSelectedIndexes = (selectedRows) => {
 const addRow = (ownProps) => {
   return (dispatch, getState) => {
     const state = getState();
+
+    c.l(`In addRow: cid: ${state.currentId}`);
+
     gridService.persist(state, dispatch, ownProps, [], null);
   };
 };
@@ -97,8 +100,6 @@ const addRow = (ownProps) => {
 const updateGridRows = (ownProps, rows) => {
   return (dispatch, getState) => {
     const state = getState();
-
-    c.lo(rows, 'row in ugr: ');
 
     return gridService.persist(state, dispatch, ownProps, rows.rowIds, rows.updated);
   };
@@ -125,6 +126,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onClickRemove: () => {
       gridService.delete(dispatch, ownProps, ownProps.gridViewModel.selectedIndexes);
+      // dispatch(gridService.delete);
     }
 
   };

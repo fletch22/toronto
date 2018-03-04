@@ -11,7 +11,7 @@ const AppProperties = {
   nodeServer: {
     scheme: 'http',
     host: 'localhost',
-    port: 3000
+    port: 3001
   }
 };
 

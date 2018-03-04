@@ -95,7 +95,6 @@ class StateService {
   }
 
   writePersistStateToFile(key, stateString) {
-    winston.info('In writeStateToFile.');
     sessionService.persistSessionIfMissing(key);
     this.saveToStateIndex(stateString);
     return fileService.persistByAppending(this.composeFilePathFromSessionKey(key), `${_.trim(stateString)}\n`);
@@ -163,6 +162,7 @@ class StateService {
     statePackageStunted.state = this.replaceStuntDoubles(JSON.parse(statePackage.state));
 
     const persistState = this.transformToPersistState(statePackageStunted);
+
     return this.persistPersistState(statePackageStunted.serverStartupTimestamp, persistState);
   }
 
@@ -609,9 +609,8 @@ class StateService {
 
     const stuntDoubles = this.mapStuntDoubles(model);
 
-    const result = this.getStuntDoubleInfo(stuntDoubles);
-    const idsToReplace = result.idsToReplace;
-    let highestId = result.highestId;
+    const idsToReplace = this.getStuntDoubleInfo(stuntDoubles);
+    let highestId = state.currentId;
 
     let stateString = JSON.stringify(state);
     idsToReplace.forEach((idOriginal) => {
@@ -627,28 +626,16 @@ class StateService {
   }
 
   getStuntDoubleInfo(stuntDoubles) {
-    let highestId = 0;
     const idsToReplace = [];
     /* eslint-disable guard-for-in */
     for (const key in stuntDoubles) {
       const idValue = stuntDoubles[key];
-      const isNumber = idValue.indexOf('-') === -1;
-      if (isNumber) {
-        const id = parseInt(idValue, 10);
-        if (id > highestId) {
-          highestId = id;
-        }
-      } else {
+      if (idValue.indexOf('-') > -1) {
         idsToReplace.push(idValue);
       }
     }
 
-    idsToReplace.sort();
-
-    return {
-      idsToReplace,
-      highestId
-    };
+    return idsToReplace.sort();
   }
 
   mapStuntDoubles(model) {

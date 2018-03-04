@@ -51,7 +51,7 @@ class Service {
         if (response.status < 200 || response.status > 300) {
           return response.text()
             .then((text) => {
-              console.error(`'${response.statusText}': '${response.status}'. ${text}`);
+              console.info(`'${response.statusText}': '${response.status}'. ${text}`);
               const error = new Error(text);
               error.responseObject = JSON.parse(text);
               throw error;

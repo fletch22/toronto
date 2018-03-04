@@ -1,7 +1,0 @@
-{{#each database.dbModels}}
-app.get('/{{this.tableName}}', async (req, res) => {
-  const collection = await entityService.get{{capitalize tableName}}Collection();
-  res.send(JSON.stringify(collection));
-});
-{{iteratedBreak @root.database.dbModels @index ~}}
-{{/each}}

@@ -1,7 +1,7 @@
 import path from 'path';
-import winston from 'winston';
 import 'babel-core/register';
-import entityService from './service/entityService';
+import { setUpUserRoutes } from './userRoutes.js';
+import util from '../../../src/util/util';
 
 export const apiPath = '/api';
 
@@ -10,8 +10,11 @@ export const setupNormalRoutes = (app) => {
     res.sendFile(path.resolve(__dirname, '..', '..', 'index.html'));
   });
 
-  app.get('/c1', async (req, res) => {
-    const collection = await entityService.getC1Collection();
-    res.send(JSON.stringify(collection));
+  app.get(`${apiPath}/states/:index`, async (req, res) => {
+    const state = {};
+    const optionalResponse = util.getOptionalLiteral(state);
+    res.send(JSON.stringify(optionalResponse));
   });
+
+  setUpUserRoutes(app);
 };

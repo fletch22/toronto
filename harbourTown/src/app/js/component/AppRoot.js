@@ -10,9 +10,6 @@ import '../../css/modules/container.scss';
 class App extends React.Component {
 
   componentDidMount() {
-    const handler = new RollbackBroadcastHandler(this.context.store.dispatch);
-    handler.initialize();
-
     this.context.store.dispatch(actionInitializeApp());
   }
 

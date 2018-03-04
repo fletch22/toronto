@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const publicPath = path.resolve(__dirname, 'public');
 
 app.use(express.static(publicPath));

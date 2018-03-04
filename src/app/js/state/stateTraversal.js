@@ -7,21 +7,21 @@ class StateTraversal {
     return _.max(graphTraversal.collectPropValuesByPropName(node, 'id').filter((value) => typeof value !== typeof ''));
   }
 
-  getNextId(node) {
-    let highestId = node.currentId;
+  getNextId(state) {
+    let highestId = state.currentId;
 
     c.l(`highestId: ${highestId}`);
 
     if (!highestId) {
-      highestId = this.findHighestId(node) + 1;
+      highestId = this.findHighestId(state) + 1;
     } else {
       highestId += 1;
     }
     /* eslint-disable no-param-reassign */
-    node.currentId = highestId;
+    state.currentId = highestId;
 
-    c.l(`CurrentId: ${node.currentId}`);
-    return node.currentId;
+    c.l(`CurrentId: ${state.currentId}`);
+    return state.currentId;
   }
 
   findIslandWithId(state, id) {

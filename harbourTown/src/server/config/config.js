@@ -1,5 +1,5 @@
 const config = {
-  databaseName: 'f22_11e8_1a9b_b0d48190_b6f8_1fec543cb0ad'
+  databaseName: 'f22_11e8_1f1a_3efc6820_8044_c36dbb56dc8a'
 };
 
 export default config;

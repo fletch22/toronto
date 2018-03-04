@@ -1,12 +1,9 @@
 import Sequelize from 'sequelize';
-import { config } from '../config/config.js';
-
-console.log(JSON.stringify(config));
+import serverConfig from '../config/serverConfig.js';
 
 class DatabaseService {
   constructor() {
-    console.log('XXXX');
-    this.openConnection(config.databaseName);
+    this.openConnection(serverConfig.databaseName);
   }
 
   closeConnection() {

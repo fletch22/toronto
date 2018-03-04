@@ -2,11 +2,11 @@ import graphTraversal from '../../../../common/state/graphTraversal';
 import { actionHoverOver } from '../../actions/dnd/index.js';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 import ActionInvoker from '../../actions/ActionInvoker';
-import MoveComponentService from '../../service/MoveComponentService';
 import modalDispatcher from '../../component/modals/modalDispatcher';
 import StatePackager from '../../service/StatePackager';
 import crudActionCreator from '../../actions/crudActionCreator';
 import borderScrivenerUtils from '../../component/utils/borderScrivenerUtils';
+import stateSyncService from '../../service/stateSyncService';
 
 const getDndOnEnd = () => {
   /* eslint-disable no-param-reassign */
@@ -109,10 +109,11 @@ const persistMove = () => {
       const statePackager = new StatePackager();
       const statePackage = statePackager.package(jsonStateOld, JSON.stringify(moveInfo.state));
 
-      return MoveComponentService.move(statePackage, moveInfo.draggedParentModelId, moveInfo.hoveredParentModelId, moveInfo.draggedModelId, moveInfo.ordinalChildTarget)
+      // return MoveComponentService.move(statePackage, moveInfo.draggedParentModelId, moveInfo.hoveredParentModelId, moveInfo.draggedModelId, moveInfo.ordinalChildTarget)
+      return stateSyncService.saveState(statePackage)
         .then((result) => {
           console.debug('Success Callback.');
-          return Promise.resolve(result);
+          return Promise.resolve(result.state);
         })
         .catch((error) => {
           console.debug('Failure Callback.');

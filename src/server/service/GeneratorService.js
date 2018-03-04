@@ -10,9 +10,6 @@ export const templateRoot = path.join(targetProjectRoot, 'templates');
 
 class GeneratorService {
   constructor() {
-    const partialMap = this.getPartialsMap();
-    Handlebars.registerPartial('getCollectionEndpoint', partialMap.getCollectionEndpoint);
-
     // NOTE: With the use of '~' this will output a new line when interating through arrays.
     // Example: {{iteratedBreak @root.someArray @index ~}}
     Handlebars.registerHelper('iteratedBreak', (array, index, options) => {

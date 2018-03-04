@@ -1,0 +1,14 @@
+import 'babel-core/register';
+import entityService from './service/entityService';
+
+export const apiPath = '/api';
+
+export const setUpUserRoutes = (app) => {
+  {{#each database.dbModels}}
+  app.get(`${apiPath}/{{this.tableName}}`, async (req, res) => {
+    const collection = await entityService.get{{capitalize tableName}}Collection();
+    res.send(JSON.stringify(collection));
+  });
+{{iteratedBreak @root.database.dbModels @index ~}}
+{{/each}}
+};

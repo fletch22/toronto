@@ -2,9 +2,6 @@ import graphTraversal from '../../../../common/state/graphTraversal';
 import { actionHoverOver } from '../../actions/dnd/index.js';
 import { actionSetCurrentBodyTool } from '../../actions/bodyChildrenEditor/index';
 import ActionInvoker from '../../actions/ActionInvoker';
-import MoveComponentService from '../../service/MoveComponentService';
-import modalDispatcher from '../../component/modals/modalDispatcher';
-import StatePackager from '../../service/StatePackager';
 import crudActionCreator from '../../actions/crudActionCreator';
 import borderScrivenerUtils from '../../component/utils/borderScrivenerUtils';
 
@@ -103,22 +100,7 @@ const moveInState = (state) => {
 const persistMove = () => {
   const moveStuff = (dispatch, state) => {
     try {
-      const jsonStateOld = JSON.stringify(state);
-      const moveInfo = moveInState(JSON.parse(jsonStateOld));
-
-      const statePackager = new StatePackager();
-      const statePackage = statePackager.package(jsonStateOld, JSON.stringify(moveInfo.state));
-
-      return MoveComponentService.move(statePackage, moveInfo.draggedParentModelId, moveInfo.hoveredParentModelId, moveInfo.draggedModelId, moveInfo.ordinalChildTarget)
-        .then((result) => {
-          console.debug('Success Callback.');
-          return Promise.resolve(result);
-        })
-        .catch((error) => {
-          console.debug('Failure Callback.');
-          modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to create/update component.', dispatch);
-          return Promise.reject(error);
-        });
+      return Promise.reject('Not implemented.');
     } catch (error) {
       console.error(error);
     }

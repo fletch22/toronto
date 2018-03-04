@@ -143,15 +143,15 @@ const reducer = (state = defaultState.getInstance(), action) => {
       return stateNew;
     }
     case ACTIONS.types.INITIALIZE_F22_APP: {
-      if (!stateNew.hasInitialStateBeenSaved) {
-        const islandView = dashboardIslandViewFactory.createInstance(stateNew.model.appContainer);
-        stateNew.views.push(islandView);
+      // if (!stateNew.hasInitialStateBeenSaved) {
+      //   const islandView = dashboardIslandViewFactory.createInstance(stateNew.model.appContainer);
+      //   stateNew.views.push(islandView);
+      //
+      //   stateNew.hasInitialStateBeenSaved = true;
+      //   stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+      // }
 
-        stateNew.hasInitialStateBeenSaved = true;
-        stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-      }
-
-      return stateNew;
+      return state;
     }
     case ACTIONS.types.REFRESH_PAGE: {
       window.document.location.reload();
