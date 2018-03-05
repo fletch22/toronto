@@ -20,7 +20,7 @@ class ServerConfig {
   }
 
   getWebDevServerPort() {
-    return 8081;
+    return 8082;
   }
 }
 
