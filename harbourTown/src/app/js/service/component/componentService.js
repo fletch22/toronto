@@ -4,7 +4,7 @@ import _ from 'lodash';
 import StatePackager from '../../service/StatePackager';
 import dancePartnerSynchronizer from '../../views/dancePartnerSynchronizer';
 import dashboardIslandViewFactory from "../../views/DashboardIslandViewModelFactory";
-import stateTraversal from "../../state/stateTraversal";
+import stateTraversal from "../../../../common/state/stateTraversal";
 
 // NOTE: Deprecated. Do not use parallel dom anymore.
 class ComponentService {

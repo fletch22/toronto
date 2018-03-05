@@ -108,8 +108,6 @@ class GraphTraversal {
       return child.id === id;
     });
   }
-
-  findAll
 }
 
 export default new GraphTraversal();

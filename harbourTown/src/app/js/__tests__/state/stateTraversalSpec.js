@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import stateTraversal from '../../state/stateTraversal';
+import stateTraversal from '../../../../common/state/stateTraversal';
 
 describe('stateTraversal', () => {
   it('should return the highest id', () => {

@@ -11,7 +11,7 @@ import { actionUpdatePropertyWithPersist } from '../../../../../../actions/index
 import dataUniverseModelUtils from '../../../../../../domain/component/dataUniverseModelUtils';
 import dataStoreModelUtils from '../../../../../../domain/component/dataStoreModelUtils';
 import graphTraversal from '../../../../../../../../common/state/graphTraversal';
-import stateTraversal from '../../../../../../state/stateTraversal';
+import stateTraversal from '../../../../../../../../common/state/stateTraversal';
 
 class SlideSelectOrAddCollection extends React.Component {
 

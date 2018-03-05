@@ -12,66 +12,26 @@ import { actionUnsetCurrentBody } from '../../../actions/bodyChildrenEditor/inde
 
 class Body extends BodyChild {
   render() {
-    const children = (this.props.children) ? this.props.children : [];
+    const children = (this.props.model.children) ? this.props.model.children : [];
 
-    const style = typeof this.props.viewModel.style === 'object' ? JSON.parse(this.props.viewModel.style) : {};
+    const style = JSON.parse(this.props.model.style);
 
-    style.flexGrow = 1;
-    style.marginLeft = '4px';
-    style.border = this.props.isHoveringOver ? '2px solid red' : style.border;
-
-    let selectedContextToolbar = null;
-    if (this.props.selectedViewModel) {
-      selectedContextToolbar = (<SelectedContextToolbar selectedViewModel={this.props.selectedViewModel} />);
-    }
-
-    return DragAndDropMaker.connectDropRender(this.props, (
-      <div className="flex-bc" style={{ height: '100%' }}>
-        <div className="body-children-toolbar-col">
-          {
-            selectedContextToolbar
-          }
-        </div>
-        <div id={this.props.id} style={style} onClick={this.componentSelect} data-f22-component={ComponentTypes.WebPage}>
+    return (
+      <div className="flex-bc" style={ { height: '100%' } }>
+        <div id={this.props.model.id} style={style}>
           {
             children.map((child) =>
-              <ComponentChild key={child.id} id={child.id} viewModel={child} />
+              <ComponentChild key={child.id} id={child.id} model={child} />
             )
           }
         </div>
       </div>
-    ));
+    );
   }
 }
 
-Body.propTypes = BodyChild.mergePropTypes({
-  selectedViewModel: PropTypes.object,
-  selectedChildViewId: PropTypes.string,
-  onWillUnmount: PropTypes.func,
-  viewModel: PropTypes.object
-});
-
-const mapStateToProps = (state, ownProps) => {
-  let selectedViewModel;
-
-  const selectedChildViewId = (!!ownProps.selectedChildViewId) ? ownProps.selectedChildViewId : ownProps.id;
-  if (selectedChildViewId) {
-    selectedViewModel = graphTraversal.find(state, selectedChildViewId);
-  }
-
-  return {
-    selectedChildViewId,
-    selectedViewModel,
-    canBeDroppedOn: ownProps.canBeDroppedOn,
-    viewModel: ownProps.viewModel
-  };
+Body.propTypes = {
+  model: PropTypes.object
 };
-
-Body = DragAndDropMaker.connectDrop(Body);
-
-Body = connect(
-  mapStateToProps,
-  DragAndDropUtils.mapDispatchToProps
-)(Body);
 
 export default Body;

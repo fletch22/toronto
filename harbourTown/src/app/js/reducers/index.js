@@ -23,10 +23,11 @@ import DndActionHandler from '../actions/dnd/DndActionHandler';
 const reducer = (state = defaultState.getInstance(), action) => {
   const jsonStateOld = JSON.stringify(state);
   const stateNew = Object.assign({}, state);
-  const appContainerDom = stateNew.dom.view.appContainer;
+  // const appContainerDom = stateNew.dom.view.appContainer;
 
-  borderScrivenerUtils.domActionSyncer(stateNew);
-  // c.l(`Action Type: ${action.type}`);
+  // borderScrivenerUtils.domActionSyncer(stateNew);
+
+  c.l(`Action Type: ${action.type}`);
 
   switch (action.type) {
     case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
@@ -42,12 +43,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       return stateNew;
     }
-    case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
-      appContainerDom.section.addNew.appLabel = action.appLabel;
-
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-      return stateNew;
-    }
+    // case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
+    //   appContainerDom.section.addNew.appLabel = action.appLabel;
+    //
+    //   stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+    //   return stateNew;
+    // }
     case ACTIONS.types.SET_STATE: {
       return action.state;
     }
@@ -151,7 +152,7 @@ const reducer = (state = defaultState.getInstance(), action) => {
       //   stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       // }
 
-      return state;
+      return stateNew;
     }
     case ACTIONS.types.REFRESH_PAGE: {
       window.document.location.reload();

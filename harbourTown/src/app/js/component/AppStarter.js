@@ -30,9 +30,13 @@ class AppStarter {
 
     if (this.count < this.maxRetry) {
       const allStore = new AllStore();
+      c.l('About to get store.');
       const promiseInner = allStore.getStore();
 
       promiseInner.then((store) => {
+
+        c.lo(store, 'store: ');
+
         this.renderApp(store);
       }).catch((error) => {
         const dateFormatted = dateformat(new Date(), 'HH:MM.ss TT');

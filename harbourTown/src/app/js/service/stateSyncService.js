@@ -50,7 +50,6 @@ class StateSyncService extends Service {
 
   async getMostRecentHistoricalState() {
     const optionResult = await this.fetch(`${this.getNodeServerRootUrl()}/states/0`, 'get');
-
     return this.unwrapState(optionResult);
   }
 

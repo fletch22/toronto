@@ -6,6 +6,7 @@ import 'expose-loader?c!../../../util/c'; // Globally exposes the an instance of
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import '../../css/modules/container.scss';
+import WebPageWrapper from './WebPageWrapper';
 
 class App extends React.Component {
 
@@ -16,7 +17,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="f22-app-root container-fluid">
-        Fletch22!!
+        <WebPageWrapper />
       </div>
     );
   }

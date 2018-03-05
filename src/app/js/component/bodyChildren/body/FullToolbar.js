@@ -8,7 +8,7 @@ import { actionSetPageNeedsSaving } from '../../../actions/bodyChildrenEditor/in
 import _ from 'lodash';
 import Button from '../toolbar/Button';
 import actionBodyChildSelectorHandler from '../../../reducers/actionBodyChildSelectorHandler';
-import stateTraversal from '../../../state/stateTraversal';
+import stateTraversal from '../../../../../common/state/stateTraversal';
 
 class FullToolbar extends React.Component {
   render() {

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import stateTraversal from '../../state/stateTraversal';
+import stateTraversal from '../../../../common/state/stateTraversal';
 
 class GridHelper {
 

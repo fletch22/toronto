@@ -4,7 +4,7 @@ import cors from 'cors';
 
 import bodyParser from 'body-parser';
 import c from '../util/c';
-import { setupNormalRoutes } from './routes';
+import { setUpRoutes } from './routes';
 import winston from 'winston';
 import proxyDevServer from './service/proxyDevServer';
 
@@ -39,7 +39,7 @@ const server = app.listen(port, () => {
   winston.info(`Server running on port ${port}`);
 });
 
-setupNormalRoutes(app);
+setUpRoutes(app);
 
 
 module.exports = server;

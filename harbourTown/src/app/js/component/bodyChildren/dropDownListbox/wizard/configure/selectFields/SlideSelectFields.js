@@ -12,7 +12,7 @@ import viewModelCreator from '../../../../../utils/viewModelCreator';
 import { actionUpdatePropertyWithPersist } from '../../../../../../actions/index';
 import graphTraversal from "../../../../../../../../common/state/graphTraversal";
 import dataModelModelFactory from "../../../../../../domain/component/dataModelModelFactory";
-import stateTraversal from "../../../../../../state/stateTraversal";
+import stateTraversal from "../../../../../../../../common/state/stateTraversal";
 
 class SlideSelectFields extends React.Component {
 

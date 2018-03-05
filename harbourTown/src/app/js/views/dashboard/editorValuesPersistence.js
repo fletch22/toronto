@@ -5,7 +5,7 @@ import ViewModelCopyEditor from '../../component/editors/ViewModelCopyEditor';
 import dashboardIslandViewFactory from '../DashboardIslandViewModelFactory';
 import StatePackager from '../../service/StatePackager';
 import ViewTypes from '../ViewTypes';
-import stateTraversal from '../../state/stateTraversal';
+import stateTraversal from '../../../../common/state/stateTraversal';
 import _ from 'lodash';
 
 class EditorValuesPersistence {

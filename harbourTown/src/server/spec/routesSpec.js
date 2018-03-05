@@ -1,4 +1,4 @@
-import { apiPath, setupNormalRoutes } from '../routes';
+import { apiPath, setupRoutes } from '../routes';
 import mockExpress from 'mock-express';
 import sinon from 'sinon';
 import stateService from '../service/stateService';
@@ -8,7 +8,7 @@ import winston from 'winston';
 describe('routes', () => {
   let sandbox;
   const app = mockExpress();
-  setupNormalRoutes(app);
+  setupRoutes(app);
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();

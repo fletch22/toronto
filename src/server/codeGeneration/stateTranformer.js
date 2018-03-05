@@ -3,6 +3,8 @@ import stateToSqlModelTransformer from './sql/stateToSqlModelTransformer';
 import ComponentTypes from '../../common/domain/component/ComponentTypes';
 import graphTraversal from '../../common/state/graphTraversal';
 import type { SqlDatabaseModel } from './sql/stateToSqlModelTransformer';
+import stateTraversal from '../../common/state/stateTraversal';
+import stringUtils from '../../common/util/stringUtils';
 
 type DdlCollectionEndpoints = {
   dataStoreLabel: string,
@@ -16,18 +18,27 @@ type DdlCollectionEndpointsWrapper = {
 };
 
 type TemplateModel = {
+  state: Object,
   database: SqlDatabaseModel,
-  ddlCollectionEndpoints: Array<DdlCollectionEndpoints>
+  ddlCollectionEndpoints: Array<DdlCollectionEndpoints>,
+  appModelString: string
 };
 
 class StateTranformer {
   transform(statePackage: Object): TemplateModel {
     const sqlDatabaseModel = stateToSqlModelTransformer.transform(statePackage);
-    const serverAppModel = this.stateToServerAppModelTransformer(statePackage.state.model);
+    const state = statePackage.state;
+    const model = state.model;
+    const serverAppModel = this.stateToServerAppModelTransformer(model);
+
+    const apps = stateTraversal.findAllWithTypeLabel(model, ComponentTypes.App);
+    const helloWorldApp = apps.find((app) => app.label === 'HelloWorldApp');
 
     return {
+      state,
       database: sqlDatabaseModel,
-      ddlCollectionEndpoints: serverAppModel.ddlCollectionEndpoints
+      ddlCollectionEndpoints: serverAppModel.ddlCollectionEndpoints,
+      appModelString: JSON.stringify(helloWorldApp)
     };
   }
 

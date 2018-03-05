@@ -2,7 +2,7 @@ import ComponentService from './componentService';
 import StatePackager from '../StatePackager';
 import stateSyncService from '../stateSyncService';
 import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
-import stateTraversal from '../../state/stateTraversal';
+import stateTraversal from '../../../../common/state/stateTraversal';
 import appModelFactory from '../../domain/component/appModelFactory';
 import DomFactory from '../../domain/component/DomFactory';
 import dashboardIslandViewFactory from '../../views/DashboardIslandViewModelFactory';

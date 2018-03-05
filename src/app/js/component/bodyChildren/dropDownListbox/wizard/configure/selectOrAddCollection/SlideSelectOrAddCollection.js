@@ -10,7 +10,7 @@ import viewModelCreator from '../../../../../utils/viewModelCreator';
 import dataUniverseModelUtils from '../../../../../../../../common/domain/component/dataUniverseModelUtils';
 import dataStoreModelUtils from '../../../../../../../../common/domain/component/dataStoreModelUtils';
 import graphTraversal from '../../../../../../../../common/state/graphTraversal';
-import stateTraversal from '../../../../../../state/stateTraversal';
+import stateTraversal from '../../../../../../../../common/state/stateTraversal';
 
 class SlideSelectOrAddCollection extends React.Component {
 

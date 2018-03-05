@@ -28,13 +28,11 @@ class StateToSqlTransformer {
         sequelizeType: 'sequelize.STRING'
       };
     });
-
     return definedModel;
   }
 
   transformRecordArray(recordArray: Array<string>, dataFieldArray: Array<Object>) {
     const instance = {};
-
     c.lo(recordArray, 'recordArray: ');
 
     recordArray.forEach((fieldValue, ndxRecord) => {

@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import Island from '../../../Island';
 import { connect } from 'react-redux';
 import Header from './header/Header';
-import crudComponentOperations from '../../../../CrudOperations';
 import viewModelCreator from '../../../../../component/utils/viewModelCreator';
 
 class Page extends React.Component {

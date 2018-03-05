@@ -1,0 +1,42 @@
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+
+class WebPageWrapper extends React.Component {
+  render() {
+    const height = 670;
+    const tabContentHeight = height - 80;
+
+    const style = { border: '1px solid red' };
+
+    return (
+      <div style={ style }>
+        <div className="flex-normal">
+          <div className="pseudo-modal-content" style={ { height: `${height}px` } }>
+            <div className="flex-pseudo-modal" style={ { flexGrow: 1, height: `${tabContentHeight}px` } }>
+              <div style={ { flexGrow: 1 } }>
+                {{> page }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+WebPageWrapper.propTypes = {
+  id: PropTypes.string,
+  data: PropTypes.object
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+  };
+};
+
+WebPageWrapper = connect(
+  null,
+  mapDispatchToProps
+)(WebPageWrapper);
+
+export default WebPageWrapper;

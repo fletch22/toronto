@@ -1,7 +1,5 @@
 import path from 'path';
-
 import GeneratorService, { templateRoot } from './GeneratorService';
-
 
 class ServerAppGeneratorService extends GeneratorService {
   async generateAndPersist(templateModel) {
@@ -10,6 +8,9 @@ class ServerAppGeneratorService extends GeneratorService {
 
     const configTemplatePath = path.join(serverPath, 'config', 'config.js.template');
     await this.genSendOutput(templateModel.database, configTemplatePath);
+
+    const routesTemplatePath = path.join(templateRoot, 'src', 'server', 'routes.js.template');
+    await this.genSendOutput(templateModel, routesTemplatePath);
 
     const userRoutesTemplatePath = path.join(templateRoot, 'src', 'server', 'userRoutes.js.template');
     await this.genSendOutput(templateModel, userRoutesTemplatePath);

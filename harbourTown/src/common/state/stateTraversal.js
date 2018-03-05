@@ -1,6 +1,6 @@
-import graphTraversal from '../../../common/state/graphTraversal';
+import graphTraversal from './graphTraversal';
 import _ from 'lodash';
-import ViewTypes from "../views/ViewTypes";
+import ViewTypes from '../../app/js/views/ViewTypes';
 
 class StateTraversal {
   findHighestId(node) {
@@ -30,6 +30,11 @@ class StateTraversal {
     return _.find(islands, (isle) => {
       return !!graphTraversal.find(isle, id);
     });
+  }
+
+  findAllWithTypeLabel(node, typeLabel) {
+    const collection = graphTraversal.traverseAndCollect(node, 'typeLabel');
+    return collection.filter((item) => item.typeLabel === typeLabel);
   }
 }
 
