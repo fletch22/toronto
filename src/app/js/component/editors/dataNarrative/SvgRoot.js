@@ -6,6 +6,7 @@ import { select, event } from 'd3-selection';
 import SvgRootVisualization from './SvgRootVisualization';
 import { actionUpdateViewPropertyValue } from '../../../actions/index';
 import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor/index';
+import Cylinder from './shapes/Cylinder';
 
 class SvgRoot extends React.Component {
 
@@ -88,8 +89,11 @@ class SvgRoot extends React.Component {
 
   render() {
     return (
-      <svg width={this.props.width} height={this.props.height + 10} style={{ border: "1px solid gray" }}>
-          <g ref="rootGroup"></g>
+      <svg width={this.props.width} height={this.props.height + 10} style={{ border: '1px solid gray' }}>
+          <g ref="rootGroup">
+            <circle cx="25" cy="25" r="25" fill="red" />
+          </g>
+        <Cylinder />
       </svg>
     );
   }
