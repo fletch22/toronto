@@ -4,13 +4,13 @@ import ComponentTypes from '../../common/domain/component/ComponentTypes';
 import graphTraversal from '../../common/state/graphTraversal';
 import type { SqlDatabaseModel } from './sql/stateToSqlModelTransformer';
 import stateTraversal from '../../common/state/stateTraversal';
-import stringUtils from '../../common/util/stringUtils';
 
 type DdlCollectionEndpoints = {
   dataStoreLabel: string,
   collectionName: string,
   dataValueField: string,
-  dataTextField: string
+  dataTextField: string,
+  collectionCallName: string
 };
 
 type DdlCollectionEndpointsWrapper = {
@@ -33,6 +33,8 @@ class StateTranformer {
 
     const apps = stateTraversal.findAllWithTypeLabel(model, ComponentTypes.App);
     const helloWorldApp = apps.find((app) => app.label === 'HelloWorldApp');
+
+    // c.lo(helloWorldApp, 'hwa: ');
 
     return {
       state,
@@ -71,7 +73,8 @@ class StateTranformer {
       dataStoreLabel: graphTraversal.find(stateModel, ddl.dataStoreId).label,
       collectionName: graphTraversal.find(stateModel, ddl.dataModelId).label,
       dataValueField: graphTraversal.find(stateModel, ddl.dataValueId).label,
-      dataTextField: graphTraversal.find(stateModel, ddl.dataTextId).label
+      dataTextField: graphTraversal.find(stateModel, ddl.dataTextId).label,
+      collectionCallName: ddl.collectionCallName
     };
   }
 }

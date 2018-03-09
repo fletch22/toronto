@@ -10,6 +10,7 @@ class DdlModelFactory extends ModelFactory {
       parentId: model.parentId,
       id,
       elementId: model.elementId || '-1',
+      collectionCallName: model.collectionCallName,
       dataStoreId: model.dataStoreId || '-1',
       dataModelId: model.dataModelId || '-1',
       dataValueId: model.dataValueId || '-1',

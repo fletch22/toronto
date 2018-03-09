@@ -1,11 +1,17 @@
 import modelFactory from '../models/modelFactory';
 
 class EntityService {
-{{#each dbModels}}
-  get{{capitalize tableName}}Collection() {
-    return modelFactory.{{capitalize tableName}}.findAll();
+{{#each ddlCollectionEndpoints}}
+  get{{capitalize this.collectionCallName}}Collection() {
+    const collectionRaw = modelFactory.{{capitalize this.collectionName}}.findAll();
+    return collectionRaw.map((item) => {
+      return {
+        value: item['{{this.dataValueField}}'],
+        text: item['{{this.dataTextField}}']
+      };
+    });
   }
-{{iteratedBreak ../dbModels @index ~}}
+{{iteratedBreak ../ddlCollectionEndpoints @index ~}}
 {{/each}}
 }
 

@@ -28,6 +28,7 @@ class PropPathTextInput extends React.Component {
       <div>
         <input className={this.props.classNames} type="text" ref="input" value={value}
           onChange={this.props.onChange} onBlur={this.props.onBlur} onKeyUp={this.handleKeyPress}
+          style={this.props.style}
         />
       </div>
     );
@@ -42,11 +43,12 @@ PropPathTextInput.propTypes = {
   onBlur: PropTypes.func,
   classNames: PropTypes.string,
   onChange: PropTypes.func,
-  onChangeExternal: PropTypes.func
+  onChangeExternal: PropTypes.func,
+  style: PropTypes.object
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  const persistState = ownProps.persistStateArrays ? ownProps.persistStateArrays : false;
+  const persistState = ownProps.persistState;
 
   return {
     onChange: (event) => {

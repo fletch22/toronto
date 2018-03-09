@@ -6,6 +6,7 @@ import { ActionTypes as GridActionTypes } from './grid';
 import { ActionTypes as ProxyActionTypes } from './proxy';
 import { ActionTypes as DndActionTypes } from './dnd';
 import { ACTIONS as bodyChildrenEditorActions } from './bodyChildrenEditor/index';
+import { ActionTypes as BodyChildrenActionTypes } from './bodyChildren/index';
 
 export const ACTIONS = {
   types: {
@@ -41,6 +42,7 @@ _.extend(ACTIONS.types, WizardActionTypes);
 _.extend(ACTIONS.types, GridActionTypes);
 _.extend(ACTIONS.types, ProxyActionTypes);
 _.extend(ACTIONS.types, DndActionTypes);
+_.extend(ACTIONS.types, BodyChildrenActionTypes);
 
 export const actionChangeAppLabelInput = (appLabel) => {
   return {

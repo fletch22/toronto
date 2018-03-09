@@ -751,7 +751,8 @@ export const statePackageTest = {
                             dataTextId: 1070,
                             typeLabel: 'DropDownListbox',
                             style: null,
-                            ordinal: '0'
+                            ordinal: '0',
+                            collectionCallName: 'c1OptionData'
                           }
                         ],
                         ordinal: '0'

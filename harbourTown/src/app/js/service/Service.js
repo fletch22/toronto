@@ -4,12 +4,7 @@ import jQuery from 'jquery';
 class Service {
 
   constructor() {
-    this.url = this.getOrbServerRootUrl();
-  }
-
-  getOrbServerRootUrl() {
-    const orbServer = AppProperties.orbServer;
-    return `${orbServer.scheme}://${orbServer.host}:${orbServer.port}/${orbServer.appContext}/api`;
+    this.url = this.getNodeServerRootUrl();
   }
 
   getNodeServerRootUrl() {

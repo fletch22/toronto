@@ -4,6 +4,7 @@ import ButtonWizard from '../../ButtonWizard';
 import { connect } from 'react-redux';
 import viewModelCreator from '../../../../../../component/utils/viewModelCreator';
 import graphTraversal from '../../../../../../../../common/state/graphTraversal';
+import PropPathTextInput from '../../../../../editors/PropPathTextInput';
 
 class SlideSaveDdlInfo extends React.Component {
 
@@ -18,6 +19,19 @@ class SlideSaveDdlInfo extends React.Component {
         <div className="sel_view_row_main">
           <h4>Save</h4>
           <div className="save-ddl-info">
+            <div className="save-ddl-field-info">
+              <div className="save-ddl-info-form-label">
+                <label>Collection Call Name: </label>
+              </div>
+              <div className="save-ddl-info-form-field">
+                <PropPathTextInput
+                  id={this.props.wizardData.id}
+                  path="collectionCallName"
+                  value={this.props.collectionCallName}
+                  style={{ border: '1px solid black', margin: '-3px' }}
+                />
+              </div>
+            </div>
             <div className="save-ddl-field-info">
               <div className="save-ddl-info-form-label">
                 <label>DataStore: </label>
@@ -69,20 +83,23 @@ SlideSaveDdlInfo.propTypes = {
   saveEnabled: PropTypes.bool,
   dataStoreId: PropTypes.any,
   dataStoreLabel: PropTypes.string,
-  onCloseModal: PropTypes.func
+  onCloseModal: PropTypes.func,
+  collectionCallName: PropTypes.string
 };
 
 const getComponentProps = (props) => {
   const wizardData = props.wizardData;
   const dataStoreId = wizardData.dataStoreId;
   const dataStoreLabel = wizardData.dataStoreLabel;
+  const collectionCallName = wizardData.collectionCallName;
 
   return {
     wizardData,
     saveEnabled: true,
     dataStoreId,
     dataStoreLabel,
-    onCloseModal: props.onCloseModal
+    onCloseModal: props.onCloseModal,
+    collectionCallName
   };
 };
 
@@ -106,6 +123,7 @@ const doSaveAction = (ownProps) => {
     outerViewModel.viewModel.dataModelId = wizardData.dataModelId;
     outerViewModel.viewModel.dataValueId = wizardData.dataValueId;
     outerViewModel.viewModel.dataTextId = wizardData.dataTextId;
+    outerViewModel.viewModel.collectionCallName = wizardData.collectionCallName;
 
     const successCallback = () => {
       ownProps.onCloseModal();

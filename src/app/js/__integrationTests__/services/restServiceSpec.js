@@ -47,7 +47,7 @@ describe('Rest service', () => {
   });
 
   it('should compose the url without exception.', () => {
-    const url = RestService.getOrbServerRootUrl();
+    const url = RestService.getNodeServerRootUrl();
     expect(url).to.not.equal(null);
   });
 

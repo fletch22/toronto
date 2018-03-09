@@ -19,7 +19,10 @@ class ServerAppGeneratorService extends GeneratorService {
     await this.genSendOutput(templateModel.database, modelsTemplatePath);
 
     const entityServiceTemplatePath = path.join(templateRoot, 'src', 'server', 'service', 'entityService.js.template');
-    await this.genSendOutput(templateModel.database, entityServiceTemplatePath);
+    await this.genSendOutput(templateModel, entityServiceTemplatePath);
+
+    const initialStateTemplatePath = path.join(templateRoot, 'src', 'server', 'config', 'initialState.json.template');
+    await this.genSendOutput(templateModel, initialStateTemplatePath);
   }
 
   async genSendOutput(model, configTemplatePath) {

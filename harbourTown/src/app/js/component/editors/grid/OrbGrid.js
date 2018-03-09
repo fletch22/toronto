@@ -1,9 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { actionShowModelData } from '../../../actions/grid/index';
 import Grid from './Grid';
-import collectionService from '../../../service/collectionService';
-import collectionToGridDataTransformer from '../../../domain/collection/collectionToGridDataTransformer';
 
 class OrbGrid extends React.Component {
 

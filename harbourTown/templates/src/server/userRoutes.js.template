@@ -4,11 +4,11 @@ import entityService from './service/entityService';
 export const apiPath = '/api';
 
 export const setUpUserRoutes = (app) => {
-  {{#each database.dbModels}}
-  app.get(`${apiPath}/{{this.tableName}}`, async (req, res) => {
-    const collection = await entityService.get{{capitalize tableName}}Collection();
+  {{#each ddlCollectionEndpoints}}
+  app.get(`${apiPath}/options/{{this.collectionCallName}}`, async (req, res) => {
+    const collection = await entityService.get{{capitalize this.collectionCallName}}Collection();
     res.send(JSON.stringify(collection));
   });
-{{iteratedBreak @root.database.dbModels @index ~}}
+{{iteratedBreak @root.ddlCollectionEndpoints @index ~}}
 {{/each}}
 };

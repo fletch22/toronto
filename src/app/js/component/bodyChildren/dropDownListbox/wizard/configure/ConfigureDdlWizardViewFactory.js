@@ -62,6 +62,7 @@ class ConfigureDdlWizardViewFactory {
       type: PseudoModalTypes.WizardTypes.ConfigureDdl,
       model: ddlModel,
       activeIndex: 0,
+      collectionCallName: ddlModel.collectionCallName,
       dataSourceType: null,
       dataStoreId: ddlModel.dataStoreId,
       dataStoreLabel,

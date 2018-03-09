@@ -1,15 +1,12 @@
 import Service from './Service';
-import blockadeAndDrainService from '../../js/service/blockadeAndDrainService';
-import collectionService from '../service/collectionService';
 import modalDispatcher from '../component/modals/modalDispatcher';
 import gridHelper from '../domain/collection/gridHelper';
-import { actionGridRowSaved, actionGridRowDelete } from '../actions/grid';
 import _ from 'lodash';
 import graphTraversal from '../../../common/state/graphTraversal';
 import ComponentTypes from '../../../common/domain/component/ComponentTypes';
 import StatePackager from '../service/StatePackager';
 import stateSyncService from '../service/stateSyncService';
-import crudActionCreator from "../actions/crudActionCreator";
+import crudActionCreator from '../actions/crudActionCreator';
 
 class GridService extends Service {
 
@@ -18,48 +15,7 @@ class GridService extends Service {
   }
 
   delete(dispatch, ownProps, rowIndexes) {
-    const grid = ownProps.gridViewModel;
-
-    const rowIds = rowIndexes.map((index) => {
-      return grid.data.rows[index].id;
-    });
-
-    if (rowIds.length === 0) {
-      const error = {
-        name: 'Save Error',
-        message: 'Encountered error while trying to delete grid row(s). No rows selected.'
-      };
-      modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to save/update grid row.', dispatch);
-      return;
-    }
-
-    const successCallback = () => {
-      dispatch(actionGridRowDelete(ownProps.gridViewModel.id, rowIds));
-    };
-
-    const dispatchHelper = () => {
-      const deleteRows = (cuDispatch) => {
-        try {
-          return collectionService.delete(rowIds)
-            .then((result) => {
-              console.debug('Success Callback.');
-              return Promise.resolve(result);
-            })
-            .catch((error) => {
-              console.debug('Failure Callback.');
-              modalDispatcher.dispatchErrorModal(error, 'Encountered error while trying to create/update record.', cuDispatch);
-              return Promise.reject(error);
-            });
-        } catch (error) {
-          console.error(error);
-          return Promise.reject(error);
-        }
-      };
-
-      return blockadeAndDrainService.invoke(deleteRows, successCallback);
-    };
-
-    dispatch(dispatchHelper());
+    throw new Error('Not implemented');
   }
 
   persist(state, dispatch, ownProps, rowIdsUpdated, updatePropAndVals) {

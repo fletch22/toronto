@@ -30,25 +30,12 @@ const reducer = (state = defaultState.getInstance(), action) => {
   c.l(`Action Type: ${action.type}`);
 
   switch (action.type) {
-    case ACTIONS.types.DASHBOARD.APP.TOGGLE_HEADER_MENU: {
-      const node = graphTraversal.find(state, action.modelId);
+    case ACTIONS.types.BODY_CHILDREN.DROP_DOWN_LISTBOX.SET_COLLECTION: {
+      const node = graphTraversal.find(stateNew, action.payload.modelId);
+      node.collection = action.payload.collection;
 
-      if (!node) {
-        console.error('Could not find node to toggle header menu.');
-        return state;
-      }
-
-      node.isShowingHeaderMenu = !node.isShowingHeaderMenu;
-
-      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
       return stateNew;
     }
-    // case ACTIONS.types.APP_LABEL_INPUT_CHANGE: {
-    //   appContainerDom.section.addNew.appLabel = action.appLabel;
-    //
-    //   stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
-    //   return stateNew;
-    // }
     case ACTIONS.types.SET_STATE: {
       return action.state;
     }

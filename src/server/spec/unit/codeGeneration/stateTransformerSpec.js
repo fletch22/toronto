@@ -14,8 +14,8 @@ describe('stateTransformer', () => {
     const c1 = endpoints[0];
     expect(c1.dataStoreLabel).toBe('default');
     expect(c1.collectionName).toBe('c1');
-    expect(c1.dataValueField).toBe('f1');
-    expect(c1.dataTextField).toBe('f2');
+    expect(c1.dataValueField).toBe('f2');
+    expect(c1.dataTextField).toBe('f1');
   });
 });
 
