@@ -258,8 +258,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       let stateModified = actionBodyChildSelectorHandler.process(stateNew, intendedSelectedViewModelId);
       stateModified = borderScrivenerUtils.domActionSyncer(stateModified);
 
-      // stateFixer.fix(jsonStateOld, JSON.stringify(stateModified));
-
       return stateModified;
     }
     case ACTIONS.types.SET_CURRENT_BODY_CHILD_TO_PARENT_TOOL: {

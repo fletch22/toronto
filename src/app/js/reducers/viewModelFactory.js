@@ -4,7 +4,6 @@ import PseudoModalTypes from '../component/modals/PseudoModalTypes';
 import graphTraversal from '../../../common/state/graphTraversal';
 import viewFactory from '../domain/component/view/viewFactory';
 import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
-import dataNarrativeViewFactory from '../component/editors/dataNarrative/dataNarrativeViewFactory';
 import { DatastoreModelConstants } from '../../../common/domain/component/dataStoreModelUtils';
 import dataUniverseUtils from '../../../common/domain/component/dataUniverseModelUtils';
 
@@ -52,14 +51,12 @@ class ViewModelFactory {
         break;
       }
       case PseudoModalTypes.DataNarrativeEditor: {
-        // const dataNarrativeThreads = model.children;
-        // if (dataNarrativeThreads.length === 0) {
-        //   dataNarrativeThreads.push(dataNarrativeThreadModelFactory.createInstance());
-        // }
-        data = dataNarrativeViewFactory.createInstance(viewId, []);
+        const dataNarrativeArray = outerViewModel.viewModel.children.filter((child) => child.viewModel.typeLabel === ComponentTypes.DataNarrative);
+        if (dataNarrativeArray.length > 1) {
+          throw new Error(`Encountered problem while trying to find all the DataNarrative view components inside a '${outerViewModel.viewModel.typeLabel}' component.`);
+        }
 
-        // const viewModel = this.generateViewModel(data.id, { typeLabel: ComponentTypes.DataNarrative });
-        // Object.assign(data, { viewModel });
+        data = dataNarrativeArray[0];
 
         viewName = PseudoModalTypes.DataNarrativeEditor;
         pseudoModalType = PseudoModalTypes.DataNarrativeEditor;
@@ -128,6 +125,14 @@ class ViewModelFactory {
       }
       case ComponentTypes.DataNarrative: {
         view = viewFactory.createDataNarrativeView(model);
+        break;
+      }
+      case ComponentTypes.Cylinder: {
+        view = viewFactory.createCylinderView();
+        break;
+      }
+      case ComponentTypes.DnDataStore: {
+        view = viewFactory.createDnDatastoreView(model);
         break;
       }
       default: {

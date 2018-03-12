@@ -6,13 +6,13 @@ const duration = 40;
 
 SvgRootVisualization.enter = (selection) => {
   selection.attr('transform', (d) => {
-    return `translate(${d.viewCoordinates.x}, ${d.viewCoordinates.y}) scale(${d.zoom})`;
+    return `translate(${d.viewModel.viewCoordinates.x}, ${d.viewModel.viewCoordinates.y}) scale(${d.viewModel.zoom})`;
   });
 };
 
 SvgRootVisualization.update = (selection) => {
   selection.attr('transform', (d) => {
-    return `translate(${d.viewCoordinates.x}, ${d.viewCoordinates.y}) scale(${d.zoom})`;
+    return `translate(${d.viewModel.viewCoordinates.x}, ${d.viewModel.viewCoordinates.y}) scale(${d.viewModel.zoom})`;
   });
 };
 

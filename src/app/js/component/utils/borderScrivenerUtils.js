@@ -1,4 +1,4 @@
-import graphTraversal from "../../../../common/state/graphTraversal";
+import graphTraversal from '../../../../common/state/graphTraversal';
 
 class BorderScrivenerUtils {
 

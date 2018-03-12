@@ -81,7 +81,19 @@ class ViewFactory {
     };
   }
 
-  createDataNarrativeView() {
+  createDataNarrativeView(model) {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
+
+  createCylinderView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
+
+  createDnDatastoreView() {
     return {
       id: f22Uuid.generate()
     };

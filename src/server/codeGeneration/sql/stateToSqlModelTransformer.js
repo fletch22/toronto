@@ -71,7 +71,7 @@ class StateToSqlTransformer {
 
   findDataModels(state: Object) {
     const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
-    const dataStore = dataStoreModelUtils.getDefaultDatastore(dataUniverse);
+    const dataStore = dataStoreModelUtils.getDefaultDataStore(dataUniverse);
     return dataModelModelUtils.getDataModels(dataStore);
   }
 

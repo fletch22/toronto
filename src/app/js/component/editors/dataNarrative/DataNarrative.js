@@ -5,7 +5,6 @@ import Button from '../../bodyChildren/toolbar/Button';
 import { actionUpdateViewPropertyValue } from '../../../actions/index';
 
 class DataNarrative extends React.Component {
-
   render() {
     return (
       <div className="flex-normal" style={{ height: '100%' }}>

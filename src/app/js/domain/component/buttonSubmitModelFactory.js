@@ -1,5 +1,8 @@
 import ModelFactory from './ModelFactory';
+import dataNarrativeModelFactory from '../../domain/component/dataNarrativeModelFactory';
 import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
+import dataUniverseModelUtils from '../../../../common/domain/component/dataUniverseModelUtils';
+import dnDataStoreModelFactory from '../../domain/component/dataNarrative/dnDataStoreModelFactory';
 
 class ButtonSubmitModelFactory extends ModelFactory {
 
@@ -13,12 +16,24 @@ class ButtonSubmitModelFactory extends ModelFactory {
       elementId: model.elementId,
       label: model.label,
       style: model.style || null,
-      ordinal: model.ordinal
+      ordinal: model.ordinal,
+      children: []
     };
   }
 
-  createInstance(parentId, elementId, label, ordinal) {
-    return this.createInstanceFromModel({ parentId, elementId, label, ordinal });
+  createInstance(state, parentId, elementId, label, ordinal) {
+    const buttonSubmitInstance = this.createInstanceFromModel({ parentId, elementId, label, ordinal });
+
+    const dataNarrative = dataNarrativeModelFactory.createInstance(buttonSubmitInstance.id);
+
+    const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
+    const defaultDataStore = dataUniverseModelUtils.getDataStoreModelUtils().getDefaultDataStore(dataUniverse);
+    const dnDataStoreModel = dnDataStoreModelFactory.createInstance(parentId, defaultDataStore.id);
+    dataNarrative.children = [dnDataStoreModel];
+
+    buttonSubmitInstance.children = [dataNarrative];
+
+    return buttonSubmitInstance;
   }
 }
 

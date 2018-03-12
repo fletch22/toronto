@@ -3,6 +3,7 @@ const ComponentTypes = {
   App: 'App',
   ButtonSubmit: 'ButtonSubmit',
   Datastore: 'Datastore',
+  DnDataStore: 'DnDataStore',
   DataModel: 'DataModel',
   DataField: 'DataField',
   DataUniverse: 'DataUniverse',
@@ -13,7 +14,8 @@ const ComponentTypes = {
   LayoutMinion: 'LayoutMinion',
   Div: 'Div',
   DropDownListbox: 'DropDownListbox',
-  DataNarrative: 'DataNarratives'
+  DataNarrative: 'DataNarratives',
+  Cylinder: 'Cylinder'
 };
 
 export default ComponentTypes;

@@ -30,7 +30,7 @@ const addButtonSubmit = (ownProps) => {
 
     const parentViewModel = graphTraversal.find(state, ownProps.viewModel.id);
 
-    const model = buttonSubmitModelFactory.createInstance(ownProps.viewModel.viewModel.id, nameUnique, 'Submit', String(parentViewModel.viewModel.children.length));
+    const model = buttonSubmitModelFactory.createInstance(state, ownProps.viewModel.viewModel.id, nameUnique, 'Submit', String(parentViewModel.viewModel.children.length));
     bodyChildrenCreatorService.create(dispatch, model, ownProps.viewModel.id);
   };
 };
