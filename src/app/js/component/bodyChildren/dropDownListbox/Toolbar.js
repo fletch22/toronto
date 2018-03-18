@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ConfigureDdl from './ConfigureDdl';
-import { actionCreatePseudoModal } from '../../../actions/index';
+import { actionCreatePseudoModalFromExistingVm } from '../../../actions/index';
 import PseudoModalTypes from '../../../component/modals/PseudoModalTypes';
 
 class Toolbar extends React.Component {
@@ -25,7 +25,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onConfigClick: () => {
       if (!ownProps.disabled) {
-        dispatch(actionCreatePseudoModal(PseudoModalTypes.WizardTypes.ConfigureDdl, ownProps.selectedViewModel.id));
+        dispatch(actionCreatePseudoModalFromExistingVm(PseudoModalTypes.WizardTypes.ConfigureDdl, ownProps.selectedViewModel.id));
       }
     }
   };

@@ -5,8 +5,10 @@ import dataStoreModelUtils from '../../../../../common/domain/component/dataStor
 import DnText from './DnText';
 import { select } from 'd3-selection';
 import ReactDOM from 'react-dom';
-import graphTraversal from "../../../../../common/state/graphTraversal";
-import ActionInvoker from "../../../actions/ActionInvoker";
+import graphTraversal from '../../../../../common/state/graphTraversal';
+import ActionInvoker from '../../../actions/ActionInvoker';
+import SvgRootVisualization from "./SvgRootVisualization";
+import {zoom} from "d3-zoom";
 
 class DnDataStore extends SvgComponent {
 
@@ -17,6 +19,27 @@ class DnDataStore extends SvgComponent {
 
   onMouseOver() {
     select(ReactDOM.findDOMNode(this.refs.rootGroup)).style('cursor', 'move');
+  }
+
+  componentDidMount() {
+    // this.svgNodeSelection = select(ReactDOM.findDOMNode(this));
+    // this.svgNodeSelection
+    //   .call(SvgRootVisualization.drag, this.beforeDrag, this.onDrag, this.afterDrag)
+    //   .call(zoom().on('zoom', this.zoomed));
+    //
+    // this.rootGroupNodeSelection = select(ReactDOM.findDOMNode(this.refs.rootGroup));
+    // this.rootGroupNodeSelection.datum(this.props.data)
+    //   .call(SvgRootVisualization.enter);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    // this.rootGroupNodeSelection.datum(nextProps.data);
+    return false;
+  }
+
+  componentDidUpdate() {
+    // this.rootGroupNodeSelection.datum(this.props.data)
+    //   .call(SvgRootVisualization.update);
   }
 
   render() {
@@ -36,35 +59,42 @@ DnDataStore.propTypes = {
   id: PropTypes.number,
   label: PropTypes.string,
   onClick: PropTypes.func,
-  dataModelDisplay: PropTypes.bool
+  dataNarrativeView: PropTypes.object
 };
 
 const mapStateToProps = (state, ownProps) => {
   const defaultDataStore = dataStoreModelUtils.getDefaultDataStoreByState(state);
-
-  c.lo(ownProps, 'ownProps: ');
 
   return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
     label: defaultDataStore.label
   };
 };
 
-const onClick = (actionStatePackage, ownProps) => {
+const onClick = (actionStatePackage, args) => {
   const stateNew = actionStatePackage.stateNew;
 
-  const viewModel = graphTraversal.find(stateNew, ownProps.id);
+  const event = args.event;
 
-  c.lo(viewModel, 'viewModel: ');
+  const dataNarrativeView = args.dataNarrativeView;
 
-  viewModel.dataModelDisplay = true;
+  const viewModel = graphTraversal.find(stateNew, dataNarrativeView.id);
+
+  viewModel.collectionMenu = {
+    position: {
+      x: event.clientX,
+      y: event.clientY
+    },
+    display: true,
+    children: []
+  };
 
   return stateNew;
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const fns = {
-    onClick: () => {
-      ActionInvoker.invoke(dispatch, onClick, ownProps);
+    onClick: (event) => {
+      ActionInvoker.invoke(dispatch, onClick, { ...ownProps, event });
     }
   };
 

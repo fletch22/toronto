@@ -19,13 +19,11 @@ class DnText extends React.Component {
   render() {
     return (
       <g ref="rootGroup">
-        <text x="4" y="28" font-family="sans-serif" font-size="20px" fill="white" onClick={this.props.onClick} onMouseOver={this.onMouseOver}>{this.props.label}</text>
+        <text x="4" y="28" font-family="sans-serif" font-size="20px" fill="white" onClick={this.props.onClick} onMouseOver={this.onMouseOver}>AAA{this.props.label}</text>
       </g>
     );
   }
 }
-
-
 
 
 DnText.propTypes = {

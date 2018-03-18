@@ -6,8 +6,9 @@ import { select, event } from 'd3-selection';
 import SvgRootVisualization from './SvgRootVisualization';
 import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor/index';
 import DnDataStore from './DnDataStore';
+import SvgComponent from './SvgComponent';
 
-class SvgRoot extends React.Component {
+class SvgRoot extends SvgComponent {
 
   constructor(props) {
     super(props);
@@ -17,27 +18,18 @@ class SvgRoot extends React.Component {
   componentDidMount() {
     this.svgNodeSelection = select(ReactDOM.findDOMNode(this));
     this.svgNodeSelection
+      .call(SvgRootVisualization.drag, this.beforeDrag, this.onDrag, this.afterDrag)
       .call(zoom().on('zoom', this.zoomed));
+
+    c.lo(this.props.data.viewModel, 'componentDidMount: ');
 
     this.rootGroupNodeSelection = select(ReactDOM.findDOMNode(this.refs.rootGroup));
     this.rootGroupNodeSelection.datum(this.props.data)
       .call(SvgRootVisualization.enter);
-
-    this.rootGroupNodeSelection.transition().attr('transform', `translate(${this.props.width / 2}, ${this.props.height / 2})`);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    this.rootGroupNodeSelection.datum(nextProps.data);
-    return true;
-  }
-
-  componentDidUpdate() {
-    this.rootGroupNodeSelection.datum(this.props.data)
-      .call(SvgRootVisualization.update);
   }
 
   zoomed() {
-    this.rootGroupNodeSelection.transition().attr('transform', `translate(${this.props.width / 2}, ${this.props.height / 2}) scale(${event.transform.k})`);
+    this.rootGroupNodeSelection.transition().attr('transform', `scale(${event.transform.k})`);
     this.props.onMouseZoom(event.transform.k, { x: 0, y: 0 });
   }
 
@@ -46,12 +38,14 @@ class SvgRoot extends React.Component {
 
     return (
       <svg width={this.props.width} height={this.props.height + 10} style={{ border: '1px solid gray' }}>
-        <g ref="rootGroup">
-          {
-            children.map((child) =>
-              <DnDataStore {... child} data={child} />
-            )
-          }
+        <g>
+          <g ref="rootGroup">
+            {
+              children.map((child) =>
+                <DnDataStore {... child} data={child} dataNarrativeView={this.props.data} />
+              )
+            }
+          </g>
         </g>
       </svg>
     );
@@ -59,43 +53,26 @@ class SvgRoot extends React.Component {
 }
 
 SvgRoot.propTypes = {
-  data: PropTypes.object,
-  size: PropTypes.array,
-  height: PropTypes.any,
-  width: PropTypes.any,
+  ...SvgComponent.propTypes,
   zoom: PropTypes.number,
-  viewCoordinates: PropTypes.object,
-  x: PropTypes.number,
-  y: PropTypes.number,
-  onMouseZoom: PropTypes.func,
-  beforeDrag: PropTypes.func,
-  onDrag: PropTypes.func,
-  afterDrag: PropTypes.func,
-  viewCoordinatesDragOffset: PropTypes.object
+  onMouseZoom: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const viewModel = ownProps.data.viewModel;
-
   return {
-    data: ownProps.data,
-    size: ownProps.size,
-    height: ownProps.height,
-    width: ownProps.width,
-    zoom: viewModel.zoom,
-    viewCoordinates: viewModel.viewCoordinates,
-    viewCoordinatesDragOffset: viewModel.viewCoordinatesDragOffset,
-    x: viewModel.viewCoordinates.x,
-    y: viewModel.viewCoordinates.y
+    ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
+    zoom: ownProps.data.viewModel.zoom
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
+  const fns = {
     onMouseZoom: (zoomFactor, mouseCoords) => {
       dispatch(actionSetDataNarrativeViewProps(ownProps.data.id, zoomFactor, mouseCoords.x, mouseCoords.y, true));
     }
   };
+
+  return { ...fns, ...SvgComponent.getDragNDropFns(dispatch, ownProps) };
 };
 
 SvgRoot = connect(

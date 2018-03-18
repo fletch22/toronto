@@ -83,7 +83,15 @@ class ViewFactory {
 
   createDataNarrativeView(model) {
     return {
-      id: f22Uuid.generate()
+      id: f22Uuid.generate(),
+      collectionMenu: {
+        position: {
+          x: 0,
+          y: 0
+        },
+        display: false,
+        children: []
+      }
     };
   }
 

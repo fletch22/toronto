@@ -12,6 +12,7 @@ SvgRootVisualization.enter = (selection) => {
 
 SvgRootVisualization.update = (selection) => {
   selection.attr('transform', (d) => {
+    c.lo(d, 'd: ');
     return `translate(${d.viewModel.viewCoordinates.x}, ${d.viewModel.viewCoordinates.y}) scale(${d.viewModel.zoom})`;
   });
 };
@@ -26,6 +27,9 @@ SvgRootVisualization.drag = (selection, beforeDrag, onDrag, afterDrag) => {
       beforeDrag();
     }).on('drag', () => {
       if (!draggable) return;
+
+      c.l(`Event.x: ${event.x}`);
+
       onDrag(event.x, event.y);
     }).on('end', () => {
       draggable = false;

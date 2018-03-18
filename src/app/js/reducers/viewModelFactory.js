@@ -13,7 +13,7 @@ class ViewModelFactory {
     this.WEB_PAGE_ROOT = 'WEB_PAGE_ROOT';
   }
 
-  getPseudoModalData(type, state, viewId) {
+  getPseudoModalDataForExistingVm(type, state, viewId) {
     // Note: This should be changed to just 'viewName'
     let viewName;
     let data;
@@ -50,13 +50,31 @@ class ViewModelFactory {
         className = 'pseudo-modal-edit-configureddl';
         break;
       }
-      case PseudoModalTypes.DataNarrativeEditor: {
-        const dataNarrativeArray = outerViewModel.viewModel.children.filter((child) => child.viewModel.typeLabel === ComponentTypes.DataNarrative);
-        if (dataNarrativeArray.length > 1) {
-          throw new Error(`Encountered problem while trying to find all the DataNarrative view components inside a '${outerViewModel.viewModel.typeLabel}' component.`);
-        }
+      default: {
+        throw new Error(`Action not yet configured to handle ${type}.`);
+      }
+    }
 
-        data = dataNarrativeArray[0];
+    return {
+      viewName,
+      data,
+      pseudoModalType,
+      title,
+      className
+    };
+  }
+
+  getPseudoModalDataFromViewModel(type, viewModel) {
+    // Note: This should be changed to just 'viewName'
+    let viewName;
+    let data;
+    let pseudoModalType;
+
+    let title = '';
+    let className = '';
+    switch (type) {
+      case PseudoModalTypes.DataNarrativeEditor: {
+        data = viewModel;
 
         viewName = PseudoModalTypes.DataNarrativeEditor;
         pseudoModalType = PseudoModalTypes.DataNarrativeEditor;

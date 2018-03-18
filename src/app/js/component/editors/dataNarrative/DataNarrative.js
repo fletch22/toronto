@@ -35,7 +35,7 @@ const transformProps = (props) => {
   return {
     id: props.id,
     data: props.data,
-    zoom: props.data.zoom
+    zoom: props.data.viewModel.zoom
   };
 };
 
@@ -47,11 +47,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClickZoomIn: (event) => {
       const props = transformProps(ownProps);
-      dispatch(actionUpdateViewPropertyValue(props.data.id, 'zoom', props.zoom * 1.1, true));
+      // dispatch(actionUpdateViewPropertyValue(props.data.id, 'zoom', props.zoom * 1.1, true));
     },
     onClickZoomOut: (event) => {
       const props = transformProps(ownProps);
-      dispatch(actionUpdateViewPropertyValue(props.data.id, 'zoom', props.zoom * 0.9, true));
+      // dispatch(actionUpdateViewPropertyValue(props.data.id, 'zoom', props.zoom * 0.9, true));
     }
   };
 };

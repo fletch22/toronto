@@ -30,7 +30,8 @@ export const ACTIONS = {
     RESTORE_FROM_DISK: 'RESTORE_FROM_DISK',
     UPDATE_VIEW_PROPERTY_VALUE: 'UPDATE_VIEW_PROPERTY_VALUE',
     CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT',
-    CREATE_PSEUDO_MODAL: 'CREATE_PSEUDO_MODAL',
+    CREATE_PSEUDO_MODAL_FROM_EXIST_VM: 'CREATE_PSEUDO_MODAL_FROM_EXIST_VM',
+    CREATE_PSEUDO_MODAL_FROM_SCRATCH: 'CREATE_PSEUDO_MODAL_FROM_SCRATCH',
     SCRIBE_BORDER: 'SCRIBE_BORDER'
   }
 };
@@ -166,11 +167,19 @@ export const actionCreatePseudoModalComponent = (componentType, options) => ({
   }
 });
 
-export const actionCreatePseudoModal = (pseudoModalTypes, viewId) => ({
-  type: ACTIONS.types.CREATE_PSEUDO_MODAL,
+export const actionCreatePseudoModalFromExistingVm = (pseudoModalTypes, viewId) => ({
+  type: ACTIONS.types.CREATE_PSEUDO_MODAL_FROM_EXIST_VM,
   payload: {
     pseudoModalTypes,
     viewId
+  }
+});
+
+export const actionCreatePseudoModalFromScratch = (pseudoModalTypes, viewModel) => ({
+  type: ACTIONS.types.CREATE_PSEUDO_MODAL_FROM_SCRATCH,
+  payload: {
+    pseudoModalTypes,
+    viewModel
   }
 });
 

@@ -10,8 +10,7 @@ class DnDataStoreModelFactory extends ModelFactory {
       parentId,
       dataStoreId,
       typeLabel: ComponentTypes.DnDataStore,
-      children: [],
-      dataModelDisplay: false
+      children: []
     });
   }
 }

@@ -14,8 +14,7 @@ import actionBodyChildSelectorHandler from './actionBodyChildSelectorHandler';
 import actionBodyChildSetPropertyHandler from './actionBodyChildSetPropertyHandler';
 import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
-import viewUtils from '../views/viewUtils';
-import ViewTypes from '../views/ViewTypes';
+import f22Uuid from '../../../common/util/f22Uuid';
 import actionInvoker from '../actions/ActionInvoker';
 import borderScrivenerUtils from '../component/utils/borderScrivenerUtils';
 import DndActionHandler from '../actions/dnd/DndActionHandler';
@@ -238,15 +237,27 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
-    case ACTIONS.types.CREATE_PSEUDO_MODAL: {
+    case ACTIONS.types.CREATE_PSEUDO_MODAL_FROM_EXIST_VM: {
       const payload = action.payload;
 
-      const viewModel = actionComponentCreator.getPseudoModalData(payload.pseudoModalTypes, state, payload.viewId);
+      let viewModel = actionComponentCreator.getPseudoModalDataForExistingVm(payload.pseudoModalTypes, state, payload.viewId);
 
-      let viewData = modalDtoFactory.getPseudoModalInstance(viewModel);
-      viewData = _.cloneDeep(viewData);
+      viewModel = _.cloneDeep(viewModel);
+      const viewData = modalDtoFactory.getPseudoModalInstance(viewModel);
 
       stateNew.dom.pseudoModals.push(viewData);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
+    case ACTIONS.types.CREATE_PSEUDO_MODAL_FROM_SCRATCH: {
+      const payload = action.payload;
+
+      const pseudoModalData = actionComponentCreator.getPseudoModalDataFromViewModel(payload.pseudoModalTypes, payload.viewModel);
+
+      const pseudoModalInstance = modalDtoFactory.getPseudoModalInstance(pseudoModalData);
+      stateNew.dom.pseudoModals.push(pseudoModalInstance);
 
       stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
 
@@ -549,9 +560,13 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const payload = action.payload;
       const viewId = payload.viewId;
 
+      c.lo(payload, 'pl: ');
+
       const view = graphTraversal.find(stateNew, viewId);
-      view.zoom = payload.zoomFactor;
-      view.viewCoordinates = { x: payload.viewCoordinateX, y: payload.viewCoordinateY };
+      view.viewModel.zoom = payload.zoomFactor;
+      view.viewModel.viewCoordinates = { x: payload.viewCoordinateX, y: payload.viewCoordinateY };
+
+      c.lo(view.viewModel.viewCoordinates, 'view.viewModel.viewCoordinates: ');
 
       if (payload.persist) {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
