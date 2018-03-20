@@ -47,7 +47,7 @@ class SvgRoot extends SvgComponent {
               )
             }
           </g>
-
+          <Cylinder {...this.props.data} data={this.props.data} color="red" offset="50" />
         </g>
       </svg>
     );
@@ -61,6 +61,9 @@ SvgRoot.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+
+  c.lo(ownProps.data.viewModel.children, 'children: ');
+
   return {
     ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
     zoom: ownProps.data.viewModel.zoom

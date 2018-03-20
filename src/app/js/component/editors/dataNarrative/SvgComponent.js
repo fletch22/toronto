@@ -17,12 +17,13 @@ class SvgComponent extends React.Component {
         dispatch(actionUpdateViewPropertyValue(data.id, 'viewModel.viewCoordinatesDragOffset', data.viewModel.viewCoordinatesDragOffset, true));
       },
       onDrag: (data) => {
-        const x = data.viewModel.viewCoordinates.x; // - data.viewModel.viewCoordinatesDragOffset.x;
-        const y = data.viewModel.viewCoordinates.y; // - data.viewModel.viewCoordinatesDragOffset.y;
+        const x = data.viewModel.viewCoordinates.x - data.viewModel.viewCoordinatesDragOffset.x;
+        const y = data.viewModel.viewCoordinates.y - data.viewModel.viewCoordinatesDragOffset.y;
+
         dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, x, y, false));
       },
       afterDrag: (data) => {
-        // dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, data.viewModel.viewCoordinates.x, data.viewModel.viewCoordinates.y, true));
+        dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, data.viewModel.viewCoordinates.x, data.viewModel.viewCoordinates.y, true));
       }
     };
   }
@@ -55,7 +56,7 @@ class SvgComponent extends React.Component {
     this.svgNodeSelection
       .call(SvgRootVisualization.drag, this.beforeDrag, this.onDrag, this.afterDrag);
 
-    this.rootGroupNodeSelection = d3.select(ReactDOM.findDOMNode(this.refs.rootGroup));
+    this.rootGroupNodeSelection = d3.select(ReactDOM.findDOMNode(this));
 
     this.rootGroupNodeSelection.datum(this.props.data)
       .call(SvgRootVisualization.enter);
@@ -72,15 +73,13 @@ class SvgComponent extends React.Component {
   }
 
   onDrag(x, y) {
-    const domNode = ReactDOM.findDOMNode(this.refs.rootGroup);
-    const rectRaw = domNode.getBoundingClientRect();
+    // const domNode = ReactDOM.findDOMNode(this.refs.rootGroup);
+    // const rectRaw = domNode.getBoundingClientRect();
 
-    const data = Object.assign({}, this.props.data);
+    const data = { ...this.props.data };
     // data.viewModel.viewCoordinates = { x: x - (rectRaw.width / 2) + 10, y: y - (rectRaw.height / 2) };
 
-    c.l(`onDrag y: ${y}`);
-
-    data.viewModel.viewCoordinates = { x: x, y: y};
+    data.viewModel.viewCoordinates = { x, y };
     this.props.onDrag(data);
   }
 
@@ -95,6 +94,10 @@ class SvgComponent extends React.Component {
 
   beforeDrag() {
     this.props.data.viewModel.viewCoordinatesDragOffset = this.getViewDragOffsetCoordinates(d3.event.x, d3.event.y);
+
+    c.lo(this.props.data.viewModel.viewCoordinatesDragOffset, 'vcdo: ');
+    c.lo(this.props.data.viewModel.viewCoordinates, 'vc: ');
+
     this.props.beforeDrag(this.props.data);
   }
 
