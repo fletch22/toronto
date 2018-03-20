@@ -139,8 +139,6 @@ const doSaveCollectionAction = (event, ownProps) => (
 
     const protoModel = { id: stateTraversal.getNextId(state), parentId: props.viewModel.viewModel.id, label: props.newItemNameInput.value };
 
-    c.lo(protoModel, 'protoModel: ');
-
     const model = dataModelModelFactory.createInstanceFromModel(protoModel);
 
     const newItemNameInput = graphTraversal.find(state, props.newItemNameInput.id);

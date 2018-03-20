@@ -1,9 +1,6 @@
 import React, { PropTypes } from 'react';
-import SvgComponent from './SvgComponent';
-import { connect } from 'react-redux';
-import dataStoreModelUtils from '../../../../../common/domain/component/dataStoreModelUtils';
-import {select} from "d3-selection";
-import ReactDOM from "react-dom";
+import * as d3 from 'd3';
+import ReactDOM from 'react-dom';
 
 class DnText extends React.Component {
 
@@ -13,7 +10,7 @@ class DnText extends React.Component {
   }
 
   onMouseOver() {
-    select(ReactDOM.findDOMNode(this.refs.rootGroup)).style('cursor', 'pointer');
+    d3.select(ReactDOM.findDOMNode(this.refs.rootGroup)).style('cursor', 'pointer');
   }
 
   render() {
@@ -24,7 +21,6 @@ class DnText extends React.Component {
     );
   }
 }
-
 
 DnText.propTypes = {
   label: PropTypes.string,

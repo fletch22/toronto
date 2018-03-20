@@ -1,8 +1,8 @@
 import { drag } from 'd3-drag';
-import { event } from 'd3-selection';
+import { event as currentEvent } from 'd3-selection';
 
 const SvgRootVisualization = {};
-const duration = 40;
+const duration = 10;
 
 SvgRootVisualization.enter = (selection) => {
   selection.attr('transform', (d) => {
@@ -12,7 +12,6 @@ SvgRootVisualization.enter = (selection) => {
 
 SvgRootVisualization.update = (selection) => {
   selection.attr('transform', (d) => {
-    c.lo(d, 'd: ');
     return `translate(${d.viewModel.viewCoordinates.x}, ${d.viewModel.viewCoordinates.y}) scale(${d.viewModel.zoom})`;
   });
 };
@@ -27,10 +26,7 @@ SvgRootVisualization.drag = (selection, beforeDrag, onDrag, afterDrag) => {
       beforeDrag();
     }).on('drag', () => {
       if (!draggable) return;
-
-      c.l(`Event.x: ${event.x}`);
-
-      onDrag(event.x, event.y);
+      onDrag(currentEvent.x, currentEvent.y);
     }).on('end', () => {
       draggable = false;
       afterDrag();

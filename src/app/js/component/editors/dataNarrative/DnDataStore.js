@@ -3,12 +3,10 @@ import SvgComponent from './SvgComponent';
 import { connect } from 'react-redux';
 import dataStoreModelUtils from '../../../../../common/domain/component/dataStoreModelUtils';
 import DnText from './DnText';
-import { select } from 'd3-selection';
 import ReactDOM from 'react-dom';
 import graphTraversal from '../../../../../common/state/graphTraversal';
 import ActionInvoker from '../../../actions/ActionInvoker';
-import SvgRootVisualization from "./SvgRootVisualization";
-import {zoom} from "d3-zoom";
+import * as d3 from 'd3';
 
 class DnDataStore extends SvgComponent {
 
@@ -18,28 +16,7 @@ class DnDataStore extends SvgComponent {
   }
 
   onMouseOver() {
-    select(ReactDOM.findDOMNode(this.refs.rootGroup)).style('cursor', 'move');
-  }
-
-  componentDidMount() {
-    // this.svgNodeSelection = select(ReactDOM.findDOMNode(this));
-    // this.svgNodeSelection
-    //   .call(SvgRootVisualization.drag, this.beforeDrag, this.onDrag, this.afterDrag)
-    //   .call(zoom().on('zoom', this.zoomed));
-    //
-    // this.rootGroupNodeSelection = select(ReactDOM.findDOMNode(this.refs.rootGroup));
-    // this.rootGroupNodeSelection.datum(this.props.data)
-    //   .call(SvgRootVisualization.enter);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    // this.rootGroupNodeSelection.datum(nextProps.data);
-    return false;
-  }
-
-  componentDidUpdate() {
-    // this.rootGroupNodeSelection.datum(this.props.data)
-    //   .call(SvgRootVisualization.update);
+    d3.select(ReactDOM.findDOMNode(this.refs.rootGroup)).style('cursor', 'move');
   }
 
   render() {

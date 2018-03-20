@@ -1,36 +1,37 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { zoom } from 'd3-zoom';
-import { select, event } from 'd3-selection';
+
+import * as selection from 'd3-selection'; // You must import all d3-selection module
+import { zoom, zoomIdentity } from 'd3-zoom'; // An example if you are using zoom functions
+const d3 = Object.assign(selection, { zoom, zoomIdentity });
+
 import SvgRootVisualization from './SvgRootVisualization';
 import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor/index';
 import DnDataStore from './DnDataStore';
 import SvgComponent from './SvgComponent';
+import Cylinder from './shapes/Cylinder';
 
 class SvgRoot extends SvgComponent {
-
   constructor(props) {
     super(props);
     this.zoomed = this.zoomed.bind(this);
   }
 
   componentDidMount() {
-    this.svgNodeSelection = select(ReactDOM.findDOMNode(this));
+    this.svgNodeSelection = d3.select(ReactDOM.findDOMNode(this));
     this.svgNodeSelection
       .call(SvgRootVisualization.drag, this.beforeDrag, this.onDrag, this.afterDrag)
-      .call(zoom().on('zoom', this.zoomed));
+      .call(d3.zoom().on('zoom', this.zoomed));
 
-    c.lo(this.props.data.viewModel, 'componentDidMount: ');
-
-    this.rootGroupNodeSelection = select(ReactDOM.findDOMNode(this.refs.rootGroup));
+    this.rootGroupNodeSelection = d3.select(ReactDOM.findDOMNode(this.refs.rootGroup));
     this.rootGroupNodeSelection.datum(this.props.data)
       .call(SvgRootVisualization.enter);
   }
 
   zoomed() {
-    this.rootGroupNodeSelection.transition().attr('transform', `scale(${event.transform.k})`);
-    this.props.onMouseZoom(event.transform.k, { x: 0, y: 0 });
+    this.rootGroupNodeSelection.transition().attr('transform', `scale(${selection.event.transform.k})`);
+    this.props.onMouseZoom(selection.event.transform.k, { x: 0, y: 0 });
   }
 
   render() {
@@ -46,6 +47,7 @@ class SvgRoot extends SvgComponent {
               )
             }
           </g>
+
         </g>
       </svg>
     );

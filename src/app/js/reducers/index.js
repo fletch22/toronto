@@ -560,13 +560,9 @@ const reducer = (state = defaultState.getInstance(), action) => {
       const payload = action.payload;
       const viewId = payload.viewId;
 
-      c.lo(payload, 'pl: ');
-
       const view = graphTraversal.find(stateNew, viewId);
       view.viewModel.zoom = payload.zoomFactor;
       view.viewModel.viewCoordinates = { x: payload.viewCoordinateX, y: payload.viewCoordinateY };
-
-      c.lo(view.viewModel.viewCoordinates, 'view.viewModel.viewCoordinates: ');
 
       if (payload.persist) {
         stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));

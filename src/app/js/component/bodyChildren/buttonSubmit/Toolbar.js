@@ -33,7 +33,6 @@ const createPseudoModal = (ownProps) => {
     const model = dataNarrativeArray[0];
 
     const viewModel = viewModelFactory.generateViewModel(ownProps.selectedViewModel.id, model);
-    c.lo(viewModel, 'viewModel: ');
 
     dispatch(actionCreatePseudoModalFromScratch(PseudoModalTypes.DataNarrativeEditor, viewModel));
   };

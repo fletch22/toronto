@@ -92,7 +92,6 @@ class GridService extends Service {
       if (isNew) {
         dataModel.userData.unshift(row);
       } else {
-        c.lo(row, 'Updating...');
         const rowIndex = _.findIndex(dataModel.userData, (rowUserData) => {
           return rowUserData[0] === row[0];
         });

@@ -1,7 +1,10 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import { zoom } from 'd3-zoom';
-import { select, event } from 'd3-selection';
+import * as selection from 'd3-selection'; // You must import all d3-selection module
+import { zoom, zoomIdentity } from 'd3-zoom'; // An example if you are using zoom functions
+const d3 = Object.assign(selection, { zoom, zoomIdentity });
+
+import { event as currentEvent } from 'd3';
 import SvgRootVisualization from './SvgRootVisualization';
 import { actionUpdateViewPropertyValue } from '../../../actions/index';
 import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor/index';
@@ -14,12 +17,12 @@ class SvgComponent extends React.Component {
         dispatch(actionUpdateViewPropertyValue(data.id, 'viewModel.viewCoordinatesDragOffset', data.viewModel.viewCoordinatesDragOffset, true));
       },
       onDrag: (data) => {
-        const x = data.viewModel.viewCoordinates.x - data.viewModel.viewCoordinatesDragOffset.x;
-        const y = data.viewModel.viewCoordinates.y - data.viewModel.viewCoordinatesDragOffset.y;
+        const x = data.viewModel.viewCoordinates.x; // - data.viewModel.viewCoordinatesDragOffset.x;
+        const y = data.viewModel.viewCoordinates.y; // - data.viewModel.viewCoordinatesDragOffset.y;
         dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, x, y, false));
       },
       afterDrag: (data) => {
-        dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, data.viewModel.viewCoordinates.x, data.viewModel.viewCoordinates.y, true));
+        // dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, data.viewModel.viewCoordinates.x, data.viewModel.viewCoordinates.y, true));
       }
     };
   }
@@ -48,11 +51,11 @@ class SvgComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.svgNodeSelection = select(ReactDOM.findDOMNode(this));
+    this.svgNodeSelection = d3.select(ReactDOM.findDOMNode(this));
     this.svgNodeSelection
       .call(SvgRootVisualization.drag, this.beforeDrag, this.onDrag, this.afterDrag);
 
-    this.rootGroupNodeSelection = select(ReactDOM.findDOMNode(this.refs.rootGroup));
+    this.rootGroupNodeSelection = d3.select(ReactDOM.findDOMNode(this.refs.rootGroup));
 
     this.rootGroupNodeSelection.datum(this.props.data)
       .call(SvgRootVisualization.enter);
@@ -73,20 +76,25 @@ class SvgComponent extends React.Component {
     const rectRaw = domNode.getBoundingClientRect();
 
     const data = Object.assign({}, this.props.data);
-    data.viewModel.viewCoordinates = { x: x - (rectRaw.width / 2), y: y - (rectRaw.height / 2) };
+    // data.viewModel.viewCoordinates = { x: x - (rectRaw.width / 2) + 10, y: y - (rectRaw.height / 2) };
+
+    c.l(`onDrag y: ${y}`);
+
+    data.viewModel.viewCoordinates = { x: x, y: y};
     this.props.onDrag(data);
   }
 
   getViewDragOffsetCoordinates(xNew, yNew) {
     const yCurrent = this.props.data.viewModel.viewCoordinates.y;
     const xCurrent = this.props.data.viewModel.viewCoordinates.x;
+
+    c.l(`yNew: ${yNew}; yCurrent: ${yCurrent}`);
+
     return { x: xNew - xCurrent, y: yNew - yCurrent };
   }
 
   beforeDrag() {
-    c.lo(this.props.data.viewModel.viewCoordinatesDragOffset, 'before set offet: ');
-    this.props.data.viewModel.viewCoordinatesDragOffset = this.getViewDragOffsetCoordinates(event.x, event.y);
-    c.lo(this.props.data.viewModel.viewCoordinatesDragOffset, 'before set offet: ');
+    this.props.data.viewModel.viewCoordinatesDragOffset = this.getViewDragOffsetCoordinates(d3.event.x, d3.event.y);
     this.props.beforeDrag(this.props.data);
   }
 

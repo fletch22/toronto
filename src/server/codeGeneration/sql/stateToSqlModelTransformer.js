@@ -33,7 +33,6 @@ class StateToSqlTransformer {
 
   transformRecordArray(recordArray: Array<string>, dataFieldArray: Array<Object>) {
     const instance = {};
-    c.lo(recordArray, 'recordArray: ');
 
     recordArray.forEach((fieldValue, ndxRecord) => {
       if (ndxRecord === 0) {
