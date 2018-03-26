@@ -145,6 +145,18 @@ class ViewModelFactory {
         view = viewFactory.createDataNarrativeView(model);
         break;
       }
+      case ComponentTypes.DnBrowser: {
+        view = viewFactory.createDnBrowserView();
+        break;
+      }
+      case ComponentTypes.DnConnector: {
+        view = viewFactory.createDnConnectorView();
+        break;
+      }
+      case ComponentTypes.DnWebServer: {
+        view = viewFactory.createDnWebServerView();
+        break;
+      }
       case ComponentTypes.Cylinder: {
         view = viewFactory.createCylinderView();
         break;

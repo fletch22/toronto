@@ -6,7 +6,7 @@ class SvgModelFactoryHelper {
   mergeSvgAttributes(model) {
     const svgStuff = {
       zoom: 1,
-      viewCoordinates: originCoordinates,
+      viewCoordinates: model.viewCoordinates || originCoordinates,
       viewCoordinatesDragOffset: originCoordinates
     };
 

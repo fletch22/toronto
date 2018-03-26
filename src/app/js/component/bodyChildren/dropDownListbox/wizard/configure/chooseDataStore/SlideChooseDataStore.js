@@ -72,10 +72,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const doCollectionFocusAction = (event, ownProps) => {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    // const props = partialFlatten(state, ownProps);
+  return (dispatch) => {
     const dataStoreId = parseInt(event.target.dataset.value, 10);
     const selectedDataStoreLabel = event.target.dataset.label;
 

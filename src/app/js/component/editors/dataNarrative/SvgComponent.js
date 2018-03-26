@@ -52,14 +52,17 @@ class SvgComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.svgNodeSelection = d3.select(ReactDOM.findDOMNode(this));
-    this.svgNodeSelection
+    const dom = ReactDOM.findDOMNode(this);
+
+    this.svgNodeSelection = d3.select(dom);
+    this.drag = this.svgNodeSelection
       .call(SvgRootVisualization.drag, this.beforeDrag, this.onDrag, this.afterDrag);
 
-    this.rootGroupNodeSelection = d3.select(ReactDOM.findDOMNode(this));
-
+    this.rootGroupNodeSelection = d3.select(dom);
     this.rootGroupNodeSelection.datum(this.props.data)
       .call(SvgRootVisualization.enter);
+
+    this.afterMount(dom);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -70,14 +73,12 @@ class SvgComponent extends React.Component {
   componentDidUpdate() {
     this.rootGroupNodeSelection.datum(this.props.data)
       .call(SvgRootVisualization.update);
+
+    this.afterUpdate(ReactDOM.findDOMNode(this));
   }
 
   onDrag(x, y) {
-    // const domNode = ReactDOM.findDOMNode(this.refs.rootGroup);
-    // const rectRaw = domNode.getBoundingClientRect();
-
-    const data = { ...this.props.data };
-    // data.viewModel.viewCoordinates = { x: x - (rectRaw.width / 2) + 10, y: y - (rectRaw.height / 2) };
+    const data = this.props.data;
 
     data.viewModel.viewCoordinates = { x, y };
     this.props.onDrag(data);
@@ -87,22 +88,22 @@ class SvgComponent extends React.Component {
     const yCurrent = this.props.data.viewModel.viewCoordinates.y;
     const xCurrent = this.props.data.viewModel.viewCoordinates.x;
 
-    c.l(`yNew: ${yNew}; yCurrent: ${yCurrent}`);
-
     return { x: xNew - xCurrent, y: yNew - yCurrent };
   }
 
   beforeDrag() {
     this.props.data.viewModel.viewCoordinatesDragOffset = this.getViewDragOffsetCoordinates(d3.event.x, d3.event.y);
-
-    c.lo(this.props.data.viewModel.viewCoordinatesDragOffset, 'vcdo: ');
-    c.lo(this.props.data.viewModel.viewCoordinates, 'vc: ');
-
     this.props.beforeDrag(this.props.data);
   }
 
   afterDrag() {
     this.props.afterDrag(this.props.data);
+  }
+
+  afterMount(dom) {
+  }
+
+  afterUpdate(dom) {
   }
 }
 

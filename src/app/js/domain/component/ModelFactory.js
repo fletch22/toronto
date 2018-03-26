@@ -20,3 +20,4 @@ class ModelViewFactory {
 }
 
 export default ModelViewFactory;
+

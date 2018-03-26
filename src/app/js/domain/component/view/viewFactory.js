@@ -95,6 +95,24 @@ class ViewFactory {
     };
   }
 
+  createDnBrowserView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
+
+  createDnConnectorView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
+
+  createDnWebServerView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
+
   createCylinderView() {
     return {
       id: f22Uuid.generate()

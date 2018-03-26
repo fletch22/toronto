@@ -33,6 +33,8 @@ SvgRootVisualization.drag = (selection, beforeDrag, onDrag, afterDrag) => {
     });
 
   selection.call(dragThing);
+
+  return dragThing;
 };
 
 export default SvgRootVisualization;

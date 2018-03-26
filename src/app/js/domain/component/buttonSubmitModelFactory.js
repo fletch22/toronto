@@ -3,6 +3,8 @@ import dataNarrativeModelFactory from '../../domain/component/dataNarrativeModel
 import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 import dataUniverseModelUtils from '../../../../common/domain/component/dataUniverseModelUtils';
 import dnDataStoreModelFactory from '../../domain/component/dataNarrative/dnDataStoreModelFactory';
+import dnBrowserModelFactory from '../../domain/component/dataNarrative/dnBrowserModelFactory';
+import dnWebServerModelFactory from '../../domain/component/dataNarrative/dnWebServerModelFactory';
 
 class ButtonSubmitModelFactory extends ModelFactory {
 
@@ -29,8 +31,11 @@ class ButtonSubmitModelFactory extends ModelFactory {
     const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
     const defaultDataStore = dataUniverseModelUtils.getDataStoreModelUtils().getDefaultDataStore(dataUniverse);
     const dnDataStoreModel = dnDataStoreModelFactory.createInstance(parentId, defaultDataStore.id);
-    const dnDataStoreModelExtra = dnDataStoreModelFactory.createInstance(parentId, defaultDataStore.id);
-    dataNarrative.children = [dnDataStoreModel, dnDataStoreModelExtra];
+
+    const dnBrowserModel = dnBrowserModelFactory.createInstance();
+    const dnWebServerModel = dnWebServerModelFactory.createInstance();
+
+    dataNarrative.children = [dnDataStoreModel, dnWebServerModel, dnBrowserModel];
 
     buttonSubmitInstance.children = [dataNarrative];
 

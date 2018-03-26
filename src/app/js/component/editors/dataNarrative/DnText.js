@@ -16,7 +16,7 @@ class DnText extends React.Component {
   render() {
     return (
       <g ref="rootGroup">
-        <text x="4" y="28" font-family="sans-serif" font-size="20px" fill="white" onClick={this.props.onClick} onMouseOver={this.onMouseOver}>AAA{this.props.label}</text>
+        <text ref={this.props.refLinkName} x={this.props.x} y={this.props.y} fill="black" onClick={this.props.onClick} onMouseOver={this.onMouseOver}>{this.props.label}</text>
       </g>
     );
   }
@@ -24,7 +24,10 @@ class DnText extends React.Component {
 
 DnText.propTypes = {
   label: PropTypes.string,
-  onClick: PropTypes.string
+  onClick: PropTypes.string,
+  x: PropTypes.number,
+  y: PropTypes.number,
+  refLinkName: PropTypes.string
 };
 
 

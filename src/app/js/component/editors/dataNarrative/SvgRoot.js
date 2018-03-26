@@ -8,9 +8,8 @@ const d3 = Object.assign(selection, { zoom, zoomIdentity });
 
 import SvgRootVisualization from './SvgRootVisualization';
 import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor/index';
-import DnDataStore from './DnDataStore';
+import DnComponentDealer from './DnComponentDealer';
 import SvgComponent from './SvgComponent';
-import Cylinder from './shapes/Cylinder';
 
 class SvgRoot extends SvgComponent {
   constructor(props) {
@@ -27,6 +26,13 @@ class SvgRoot extends SvgComponent {
     this.rootGroupNodeSelection = d3.select(ReactDOM.findDOMNode(this.refs.rootGroup));
     this.rootGroupNodeSelection.datum(this.props.data)
       .call(SvgRootVisualization.enter);
+
+    // NOTE: Center the Play Area
+    const rectRaw = ReactDOM.findDOMNode(this).getBoundingClientRect();
+    const outerRootGroup = d3.select(ReactDOM.findDOMNode(this.refs.outerRootGroup));
+    outerRootGroup.attr('transform', (d) => {
+      return `translate(${parseInt(rectRaw.width, 10) / 2}, ${parseInt(rectRaw.height, 10) / 2})`;
+    });
   }
 
   zoomed() {
@@ -39,15 +45,14 @@ class SvgRoot extends SvgComponent {
 
     return (
       <svg width={this.props.width} height={this.props.height + 10} style={{ border: '1px solid gray' }}>
-        <g>
+        <g ref="outerRootGroup">
           <g ref="rootGroup">
             {
               children.map((child) =>
-                <DnDataStore {... child} data={child} dataNarrativeView={this.props.data} />
+                <DnComponentDealer {... child} data={child} dataNarrativeView={this.props.data} />
               )
             }
           </g>
-          <Cylinder {...this.props.data} data={this.props.data} color="red" offset="50" />
         </g>
       </svg>
     );
@@ -61,9 +66,6 @@ SvgRoot.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-
-  c.lo(ownProps.data.viewModel.children, 'children: ');
-
   return {
     ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
     zoom: ownProps.data.viewModel.zoom

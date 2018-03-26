@@ -10,8 +10,6 @@ class StateTraversal {
   getNextId(state) {
     let highestId = state.currentId;
 
-    c.l(`highestId: ${highestId}`);
-
     if (!highestId) {
       highestId = this.findHighestId(state) + 1;
     } else {
@@ -20,7 +18,6 @@ class StateTraversal {
     /* eslint-disable no-param-reassign */
     state.currentId = highestId;
 
-    c.l(`CurrentId: ${state.currentId}`);
     return state.currentId;
   }
 
