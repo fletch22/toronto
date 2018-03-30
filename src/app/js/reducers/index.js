@@ -570,6 +570,22 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return stateNew;
     }
+    case ACTIONS.types.SET_DATA_NARRATIVE_CONNECTOR_AFTER_DRAG: {
+      const payload = action.payload;
+      const viewId = payload.viewId;
+
+      const view = graphTraversal.find(stateNew, viewId);
+
+      const parentView = graphTraversal.find(stateNew, view.parentId);
+      parentView.viewModel.children = parentView.viewModel.children.filter((child) => child.id !== view.id);
+
+      const parentModel = graphTraversal.find(stateNew.model, view.viewModel.parentId);
+      parentModel.children = parentModel.children.filter((child) => child.id !== view.id);
+
+      stateFixer.fix(jsonStateOld, JSON.stringify(stateNew));
+
+      return stateNew;
+    }
     case ACTIONS.types.PAGE_NEEDS_SAVING: {
       const payload = action.payload;
       const viewId = payload.viewId;

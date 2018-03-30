@@ -5,7 +5,7 @@ import dataStoreModelUtils from '../../../../../common/domain/component/dataStor
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import ActionInvoker from '../../../actions/ActionInvoker';
-import Connector from './DnConnectorNexus';
+import DnConnectorNexus from './DnConnectorOutNexus';
 
 class DnBrowser extends SvgComponent {
 
@@ -23,7 +23,7 @@ class DnBrowser extends SvgComponent {
       <g ref="rootGroup" onMouseOver={this.onMouseOver}>
         <rect rx="6" x="0" y="0" width="100" height="75" fill="gray" />
         <text ref="label" fontFamily="sans-serif" fill="white" textAnchor="middle" alignmentBaseline="alphabetic" x="51" y="42">Browser</text>
-        <Connector { ...this.props.data } data={this.props.data} dataNarrativeView={this.props.dataNarrativeView} />
+        <DnConnectorNexus { ...this.props.data } data={this.props.data} dataNarrativeView={this.props.dataNarrativeView} connectorX={100} connectorY={39} />
       </g>
     );
   }

@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import SvgComponent from './SvgComponent';
 import { connect } from 'react-redux';
 import dataStoreModelUtils from '../../../../../common/domain/component/dataStoreModelUtils';
-import DnText from './DnText';
 import ReactDOM from 'react-dom';
 import graphTraversal from '../../../../../common/state/graphTraversal';
 import ActionInvoker from '../../../actions/ActionInvoker';

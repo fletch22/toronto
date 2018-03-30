@@ -4,7 +4,6 @@ import * as selection from 'd3-selection'; // You must import all d3-selection m
 import { zoom, zoomIdentity } from 'd3-zoom'; // An example if you are using zoom functions
 const d3 = Object.assign(selection, { zoom, zoomIdentity });
 
-import { event as currentEvent } from 'd3';
 import SvgRootVisualization from './SvgRootVisualization';
 import { actionUpdateViewPropertyValue } from '../../../actions/index';
 import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor/index';

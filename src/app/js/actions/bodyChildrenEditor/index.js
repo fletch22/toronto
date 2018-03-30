@@ -5,9 +5,10 @@ export const ACTIONS = {
   TOGGLE_MINION_STATIC_LOCK: 'TOGGLE_MINION_STATIC_LOCK',
   TOGGLE_LAYOUT_MINION_BORDERS: 'TOGGLE_LAYOUT_MINION_BORDERS',
   SET_DATA_NARRATIVE_VIEW_PROPS: 'SET_DATA_NARRATIVE_VIEW_PROPS',
+  SET_DATA_NARRATIVE_CONNECTOR_AFTER_DRAG: 'SET_DATA_NARRATIVE_CONNECTOR_AFTER_DRAG',
   PAGE_NEEDS_SAVING: 'PAGE_NEEDS_SAVING',
   PAGE_DOES_NOT_NEED_SAVING: 'PAGE_DOES_NOT_NEED_SAVING',
-  SET_PAGE_NEEDS_SAVING: 'SET_PAGE_NEEDS_SAVING',
+  SET_PAGE_NEEDS_SAVING: 'SET_PAGE_NEEDS_SAVING'
 };
 
 export const actionSetCurrentBodyTool = (viewModelId) => ({
@@ -39,6 +40,16 @@ export const actionSetDataNarrativeViewProps = (viewId, zoomFactor, viewCoordina
     viewCoordinateX,
     viewCoordinateY,
     persist
+  }
+});
+
+export const actionSetDataNarrativeConnectorAfterDrag = (viewId, zoomFactor, viewCoordinateX, viewCoordinateY) => ({
+  type: ACTIONS.SET_DATA_NARRATIVE_CONNECTOR_AFTER_DRAG,
+  payload: {
+    viewId,
+    zoomFactor,
+    viewCoordinateX,
+    viewCoordinateY
   }
 });
 

@@ -5,6 +5,7 @@ import dataStoreModelUtils from '../../../../../common/domain/component/dataStor
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import webServer from '../../../../images/webServer2.svg';
+import DnConnectorInNexus from './DnConnectorInNexus';
 
 class DnWebServer extends SvgComponent {
 
@@ -18,7 +19,9 @@ class DnWebServer extends SvgComponent {
   }
 
   afterMount(dom) {
-    const connector = ReactDOM.findDOMNode(this.refs.connector);
+    // const connector = ReactDOM.findDOMNode(this.refs.connector);
+    // <DnConnectorOutNexus { ...this.props.data } data={this.props.data} dataNarrativeView={this.props.dataNarrativeView} />
+    // <circle ref="connector" cx="15" cy="88" r="5" fill="purple" />
   }
 
   afterUpdate(dom) {
@@ -30,7 +33,7 @@ class DnWebServer extends SvgComponent {
       <g ref="rootGroup" onMouseOver={this.onMouseOver}>
         <image xlinkHref={webServer} transform="scale(.2)" />
         <text fontFamily="sans-serif" fill="gray" textAnchor="middle" alignmentBaseline="alphabetic" x="84" y="45">Web Server</text>
-        <circle ref="connector" cx="15" cy="88" r="5" fill="purple" />
+        <DnConnectorInNexus { ...this.props.data } data={this.props.data} dataNarrativeView={this.props.dataNarrativeView} connectorX={15} connectorY={88} />
       </g>
     );
   }

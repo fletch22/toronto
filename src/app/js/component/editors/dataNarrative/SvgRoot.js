@@ -44,7 +44,7 @@ class SvgRoot extends SvgComponent {
     const children = (this.props.data.viewModel.children) ? this.props.data.viewModel.children : [];
 
     return (
-      <svg width={this.props.width} height={this.props.height + 10} style={{ border: '1px solid gray' }}>
+      <svg id="svgRoot" width={this.props.width} height={this.props.height + 10} style={{ border: '1px solid gray' }}>
         <g ref="outerRootGroup">
           <g ref="rootGroup">
             {
