@@ -3,10 +3,6 @@ import { connect } from 'react-redux';
 import SvgComponent from './SvgComponent';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
-import viewModelCreator from '../../../component/utils/viewModelCreator';
-import stateTraversal from '../../../../../common/state/stateTraversal';
-import dnConnectorModelFactory from '../../../domain/component/dataNarrative/dnConnectorModelFactory';
-import DnComponentDealer from './DnComponentDealer';
 import graphTraversal from '../../../../../common/state/graphTraversal';
 import ActionInvoker from '../../../actions/ActionInvoker';
 
@@ -18,8 +14,6 @@ class DnConnectorOutNexus extends React.Component {
   }
 
   componentDidMount() {
-    const dom = ReactDOM.findDOMNode(this);
-
     const props = this.props;
 
     const connector = ReactDOM.findDOMNode(this.refs.connector);
@@ -28,17 +22,18 @@ class DnConnectorOutNexus extends React.Component {
       d3.event.preventDefault();
       d3.event.stopPropagation();
 
-      c.l('mousedown!');
+      // c.l('mousedown!');
       function mousemove() {
-        c.l('Test move');
+        // c.l('Test move');
         props.onMouseMoveConnector();
       }
 
       function mouseup() {
-        c.l('Test up');
+        // c.l('Test up');
         d3.select(this)
           .on('mousemove', null)
           .on('mouseup', null);
+        props.onMouseUpConnector();
       }
 
       d3.select(window)
@@ -76,11 +71,14 @@ class DnConnectorOutNexus extends React.Component {
     g.selectAll('path').remove();
 
     const triangleSymbol = d3.symbol().type(d3.symbolTriangle);
-    g.append('path')
-      .attr('d', triangleSymbol)
-      .attr('fill', 'red')
-      .attr('stroke', 'red')
-      .attr('transform', `translate(${iPNT.x}, ${iPNT.y})`);
+
+    if (iPNT) {
+      g.append('path')
+        .attr('d', triangleSymbol)
+        .attr('fill', 'red')
+        .attr('stroke', 'red')
+        .attr('transform', `translate(${iPNT.x}, ${iPNT.y})`);
+    }
 
     let closestConnector;
     Array.from(document.getElementsByClassName('dnConnectorInNexus'))
@@ -90,12 +88,14 @@ class DnConnectorOutNexus extends React.Component {
 
         if (!closestConnector || dist < closestConnector.dist) {
           closestConnector = {
-            obj: this,
+            obj: domNode,
             dist
           };
         }
       });
-    c.l(`Dist2: ${closestConnector.dist}`);
+
+    // if (closestConnector) c.l(`Target ID: ${closestConnector.obj.getAttribute('id')}`);
+    c.lo(closestConnector.obj.id);
   }
 
   onMouseOver() {
@@ -103,14 +103,12 @@ class DnConnectorOutNexus extends React.Component {
   }
 
   render() {
+
+    // <circle ref="connector" id={this.props.id} cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="purple" />
+
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
-        <circle ref="connector" cx={this.props.connectorX} cy={this.props.connectorY} r="5" fill="purple" />
-        {
-          this.props.children.map((child) =>
-            <DnComponentDealer {... child} data={child} dataNarrativeView={this.props.data} />
-          )
-        }
+        <circle ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="purple" />
       </g>
     );
   }
@@ -124,6 +122,7 @@ DnConnectorOutNexus.propTypes = {
   dataNarrativeView: PropTypes.object,
   onMouseDownConnector: PropTypes.func,
   onMouseMoveConnector: PropTypes.func,
+  onMouseUpConnector: PropTypes.func,
   children: PropTypes.array,
   connectorX: PropTypes.number,
   connectorY: PropTypes.number,
@@ -133,31 +132,33 @@ DnConnectorOutNexus.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const children = !!ownProps.data.viewModel.children ? ownProps.data.viewModel.children : [];
 
-  const draggingConnector = ownProps.data.draggingConnector;
+  // c.lo(ownProps.data, 'ownProps.data: ');
+  // c.lo(ownProps, 'ownProps: ');
 
-  return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
+  const draggingConnector = { ...ownProps.draggingConnector };
+  return {
     children,
     draggingConnector
   };
 };
 
-const onMouseDownConnector = (ownProps) => {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    const viewCoordinates = { x: 100 - 20, y: 39 - 10 };
-    const protoModel = { id: stateTraversal.getNextId(state), parentId: ownProps.viewModel.id, viewCoordinates };
-
-    const model = dnConnectorModelFactory.createInstance(protoModel);
-
-    return viewModelCreator.create(dispatch, model, ownProps.id);
-  };
-};
+// const onMouseDownConnector = (ownProps) => {
+//   return (dispatch, getState) => {
+//     const state = getState();
+//
+//     const viewCoordinates = { x: 100 - 20, y: 39 - 10 };
+//     const protoModel = { id: stateTraversal.getNextId(state), parentId: ownProps.viewModel.id, viewCoordinates };
+//
+//     const model = dnConnectorModelFactory.createInstance(protoModel);
+//
+//     return viewModelCreator.create(dispatch, model, ownProps.id);
+//   };
+// };
 
 const onMouseMoveConnector = (actionStatePackage, args) => {
   const stateNew = actionStatePackage.stateNew;
 
-  const view = graphTraversal.find(stateNew, args.data.id);
+  const view = graphTraversal.find(stateNew, args.id);
 
   view.draggingConnector = {
     position: {
@@ -169,14 +170,25 @@ const onMouseMoveConnector = (actionStatePackage, args) => {
   return stateNew;
 };
 
+const onMouseUpConnector = (actionStatePackage, args) => {
+  const stateNew = actionStatePackage.stateNew;
+
+  c.l('OnMouseUpConnector fired.');
+
+  return stateNew;
+};
+
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const fns = {
     onMouseDownConnector: () => {
-      dispatch(onMouseDownConnector(ownProps));
+      // dispatch(onMouseDownConnector(ownProps));
     },
     onMouseMoveConnector: () => {
       ActionInvoker.invoke(dispatch, onMouseMoveConnector, { ...ownProps });
+    },
+    onMouseUpConnector: () => {
+      ActionInvoker.invoke(dispatch, onMouseUpConnector, { ...ownProps });
     }
   };
 

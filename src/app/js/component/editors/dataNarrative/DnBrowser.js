@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import dataStoreModelUtils from '../../../../../common/domain/component/dataStoreModelUtils';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
-import ActionInvoker from '../../../actions/ActionInvoker';
+import DnComponentDealer from './DnComponentDealer';
 import DnConnectorNexus from './DnConnectorOutNexus';
 
 class DnBrowser extends SvgComponent {
@@ -19,11 +19,17 @@ class DnBrowser extends SvgComponent {
   }
 
   render() {
+    const children = this.props.data.viewModel.children || [];
+
     return (
       <g ref="rootGroup" onMouseOver={this.onMouseOver}>
         <rect rx="6" x="0" y="0" width="100" height="75" fill="gray" />
         <text ref="label" fontFamily="sans-serif" fill="white" textAnchor="middle" alignmentBaseline="alphabetic" x="51" y="42">Browser</text>
-        <DnConnectorNexus { ...this.props.data } data={this.props.data} dataNarrativeView={this.props.dataNarrativeView} connectorX={100} connectorY={39} />
+        {
+          children.map((child) => (
+            <DnComponentDealer {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
+          ))
+        }
       </g>
     );
   }
@@ -38,7 +44,7 @@ DnBrowser.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  // c.lo(ownProps, 'dnb op: ');
+  // c.lo(ownProps.data.viewModel.typeLabel, 'dnb op: ');
   const defaultDataStore = dataStoreModelUtils.getDefaultDataStoreByState(state);
 
   return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
@@ -48,12 +54,12 @@ const mapStateToProps = (state, ownProps) => {
 
 const onMouseOverConnector = (ownProps, newSelection, propertyName) => {
   return (dispatch, getState) => {
-    const state = getState();
-
-    const mergedProps = _.cloneDeep(ownProps);
-    mergedProps.selectedViewModel[propertyName] = newSelection;
-
-    const props = mapStateToProps(state, mergedProps);
+    // const state = getState();
+    //
+    // const mergedProps = _.cloneDeep(ownProps);
+    // mergedProps.selectedViewModel[propertyName] = newSelection;
+    //
+    // const props = mapStateToProps(state, mergedProps);
 
     // ActionInvoker.invoke(dispatch, stateUpdateSelectChange, { viewId: ownProps.selectedViewModel.id, propertyName, newValue: newSelection, needsSaving: props.needsSaving });
   };

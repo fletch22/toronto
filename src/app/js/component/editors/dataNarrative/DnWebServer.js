@@ -5,7 +5,7 @@ import dataStoreModelUtils from '../../../../../common/domain/component/dataStor
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import webServer from '../../../../images/webServer2.svg';
-import DnConnectorInNexus from './DnConnectorInNexus';
+import DnComponentDealer from './DnComponentDealer';
 
 class DnWebServer extends SvgComponent {
 
@@ -29,11 +29,17 @@ class DnWebServer extends SvgComponent {
   }
 
   render() {
+    const children = this.props.data.viewModel.children || [];
+
     return (
       <g ref="rootGroup" onMouseOver={this.onMouseOver}>
         <image xlinkHref={webServer} transform="scale(.2)" />
         <text fontFamily="sans-serif" fill="gray" textAnchor="middle" alignmentBaseline="alphabetic" x="84" y="45">Web Server</text>
-        <DnConnectorInNexus { ...this.props.data } data={this.props.data} dataNarrativeView={this.props.dataNarrativeView} connectorX={15} connectorY={88} />
+        {
+          children.map((child) => (
+            <DnComponentDealer {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
+          ))
+        }
       </g>
     );
   }
@@ -48,6 +54,7 @@ DnWebServer.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+
   const defaultDataStore = dataStoreModelUtils.getDefaultDataStoreByState(state);
 
   return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),

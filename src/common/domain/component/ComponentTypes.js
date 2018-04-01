@@ -5,6 +5,8 @@ const ComponentTypes = {
   Datastore: 'Datastore',
   DnBrowser: 'DnBrowser',
   DnConnector: 'DnConnector',
+  DnConnectorInNexus: 'DnConnectorInNexus',
+  DnConnectorOutNexus: 'DnConnectorOutNexus',
   DnWebServer: 'DnWebServer',
   DnDataStore: 'DnDataStore',
   DataModel: 'DataModel',

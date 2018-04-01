@@ -4,6 +4,8 @@ import DnDataStore from '../../../component/editors/dataNarrative/DnDataStore';
 import DnBrowser from '../../../component/editors/dataNarrative/DnBrowser';
 import DnWebServer from '../../../component/editors/dataNarrative/DnWebServer';
 import DnConnector from '../../../component/editors/dataNarrative/DnConnector';
+import DnConnectorInNexus from './DnConnectorInNexus';
+import DnConnectorOutNexus from './DnConnectorOutNexus';
 
 class DnComponentDealer extends React.Component {
 
@@ -29,6 +31,14 @@ class DnComponentDealer extends React.Component {
         component = (<DnConnector {... componentData} data={componentData} dataNarrativeView={this.props.dataNarrativeView} />);
         break;
       }
+      case ComponentTypes.DnConnectorInNexus: {
+        component = (<DnConnectorInNexus {... this.props} data={this.props} />);
+        break;
+      }
+      case ComponentTypes.DnConnectorOutNexus: {
+        component = (<DnConnectorOutNexus data={this.props.data} {...this.props.data} />);
+        break;
+      }
       default:
         throw new Error(`Encountered error trying to create data narrative component. Did not recognize ${this.props}.`);
     }
@@ -37,6 +47,7 @@ class DnComponentDealer extends React.Component {
       component
     );
   }
+
 }
 
 

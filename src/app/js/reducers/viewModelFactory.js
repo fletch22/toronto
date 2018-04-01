@@ -153,6 +153,14 @@ class ViewModelFactory {
         view = viewFactory.createDnConnectorView();
         break;
       }
+      case ComponentTypes.DnConnectorInNexus: {
+        view = viewFactory.createDnConnectorInNexusView();
+        break;
+      }
+      case ComponentTypes.DnConnectorOutNexus: {
+        view = viewFactory.createDnConnectorOutNexusView();
+        break;
+      }
       case ComponentTypes.DnWebServer: {
         view = viewFactory.createDnWebServerView();
         break;

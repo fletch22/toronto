@@ -124,6 +124,18 @@ class ViewFactory {
       id: f22Uuid.generate()
     };
   }
+
+  createDnConnectorInNexusView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
+
+  createDnConnectorOutNexusView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
 }
 
 export default new ViewFactory();

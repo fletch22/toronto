@@ -16,11 +16,9 @@ class DnConnectorInNexus extends React.Component {
   }
 
   componentDidMount() {
-    const dom = ReactDOM.findDOMNode(this);
-    const g = d3.select(dom);
-
+    // const dom = ReactDOM.findDOMNode(this);
+    // const g = d3.select(dom);
     // g.selectAll('path').remove();
-
     // const connector = ReactDOM.findDOMNode(this.refs.connector);
     // d3.select(connector).on('mouseup', () => {
     //   c.l('mouseup!');
@@ -46,7 +44,7 @@ class DnConnectorInNexus extends React.Component {
   render() {
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
-        <circle className="dnConnectorInNexus" ref="connector" cx={this.props.connectorX} cy={this.props.connectorY} r="5" fill="purple"
+        <circle id={this.props.id} className="dnConnectorInNexus" ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="purple"
           onClick={this.props.onClick} onMouseOver={this.props.onMouseOverConnector}
         />
       </g>
@@ -65,14 +63,17 @@ DnConnectorInNexus.propTypes = {
   children: PropTypes.array,
   connectorX: PropTypes.number,
   connectorY: PropTypes.number,
+  offsetX: PropTypes.number,
+  offsetY: PropTypes.number,
   onClick: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => {
+  // c.lo(ownProps, 'ownProps: ');
   const children = !!ownProps.data.viewModel.children ? ownProps.data.viewModel.children : [];
 
   return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
-  children
+    children
   };
 };
 
