@@ -12,7 +12,14 @@ class DnConnectorOutNexusModelFactory extends ModelFactory {
       offsetY,
       viewCoordinates: { x: offsetX, y: offsetY },
       typeLabel: ComponentTypes.DnConnectorOutNexus,
-      children: []
+      children: [],
+      draggingConnector: {
+        position: {
+          x: 0,
+          y: 0
+        },
+        visible: false
+      }
     });
   }
 }

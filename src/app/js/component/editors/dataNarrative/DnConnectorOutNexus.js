@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import SvgComponent from './SvgComponent';
+import DnConnectorInNexus from './DnConnectorInNexus';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import graphTraversal from '../../../../../common/state/graphTraversal';
@@ -22,14 +22,11 @@ class DnConnectorOutNexus extends React.Component {
       d3.event.preventDefault();
       d3.event.stopPropagation();
 
-      // c.l('mousedown!');
       function mousemove() {
-        // c.l('Test move');
         props.onMouseMoveConnector();
       }
 
       function mouseup() {
-        // c.l('Test up');
         d3.select(this)
           .on('mousemove', null)
           .on('mouseup', null);
@@ -39,63 +36,74 @@ class DnConnectorOutNexus extends React.Component {
       d3.select(window)
         .on('mousemove', mousemove)
         .on('mouseup', mouseup);
-
       // this.props.onMouseDownConnector();
     });
   }
 
   componentDidUpdate() {
+    // c.l('ComponentDidUpdate...');
+
     const dom = ReactDOM.findDOMNode(this.refs.container);
     const g = d3.select(dom);
 
     const domConnector = ReactDOM.findDOMNode(this.refs.connector);
 
     let iPNT;
-    const draggingConnector = this.props.data.draggingConnector;
-    let x = 0;
-    let y = 0;
-    let SCTM = null;
-    if (!!draggingConnector) {
-      x = (draggingConnector.position.x);
-      y = draggingConnector.position.y;
+    const draggingConnector = this.props.draggingConnector;
 
-      const mySVG = document.getElementById('svgRoot');
-      const pnt = mySVG.createSVGPoint();
-      pnt.x = x;
-      pnt.y = y;
-
-      SCTM = domConnector.getScreenCTM();
-      iPNT = pnt.matrixTransform(SCTM.inverse());
-    }
+    // c.lo(draggingConnector, 'dc: ');
 
     g.selectAll('path').remove();
 
-    const triangleSymbol = d3.symbol().type(d3.symbolTriangle);
+    if (this.props.draggingConnector.visible) {
+      let x = 0;
+      let y = 0;
+      let SCTM = null;
+      if (!!draggingConnector) {
+        x = (draggingConnector.position.x);
+        y = draggingConnector.position.y;
 
-    if (iPNT) {
-      g.append('path')
-        .attr('d', triangleSymbol)
-        .attr('fill', 'red')
-        .attr('stroke', 'red')
-        .attr('transform', `translate(${iPNT.x}, ${iPNT.y})`);
+        const mySVG = document.getElementById('svgRoot');
+        const pnt = mySVG.createSVGPoint();
+        pnt.x = x;
+        pnt.y = y;
+
+        SCTM = domConnector.getScreenCTM();
+        iPNT = pnt.matrixTransform(SCTM.inverse());
+      }
+
+      const triangleSymbol = d3.symbol().type(d3.symbolTriangle);
+
+      if (iPNT) {
+        g.append('path')
+          .attr('d', triangleSymbol)
+          .attr('fill', 'red')
+          .attr('stroke', 'red')
+          .attr('transform', `translate(${iPNT.x}, ${iPNT.y}) rotate(90) scale(1.4)`);
+      }
+
+      let closestConnector;
+      Array.from(document.getElementsByClassName('dnConnectorInNexus'))
+        .forEach((domNode) => {
+          const rect = domNode.getBoundingClientRect();
+          const dist = Math.sqrt(Math.pow(rect.x - x + (rect.width / 2), 2) + Math.pow(rect.y - y + (rect.height / 2), 2));
+
+          if (!closestConnector || dist < closestConnector.dist) {
+            closestConnector = {
+              obj: domNode,
+              dist,
+              radius: rect.width / 2
+            };
+          }
+        });
+
+      if (closestConnector && closestConnector.dist < (closestConnector.radius + 12)) {
+        DnConnectorInNexus.renderConnectingHover(closestConnector.obj);
+        this.props.onSelectClosestConnector(closestConnector.obj.id);
+      } else {
+        DnConnectorInNexus.renderConnectingDeHover(closestConnector.obj);
+      }
     }
-
-    let closestConnector;
-    Array.from(document.getElementsByClassName('dnConnectorInNexus'))
-      .forEach((domNode) => {
-        const rect = domNode.getBoundingClientRect();
-        const dist = Math.sqrt(Math.pow(rect.x - x + (rect.width / 2), 2) + Math.pow(rect.y - y + (rect.height / 2), 2));
-
-        if (!closestConnector || dist < closestConnector.dist) {
-          closestConnector = {
-            obj: domNode,
-            dist
-          };
-        }
-      });
-
-    // if (closestConnector) c.l(`Target ID: ${closestConnector.obj.getAttribute('id')}`);
-    c.lo(closestConnector.obj.id);
   }
 
   onMouseOver() {
@@ -103,9 +111,6 @@ class DnConnectorOutNexus extends React.Component {
   }
 
   render() {
-
-    // <circle ref="connector" id={this.props.id} cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="purple" />
-
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
         <circle ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="purple" />
@@ -114,57 +119,47 @@ class DnConnectorOutNexus extends React.Component {
   }
 }
 
-DnConnectorOutNexus.contextTypes = { store: PropTypes.object };
-
 DnConnectorOutNexus.propTypes = {
-  ...SvgComponent.propTypes,
   id: PropTypes.number,
-  dataNarrativeView: PropTypes.object,
   onMouseDownConnector: PropTypes.func,
   onMouseMoveConnector: PropTypes.func,
   onMouseUpConnector: PropTypes.func,
-  children: PropTypes.array,
-  connectorX: PropTypes.number,
-  connectorY: PropTypes.number,
-  draggingConnector: PropTypes.object
+  onSelectClosestConnector: PropTypes.func,
+  draggingConnector: PropTypes.object,
+  draggingConnectorVisible: PropTypes.bool,
+  viewModel: PropTypes.object,
+  viewCoordinates: PropTypes.object
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const children = !!ownProps.data.viewModel.children ? ownProps.data.viewModel.children : [];
 
-  // c.lo(ownProps.data, 'ownProps.data: ');
-  // c.lo(ownProps, 'ownProps: ');
+const initState = (state, ownProps) => {
+  const props = ownProps.data;
 
-  const draggingConnector = { ...ownProps.draggingConnector };
   return {
-    children,
-    draggingConnector
+    id: props.id,
+    viewModel: props.viewModel,
+    viewCoordinates: props.viewCoordinates,
+    draggingConnector: props.draggingConnector,
+    draggingConnectorVisible: props.draggingConnector.visible
   };
 };
 
-// const onMouseDownConnector = (ownProps) => {
-//   return (dispatch, getState) => {
-//     const state = getState();
-//
-//     const viewCoordinates = { x: 100 - 20, y: 39 - 10 };
-//     const protoModel = { id: stateTraversal.getNextId(state), parentId: ownProps.viewModel.id, viewCoordinates };
-//
-//     const model = dnConnectorModelFactory.createInstance(protoModel);
-//
-//     return viewModelCreator.create(dispatch, model, ownProps.id);
-//   };
-// };
+const mapStateToProps = (state, ownProps) => {
+  return initState(state, ownProps);
+};
 
 const onMouseMoveConnector = (actionStatePackage, args) => {
   const stateNew = actionStatePackage.stateNew;
 
-  const view = graphTraversal.find(stateNew, args.id);
+  const props = initState(stateNew, args);
 
+  const view = graphTraversal.find(stateNew, props.id);
   view.draggingConnector = {
     position: {
       x: d3.event.x,
       y: d3.event.y
-    }
+    },
+    visible: true
   };
 
   return stateNew;
@@ -173,26 +168,47 @@ const onMouseMoveConnector = (actionStatePackage, args) => {
 const onMouseUpConnector = (actionStatePackage, args) => {
   const stateNew = actionStatePackage.stateNew;
 
-  c.l('OnMouseUpConnector fired.');
+  const props = initState(stateNew, args);
+
+  const view = graphTraversal.find(stateNew, props.id);
+  view.draggingConnector.visible = false;
+
+  const domNode = document.getElementById(view.draggingConnector.closestConnectorId);
+  DnConnectorInNexus.renderConnectingDeHover(domNode);
+  view.draggingConnector.closestConnectorId = null;
 
   return stateNew;
 };
 
+const onSelectClosestConnector = (actionStatePackage, args) => {
+  const stateNew = actionStatePackage.stateNew;
+
+  const inConnectorId = args.inConnectorId;
+  const props = initState(stateNew, args);
+
+  const view = graphTraversal.find(stateNew, props.id);
+  view.draggingConnector.closestConnectorId = inConnectorId;
+
+  c.l(`${view.draggingConnector.closestConnectorId}: foo`);
+
+  return stateNew;
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  const fns = {
+  return {
     onMouseDownConnector: () => {
       // dispatch(onMouseDownConnector(ownProps));
     },
     onMouseMoveConnector: () => {
-      ActionInvoker.invoke(dispatch, onMouseMoveConnector, { ...ownProps });
+      ActionInvoker.invoke(dispatch, onMouseMoveConnector, ownProps);
     },
     onMouseUpConnector: () => {
-      ActionInvoker.invoke(dispatch, onMouseUpConnector, { ...ownProps });
+      ActionInvoker.invoke(dispatch, onMouseUpConnector, ownProps);
+    },
+    onSelectClosestConnector: (id) => {
+      ActionInvoker.invoke(dispatch, onSelectClosestConnector, { inConnectorId: id, ...ownProps });
     }
   };
-
-  return { ...fns, ...SvgComponent.getDragNDropFns(dispatch, ownProps) };
 };
 
 

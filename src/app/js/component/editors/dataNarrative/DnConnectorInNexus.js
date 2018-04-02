@@ -10,24 +10,20 @@ import DnComponentDealer from './DnComponentDealer';
 
 class DnConnectorInNexus extends React.Component {
 
+  static renderConnectingHover(domNode) {
+    d3.select(domNode).attr('fill', 'yellow').attr('stroke', 'black').attr('r', '10');
+  }
+
+  static renderConnectingDeHover(domNode) {
+    d3.select(domNode).attr('fill', 'purple').attr('stroke', null).attr('r', '5');
+  }
+
   constructor(props) {
     super(props);
     this.onMouseOver = this.onMouseOver.bind(this);
   }
 
   componentDidMount() {
-    // const dom = ReactDOM.findDOMNode(this);
-    // const g = d3.select(dom);
-    // g.selectAll('path').remove();
-    // const connector = ReactDOM.findDOMNode(this.refs.connector);
-    // d3.select(connector).on('mouseup', () => {
-    //   c.l('mouseup!');
-    //
-    //   d3.event.preventDefault();
-    //   d3.event.stopPropagation();
-    //
-    //   this.props.onMouseUpConnector();
-    // });
   }
 
   componentDidUpdate() {
@@ -36,15 +32,12 @@ class DnConnectorInNexus extends React.Component {
 
   onMouseOver() {
     d3.select(ReactDOM.findDOMNode(this.refs.container)).style('cursor', 'pointer');
-
-    // this.props.children.map((child) =>
-    // )
   }
 
   render() {
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
-        <circle id={this.props.id} className="dnConnectorInNexus" ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="purple"
+        <circle id={this.props.id} className="dnConnectorInNexus dnConnectorInNexusUnselected" ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5"
           onClick={this.props.onClick} onMouseOver={this.props.onMouseOverConnector}
         />
       </g>

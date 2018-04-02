@@ -6,6 +6,7 @@ import DnWebServer from '../../../component/editors/dataNarrative/DnWebServer';
 import DnConnector from '../../../component/editors/dataNarrative/DnConnector';
 import DnConnectorInNexus from './DnConnectorInNexus';
 import DnConnectorOutNexus from './DnConnectorOutNexus';
+import {connect} from "react-redux";
 
 class DnComponentDealer extends React.Component {
 
@@ -36,7 +37,7 @@ class DnComponentDealer extends React.Component {
         break;
       }
       case ComponentTypes.DnConnectorOutNexus: {
-        component = (<DnConnectorOutNexus data={this.props.data} {...this.props.data} />);
+        component = (<DnConnectorOutNexus data={this.props.data} />);
         break;
       }
       default:
@@ -47,9 +48,7 @@ class DnComponentDealer extends React.Component {
       component
     );
   }
-
 }
-
 
 DnComponentDealer.propTypes = {
   data: PropTypes.object,

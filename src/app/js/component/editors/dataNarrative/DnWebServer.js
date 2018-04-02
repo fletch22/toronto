@@ -19,9 +19,6 @@ class DnWebServer extends SvgComponent {
   }
 
   afterMount(dom) {
-    // const connector = ReactDOM.findDOMNode(this.refs.connector);
-    // <DnConnectorOutNexus { ...this.props.data } data={this.props.data} dataNarrativeView={this.props.dataNarrativeView} />
-    // <circle ref="connector" cx="15" cy="88" r="5" fill="purple" />
   }
 
   afterUpdate(dom) {
@@ -54,7 +51,6 @@ DnWebServer.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-
   const defaultDataStore = dataStoreModelUtils.getDefaultDataStoreByState(state);
 
   return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
