@@ -77,8 +77,7 @@ class DnConnectorOutNexus extends React.Component {
       if (iPNT) {
         g.append('path')
           .attr('d', triangleSymbol)
-          .attr('fill', 'red')
-          .attr('stroke', 'red')
+          .attr('fill', 'CornflowerBlue')
           .attr('transform', `translate(${iPNT.x}, ${iPNT.y}) rotate(90) scale(1.4)`);
       }
 
@@ -113,7 +112,7 @@ class DnConnectorOutNexus extends React.Component {
   render() {
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
-        <circle ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="purple" />
+        <circle ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="CornflowerBlue" />
       </g>
     );
   }

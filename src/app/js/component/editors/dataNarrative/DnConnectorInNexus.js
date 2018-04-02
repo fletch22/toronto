@@ -11,11 +11,11 @@ import DnComponentDealer from './DnComponentDealer';
 class DnConnectorInNexus extends React.Component {
 
   static renderConnectingHover(domNode) {
-    d3.select(domNode).attr('fill', 'yellow').attr('stroke', 'black').attr('r', '10');
+    d3.select(domNode).attr('fill', 'LightBlue').attr('stroke', 'CornflowerBlue').attr('r', '10');
   }
 
   static renderConnectingDeHover(domNode) {
-    d3.select(domNode).attr('fill', 'purple').attr('stroke', null).attr('r', '5');
+    d3.select(domNode).attr('fill', 'CornflowerBlue').attr('stroke', null).attr('r', '5');
   }
 
   constructor(props) {
@@ -37,7 +37,7 @@ class DnConnectorInNexus extends React.Component {
   render() {
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
-        <circle id={this.props.id} className="dnConnectorInNexus dnConnectorInNexusUnselected" ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5"
+        <circle id={this.props.id} className="dnConnectorInNexus" ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="CornflowerBlue"
           onClick={this.props.onClick} onMouseOver={this.props.onMouseOverConnector}
         />
       </g>
