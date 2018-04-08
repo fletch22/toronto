@@ -29,7 +29,7 @@ class DnComponentDealer extends React.Component {
         break;
       }
       case ComponentTypes.DnConnector: {
-        component = (<DnConnector {... componentData} data={componentData} dataNarrativeView={this.props.dataNarrativeView} />);
+        component = (<DnConnector id={componentData.id} parentId={componentData.parentId} viewModel={componentData.viewModel} data={componentData} dataNarrativeView={this.props.dataNarrativeView} />);
         break;
       }
       case ComponentTypes.DnConnectorInNexus: {

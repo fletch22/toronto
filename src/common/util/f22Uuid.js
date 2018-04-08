@@ -12,7 +12,7 @@ class F22Uuid {
   // then order lexicographically.'
   generate() {
     const id = uuid.v1();
-    return id.replace(/^(.{8})-(.{4})-(.{4})/, '$3-$2-$1');
+    return `u${id.replace(/^(.{8})-(.{4})-(.{4})/, '$3-$2-$1')}`;
   }
 }
 

@@ -9,7 +9,6 @@ class SvgContainer extends React.Component {
     return (
       <div style={{ position: 'relative' }}>
         <SvgRoot data={this.props.data} height={this.props.containerHeight} width={this.props.containerWidth} size={[500, 500]} />
-        <CollectionMenu data={this.props.collectionMenu} />
       </div>
     );
   }

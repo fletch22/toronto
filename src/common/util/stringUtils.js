@@ -11,7 +11,8 @@ class StringUtils {
   }
 
   replaceAll(searchString, toFind, replacement) {
-    return searchString.replace(new RegExp(toFind, 'g'), replacement);
+    const replacementCorrected = replacement || '';
+    return searchString.replace(new RegExp(toFind, 'g'), replacementCorrected);
   }
 }
 
