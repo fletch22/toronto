@@ -74,8 +74,6 @@ const onMouseUpConnector = (ownProps) => {
   return (dispatch, getState) => {
     const state = getState();
 
-    c.l('Got to mouse up connector.');
-
     // const viewCoordinates = { x: 100 - 20, y: 39 - 10 };
     // const protoModel = { id: stateTraversal.getNextId(state), parentId: ownProps.viewModel.id, viewCoordinates };
     //
@@ -88,8 +86,6 @@ const onMouseUpConnector = (ownProps) => {
 const onMouseOverConnector = (ownProps) => {
   return (dispatch, getState) => {
     const state = getState();
-
-    c.l('Got to mouse over connector.');
 
     // const viewCoordinates = { x: 100 - 20, y: 39 - 10 };
     // const protoModel = { id: stateTraversal.getNextId(state), parentId: ownProps.viewModel.id, viewCoordinates };

@@ -9,7 +9,6 @@ import dnConnectorModelFactory from '../../../domain/component/dataNarrative/dnC
 import viewModelFactory from '../../../reducers/viewModelFactory';
 import DnComponentDealer from '../../../component/editors/dataNarrative/DnComponentDealer';
 import stateTraversal from '../../../../../common/state/stateTraversal';
-import stringUtils from '../../../../../common/util/stringUtils';
 
 class DnConnectorOutNexus extends React.Component {
 
@@ -53,7 +52,7 @@ class DnConnectorOutNexus extends React.Component {
     let iPNT;
     const draggingConnector = this.props.draggingConnector;
 
-    g.selectAll('path').remove();
+    g.selectAll('path.blueMover').remove();
 
     if (this.props.draggingConnector && this.props.draggingConnector.visible) {
       let x = 0;
@@ -77,6 +76,7 @@ class DnConnectorOutNexus extends React.Component {
       if (iPNT) {
         g.append('path')
           .attr('d', triangleSymbol)
+          .classed('blueMover', true)
           .attr('fill', 'CornflowerBlue')
           .attr('transform', `translate(${iPNT.x}, ${iPNT.y}) rotate(90) scale(1.4)`);
       }
