@@ -6,11 +6,12 @@ import { actionUpdateViewPropertyValue } from '../../../actions';
 import { actionSetDataNarrativeConnectorAfterDrag } from '../../../actions/bodyChildrenEditor/index';
 import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor';
 import ReactDOM from "react-dom";
-import DnConnectorInNexus from "./DnConnectorInNexus";
-import stringUtils from '../../../../../common/util/stringUtils';
+import { actionDoNothing } from '../../../actions';
+import stateTraversal from "../../../../../common/state/stateTraversal";
+import graphTraversal from "../../../../../common/state/graphTraversal";
+import ComponentTypes from "../../../../../common/domain/component/ComponentTypes";
 
 class DnConnector extends React.Component {
-
   componentDidMount() {
     const domNode = ReactDOM.findDOMNode(this.refs.rootGroup);
     const g = d3.select(domNode);
@@ -24,50 +25,67 @@ class DnConnector extends React.Component {
         d3.event.stopPropagation();
       });
     });
+
+    this.props.postRender();
   }
 
   getConnectorForReact() {
     const triangleSymbol = d3.symbol().type(d3.symbolTriangle);
 
-    const connectorInNexusId = this.props.viewModel.connectorInNexusId;
-    const inNexusDomNode = document.getElementById(connectorInNexusId);
+    const inNexusDomNode = document.getElementById(this.props.connectorInNexusId);
 
     if (inNexusDomNode) {
-      const outNexusDomNode = document.getElementById(this.props.parentId);
-      const destinationCoord = this.translateRelativeToNode(inNexusDomNode, outNexusDomNode);
-
-      const radiusOrigin = parseInt(outNexusDomNode.getAttribute('r'), 10);
-
-      const originCoord = this.translateRelativeToNode(outNexusDomNode, outNexusDomNode);
-      const originOffsetCoord = {
-        x: originCoord.x + radiusOrigin,
-        y: originCoord.y + radiusOrigin
-      };
-
-      const radiusDest = parseInt(inNexusDomNode.getAttribute('r'), 10);
-      const destinationOffsetCoord = {
-        x: destinationCoord.x - radiusDest,
-        y: destinationCoord.y + radiusDest
-      };
-
-      const slope = (originOffsetCoord.y - destinationOffsetCoord.y) / (originOffsetCoord.x - destinationOffsetCoord.x);
-      let rotationAngle = Math.atan(slope) * (180 / Math.PI) - 30;
-
-      if ((originCoord.x > destinationOffsetCoord.x)) {
-        rotationAngle += 180;
-      } else if (originCoord.x === destinationOffsetCoord.x) {
-        // rotationAngle += 180;
-      }
+      const lineInfo = this.getLine(inNexusDomNode);
 
       return (
         <g>
-          <line x1={originOffsetCoord.x} y1={originOffsetCoord.y} x2={destinationOffsetCoord.x} y2={destinationOffsetCoord.y} stroke="Cornflowerblue" strokeWidth="4" />
-          <path d={`${triangleSymbol()}`} fill="Cornflowerblue" stroke="Cornflowerblue" transform={`translate(${destinationOffsetCoord.x}, ${destinationOffsetCoord.y}) rotate(${rotationAngle}) scale(1.4)`} />
+          <line x1={lineInfo.originOffsetCoord.x} y1={lineInfo.originOffsetCoord.y} x2={lineInfo.destinationOffsetCoord.x} y2={lineInfo.destinationOffsetCoord.y} stroke="Cornflowerblue" strokeWidth="4" />
+          <path d={`${triangleSymbol()}`}
+            fill="Cornflowerblue"
+            stroke="Cornflowerblue"
+            transform={`translate(${lineInfo.destinationOffsetCoord.x}, ${lineInfo.destinationOffsetCoord.y}) rotate(${lineInfo.rotationAngle}) scale(1.4)`}
+          />
         </g>
       );
     }
 
     return null;
+  }
+
+  getLine(inNexusDomNode) {
+    const outNexusDomNode = document.getElementById(this.props.parentId);
+    const destinationCoord = this.translateRelativeToNode(inNexusDomNode, outNexusDomNode);
+
+    const radiusOrigin = parseInt(outNexusDomNode.getAttribute('r'), 10);
+
+    const originCoord = this.translateRelativeToNode(outNexusDomNode, outNexusDomNode);
+    const originOffsetCoord = {
+      x: originCoord.x + radiusOrigin,
+      y: originCoord.y + radiusOrigin
+    };
+
+    const radiusDest = parseInt(inNexusDomNode.getAttribute('r'), 10);
+    const destinationOffsetCoord = {
+      x: destinationCoord.x - radiusDest,
+      y: destinationCoord.y + radiusDest
+    };
+
+    let rotationAngle = this.getHeadRotation(originOffsetCoord, destinationOffsetCoord);
+
+    if ((originOffsetCoord.x > destinationOffsetCoord.x)) {
+      rotationAngle += 180;
+    }
+
+    return {
+      originOffsetCoord,
+      destinationOffsetCoord,
+      rotationAngle
+    };
+  }
+
+  getHeadRotation(originOffsetCoord, destinationOffsetCoord) {
+    const slope = (originOffsetCoord.y - destinationOffsetCoord.y) / (originOffsetCoord.x - destinationOffsetCoord.x);
+    return Math.atan(slope) * (180 / Math.PI) - 30;
   }
 
   translateRelativeToNode(inNexusDomNode, outNexusDomNode) {
@@ -103,19 +121,42 @@ DnConnector.propTypes = {
   dataNarrativeView: PropTypes.object,
   onMouseOverConnector: PropTypes.object,
   data: PropTypes.object,
-  test: PropTypes.string
+  postRender: PropTypes.func,
+  connectorInNexusId: PropTypes.string
+};
+
+
+const findViewIdFromModelId = (state, viewId, modelId) => {
+  const node = graphTraversal.find(state, viewId);
+
+  const dataNarrative = stateTraversal.findAncestorViewWithModelTypeLabel(state, node, ComponentTypes.DataNarrative);
+  const view = stateTraversal.findDescendentViewWithModelId(dataNarrative, modelId);
+
+  return view.id;
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const viewModel = ownProps.data.viewModel;
+  const viewCoordinates = { ...viewModel.viewCoordinates };
+
+  const connectorInNexusId = findViewIdFromModelId(state, ownProps.data.id, viewModel.connectorInNexusId);
+
   return {
     ...ownProps,
-    test: new Date().getMilliseconds()
+    viewModel,
+    viewCoordinates,
+    connectorInNexusId
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {};
+  return {
+    postRender: () => {
+      dispatch(actionDoNothing());
+    }
+  };
 };
+
 
 DnConnector = connect(
   mapStateToProps,

@@ -9,6 +9,7 @@ import dnConnectorModelFactory from '../../../domain/component/dataNarrative/dnC
 import viewModelFactory from '../../../reducers/viewModelFactory';
 import DnComponentDealer from '../../../component/editors/dataNarrative/DnComponentDealer';
 import stateTraversal from '../../../../../common/state/stateTraversal';
+import stateFixer from '../../../domain/stateFixer';
 
 class DnConnectorOutNexus extends React.Component {
 
@@ -20,8 +21,8 @@ class DnConnectorOutNexus extends React.Component {
   componentDidMount() {
     const props = this.props;
 
-    const connector = ReactDOM.findDOMNode(this.refs.connector);
-    const connectionSelection = d3.select(connector);
+    const domConnector = ReactDOM.findDOMNode(this.refs.connector);
+    const connectionSelection = d3.select(domConnector);
     connectionSelection.on('mousedown', () => {
       d3.event.preventDefault();
       d3.event.stopPropagation();
@@ -44,6 +45,14 @@ class DnConnectorOutNexus extends React.Component {
   }
 
   componentDidUpdate() {
+    this.draw();
+  }
+
+  onMouseOver() {
+    d3.select(ReactDOM.findDOMNode(this.refs.container)).style('cursor', 'pointer');
+  }
+
+  draw() {
     const dom = ReactDOM.findDOMNode(this.refs.container);
     const g = d3.select(dom);
 
@@ -105,18 +114,12 @@ class DnConnectorOutNexus extends React.Component {
     }
   }
 
-  onMouseOver() {
-    d3.select(ReactDOM.findDOMNode(this.refs.container)).style('cursor', 'pointer');
-  }
-
   render() {
-    const children = this.props.viewModel.children || [];
-
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
-        <circle id={this.props.id} ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="CornflowerBlue" />
+        <circle id={this.props.id} ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="red" />
         {
-          children.map((child) => (
+          this.props.children.map((child) => (
             <DnComponentDealer data={child} dataNarrativeView={this.props.dataNarrativeView} />
           ))
         }
@@ -156,8 +159,6 @@ const initState = (state, ownProps) => {
   };
 };
 
-
-
 const mapStateToProps = (state, ownProps) => {
   return initState(state, ownProps);
 };
@@ -193,19 +194,22 @@ const onMouseUpConnector = (actionStatePackage, args) => {
   view.viewModel.children = [];
 
   if (view.draggingConnector.closestConnectorId) {
-    const id = stateTraversal.findHighestId(stateNew.model);
+    const id = stateTraversal.getNextId(stateNew);
 
-    const model = dnConnectorModelFactory.createInstance(id, props.viewModel.id, view.draggingConnector.closestConnectorId);
+    const inView = graphTraversal.find(stateNew, view.draggingConnector.closestConnectorId);
+    const closestConnectorModelId = inView.viewModel.id;
+
+    const model = dnConnectorModelFactory.createInstance(id, props.viewModel.id, closestConnectorModelId);
     const parentModel = graphTraversal.find(stateNew.model, props.viewModel.id);
     parentModel.children.push(model);
 
     const viewModel = viewModelFactory.generateViewModel(props.id, model);
     view.viewModel.children = view.viewModel.children.concat(viewModel);
-
-    c.l(`Just after creation: ${viewModel.id}`);
   }
 
   view.draggingConnector.closestConnectorId = null;
+
+  stateFixer.fix(actionStatePackage.jsonStateOld, JSON.stringify(stateNew));
 
   return stateNew;
 };

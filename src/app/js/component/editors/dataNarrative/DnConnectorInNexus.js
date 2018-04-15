@@ -37,7 +37,7 @@ class DnConnectorInNexus extends React.Component {
   render() {
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
-        <circle id={this.props.id} className="dnConnectorInNexus" ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="CornflowerBlue"
+        <circle id={this.props.id} className="dnConnectorInNexus" ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="green"
           onClick={this.props.onClick} onMouseOver={this.props.onMouseOverConnector}
         />
       </g>
@@ -58,15 +58,23 @@ DnConnectorInNexus.propTypes = {
   connectorY: PropTypes.number,
   offsetX: PropTypes.number,
   offsetY: PropTypes.number,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  viewModel: PropTypes.object
 };
 
 const mapStateToProps = (state, ownProps) => {
-  // c.lo(ownProps, 'ownProps: ');
-  const children = !!ownProps.data.viewModel.children ? ownProps.data.viewModel.children : [];
+  const viewModel = ownProps.data.viewModel;
 
-  return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
-    children
+  return {
+    data: ownProps,
+    size: ownProps.size,
+    height: ownProps.height,
+    width: ownProps.width,
+    viewModel,
+    viewCoordinates: viewModel.viewCoordinates,
+    viewCoordinatesDragOffset: viewModel.viewCoordinatesDragOffset,
+    x: viewModel.viewCoordinates.x,
+    y: viewModel.viewCoordinates.y
   };
 };
 

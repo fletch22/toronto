@@ -18,13 +18,6 @@ class DnWebServer extends SvgComponent {
     d3.select(ReactDOM.findDOMNode(this.refs.rootGroup)).style('cursor', 'move');
   }
 
-  afterMount(dom) {
-  }
-
-  afterUpdate(dom) {
-    this.afterMount(dom);
-  }
-
   render() {
     const children = this.props.data.viewModel.children || [];
 

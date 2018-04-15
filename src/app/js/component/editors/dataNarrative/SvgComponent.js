@@ -7,9 +7,31 @@ const d3 = Object.assign(selection, { zoom, zoomIdentity });
 import SvgRootVisualization from './SvgRootVisualization';
 import { actionUpdateViewPropertyValue } from '../../../actions/index';
 import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor/index';
+import graphTraversal from "../../../../../common/state/graphTraversal";
+import viewModelCreator from "../../utils/viewModelCreator";
+import actionComponentCreator from "../../../reducers/viewModelFactory";
+import ActionInvoker from "../../../actions/ActionInvoker";
+import stateTraversal from "../../../../../common/state/stateTraversal";
+import ComponentTypes from "../../../../../common/domain/component/ComponentTypes";
 
-class SvgComponent extends React.Component {
+const afterDrag = (actionStatePackage, args) => {
+  const stateNew = actionStatePackage.stateNew;
+  const modelFromViewModel = args.viewModel;
 
+  const model = actionComponentCreator.extractModelFromModelFromViewModel(modelFromViewModel);
+  const parentModel = graphTraversal.findParent(stateNew.model, model.id);
+
+  const index = parentModel.children.findIndex((child) => {
+    return child.id === model.id;
+  });
+
+  parentModel.children[index] = model;
+
+  return stateNew;
+};
+
+class
+SvgComponent extends React.Component {
   static getDragNDropFns(dispatch, ownProps) {
     return {
       beforeDrag: (data) => {
@@ -22,7 +44,9 @@ class SvgComponent extends React.Component {
         dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, x, y, false));
       },
       afterDrag: (data) => {
-        dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, data.viewModel.viewCoordinates.x, data.viewModel.viewCoordinates.y, true));
+        // dispatch(actionSetDataNarrativeViewProps(data.id, data.viewModel.zoom, data.viewModel.viewCoordinates.x, data.viewModel.viewCoordinates.y, true));
+        // dispatch(afterDrag(data));
+        ActionInvoker.invoke(dispatch, afterDrag, data);
       }
     };
   }

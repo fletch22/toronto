@@ -7,6 +7,7 @@ import graphTraversal from '../../../../../common/state/graphTraversal';
 import ActionInvoker from '../../../actions/ActionInvoker';
 import * as d3 from 'd3';
 import dataStoreImage from '../../../../images/database-generic.svg';
+import DnComponentDealer from './DnComponentDealer';
 
 class DnDataStore extends SvgComponent {
 
@@ -19,30 +20,18 @@ class DnDataStore extends SvgComponent {
     d3.select(ReactDOM.findDOMNode(this.refs.rootGroup)).style('cursor', 'move');
   }
 
-  afterMount(dom) {
-    const group = d3.select(ReactDOM.findDOMNode(this.refs.rootGroup)); // this.links.exit().remove();
-    group.selectAll('*').remove();
-
-    group.append('svg:image')
-      .attr('xlink:href', dataStoreImage)
-      .attr('transform', 'scale(.2)');
-
-    group.append('text')
-      .attr('font-family', 'sans-serif').attr('text-anchor', 'middle')
-      .attr('fill', 'white')
-      .attr('alignment-baseline', 'alphabetic')
-      .attr('y', 63).attr('x', 41)
-      .text(this.props.label);
-  }
-
-  afterUpdate(dom) {
-    this.afterMount(dom);
-  }
-
   render() {
+    const children = this.props.viewModel.children || [];
+
     return (
       <g ref="rootGroup" onMouseOver={this.onMouseOver}>
-
+        <image xlinkHref={dataStoreImage} transform="scale(.2)" />
+        <text fontFamily="sans-serif" fill="white" textAnchor="middle" alignmentBaseline="alphabetic" x="41" y="63">{this.props.label}</text>
+        {
+          children.map((child) => (
+            <DnComponentDealer {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
+          ))
+        }
       </g>
     );
   }
@@ -53,14 +42,16 @@ DnDataStore.propTypes = {
   id: PropTypes.number,
   label: PropTypes.string,
   onClick: PropTypes.func,
-  dataNarrativeView: PropTypes.object
+  dataNarrativeView: PropTypes.object,
+  viewModel: PropTypes.object
 };
 
 const mapStateToProps = (state, ownProps) => {
   const defaultDataStore = dataStoreModelUtils.getDefaultDataStoreByState(state);
 
   return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),
-    label: defaultDataStore.label
+    label: defaultDataStore.label,
+    viewModel: ownProps.data.viewModel
   };
 };
 

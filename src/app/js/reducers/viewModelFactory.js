@@ -199,6 +199,14 @@ class ViewModelFactory {
     return clone;
   }
 
+  extractModelFromModelFromViewModel(viewModel) {
+    const clone = _.cloneDeep(viewModel);
+    if (clone.children) {
+      clone.children = this.extractChildrenFromViewModel(clone.children);
+    }
+    return clone;
+  }
+
   extractChildrenFromViewModel(viewModelsChildren) {
     const modelChildren = [];
     viewModelsChildren.forEach((item, index) => {

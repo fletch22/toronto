@@ -14,7 +14,6 @@ import actionBodyChildSelectorHandler from './actionBodyChildSelectorHandler';
 import actionBodyChildSetPropertyHandler from './actionBodyChildSetPropertyHandler';
 import actionPseudoModalEditorCreator from './actionPseudoModalEditorCreator';
 import dashboardIslandViewFactory from '../views/DashboardIslandViewModelFactory';
-import f22Uuid from '../../../common/util/f22Uuid';
 import actionInvoker from '../actions/ActionInvoker';
 import borderScrivenerUtils from '../component/utils/borderScrivenerUtils';
 import DndActionHandler from '../actions/dnd/DndActionHandler';
@@ -370,9 +369,6 @@ const reducer = (state = defaultState.getInstance(), action) => {
       viewModelWizard.dataModelId = payload.selectedDataModelId;
       viewModelWizard.dataModelLabel = payload.selectedDataModelLabel;
 
-      c.l(`viewModelWizard.dataModelLabel: ${viewModelWizard.dataModelLabel}`);
-      c.l(`viewModelWizard.dataModelId: ${viewModelWizard.dataModelId}`);
-
       const collections = viewModelWizard.viewModel.viewModel.children;
       const collection = _.find(collections, (coll) => {
         return coll.viewModel.id === viewModelWizard.dataModelId;
@@ -645,10 +641,14 @@ const reducer = (state = defaultState.getInstance(), action) => {
 
       return DndActionHandler.handleHover(state, stateNew, hoverOveredId, draggedId, measurements);
     }
+    case ACTIONS.types.DO_NOTHING: {
+      return stateNew;
+    }
     default: {
       return state;
     }
   }
 };
+
 
 export default reducer;

@@ -5,12 +5,11 @@ import svgModelFactoryHelper from '../svgModelFactoryHelper';
 import dnConnectorOutNexusModelFactory from './dnConnectorOutNexusModelFactory';
 
 class DnBrowserModelFactory extends ModelFactory {
-  createInstance(parentId, dataStoreId) {
+  createInstance(parentId) {
     const id = f22Uuid.generate();
     return svgModelFactoryHelper.mergeSvgAttributes({
       id,
       parentId,
-      dataStoreId,
       typeLabel: ComponentTypes.DnBrowser,
       children: [this.createConnectorIngress(id, 100, 39)]
     });

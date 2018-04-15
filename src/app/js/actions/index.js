@@ -32,7 +32,8 @@ export const ACTIONS = {
     CREATE_PSEUDO_MODAL_COMPONENT: 'CREATE_PSEUDO_MODAL_COMPONENT',
     CREATE_PSEUDO_MODAL_FROM_EXIST_VM: 'CREATE_PSEUDO_MODAL_FROM_EXIST_VM',
     CREATE_PSEUDO_MODAL_FROM_SCRATCH: 'CREATE_PSEUDO_MODAL_FROM_SCRATCH',
-    SCRIBE_BORDER: 'SCRIBE_BORDER'
+    SCRIBE_BORDER: 'SCRIBE_BORDER',
+    DO_NOTHING: 'DO_NOTHING'
   }
 };
 _.extend(ACTIONS.types, dashboard.ActionTypes);
@@ -186,3 +187,8 @@ export const actionCreatePseudoModalFromScratch = (pseudoModalTypes, viewModel) 
 export const actionScribeBorder = () => ({
   type: ACTIONS.types.SCRIBE_BORDER
 });
+
+export const actionDoNothing = () => ({
+  type: ACTIONS.types.DO_NOTHING
+});
+

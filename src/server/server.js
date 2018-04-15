@@ -8,7 +8,6 @@ import proxyDevServer from './service/proxyDevServer';
 
 global.c = c;
 
-
 import exitHook from 'exit-hook';
 exitHook(() => {
   winston.info('exiting');
@@ -20,7 +19,8 @@ const path = require('path');
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';

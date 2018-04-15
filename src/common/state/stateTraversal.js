@@ -33,6 +33,47 @@ class StateTraversal {
     const collection = graphTraversal.traverseAndCollect(node, 'typeLabel');
     return collection.filter((item) => item.typeLabel === typeLabel);
   }
+
+  findAncestorViewWithModelTypeLabel(rootishNode, viewNode, typeLabel) {
+    const viewModel = viewNode.viewModel;
+    if (viewModel.hasOwnProperty('typeLabel') && viewModel.typeLabel === typeLabel) {
+      return viewNode;
+    } else {
+      if (viewNode.hasOwnProperty('parentId')) {
+        const parentViewNode = graphTraversal.find(rootishNode, viewNode.parentId);
+        if (parentViewNode !== rootishNode) {
+          return this.findAncestorViewWithModelTypeLabel(rootishNode, parentViewNode, typeLabel);
+        } else {
+          throw new Error(`Encountered problem trying to find viewModel ancestor \'${typeLabel}\' in ${JSON.stringify(viewNode)}. Traversed to the provided root but could not find parent.`);
+        }
+      } else {
+        throw new Error(`Encountered problem trying to find ancestor \'${typeLabel}\' in ${JSON.stringify(viewNode)}`);
+      }
+    }
+  }
+
+  findDescendentViewWithModelId(viewNode, modelId) {
+    const viewModel = viewNode.viewModel;
+    if (viewModel.hasOwnProperty('typeLabel') && viewModel.id === modelId) {
+      return viewNode;
+    }
+
+    let resultViewNode = null;
+    for (const childView of viewModel.children) {
+      const childViewModel = this.findDescendentViewWithModelId(childView, modelId);
+      if (!!childViewModel) {
+        resultViewNode = childViewModel;
+        break;
+      }
+    }
+
+    return resultViewNode;
+  }
 }
+
+
+
+
+
 
 export default new StateTraversal();
