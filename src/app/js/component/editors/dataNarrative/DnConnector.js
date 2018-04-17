@@ -139,7 +139,10 @@ const mapStateToProps = (state, ownProps) => {
   const viewModel = ownProps.data.viewModel;
   const viewCoordinates = { ...viewModel.viewCoordinates };
 
-  const connectorInNexusId = findViewIdFromModelId(state, ownProps.data.id, viewModel.connectorInNexusId);
+  let connectorInNexusId;
+  if (viewModel.connectorInNexusId) {
+    connectorInNexusId = findViewIdFromModelId(state, ownProps.data.id, viewModel.connectorInNexusId);
+  }
 
   return {
     ...ownProps,

@@ -30,8 +30,7 @@ const afterDrag = (actionStatePackage, args) => {
   return stateNew;
 };
 
-class
-SvgComponent extends React.Component {
+class SvgComponent extends React.Component {
   static getDragNDropFns(dispatch, ownProps) {
     return {
       beforeDrag: (data) => {
