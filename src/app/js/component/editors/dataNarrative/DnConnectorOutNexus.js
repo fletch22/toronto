@@ -8,7 +8,7 @@ import ActionInvoker from '../../../actions/ActionInvoker';
 import dnConnectorModelFactory from '../../../domain/component/dataNarrative/dnConnectorModelFactory';
 import viewModelFactory from '../../../reducers/viewModelFactory';
 import DnComponentDealer from '../../../component/editors/dataNarrative/DnComponentDealer';
-import stateTraversal from '../../../../../common/state/stateTraversal';
+import dnConnectorUtils from './dnConnector/dnConnectorUtils';
 import stateFixer from '../../../domain/stateFixer';
 
 class DnConnectorOutNexus extends React.Component {
@@ -62,6 +62,7 @@ class DnConnectorOutNexus extends React.Component {
     const draggingConnector = this.props.draggingConnector;
 
     g.selectAll('path.blueMover').remove();
+    g.selectAll('line.blueMover').remove();
 
     if (this.props.draggingConnector && this.props.draggingConnector.visible) {
       let x = 0;
@@ -86,8 +87,18 @@ class DnConnectorOutNexus extends React.Component {
         g.append('path')
           .attr('d', triangleSymbol)
           .classed('blueMover', true)
-          .attr('fill', 'CornflowerBlue')
+          .attr('fill', dnConnectorUtils.color)
           .attr('transform', `translate(${iPNT.x}, ${iPNT.y}) rotate(90) scale(1.4)`);
+
+        const coords = this.translateRelativeToNode(domConnector, domConnector);
+        g.append('line')
+          .classed('blueMover', true)
+          .attr('x1', coords.x)
+          .attr('y1', coords.y)
+          .attr('x2', iPNT.x)
+          .attr('y2', iPNT.y)
+          .attr('stroke', dnConnectorUtils.color)
+          .attr('strokeWidth', '4');
       }
 
       let closestConnector;
@@ -110,8 +121,21 @@ class DnConnectorOutNexus extends React.Component {
         this.props.onSelectClosestConnector(closestConnector.obj.id);
       } else {
         DnConnectorInNexus.renderConnectingDeHover(closestConnector.obj);
+        this.props.onSelectClosestConnector(null);
       }
     }
+  }
+
+  translateRelativeToNode(nodeNeedingMap, nodeToMapFrom) {
+    const inNexusRect = nodeNeedingMap.getBoundingClientRect();
+
+    const mySVG = document.getElementById('svgRoot');
+    const pnt = mySVG.createSVGPoint();
+    pnt.x = inNexusRect.x;
+    pnt.y = inNexusRect.y;
+
+    const SCTM = nodeToMapFrom.getScreenCTM();
+    return pnt.matrixTransform(SCTM.inverse());
   }
 
   render() {
@@ -180,6 +204,13 @@ const onMouseMoveConnector = (actionStatePackage, args) => {
   return stateNew;
 };
 
+const getSourceAndTargetModels = (sourceFieldIds, targetFieldIds) => {
+  return {
+    sourceFieldIds,
+    targetFieldIds
+  };
+};
+
 const onMouseUpConnector = (actionStatePackage, args) => {
   const stateNew = actionStatePackage.stateNew;
 
@@ -192,19 +223,21 @@ const onMouseUpConnector = (actionStatePackage, args) => {
   DnConnectorInNexus.renderConnectingDeHover(domNode);
 
   view.viewModel.children = [];
+  const parentModel = graphTraversal.find(stateNew.model, props.viewModel.id);
 
   if (view.draggingConnector.closestConnectorId) {
-    const id = stateTraversal.getNextId(stateNew);
-
     const inView = graphTraversal.find(stateNew, view.draggingConnector.closestConnectorId);
     const closestConnectorModelId = inView.viewModel.id;
 
-    const model = dnConnectorModelFactory.createInstance(id, props.viewModel.id, closestConnectorModelId);
-    const parentModel = graphTraversal.find(stateNew.model, props.viewModel.id);
+    const sourceAndTarget = getSourceAndTargetModels(view.viewModel.sourceFieldIds, inView.viewModel.sourceFieldIds);
+
+    const model = dnConnectorModelFactory.createInstance(stateNew, props.viewModel.id, closestConnectorModelId, sourceAndTarget);
     parentModel.children.push(model);
 
     const viewModel = viewModelFactory.generateViewModel(props.id, model);
     view.viewModel.children = view.viewModel.children.concat(viewModel);
+  } else {
+    parentModel.children = [];
   }
 
   view.draggingConnector.closestConnectorId = null;
@@ -215,6 +248,7 @@ const onMouseUpConnector = (actionStatePackage, args) => {
 };
 
 const onSelectClosestConnector = (actionStatePackage, args) => {
+
   const stateNew = actionStatePackage.stateNew;
 
   const inConnectorId = args.inConnectorId;

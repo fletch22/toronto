@@ -161,6 +161,10 @@ class ViewModelFactory {
         view = viewFactory.createDnConnectorOutNexusView();
         break;
       }
+      case ComponentTypes.DnTransferCase: {
+        view = viewFactory.createDnTransferCaseView();
+        break;
+      }
       case ComponentTypes.DnWebServer: {
         view = viewFactory.createDnWebServerView();
         break;

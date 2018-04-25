@@ -1,15 +1,14 @@
 import React, { PropTypes } from 'react';
-import SvgComponent from './SvgComponent';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
-import { actionUpdateViewPropertyValue } from '../../../actions';
-import { actionSetDataNarrativeConnectorAfterDrag } from '../../../actions/bodyChildrenEditor/index';
-import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEditor';
-import ReactDOM from "react-dom";
-import { actionDoNothing } from '../../../actions';
-import stateTraversal from "../../../../../common/state/stateTraversal";
-import graphTraversal from "../../../../../common/state/graphTraversal";
-import ComponentTypes from "../../../../../common/domain/component/ComponentTypes";
+import ReactDOM from 'react-dom';
+import { actionDoNothing } from '../../../../actions/index';
+import stateTraversal from '../../../../../../common/state/stateTraversal';
+import graphTraversal from '../../../../../../common/state/graphTraversal';
+import ComponentTypes from '../../../../../../common/domain/component/ComponentTypes';
+import DnComponentDealer from '../DnComponentDealer';
+import SvgUtil from '../SvgUtil';
+import dnConnectorUtils from '../dnConnector/dnConnectorUtils';
 
 class DnConnector extends React.Component {
   componentDidMount() {
@@ -39,10 +38,17 @@ class DnConnector extends React.Component {
 
       return (
         <g>
-          <line x1={lineInfo.originOffsetCoord.x} y1={lineInfo.originOffsetCoord.y} x2={lineInfo.destinationOffsetCoord.x} y2={lineInfo.destinationOffsetCoord.y} stroke="Cornflowerblue" strokeWidth="4" />
+          <line id={this.props.id}
+            x1={lineInfo.originOffsetCoord.x}
+            y1={lineInfo.originOffsetCoord.y}
+            x2={lineInfo.destinationOffsetCoord.x}
+            y2={lineInfo.destinationOffsetCoord.y}
+            stroke={dnConnectorUtils.color}
+            strokeWidth="4"
+          />
           <path d={`${triangleSymbol()}`}
-            fill="Cornflowerblue"
-            stroke="Cornflowerblue"
+            fill={dnConnectorUtils.color}
+            stroke={dnConnectorUtils.color}
             transform={`translate(${lineInfo.destinationOffsetCoord.x}, ${lineInfo.destinationOffsetCoord.y}) rotate(${lineInfo.rotationAngle}) scale(1.4)`}
           />
         </g>
@@ -54,11 +60,11 @@ class DnConnector extends React.Component {
 
   getLine(inNexusDomNode) {
     const outNexusDomNode = document.getElementById(this.props.parentId);
-    const destinationCoord = this.translateRelativeToNode(inNexusDomNode, outNexusDomNode);
+    const destinationCoord = SvgUtil.translateRelativeToNode(inNexusDomNode, outNexusDomNode);
 
     const radiusOrigin = parseInt(outNexusDomNode.getAttribute('r'), 10);
 
-    const originCoord = this.translateRelativeToNode(outNexusDomNode, outNexusDomNode);
+    const originCoord = SvgUtil.translateRelativeToNode(outNexusDomNode, outNexusDomNode);
     const originOffsetCoord = {
       x: originCoord.x + radiusOrigin,
       y: originCoord.y + radiusOrigin
@@ -88,18 +94,6 @@ class DnConnector extends React.Component {
     return Math.atan(slope) * (180 / Math.PI) - 30;
   }
 
-  translateRelativeToNode(inNexusDomNode, outNexusDomNode) {
-    const inNexusRect = inNexusDomNode.getBoundingClientRect();
-
-    const mySVG = document.getElementById('svgRoot');
-    const pnt = mySVG.createSVGPoint();
-    pnt.x = inNexusRect.x;
-    pnt.y = inNexusRect.y;
-
-    const SCTM = outNexusDomNode.getScreenCTM();
-    return pnt.matrixTransform(SCTM.inverse());
-  }
-
   render() {
     const connector = this.getConnectorForReact();
 
@@ -107,6 +101,11 @@ class DnConnector extends React.Component {
       <g ref="rootGroup">
         {
           connector
+        }
+        {
+          this.props.children.map((child) => (
+            <DnComponentDealer data={child} dataNarrativeView={this.props.dataNarrativeView} />
+          ))
         }
       </g>
     );
@@ -122,17 +121,22 @@ DnConnector.propTypes = {
   onMouseOverConnector: PropTypes.object,
   data: PropTypes.object,
   postRender: PropTypes.func,
-  connectorInNexusId: PropTypes.string
+  connectorInNexusId: PropTypes.string,
+  children: PropTypes.array
 };
 
 
 const findViewIdFromModelId = (state, viewId, modelId) => {
   const node = graphTraversal.find(state, viewId);
 
-  const dataNarrative = stateTraversal.findAncestorViewWithModelTypeLabel(state, node, ComponentTypes.DataNarrative);
-  const view = stateTraversal.findDescendentViewWithModelId(dataNarrative, modelId);
+  let id;
+  if (node) {
+    const dataNarrative = stateTraversal.findAncestorViewWithModelTypeLabel(state, node, ComponentTypes.DataNarrative);
+    const view = stateTraversal.findDescendentViewWithModelId(dataNarrative, modelId);
+    id = view.id;
+  }
 
-  return view.id;
+  return id;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -144,11 +148,14 @@ const mapStateToProps = (state, ownProps) => {
     connectorInNexusId = findViewIdFromModelId(state, ownProps.data.id, viewModel.connectorInNexusId);
   }
 
+  const children = viewModel.children || [];
+
   return {
     ...ownProps,
     viewModel,
     viewCoordinates,
-    connectorInNexusId
+    connectorInNexusId,
+    children
   };
 };
 

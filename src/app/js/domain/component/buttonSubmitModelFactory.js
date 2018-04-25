@@ -5,9 +5,10 @@ import dataUniverseModelUtils from '../../../../common/domain/component/dataUniv
 import dnDataStoreModelFactory from '../../domain/component/dataNarrative/dnDataStoreModelFactory';
 import dnBrowserModelFactory from '../../domain/component/dataNarrative/dnBrowserModelFactory';
 import dnWebServerModelFactory from '../../domain/component/dataNarrative/dnWebServerModelFactory';
+import graphTraversal from '../../../../common/state/graphTraversal';
+import stateTraversal from '../../../../common/state/stateTraversal';
 
 class ButtonSubmitModelFactory extends ModelFactory {
-
   createInstanceFromModel(model) {
     const id = this.ensureId(model);
 
@@ -23,6 +24,17 @@ class ButtonSubmitModelFactory extends ModelFactory {
     };
   }
 
+  getWebPageFormFields(modelNode, parentNode) {
+    const webPageModel = graphTraversal.findAncestorByTypeLabel(modelNode, parentNode, ComponentTypes.WebPage);
+    const fieldArray = stateTraversal.findAllWithTypeLabels(webPageModel, [ComponentTypes.DropDownListbox]);
+
+    return fieldArray.map((field) => {
+      return {
+        $ref: field.id
+      };
+    });
+  }
+
   createInstance(state, parentId, elementId, label, ordinal) {
     const buttonSubmitInstance = this.createInstanceFromModel({ parentId, elementId, label, ordinal });
 
@@ -30,10 +42,13 @@ class ButtonSubmitModelFactory extends ModelFactory {
 
     const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
     const defaultDataStore = dataUniverseModelUtils.getDataStoreModelUtils().getDefaultDataStore(dataUniverse);
-    const dnDataStoreModel = dnDataStoreModelFactory.createInstance(dataNarrative.id, defaultDataStore.id);
+    const dnDataStoreModel = dnDataStoreModelFactory.createInstance(state, dataNarrative.id, defaultDataStore.id);
 
-    const dnBrowserModel = dnBrowserModelFactory.createInstance(dataNarrative.id);
-    const dnWebServerModel = dnWebServerModelFactory.createInstance(dataNarrative.id);
+    const parentNode = graphTraversal.find(state.model, parentId);
+    const sourceFieldIds = this.getWebPageFormFields(state.model, parentNode);
+
+    const dnBrowserModel = dnBrowserModelFactory.createInstance(state, dataNarrative.id, sourceFieldIds);
+    const dnWebServerModel = dnWebServerModelFactory.createInstance(state, dataNarrative.id);
 
     dataNarrative.children = [dnDataStoreModel, dnWebServerModel, dnBrowserModel];
 

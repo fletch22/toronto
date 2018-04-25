@@ -9,6 +9,7 @@ const ComponentTypes = {
   DnConnectorOutNexus: 'DnConnectorOutNexus',
   DnWebServer: 'DnWebServer',
   DnDataStore: 'DnDataStore',
+  DnTransferCase: 'DnTransferCase',
   DataModel: 'DataModel',
   DataField: 'DataField',
   DataUniverse: 'DataUniverse',

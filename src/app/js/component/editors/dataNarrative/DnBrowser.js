@@ -44,7 +44,6 @@ DnBrowser.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  // c.lo(ownProps.data.viewModel.typeLabel, 'dnb op: ');
   const defaultDataStore = dataStoreModelUtils.getDefaultDataStoreByState(state);
 
   return { ...SvgComponent.mapStateToPropsDragNDrop(state, ownProps),

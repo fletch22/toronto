@@ -1,22 +1,21 @@
 import ModelFactory from '../ModelFactory';
-import f22Uuid from '../../../../../common/util/f22Uuid';
 import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 import svgModelFactoryHelper from '../svgModelFactoryHelper';
 import dnConnectorOutNexusModelFactory from './dnConnectorOutNexusModelFactory';
 
 class DnBrowserModelFactory extends ModelFactory {
-  createInstance(parentId) {
-    const id = f22Uuid.generate();
+  createInstance(state, parentId, sourceFieldIds) {
+    const id = this.getNextId(state);
     return svgModelFactoryHelper.mergeSvgAttributes({
       id,
       parentId,
       typeLabel: ComponentTypes.DnBrowser,
-      children: [this.createConnectorIngress(id, 100, 39)]
+      children: [this.createConnectorIngress(state, id, 100, 39, sourceFieldIds)]
     });
   }
 
-  createConnectorIngress(parentId, offsetX, offsetY) {
-    return dnConnectorOutNexusModelFactory.createInstance(parentId, offsetX, offsetY);
+  createConnectorIngress(state, parentId, offsetX, offsetY, sourceFieldIds) {
+    return dnConnectorOutNexusModelFactory.createInstance(state, parentId, offsetX, offsetY, sourceFieldIds);
   }
 }
 

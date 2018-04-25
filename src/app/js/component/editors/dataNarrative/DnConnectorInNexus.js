@@ -3,19 +3,16 @@ import { connect } from 'react-redux';
 import SvgComponent from './SvgComponent';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
-import viewModelCreator from '../../../component/utils/viewModelCreator';
-import stateTraversal from '../../../../../common/state/stateTraversal';
-import dnConnectorModelFactory from '../../../domain/component/dataNarrative/dnConnectorModelFactory';
-import DnComponentDealer from './DnComponentDealer';
+import dnConnectorUtils from './dnConnector/dnConnectorUtils';
 
 class DnConnectorInNexus extends React.Component {
 
   static renderConnectingHover(domNode) {
-    d3.select(domNode).attr('fill', 'LightBlue').attr('stroke', 'CornflowerBlue').attr('r', '10');
+    d3.select(domNode).attr('fill', 'LightBlue').attr('stroke', dnConnectorUtils.color).attr('r', '10');
   }
 
   static renderConnectingDeHover(domNode) {
-    d3.select(domNode).attr('fill', 'CornflowerBlue').attr('stroke', null).attr('r', '5');
+    d3.select(domNode).attr('fill', dnConnectorUtils.color).attr('stroke', null).attr('r', '5');
   }
 
   constructor(props) {

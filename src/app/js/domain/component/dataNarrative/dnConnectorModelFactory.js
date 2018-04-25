@@ -1,17 +1,21 @@
 import ModelFactory from '../ModelFactory';
-import f22Uuid from '../../../../../common/util/f22Uuid';
 import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
-import svgModelFactoryHelper from '../svgModelFactoryHelper';
+import dnTransferCaseModelFactory from './dnTransferCaseModelFactory';
 
 class DnConnectorModelFactory extends ModelFactory {
-  createInstance(id, parentId, connectorInNexusId) {
+  createInstance(state, parentId, connectorInNexusId, sourceAndTargetModels) {
+    const id = this.getNextId(state);
     return {
       id,
       parentId,
       typeLabel: ComponentTypes.DnConnector,
       connectorInNexusId,
-      children: []
+      children: [this.createDnTransferCase(state, id, sourceAndTargetModels)]
     };
+  }
+
+  createDnTransferCase(state, parentId, sourceAndTargetModels) {
+    return dnTransferCaseModelFactory.createInstance(state, parentId, sourceAndTargetModels);
   }
 }
 

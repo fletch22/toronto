@@ -6,24 +6,24 @@ import dnConnectorInNexusModelFactory from './dnConnectorInNexusModelFactory';
 import dnConnectorOutNexusModelFactory from './dnConnectorOutNexusModelFactory';
 
 class DnWebServerModelFactory extends ModelFactory {
-  createInstance(parentId, dataStoreId) {
-    const id = f22Uuid.generate();
+  createInstance(state, parentId, dataStoreId) {
+    const id = this.getNextId(state);
 
     return svgModelFactoryHelper.mergeSvgAttributes({
       id,
       parentId,
       dataStoreId,
       typeLabel: ComponentTypes.DnWebServer,
-      children: [this.createConnectorIn(id, 16, 88), this.createConnectorOut(id, 132, 5)]
+      children: [this.createConnectorIn(state, id, 16, 88), this.createConnectorOut(state, id, 132, 5)]
     });
   }
 
-  createConnectorIn(parentId, offsetX, offsetY) {
-    return dnConnectorInNexusModelFactory.createInstance(parentId, offsetX, offsetY);
+  createConnectorIn(state, parentId, offsetX, offsetY) {
+    return dnConnectorInNexusModelFactory.createInstance(state, parentId, offsetX, offsetY);
   }
 
-  createConnectorOut(parentId, offsetX, offsetY) {
-    return dnConnectorOutNexusModelFactory.createInstance(parentId, offsetX, offsetY);
+  createConnectorOut(state, parentId, offsetX, offsetY) {
+    return dnConnectorOutNexusModelFactory.createInstance(state, parentId, offsetX, offsetY);
   }
 }
 

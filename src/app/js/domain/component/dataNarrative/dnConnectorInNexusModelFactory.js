@@ -4,14 +4,16 @@ import ComponentTypes from '../../../../../common/domain/component/ComponentType
 import svgModelFactoryHelper from '../svgModelFactoryHelper';
 
 class DnConnectorInNexusModelFactory extends ModelFactory {
-  createInstance(parentId, offsetX, offsetY) {
+  createInstance(state, parentId, offsetX, offsetY, sourceFieldIds) {
+    const id = this.getNextId(state);
     return svgModelFactoryHelper.mergeSvgAttributes({
-      id: f22Uuid.generate(),
+      id,
       parentId,
       offsetX,
       offsetY,
       viewCoordinates: { x: offsetX, y: offsetY },
       typeLabel: ComponentTypes.DnConnectorInNexus,
+      sourceFieldIds,
       children: []
     });
   }

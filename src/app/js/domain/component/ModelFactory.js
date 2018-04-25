@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import f22Uuid from '../../../../common/util/f22Uuid';
+import stateTraversal from '../../../../common/state/stateTraversal';
 
 class ModelViewFactory {
 
@@ -16,6 +17,10 @@ class ModelViewFactory {
       id = f22Uuid.generate();
     }
     return id;
+  }
+
+  getNextId(state) {
+    return stateTraversal.getNextId(state);
   }
 }
 

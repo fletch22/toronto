@@ -136,6 +136,12 @@ class ViewFactory {
       id: f22Uuid.generate()
     };
   }
+
+  createDnTransferCaseView() {
+    return {
+      id: f22Uuid.generate()
+    };
+  }
 }
 
 export default new ViewFactory();

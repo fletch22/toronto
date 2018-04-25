@@ -69,11 +69,14 @@ class StateTraversal {
 
     return resultViewNode;
   }
+
+  findAllWithTypeLabels(node, typeLabelArray) {
+    let result = [];
+    typeLabelArray.forEach((typeLabel) => {
+      result = result.concat(this.findAllWithTypeLabel(node, typeLabel));
+    });
+    return result;
+  }
 }
-
-
-
-
-
 
 export default new StateTraversal();
