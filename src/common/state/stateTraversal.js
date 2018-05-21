@@ -1,6 +1,7 @@
 import graphTraversal from './graphTraversal';
 import _ from 'lodash';
 import ViewTypes from '../../app/js/views/ViewTypes';
+import ComponentTypes from '../domain/component/ComponentTypes';
 
 class StateTraversal {
   findHighestId(node) {
@@ -10,7 +11,7 @@ class StateTraversal {
   getNextId(state) {
     let highestId = state.currentId;
 
-    if (!highestId) {
+    if (!highestId && highestId !== 0) {
       highestId = this.findHighestId(state) + 1;
     } else {
       highestId += 1;
@@ -59,11 +60,13 @@ class StateTraversal {
     }
 
     let resultViewNode = null;
-    for (const childView of viewModel.children) {
-      const childViewModel = this.findDescendentViewWithModelId(childView, modelId);
-      if (!!childViewModel) {
-        resultViewNode = childViewModel;
-        break;
+    if (viewModel.children) {
+      for (const childView of viewModel.children) {
+        const childViewModel = this.findDescendentViewWithModelId(childView, modelId);
+        if (!!childViewModel) {
+          resultViewNode = childViewModel;
+          break;
+        }
       }
     }
 
@@ -76,6 +79,23 @@ class StateTraversal {
       result = result.concat(this.findAllWithTypeLabel(node, typeLabel));
     });
     return result;
+  }
+
+  getWebPageFormFields(modelNode, node) {
+    const webPageModel = graphTraversal.findAncestorByTypeLabel(modelNode, node, ComponentTypes.WebPage);
+    const fieldArray = this.findAllWithTypeLabels(webPageModel, [ComponentTypes.DropDownListbox]);
+
+    return fieldArray.map((field) => this.createModelReference(field));
+  }
+
+  createModelReference(field) {
+    return {
+      $ref: field.id
+    };
+  }
+
+  getRefIdsFromNode(node) {
+    return graphTraversal.collectPropValuesByPropName(node, '$ref');
   }
 }
 

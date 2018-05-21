@@ -3,7 +3,7 @@ import ComponentTypes from '../../../../../common/domain/component/ComponentType
 import svgModelFactoryHelper from '../svgModelFactoryHelper';
 
 class DnConnectorOutNexusModelFactory extends ModelFactory {
-  createInstance(state, parentId, offsetX, offsetY, sourceFieldIds) {
+  createInstance(state, parentId, offsetX, offsetY) {
     const id = this.getNextId(state);
     return svgModelFactoryHelper.mergeSvgAttributes({
       id,
@@ -19,8 +19,7 @@ class DnConnectorOutNexusModelFactory extends ModelFactory {
           y: 0
         },
         visible: false
-      },
-      sourceFieldIds
+      }
     });
   }
 }

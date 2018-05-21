@@ -12,8 +12,7 @@ const PATHS = {
   worker: path.join(__dirname, 'src/app/js/worker')
 };
 
-const config = {
-
+module.exports = {
   // Makes sure errors in console map to the correct file
   // and line number
   devtool: 'eval',
@@ -67,7 +66,7 @@ const config = {
 
   resolve: {
     extensions: ['*', '.js', '.scss'],
-    modules: ['src', 'node_modules']
+    modules: [path.resolve(__dirname, 'src'), 'node_modules']
   },
 
   // We have to manually add the Hot Replacement plugin when running
@@ -80,4 +79,4 @@ const config = {
   ]
 };
 
-module.exports = config;
+// module.exports = config;

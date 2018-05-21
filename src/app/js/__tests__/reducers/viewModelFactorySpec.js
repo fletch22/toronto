@@ -1,13 +1,13 @@
 import { expect } from 'chai';
-import layoutModelFactory from '../../domain/component/layoutModelFactory';
+import buttonSubmitModelFactory from '../../domain/component/buttonSubmitModelFactory';
 import actionComponentCreator from '../../reducers/viewModelFactory';
 import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 describe('viewModelFactory', () => {
   it('create a faithful model out of a view model', () => {
 
-    const layoutModel = layoutModelFactory.createInstanceFromModel({ parentId: 'foo' });
-    const viewModel = actionComponentCreator.generateViewModel(123, layoutModel);
+    const buttonSubmit = buttonSubmitModelFactory.createInstanceFromModel({ elementId: 'bar', parentId: 'foo', ordinal: 2, style: '1ps solid red' });
+    const viewModel = actionComponentCreator.generateViewModel(123, buttonSubmit);
 
     const model = actionComponentCreator.extractModelFromViewModel(viewModel);
 
@@ -16,6 +16,6 @@ describe('viewModelFactory', () => {
     expect(viewModel.parentId).to.equal(123);
     expect(model.id.length).to.be.above(12);
     expect(model.children.length).to.be.equal(0);
-    expect(model.typeLabel).to.equal(ComponentTypes.Layout);
+    expect(model.typeLabel).to.equal(ComponentTypes.ButtonSubmit);
   });
 });

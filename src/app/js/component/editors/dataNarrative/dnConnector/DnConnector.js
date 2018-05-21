@@ -43,12 +43,12 @@ class DnConnector extends React.Component {
             y1={lineInfo.originOffsetCoord.y}
             x2={lineInfo.destinationOffsetCoord.x}
             y2={lineInfo.destinationOffsetCoord.y}
-            stroke={dnConnectorUtils.color}
+            stroke={dnConnectorUtils.mainBodyColor}
             strokeWidth="4"
           />
           <path d={`${triangleSymbol()}`}
-            fill={dnConnectorUtils.color}
-            stroke={dnConnectorUtils.color}
+            fill={dnConnectorUtils.mainBodyColor}
+            stroke={dnConnectorUtils.mainBodyColor}
             transform={`translate(${lineInfo.destinationOffsetCoord.x}, ${lineInfo.destinationOffsetCoord.y}) rotate(${lineInfo.rotationAngle}) scale(1.4)`}
           />
         </g>

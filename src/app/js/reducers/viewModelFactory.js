@@ -109,14 +109,6 @@ class ViewModelFactory {
         view = viewFactory.createPageView(model);
         break;
       }
-      case ComponentTypes.Layout: {
-        view = viewFactory.createLayoutView();
-        break;
-      }
-      case ComponentTypes.LayoutMinion: {
-        view = viewFactory.createLayoutMinionView();
-        break;
-      }
       case ComponentTypes.Div: {
         view = viewFactory.createDivView();
         break;

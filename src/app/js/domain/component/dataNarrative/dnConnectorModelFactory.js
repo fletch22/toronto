@@ -3,19 +3,19 @@ import ComponentTypes from '../../../../../common/domain/component/ComponentType
 import dnTransferCaseModelFactory from './dnTransferCaseModelFactory';
 
 class DnConnectorModelFactory extends ModelFactory {
-  createInstance(state, parentId, connectorInNexusId, sourceAndTargetModels) {
+  createInstance(state, parentId, connectorInNexusId) {
     const id = this.getNextId(state);
     return {
       id,
       parentId,
       typeLabel: ComponentTypes.DnConnector,
       connectorInNexusId,
-      children: [this.createDnTransferCase(state, id, sourceAndTargetModels)]
+      children: [this.createDnTransferCase(state, id)]
     };
   }
 
-  createDnTransferCase(state, parentId, sourceAndTargetModels) {
-    return dnTransferCaseModelFactory.createInstance(state, parentId, sourceAndTargetModels);
+  createDnTransferCase(state, parentId) {
+    return dnTransferCaseModelFactory.createInstance(state, parentId);
   }
 }
 

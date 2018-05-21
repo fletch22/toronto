@@ -8,11 +8,11 @@ import dnConnectorUtils from './dnConnector/dnConnectorUtils';
 class DnConnectorInNexus extends React.Component {
 
   static renderConnectingHover(domNode) {
-    d3.select(domNode).attr('fill', 'LightBlue').attr('stroke', dnConnectorUtils.color).attr('r', '10');
+    d3.select(domNode).attr('fill', 'LightBlue').attr('stroke', dnConnectorUtils.mainBodyColor).attr('r', '10');
   }
 
   static renderConnectingDeHover(domNode) {
-    d3.select(domNode).attr('fill', dnConnectorUtils.color).attr('stroke', null).attr('r', '5');
+    d3.select(domNode).attr('fill', dnConnectorUtils.mainBodyColor).attr('stroke', null).attr('r', '5');
   }
 
   constructor(props) {

@@ -87,7 +87,7 @@ class DnConnectorOutNexus extends React.Component {
         g.append('path')
           .attr('d', triangleSymbol)
           .classed('blueMover', true)
-          .attr('fill', dnConnectorUtils.color)
+          .attr('fill', dnConnectorUtils.mainBodyColor)
           .attr('transform', `translate(${iPNT.x}, ${iPNT.y}) rotate(90) scale(1.4)`);
 
         const coords = this.translateRelativeToNode(domConnector, domConnector);
@@ -97,7 +97,7 @@ class DnConnectorOutNexus extends React.Component {
           .attr('y1', coords.y)
           .attr('x2', iPNT.x)
           .attr('y2', iPNT.y)
-          .attr('stroke', dnConnectorUtils.color)
+          .attr('stroke', dnConnectorUtils.mainBodyColor)
           .attr('strokeWidth', '4');
       }
 
@@ -204,13 +204,6 @@ const onMouseMoveConnector = (actionStatePackage, args) => {
   return stateNew;
 };
 
-const getSourceAndTargetModels = (sourceFieldIds, targetFieldIds) => {
-  return {
-    sourceFieldIds,
-    targetFieldIds
-  };
-};
-
 const onMouseUpConnector = (actionStatePackage, args) => {
   const stateNew = actionStatePackage.stateNew;
 
@@ -229,9 +222,7 @@ const onMouseUpConnector = (actionStatePackage, args) => {
     const inView = graphTraversal.find(stateNew, view.draggingConnector.closestConnectorId);
     const closestConnectorModelId = inView.viewModel.id;
 
-    const sourceAndTarget = getSourceAndTargetModels(view.viewModel.sourceFieldIds, inView.viewModel.sourceFieldIds);
-
-    const model = dnConnectorModelFactory.createInstance(stateNew, props.viewModel.id, closestConnectorModelId, sourceAndTarget);
+    const model = dnConnectorModelFactory.createInstance(stateNew, props.viewModel.id, closestConnectorModelId);
     parentModel.children.push(model);
 
     const viewModel = viewModelFactory.generateViewModel(props.id, model);

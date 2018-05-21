@@ -24,17 +24,6 @@ class ButtonSubmitModelFactory extends ModelFactory {
     };
   }
 
-  getWebPageFormFields(modelNode, parentNode) {
-    const webPageModel = graphTraversal.findAncestorByTypeLabel(modelNode, parentNode, ComponentTypes.WebPage);
-    const fieldArray = stateTraversal.findAllWithTypeLabels(webPageModel, [ComponentTypes.DropDownListbox]);
-
-    return fieldArray.map((field) => {
-      return {
-        $ref: field.id
-      };
-    });
-  }
-
   createInstance(state, parentId, elementId, label, ordinal) {
     const buttonSubmitInstance = this.createInstanceFromModel({ parentId, elementId, label, ordinal });
 
@@ -45,7 +34,7 @@ class ButtonSubmitModelFactory extends ModelFactory {
     const dnDataStoreModel = dnDataStoreModelFactory.createInstance(state, dataNarrative.id, defaultDataStore.id);
 
     const parentNode = graphTraversal.find(state.model, parentId);
-    const sourceFieldIds = this.getWebPageFormFields(state.model, parentNode);
+    const sourceFieldIds = stateTraversal.getWebPageFormFields(state.model, parentNode);
 
     const dnBrowserModel = dnBrowserModelFactory.createInstance(state, dataNarrative.id, sourceFieldIds);
     const dnWebServerModel = dnWebServerModelFactory.createInstance(state, dataNarrative.id);

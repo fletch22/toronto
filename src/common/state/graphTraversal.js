@@ -56,7 +56,7 @@ class GraphTraversal {
 
     for (const key in o) {
       if (!!o[key]) {
-        if (typeof(o[key]) === 'object') {
+        if (typeof o[key] === 'object') {
           if (Array.isArray(o[key])) {
             o[key].forEach(gatherByTraverse);
           } else {

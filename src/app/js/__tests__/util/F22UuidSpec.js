@@ -9,9 +9,10 @@ describe('F22Uuid', () => {
     const id = F22Uuid.generate();
     expect(id).to.not.equal(null);
 
-    const uuidSample = uuid.v1();
+    const uuidSample = `u${uuid.v1()}`;
 
     expect(id.length).to.equal(uuidSample.length);
+
   });
 
   it('should generate ids that sort correctly.', () => {
