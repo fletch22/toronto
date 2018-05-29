@@ -79,7 +79,16 @@ class ViewModelFactory {
         viewName = PseudoModalTypes.DataNarrativeEditor;
         pseudoModalType = PseudoModalTypes.DataNarrativeEditor;
         title = 'Edit Data Narrative';
-        className = 'pseudo-modal-edit-data-narrative';
+        className = 'pseudo-modal-dn-master-edit';
+        break;
+      }
+      case PseudoModalTypes.DataNarrativeTransferCaseEditor: {
+        data = viewModel;
+
+        viewName = PseudoModalTypes.DataNarrativeTransferCaseEditor;
+        pseudoModalType = PseudoModalTypes.DataNarrativeTransferCaseEditor;
+        title = 'Edit Data Narrative Transfer Case';
+        className = 'pseudo-modal-dn-transfser-case-edit';
         break;
       }
       default: {

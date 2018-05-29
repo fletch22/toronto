@@ -11,7 +11,7 @@ import { actionSetDataNarrativeViewProps } from '../../../actions/bodyChildrenEd
 import DnComponentDealer from './DnComponentDealer';
 import SvgComponent from './SvgComponent';
 
-class SvgRoot extends SvgComponent {
+class DnEditorMasterSvgRoot extends SvgComponent {
   constructor(props) {
     super(props);
     this.zoomed = this.zoomed.bind(this);
@@ -59,7 +59,7 @@ class SvgRoot extends SvgComponent {
   }
 }
 
-SvgRoot.propTypes = {
+DnEditorMasterSvgRoot.propTypes = {
   ...SvgComponent.propTypes,
   zoom: PropTypes.number,
   onMouseZoom: PropTypes.func
@@ -84,10 +84,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return { ...fns, ...SvgComponent.getDragNDropFns(dispatch, ownProps) };
 };
 
-SvgRoot = connect(
+DnEditorMasterSvgRoot = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SvgRoot);
+)(DnEditorMasterSvgRoot);
 
 
-export default SvgRoot;
+export default DnEditorMasterSvgRoot;

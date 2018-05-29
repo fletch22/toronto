@@ -10,13 +10,13 @@ class DnConnectorModelFactory extends ModelFactory {
       parentId,
       typeLabel: ComponentTypes.DnConnector,
       connectorInNexusId,
-      children: [this.createDnTransferCase(state, id)]
+      children: []
     };
   }
 
-  createDnTransferCase(state, parentId) {
-    return dnTransferCaseModelFactory.createInstance(state, parentId);
-  }
+  // createDnTransferCase(state, parentId) {
+  //   return dnTransferCaseModelFactory.createInstance(state, parentId);
+  // }
 }
 
 export default new DnConnectorModelFactory();

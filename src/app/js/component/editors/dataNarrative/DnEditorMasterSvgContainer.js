@@ -1,20 +1,20 @@
 import React, { PropTypes } from 'react';
 import dimensions from 'react-dimensions';
-import SvgRoot from './SvgRoot';
+import DnEditorMasterSvgRoot from './DnEditorMasterSvgRoot';
 import CollectionMenu from './CollectionMenu';
 import { connect } from 'react-redux';
 
-class SvgContainer extends React.Component {
+class DnEditorMasterSvgContainer extends React.Component {
   render() {
     return (
       <div style={{ position: 'relative' }}>
-        <SvgRoot data={this.props.data} height={this.props.containerHeight} width={this.props.containerWidth} size={[500, 500]} />
+        <DnEditorMasterSvgRoot data={this.props.data} height={this.props.containerHeight} width={this.props.containerWidth} size={[500, 500]} />
       </div>
     );
   }
 }
 
-SvgContainer.propTypes = {
+DnEditorMasterSvgContainer.propTypes = {
   data: PropTypes.object,
   containerHeight: PropTypes.any,
   containerWidth: PropTypes.any,
@@ -28,11 +28,11 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-SvgContainer = connect(
+DnEditorMasterSvgContainer = connect(
   mapStateToProps,
   null
-)(SvgContainer);
+)(DnEditorMasterSvgContainer);
 
-SvgContainer = dimensions()(SvgContainer);
+DnEditorMasterSvgContainer = dimensions()(DnEditorMasterSvgContainer);
 
-export default SvgContainer;
+export default DnEditorMasterSvgContainer;

@@ -1,0 +1,10 @@
+import Service from './Service';
+
+class RestService extends Service {
+  getCollection(collectionName) {
+    return this.fetch(`${this.getNodeServerRootUrl()}/collectionName`, 'GET');
+  }
+}
+
+export default new RestService();
+

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import SvgContainer from './SvgContainer';
+import DnEditorMasterSvgContainer from './DnEditorMasterSvgContainer';
 import Button from '../../bodyChildren/toolbar/Button';
 import { actionUpdateViewPropertyValue } from '../../../actions/index';
 
@@ -15,7 +15,7 @@ class DataNarrative extends React.Component {
           </div>
         </div>
         <div style={{ width: '100%', height: '100%' }}>
-          <SvgContainer data={this.props.data} />
+          <DnEditorMasterSvgContainer data={this.props.data} />
         </div>
       </div>
     );

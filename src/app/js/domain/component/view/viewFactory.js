@@ -139,9 +139,13 @@ class ViewFactory {
 
   createDnTransferCaseView() {
     return {
-      id: f22Uuid.generate(),
-      isPopupVisible: false,
-      renderTransferCase: false
+      id: f22Uuid.generate()
+    };
+  }
+
+  createDnTransferCaseMapperView() {
+    return {
+      id: f22Uuid.generate()
     };
   }
 }

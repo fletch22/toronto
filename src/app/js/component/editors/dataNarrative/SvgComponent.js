@@ -53,6 +53,9 @@ class SvgComponent extends React.Component {
   static mapStateToPropsDragNDrop(state, ownProps) {
     const viewModel = ownProps.data.viewModel;
 
+    const x = (viewModel.viewCoordinates) ? viewModel.viewCoordinates.x : null;
+    const y = (viewModel.viewCoordinates) ? viewModel.viewCoordinates.y : null;
+
     return {
       data: ownProps.data,
       size: ownProps.size,
@@ -60,8 +63,8 @@ class SvgComponent extends React.Component {
       width: ownProps.width,
       viewCoordinates: viewModel.viewCoordinates,
       viewCoordinatesDragOffset: viewModel.viewCoordinatesDragOffset,
-      x: viewModel.viewCoordinates.x,
-      y: viewModel.viewCoordinates.y
+      x,
+      y
     };
   }
 

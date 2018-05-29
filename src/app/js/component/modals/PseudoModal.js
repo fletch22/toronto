@@ -9,6 +9,7 @@ import ConfigureDdlWizard from '../../component/bodyChildren/dropDownListbox/Con
 import Button from '../../component/Button';
 import PseudoModalTypes from '../../component/modals/PseudoModalTypes';
 import DataNarrativeEditor from '../../../js/component/editors/dataNarrative/DataNarrative';
+import DnEditorTransferCase from '../../../js/component/editors/dataNarrative/dnEditorTransferCase/DnEditorTransferCase';
 
 class PseudoModal extends React.Component {
 
@@ -35,6 +36,10 @@ class PseudoModal extends React.Component {
       }
       case PseudoModalTypes.DataNarrativeEditor: {
         component = <DataNarrativeEditor { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} />;
+        break;
+      }
+      case PseudoModalTypes.DataNarrativeTransferCaseEditor: {
+        component = <DnEditorTransferCase { ...this.props.data } data={this.props.data} onCancelClick={this.props.onCloseModal} containerHeight={625} containerWidth={960} />;
         break;
       }
       default: {
@@ -74,6 +79,7 @@ PseudoModal.propTypes = {
   data: PropTypes.object,
   zIndex: PropTypes.number,
   width: PropTypes.number,
+  height: PropTypes.number,
   onCloseModal: PropTypes.func,
   viewName: PropTypes.string,
   title: PropTypes.string,

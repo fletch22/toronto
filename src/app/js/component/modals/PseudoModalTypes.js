@@ -9,7 +9,8 @@ const pseudoModalTypes = {
     Website: ComponentTypes.Website
   },
   WizardTypes,
-  DataNarrativeEditor: 'DataNarrativeEditor'
+  DataNarrativeEditor: 'DataNarrativeEditor',
+  DataNarrativeTransferCaseEditor: 'DnEditorTransferCase'
 };
 
 export default pseudoModalTypes;
