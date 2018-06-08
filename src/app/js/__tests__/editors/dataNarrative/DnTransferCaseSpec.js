@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import DnTransferCase from '../../../component/editors/dataNarrative/dnTransferCase/DnTransferCase';
+import DnTransferCase from '../../../component/editors/dataNarrative/DnTransferCase';
 import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 import stateTraversal from '../../../../../common/state/stateTraversal';
 import modelGenerator from '../../../domain/component/modelGenerator';
@@ -60,7 +60,7 @@ describe('DnTransferCase', () => {
 
     const ddlModel = stateTraversal.findAllWithTypeLabel(actionStatePackage.stateNew.model, ComponentTypes.DropDownListbox)[0];
 
-    const expectedFormFields = [stateTraversal.createModelReference(ddlModel)];
+    const expectedFormFields = [stateTraversal.createModelReferenceFromField(ddlModel)];
     const getWebPageFormFieldsStub = sandbox.stub(stateTraversal, 'getWebPageFormFields').returns(expectedFormFields);
 
     // Act

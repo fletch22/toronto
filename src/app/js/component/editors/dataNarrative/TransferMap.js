@@ -3,12 +3,12 @@ import React, { PropTypes } from 'react';
 import Button from 'app/js/component/Button';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
-import DnTransferCase from 'app/js/component/editors/dataNarrative/dnTransferCase/DnTransferCase';
+import DnTransferCase from 'app/js/component/editors/dataNarrative/DnTransferCase';
 import { connect } from 'react-redux';
 import ActionInvoker from 'app/js/actions/ActionInvoker';
 import SvgUtil from 'app/js/component/editors/dataNarrative/SvgUtil';
-import SvgButtonClose from '../SvgButtonClose';
-import { actionDoNothing } from 'app/js/actions';
+import SvgButtonClose from './SvgButtonClose';
+import { actionDoNothing } from 'app/js/actions/index';
 
 const width = 100;
 const height = 150;

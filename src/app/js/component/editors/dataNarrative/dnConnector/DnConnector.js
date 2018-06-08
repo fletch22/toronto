@@ -9,7 +9,7 @@ import ComponentTypes from '../../../../../../common/domain/component/ComponentT
 import DnComponentDealer from '../DnComponentDealer';
 import SvgUtil from '../SvgUtil';
 import dnConnectorUtils from '../dnConnector/dnConnectorUtils';
-import DnTransferCase from '../dnTransferCase/dnTransferCase';
+import DnTransferCase from '../DnTransferCase';
 
 class DnConnector extends React.Component {
   componentDidMount() {
@@ -104,12 +104,18 @@ class DnConnector extends React.Component {
     //   ))
     // }
 
+    // <DnTransferCase data={this.props.data} />
+
     return (
       <g ref="rootGroup">
         {
           connector
         }
-        <DnTransferCase data={this.props.data} />
+        {
+           this.props.children.map((child) => (
+             <DnComponentDealer data={child} dataNarrativeView={this.props.dataNarrativeView} />
+           ))
+        }
       </g>
     );
   }

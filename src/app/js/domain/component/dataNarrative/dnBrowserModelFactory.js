@@ -11,11 +11,11 @@ class DnBrowserModelFactory extends ModelFactory {
       parentId,
       typeLabel: ComponentTypes.DnBrowser,
       sourceFieldIds,
-      children: [this.createConnectorIngress(state, id, 100, 39)]
+      children: [this.createConnectorOut(state, id, 100, 39)]
     });
   }
 
-  createConnectorIngress(state, parentId, offsetX, offsetY) {
+  createConnectorOut(state, parentId, offsetX, offsetY) {
     return dnConnectorOutNexusModelFactory.createInstance(state, parentId, offsetX, offsetY, 0);
   }
 }

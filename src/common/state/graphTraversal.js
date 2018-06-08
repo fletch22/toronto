@@ -11,6 +11,11 @@ class GraphTraversal {
     return parent;
   }
 
+  findGrandParent(node, id) {
+    const parent = this.findParent(node, id);
+    return this.findParent(node, parent.parentId);
+  }
+
   // Called with every property and it's value
   process(key, value, propertyValue, propertyName) {
     let found = false;
@@ -84,19 +89,26 @@ class GraphTraversal {
   }
 
   findAncestorByTypeLabel(rootishNode, node, typeLabel) {
+    const result = this.findAncestorByTypeLabelWithNull(rootishNode, node, typeLabel);
+
+    if (!result) {
+      throw new Error(`Encountered problem trying to find ancestor \'${typeLabel}\' in ${JSON.stringify(node)}`);
+    }
+    return result;
+  }
+
+  findAncestorByTypeLabelWithNull(rootishNode, node, typeLabel) {
     if (node.hasOwnProperty('typeLabel') && node.typeLabel === typeLabel) {
       return node;
     } else {
       if (node.hasOwnProperty('parentId')) {
         const parentNode = this.find(rootishNode, node.parentId);
+        console.log(parentNode.typeLabel);
         if (parentNode !== rootishNode) {
-          return this.findAncestorByTypeLabel(rootishNode, parentNode, typeLabel);
-        } else {
-          throw new Error(`Encountered problem trying to find ancestor \'${typeLabel}\' in ${JSON.stringify(node)}. Traversed to root but could not find parent.`);
+          return this.findAncestorByTypeLabelWithNull(rootishNode, parentNode, typeLabel);
         }
-      } else {
-        throw new Error(`Encountered problem trying to find ancestor \'${typeLabel}\' in ${JSON.stringify(node)}`);
       }
+      return null;
     }
   }
 

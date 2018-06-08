@@ -85,12 +85,16 @@ class StateTraversal {
     const webPageModel = graphTraversal.findAncestorByTypeLabel(modelNode, node, ComponentTypes.WebPage);
     const fieldArray = this.findAllWithTypeLabels(webPageModel, [ComponentTypes.DropDownListbox]);
 
-    return fieldArray.map((field) => this.createModelReference(field));
+    return fieldArray.map((field) => this.createModelReferenceFromField(field));
   }
 
-  createModelReference(field) {
+  createModelReferenceFromField(field) {
+    return this.createReference(field.id);
+  }
+
+  createReference(id) {
     return {
-      $ref: field.id
+      $ref: id
     };
   }
 

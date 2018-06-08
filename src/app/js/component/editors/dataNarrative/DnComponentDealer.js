@@ -6,7 +6,7 @@ import DnWebServer from '../../../component/editors/dataNarrative/DnWebServer';
 import DnConnector from './dnConnector/DnConnector';
 import DnConnectorInNexus from './DnConnectorInNexus';
 import DnConnectorOutNexus from './DnConnectorOutNexus';
-import DnTransferCase from './dnTransferCase/DnTransferCase';
+import DnTransferCase from './DnTransferCase';
 import DnTransferCaseMapper from './dnEditorTransferCase/DnTransferCaseMapper';
 
 class DnComponentDealer extends React.Component {
@@ -41,10 +41,10 @@ class DnComponentDealer extends React.Component {
         component = (<DnConnectorOutNexus data={this.props.data} />);
         break;
       }
-      // case ComponentTypes.DnTransferCase: {
-      //   // component = (<DnTransferCase data={this.props.data} />);
-      //   break;
-      // }
+      case ComponentTypes.DnTransferCase: {
+        component = (<DnTransferCase data={this.props.data} />);
+        break;
+      }
       case ComponentTypes.DnTransferCaseMapper: {
         component = (<DnTransferCaseMapper data={this.props.data} />);
         break;

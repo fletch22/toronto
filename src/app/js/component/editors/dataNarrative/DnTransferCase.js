@@ -1,19 +1,19 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import SvgUtil from '../SvgUtil';
+import SvgUtil from './SvgUtil';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
-import dnConnectorUtils from '../dnConnector/dnConnectorUtils';
+import dnConnectorUtils from './dnConnector/dnConnectorUtils';
 import ReactDOM from 'react-dom';
-import { actionDoNothing } from '../../../../actions/index';
-import ActionInvoker from '../../../../actions/ActionInvoker';
-import graphTraversal from '../../../../../../common/state/graphTraversal';
-import stateTraversal from '../../../../../../common/state/stateTraversal';
-import Button from 'app/js/component/Button';
-import TransferMap from './TransferMap';
-import viewModelFactory from 'app/js/reducers/viewModelFactory';
-import { actionCreatePseudoModalFromScratch } from '../../../../actions/index';
-import PseudoModalTypes from 'app/js/component/modals/PseudoModalTypes';
+import { actionDoNothing } from '../../../actions/index';
+import ActionInvoker from '../../../actions/ActionInvoker';
+import graphTraversal from '../../../../../common/state/graphTraversal';
+import stateUtils from '../../../util/stateUtil';
+import stateTraversal from '../../../../../common/state/stateTraversal';
+import { default as ComponentTypes, ComponentTypesCollections } from 'common/domain/component/ComponentTypes';
+import dnTransferFieldMapperModelFactory from 'app/js/domain/component/dataNarrative/dnTransferFieldMapperModelFactory';
+import dnTransferSourceFieldModelFactory from 'app/js/domain/component/dataNarrative/dnTransferSourceFieldModelFactory';
+import dnTransferTargetFieldModelFactory from 'app/js/domain/component/dataNarrative/dnTransferTargetFieldModelFactory';
 
 const caseWidth = 20;
 const caseHeight = 15;
@@ -50,12 +50,45 @@ class DnTransferCase extends React.Component {
   static createPseudoModal(ownProps) {
     return (dispatch, getState) => {
       const state = getState();
-      c.lo(ownProps.data.viewModel, 'ownProps.data.viewModel: ');
+      // c.lo(ownProps.data.viewModel, 'ownProps.data.viewModel: ');
 
-      // const dnTransferCaseView = graphTraversal.find(state, ownProps.data.id);
+      const dnTransferCaseView = ownProps.data;
       // c.lo(dnTransferCaseView, 'dnTransferCaseView: ');
-      //
-      // const model = graphTraversal.find(state.model, ownProps.data.viewModel.id);
+
+      const dnTransferCaseModel = graphTraversal.find(state.model, ownProps.data.viewModel.id);
+      const dnConnector = stateUtils.findAncestorByTypeLabelCollection(state.model, dnTransferCaseModel, [ComponentTypes.DnConnector]); // [ComponentTypesCollections.DnConnector]
+      const dnConnectorInNexus = graphTraversal.find(state.model, dnConnector.connectorInNexusId);
+
+      const foundTargetNexusNode = stateUtils.findAncestorByTypeLabelCollection(state.model, dnConnectorInNexus, ComponentTypesCollections.DataNarrativeNexusNodes);
+      const parentNode = graphTraversal.findParent(state.model, dnConnectorInNexus.id);
+      // c.lo(parentNode, 'parentNode: ');
+
+      const foundSourceNexusNode = stateUtils.findAncestorByTypeLabelCollection(state.model, dnTransferCaseModel, ComponentTypesCollections.DataNarrativeNexusNodes);
+
+      if (!dnTransferCaseModel.fieldMapper) {
+        // Popuplate with all fields in nexus node;
+        const fieldMapper = dnTransferFieldMapperModelFactory.createInstance(state, dnTransferCaseModel.id);
+
+        // c.lo(dnConnectorInNexus, 'dnConnectorInNexus: ');
+        // c.lo(foundSourceNexusNode, 'foundSourceNexusNode: ');
+        c.lo(foundTargetNexusNode, 'foundTargetNexusNode: ');
+
+
+        for (const fieldId of foundSourceNexusNode.sourceFieldIds) {
+          const refField = stateTraversal.createReference(fieldId);
+          const transferField = dnTransferSourceFieldModelFactory.createInstance(state, dnTransferCaseModel.parentId, refField);
+          fieldMapper.children.push(transferField);
+        }
+
+        // for (const fieldId of foundSourceNexusNode.sourceFieldIds) {
+        //   const refField = stateTraversal.createReference(fieldId);
+        //   const transferField = dnTransferSourceFieldModelFactory.createInstance(state, dnTransferCaseModel.parentId, refField);
+        //   fieldMapper.children.push(transferField);
+        // }
+      }
+
+      // const model = graphTraversal.findGrandParent(state.model, ownProps.data.viewModel.id);
+      // c.lo(model, 'model: ');
       // const dnConnectorView = graphTraversal.find(state, dnTransferCaseView.parentId);
       // const dnConnectorOutNexusView = graphTraversal.find(state, dnConnectorView.parentId);
       // const dnObject = graphTraversal.find(state, dnConnectorOutNexusView.parentId);

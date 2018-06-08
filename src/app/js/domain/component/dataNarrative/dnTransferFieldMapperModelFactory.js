@@ -1,18 +1,17 @@
 import ModelFactory from '../ModelFactory';
 import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 
-class DnTransferCaseModelFactory extends ModelFactory {
+class DnTransferFieldMapperModelFactory extends ModelFactory {
   createInstance(state, parentId) {
     const id = this.getNextId(state);
     return {
       id,
       parentId,
-      typeLabel: ComponentTypes.DnTransferCase,
-      fieldMapper: null,
+      typeLabel: ComponentTypes.DnTransferFieldMapper,
       children: []
     };
   }
 }
 
-export default new DnTransferCaseModelFactory();
+export default new DnTransferFieldMapperModelFactory();
 

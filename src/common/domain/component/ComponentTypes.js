@@ -10,6 +10,9 @@ const ComponentTypes = {
   DnWebServer: 'DnWebServer',
   DnDataStore: 'DnDataStore',
   DnTransferCase: 'DnTransferCase',
+  DnTransferFieldMapper: 'DnTransferFieldMapper',
+  DnTransferSourceField: 'DnTransferSourceField',
+  DnTransferTargetField: 'DnTransferTargetField',
   DataModel: 'DataModel',
   DataField: 'DataField',
   DataUniverse: 'DataUniverse',
@@ -22,6 +25,10 @@ const ComponentTypes = {
   DropDownListbox: 'DropDownListbox',
   DataNarrative: 'DataNarratives',
   Cylinder: 'Cylinder'
+};
+
+export const ComponentTypesCollections = {
+  DataNarrativeNexusNodes: [ComponentTypes.DnBrowser, ComponentTypes.DnWebServer, ComponentTypes.DnDataStore]
 };
 
 export default ComponentTypes;
