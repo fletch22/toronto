@@ -29,5 +29,7 @@ describe('stateUtils', () => {
     expect(nameUnique).to.be.equal('Select-3');
     expect(collectStub.called).to.be.equal(true);
   });
+
+  it('should')
 });
 

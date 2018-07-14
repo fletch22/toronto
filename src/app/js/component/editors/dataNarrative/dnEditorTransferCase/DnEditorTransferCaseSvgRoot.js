@@ -33,7 +33,7 @@ DnEditorTransferCaseSvgRoot.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
 
-  c.lo(ownProps);
+  // c.lo(ownProps);
 
   return {
     zoom: ownProps.data.viewModel.zoom

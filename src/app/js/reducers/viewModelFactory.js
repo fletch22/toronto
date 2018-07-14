@@ -6,6 +6,13 @@ import viewFactory from '../domain/component/view/viewFactory';
 import configureDdlWizardViewFactory from '../component/bodyChildren/dropDownListbox/wizard/configure/ConfigureDdlWizardViewFactory';
 import { DatastoreModelConstants } from '../../../common/domain/component/dataStoreModelUtils';
 import dataUniverseUtils from '../../../common/domain/component/dataUniverseModelUtils';
+import f22Uuid from 'common/util/f22Uuid';
+
+export const ViewModelType = {
+  DnTransferCaseEditor: 'DnTransferCaseEditor',
+  DnTransferTargetField: 'DnTransferTargetField',
+  DnTransferSourceField: 'DnTransferSourceField'
+};
 
 class ViewModelFactory {
 
@@ -194,6 +201,56 @@ class ViewModelFactory {
     }
 
     return viewModelParent;
+  }
+
+  generateViewModelFromViewModelType(viewModelParentId, viewModelType, model) {
+    const view = {
+      id: f22Uuid.generate(),
+      parentId: viewModelParentId
+    };
+
+    const embeddedModel = _.cloneDeep(model);
+
+    switch (viewModelType) {
+      case ViewModelType.DnTransferCaseEditor: {
+        embeddedModel.children = model.children.map((child) => {
+          // NOTE: 2018-06-16: Special branching here if 'one to one' won't work.
+          const childViewModelType = self.getChildViewTypeOneToOne(child.typeLabel);
+          return this.generateViewModelFromViewModelType(view.id, childViewModelType, child);
+        });
+        break;
+      }
+      case ViewModelType.DnTransferSourceField || ViewModelType.DnTransferTargetField: {
+        embeddedModel.children = model.children.map((child) => {
+          const childViewModelType = self.getChildViewTypeOneToOne(child.typeLabel);
+          return this.generateViewModelFromViewModelType(view.id, childViewModelType, child);
+        });
+        break;
+      }
+      default: {
+        throw new Error(`Encountered error trying to determine view to create for model typelabel \'${model.typeLabel}\'.`);
+      }
+    }
+
+    return { ...view, viewModel: embeddedModel };
+  }
+
+  getChildViewTypeOneToOne(typeLabel) {
+    let childViewModelType;
+    switch (typeLabel) {
+      case ComponentTypes.DnTransferSourceField: {
+        childViewModelType = ViewModelType.DnTransferSourceField;
+        break;
+      }
+      case ComponentTypes.DnTransferTargetField: {
+        childViewModelType = ViewModelType.DnTransferSourceField;
+        break;
+      }
+      default: {
+        throw new Error(`Encountered error trying to recognize viewModelType '${typeLabel}'.`);
+      }
+    }
+    return childViewModelType;
   }
 
   extractModelFromViewModel(viewModel) {

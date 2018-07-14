@@ -103,7 +103,6 @@ class GraphTraversal {
     } else {
       if (node.hasOwnProperty('parentId')) {
         const parentNode = this.find(rootishNode, node.parentId);
-        console.log(parentNode.typeLabel);
         if (parentNode !== rootishNode) {
           return this.findAncestorByTypeLabelWithNull(rootishNode, parentNode, typeLabel);
         }

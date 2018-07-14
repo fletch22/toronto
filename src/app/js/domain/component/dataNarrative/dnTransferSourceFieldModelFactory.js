@@ -6,7 +6,7 @@ class DnTransferSourceFieldModelFactory extends ModelFactory {
     const id = this.getNextId(state);
     return {
       id,
-      refId,
+      ...refId,
       parentId,
       typeLabel: ComponentTypes.DnTransferSourceField,
       children: []

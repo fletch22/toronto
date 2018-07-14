@@ -4,13 +4,12 @@ import svgModelFactoryHelper from '../svgModelFactoryHelper';
 import dnConnectorOutNexusModelFactory from './dnConnectorOutNexusModelFactory';
 
 class DnBrowserModelFactory extends ModelFactory {
-  createInstance(state, parentId, sourceFieldIds) {
+  createInstance(state, parentId) {
     const id = this.getNextId(state);
     return svgModelFactoryHelper.mergeSvgAttributes({
       id,
       parentId,
       typeLabel: ComponentTypes.DnBrowser,
-      sourceFieldIds,
       children: [this.createConnectorOut(state, id, 100, 39)]
     });
   }

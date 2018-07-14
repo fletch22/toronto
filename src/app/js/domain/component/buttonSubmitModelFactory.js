@@ -5,8 +5,8 @@ import dataUniverseModelUtils from '../../../../common/domain/component/dataUniv
 import dnDataStoreModelFactory from '../../domain/component/dataNarrative/dnDataStoreModelFactory';
 import dnBrowserModelFactory from '../../domain/component/dataNarrative/dnBrowserModelFactory';
 import dnWebServerModelFactory from '../../domain/component/dataNarrative/dnWebServerModelFactory';
-import graphTraversal from '../../../../common/state/graphTraversal';
 import stateTraversal from '../../../../common/state/stateTraversal';
+import graphTraversal from 'common/state/graphTraversal';
 
 class ButtonSubmitModelFactory extends ModelFactory {
   createInstanceFromModel(model) {
@@ -33,10 +33,11 @@ class ButtonSubmitModelFactory extends ModelFactory {
     const defaultDataStore = dataUniverseModelUtils.getDataStoreModelUtils().getDefaultDataStore(dataUniverse);
     const dnDataStoreModel = dnDataStoreModelFactory.createInstance(state, dataNarrative.id, defaultDataStore.id);
 
-    const parentNode = graphTraversal.find(state.model, parentId);
-    const sourceFieldIds = stateTraversal.getWebPageFormFields(state.model, parentNode);
+    const dnBrowserModel = dnBrowserModelFactory.createInstance(state, dataNarrative.id);
 
-    const dnBrowserModel = dnBrowserModelFactory.createInstance(state, dataNarrative.id, sourceFieldIds);
+    const webPageModel = graphTraversal.findAncestorByTypeLabel(state.model, buttonSubmitInstance, ComponentTypes.WebPage);
+    dnBrowserModel.dataSource = stateTraversal.createReference(webPageModel.id);
+
     const dnWebServerModel = dnWebServerModelFactory.createInstance(state, dataNarrative.id);
 
     dataNarrative.children = [dnDataStoreModel, dnWebServerModel, dnBrowserModel];

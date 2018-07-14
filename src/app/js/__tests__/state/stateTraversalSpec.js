@@ -19,8 +19,6 @@ describe('stateTraversal', () => {
     // Act
     const highestId = stateTraversal.findHighestId(node);
 
-    c.lo(node, 'node: ');
-
     // Assert
     expect(true).to.equal(true);
     expect(!!highestId).to.equal(true);
@@ -36,8 +34,6 @@ describe('stateTraversal', () => {
 
     // Act
     const refIds = stateTraversal.getRefIdsFromNode(node);
-
-    c.lo(refIds, 'refIds: ');
 
     // Assert
     expect(refIds.length).to.equal(1);

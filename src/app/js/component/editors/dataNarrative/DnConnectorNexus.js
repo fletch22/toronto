@@ -13,7 +13,7 @@ import { event as currentEvent } from 'd3-selection';
 const duration = 10;
 
 const onMouseDown = function () {
-  c.lo(this);
+  // c.lo(this);
 
   // this.props.onMouseDownConnector();
 };

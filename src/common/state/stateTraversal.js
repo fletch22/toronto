@@ -81,11 +81,19 @@ class StateTraversal {
     return result;
   }
 
-  getWebPageFormFields(modelNode, node) {
+  getWebPageFormFieldsAsRefs(modelNode, node) {
     const webPageModel = graphTraversal.findAncestorByTypeLabel(modelNode, node, ComponentTypes.WebPage);
-    const fieldArray = this.findAllWithTypeLabels(webPageModel, [ComponentTypes.DropDownListbox]);
+    return this.getAllFieldsFromModelAsRefs(webPageModel);
+  }
 
+  getAllFieldsFromModelAsRefs(model) {
+    const fieldArray = this.findAllWithTypeLabels(model, [ComponentTypes.DropDownListbox]);
     return fieldArray.map((field) => this.createModelReferenceFromField(field));
+  }
+
+  syncWebPageFormFields(rootishNode, id) {
+    const node = graphTraversal.find(rootishNode, id);
+    return this.getWebPageFormFieldsAsRefs(rootishNode, node);
   }
 
   createModelReferenceFromField(field) {
