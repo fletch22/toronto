@@ -113,7 +113,7 @@ class DnConnector extends React.Component {
         }
         {
            this.props.children.map((child) => (
-             <DnComponentDealer data={child} dataNarrativeView={this.props.dataNarrativeView} />
+             <DnComponentDealer key={child.id} data={child} dataNarrativeView={this.props.dataNarrativeView} />
            ))
         }
       </g>
@@ -122,7 +122,7 @@ class DnConnector extends React.Component {
 }
 
 DnConnector.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.any,
   parentId: PropTypes.string,
   viewModel: PropTypes.object,
   onClick: PropTypes.func,

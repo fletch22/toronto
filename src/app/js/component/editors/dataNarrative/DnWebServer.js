@@ -27,7 +27,7 @@ class DnWebServer extends SvgComponent {
         <text fontFamily="sans-serif" fill="gray" textAnchor="middle" alignmentBaseline="alphabetic" x="84" y="45">Web Server</text>
         {
           children.map((child) => (
-            <DnComponentDealer {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
+            <DnComponentDealer key={child.id} {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
           ))
         }
       </g>
@@ -37,7 +37,7 @@ class DnWebServer extends SvgComponent {
 
 DnWebServer.propTypes = {
   ...SvgComponent.propTypes,
-  id: PropTypes.number,
+  id: PropTypes.string,
   label: PropTypes.string,
   onClick: PropTypes.func,
   dataNarrativeView: PropTypes.object

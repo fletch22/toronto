@@ -4,6 +4,10 @@ import ViewTypes from '../../app/js/views/ViewTypes';
 import ComponentTypes from '../domain/component/ComponentTypes';
 
 class StateTraversal {
+  constructor() {
+    this.REF_ID_ATTRIBUTE = '$ref';
+  }
+
   findHighestId(node) {
     return _.max(graphTraversal.collectPropValuesByPropName(node, 'id').filter((value) => typeof value !== typeof ''));
   }
@@ -101,13 +105,13 @@ class StateTraversal {
   }
 
   createReference(id) {
-    return {
-      $ref: id
-    };
+    const result = {};
+    result[this.REF_ID_ATTRIBUTE] = id;
+    return result;
   }
 
   getRefIdsFromNode(node) {
-    return graphTraversal.collectPropValuesByPropName(node, '$ref');
+    return graphTraversal.collectPropValuesByPropName(node, this.REF_ID_ATTRIBUTE);
   }
 }
 

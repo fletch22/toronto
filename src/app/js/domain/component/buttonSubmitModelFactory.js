@@ -30,13 +30,12 @@ class ButtonSubmitModelFactory extends ModelFactory {
     const dataNarrative = dataNarrativeModelFactory.createInstance(buttonSubmitInstance.id);
 
     const dataUniverse = dataUniverseModelUtils.getDataUniverse(state);
+
     const defaultDataStore = dataUniverseModelUtils.getDataStoreModelUtils().getDefaultDataStore(dataUniverse);
     const dnDataStoreModel = dnDataStoreModelFactory.createInstance(state, dataNarrative.id, defaultDataStore.id);
 
-    const dnBrowserModel = dnBrowserModelFactory.createInstance(state, dataNarrative.id);
-
     const webPageModel = graphTraversal.findAncestorByTypeLabel(state.model, buttonSubmitInstance, ComponentTypes.WebPage);
-    dnBrowserModel.dataSource = stateTraversal.createReference(webPageModel.id);
+    const dnBrowserModel = dnBrowserModelFactory.createInstance(state, dataNarrative.id, webPageModel.id);
 
     const dnWebServerModel = dnWebServerModelFactory.createInstance(state, dataNarrative.id);
 

@@ -1,17 +1,14 @@
 [ignore]
-.*/node_modules/.*/node_modules/.*
 .*/portUnion/.*
 .*/temp/.*
 .*/harbourTown/.*
 .*/images/.*
 
 // NOTE: 2017-02-25: This is a workaround to Flow being unable to properly parse some particular files.
-;.*/node_modules/config-chain/test/.*
-;.*/node_modules/flux/flow/include/FluxMixinLegacy.js
-;.*/node_modules/fbjs/flow/include/PromiseMap.js
-;.*/node_modules/npmconf/test/fixtures/package.json
-
-
+.*/node_modules/config-chain/test/.*
+.*/node_modules/flux/flow/include/FluxMixinLegacy.js
+.*/node_modules/fbjs/flow/include/PromiseMap.js
+.*/node_modules/npmconf/test/fixtures/package.json
 
 [include]
 

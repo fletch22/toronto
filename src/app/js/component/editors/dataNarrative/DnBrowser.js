@@ -27,7 +27,7 @@ class DnBrowser extends SvgComponent {
         <text ref="label" fontFamily="sans-serif" fill="white" textAnchor="middle" alignmentBaseline="alphabetic" x="51" y="42">Browser</text>
         {
           children.map((child) => (
-            <DnComponentDealer {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
+            <DnComponentDealer key={child.id} {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
           ))
         }
       </g>
@@ -37,10 +37,10 @@ class DnBrowser extends SvgComponent {
 
 DnBrowser.propTypes = {
   ...SvgComponent.propTypes,
-  id: PropTypes.number,
+  id: PropTypes.any,
   onClick: PropTypes.func,
   dataNarrativeView: PropTypes.object,
-  onMouseOverConnector: PropTypes.object
+  onMouseOverConnector: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => {

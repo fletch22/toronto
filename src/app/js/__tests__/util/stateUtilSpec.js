@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import stateUtils from '../../util/stateUtil';
-import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
 
 describe('stateUtils', () => {
 
@@ -29,7 +28,5 @@ describe('stateUtils', () => {
     expect(nameUnique).to.be.equal('Select-3');
     expect(collectStub.called).to.be.equal(true);
   });
-
-  it('should')
 });
 

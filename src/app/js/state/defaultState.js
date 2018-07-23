@@ -2,6 +2,7 @@ class DefaultState {
 
   getInstance() {
     return {
+      centralizedRefs: [],
       dragNDrop: {
         hoverOverId: null,
         parentOfHoverOverId: null,

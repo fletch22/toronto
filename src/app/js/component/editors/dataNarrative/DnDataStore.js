@@ -29,7 +29,7 @@ class DnDataStore extends SvgComponent {
         <text fontFamily="sans-serif" fill="white" textAnchor="middle" alignmentBaseline="alphabetic" x="41" y="63">{this.props.label}</text>
         {
           children.map((child) => (
-            <DnComponentDealer {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
+            <DnComponentDealer key={child.id} {...child} data={child} dataNarrativeView={this.props.dataNarrativeView} />
           ))
         }
       </g>
@@ -39,7 +39,7 @@ class DnDataStore extends SvgComponent {
 
 DnDataStore.propTypes = {
   ...SvgComponent.propTypes,
-  id: PropTypes.number,
+  id: PropTypes.string,
   label: PropTypes.string,
   onClick: PropTypes.func,
   dataNarrativeView: PropTypes.object,

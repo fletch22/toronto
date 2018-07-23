@@ -49,7 +49,7 @@ class DnEditorMasterSvgRoot extends SvgComponent {
           <g ref="rootGroup">
             {
               children.map((child) =>
-                <DnComponentDealer {... child} data={child} dataNarrativeView={this.props.data} />
+                <DnComponentDealer key={child.id} {... child} data={child} dataNarrativeView={this.props.data} />
               )
             }
           </g>

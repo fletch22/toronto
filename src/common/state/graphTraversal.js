@@ -1,3 +1,4 @@
+// flow
 import _ from 'lodash';
 
 class GraphTraversal {
@@ -118,6 +119,56 @@ class GraphTraversal {
     return _.findIndex(array, (child) => {
       return child.id === id;
     });
+  }
+
+  findAllAttributeValuesFromDescendentsWithAttribute(node, attributeName) {
+    let accumulator = [];
+
+    for (const key of Object.keys(node)) {
+      const attributeValue = node[key];
+      if (attributeName === key) {
+        accumulator.push(_.cloneDeep(attributeValue));
+      }
+
+      if (Array.isArray(attributeValue)) {
+        for (const attrItem of attributeValue) {
+          if (typeof attrItem === 'object') {
+            const result = this.findAllAttributeValuesFromDescendentsWithAttribute(attrItem, attributeName);
+            accumulator = accumulator.concat(result);
+          }
+        }
+      } else if (typeof attributeValue === 'object') {
+        const result = this.findAllAttributeValuesFromDescendentsWithAttribute(attributeValue, attributeName);
+        accumulator = accumulator.concat(result);
+      }
+    }
+    return accumulator;
+  }
+
+  findDescendentsWithAttributeObjectKey(node, keyToFind) {
+    let accumulator = [];
+
+    for (const key of Object.keys(node)) {
+      const attributeValue = node[key];
+      if (Array.isArray(attributeValue)) {
+        for (const attrItem of attributeValue) {
+          if (typeof attrItem === 'object') {
+            const result = this.findDescendentsWithAttributeObjectKey(attrItem, keyToFind);
+            accumulator = accumulator.concat(result);
+          }
+        }
+      } else if (typeof attributeValue === 'object') {
+        if (Object.keys(attributeValue).includes(keyToFind)) {
+          const result = {
+            id: node.id,
+            attributeName: key,
+            keyToFindAttributeValue: _.cloneDeep(attributeValue[keyToFind])
+          };
+          accumulator.push(result);
+        }
+      }
+    }
+    return accumulator;
   }
 }
 

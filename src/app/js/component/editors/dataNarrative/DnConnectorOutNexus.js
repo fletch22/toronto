@@ -144,7 +144,7 @@ class DnConnectorOutNexus extends React.Component {
         <circle id={this.props.id} ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="red" />
         {
           this.props.children.map((child) => (
-            <DnComponentDealer data={child} dataNarrativeView={this.props.dataNarrativeView} />
+            <DnComponentDealer key={child.id} data={child} dataNarrativeView={this.props.dataNarrativeView} />
           ))
         }
       </g>

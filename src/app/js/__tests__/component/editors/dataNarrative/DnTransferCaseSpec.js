@@ -73,7 +73,6 @@ describe('DnTransferCase', () => {
     const dnTransferCaseModel = {
       children: [child]
     };
-    
 
     // Act
     const doesExist = dnTransferCaseUtility.hasField(dnTransferCaseModel, refIdExists.$ref);

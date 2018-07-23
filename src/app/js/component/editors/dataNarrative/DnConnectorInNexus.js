@@ -46,7 +46,7 @@ DnConnectorInNexus.contextTypes = { store: PropTypes.object };
 
 DnConnectorInNexus.propTypes = {
   ...SvgComponent.propTypes,
-  id: PropTypes.number,
+  id: PropTypes.any,
   dataNarrativeView: PropTypes.object,
   onMouseUpConnector: PropTypes.func,
   onMouseOverConnector: PropTypes.func,

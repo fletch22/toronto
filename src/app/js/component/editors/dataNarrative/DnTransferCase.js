@@ -1,31 +1,49 @@
-import React, { PropTypes } from 'react';
+// @flow
+
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import SvgUtil from './SvgUtil';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
 import ReactDOM from 'react-dom';
-import _ from 'lodash';
+// import _ from 'lodash';
 import dnConnectorUtils from './dnConnector/dnConnectorUtils';
 import { actionDoNothing } from '../../../actions/index';
 import ActionInvoker from '../../../actions/ActionInvoker';
 import graphTraversal from '../../../../../common/state/graphTraversal';
 import stateUtils from '../../../util/stateUtil';
 import stateTraversal from '../../../../../common/state/stateTraversal';
-import { default as ComponentTypes, ComponentTypesCollections } from 'common/domain/component/ComponentTypes';
+import { ComponentTypesCollections, default as ComponentTypes } from '../../../../../common/domain/component/ComponentTypes';
 import dnTransferCaseUtility from './dnEditorTransferCase/dnTransferCaseUtility';
-import dnTransferFieldMapperModelFactory from 'app/js/domain/component/dataNarrative/dnTransferFieldMapperModelFactory';
-import dnTransferSourceFieldModelFactory from 'app/js/domain/component/dataNarrative/dnTransferSourceFieldModelFactory';
-import dnTransferTargetFieldModelFactory from 'app/js/domain/component/dataNarrative/dnTransferTargetFieldModelFactory';
-import actionCreatePseudoModalFromScratch from 'app/js/actions/index';
-import PseudoModalTypes from 'app/js/component/modals/PseudoModalTypes';
-import viewModelFactory, { ViewModelType } from 'app/js/reducers/viewModelFactory';
+// import dnTransferFieldMapperModelFactory from 'app/js/domain/component/dataNarrative/dnTransferFieldMapperModelFactory';
+// import dnTransferSourceFieldModelFactory from 'app/js/domain/component/dataNarrative/dnTransferSourceFieldModelFactory';
+import dnTransferTargetFieldModelFactory from '../../../../../app/js/domain/component/dataNarrative/dnTransferTargetFieldModelFactory';
+// import actionCreatePseudoModalFromScratch from 'app/js/actions/index';
+// import PseudoModalTypes from 'app/js/component/modals/PseudoModalTypes';
+// import viewModelFactory, { ViewModelType } from 'app/js/reducers/viewModelFactory';
+import refUtils from '../../../../../app/js/util/refUtils';
 
 const caseWidth = 20;
 const caseHeight = 15;
 
-class DnTransferCase extends React.Component {
+type Props = {
+  id: any,
+  parentId: string,
+  viewModel: Object,
+  data: Object,
+  postRender: () => void,
+  onClick: () => void,
+  isPopupVisible: boolean,
+  onClosePopup: () => void,
+  isRenderTransferCase: () => void,
+  onClickCloseTransferCase: () => void
+};
+
+
+class DnTransferCase extends Component<Props> {
 
   static onClick = (actionStatePackage, args) => {
+    console.log(PI);
     c.l('Got transfer case click...');
     const stateNew = actionStatePackage.stateNew;
     const clickedTransferCaseId = args.id;
@@ -83,6 +101,38 @@ class DnTransferCase extends React.Component {
 
   static createPseudoModal(ownProps) {
     return (dispatch, getState) => {
+      c.l('createPseudoModal');
+
+      c.l(refUtils.foo2('foo'));
+
+
+      // Creating/Moving Data from Page to DnTransferCase
+      // 1. On buttonSubmit creation, in attribute 'dataSource' BrowserModel provide ref:
+      // Status: Done
+      //
+      // 2. On TransferCase creation, copy refs of refs in BM to TransferCase
+      // Status:
+      //
+      // 3. On buttonSubmit creation, copy refs into DataSource Model
+      // Status:
+      //
+      // 4. On TransferCAse creation copy refs in DataSource to TransferCase
+      // Status:
+
+      // Navigating from destination to source
+      //  1. Find the child In-Connector
+      //  2. Find the In-Connector's Source Ref
+      //  3. Find the Source from the ref -- the Out-Connector
+      //  4. The out connector contains a set of fields reffed to the container.
+      //  5. The container contains a set of fields reffed to the original source.
+
+      // Navigating from source to destination
+      //  1. Find the Out-Connector's ref to the In-Connector
+      //  2. Jump to the In-Connector.
+      //  3. Jump to the parent of the In-Connector
+      //  4. Get All the fields.
+      //  5. Jump from the fields to the ref of those fields.
+
       const state = getState();
 
       let dnTransferCaseModel = graphTraversal.find(state.model, ownProps.data.viewModel.id);
@@ -244,7 +294,7 @@ class DnTransferCase extends React.Component {
 }
 
 DnTransferCase.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.any,
   parentId: PropTypes.string,
   viewModel: PropTypes.object,
   data: PropTypes.object,
@@ -252,7 +302,7 @@ DnTransferCase.propTypes = {
   onClick: PropTypes.func,
   isPopupVisible: PropTypes.bool,
   onClosePopup: PropTypes.func,
-  isRenderTransferCase: PropTypes.bool,
+  isRenderTransferCase: PropTypes.func,
   onClickCloseTransferCase: PropTypes.func
 };
 

@@ -1,5 +1,6 @@
 import graphTraversal from '../../../../common/state/graphTraversal';
 import ComponentTypes from '../../../../common/domain/component/ComponentTypes';
+import stateTraversal from 'common/state/stateTraversal';
 
 describe('graphTraversal', () => {
   const existingSelects = ['Select-1', 'Select-2'];
@@ -63,5 +64,70 @@ describe('graphTraversal', () => {
     expect(divs).to.not.be.equal(null);
     expect(Array.isArray(divs)).to.be.equal(true);
     expect(divs.length).to.be.equal(2);
+  });
+
+  it('should get all the descendents with an attribute that matches the object', () => {
+    // Arrange
+    const node = {
+      id: 12,
+      children: [
+        {
+          id: 123,
+          foo: 'bar',
+          children: [
+            {
+              id: 777,
+              bar: {
+                id: 234,
+                fruit: 'tastey'
+              }
+            }
+          ]
+        }
+      ]
+    };
+
+    // Act
+    const refs = graphTraversal.findDescendentsWithAttributeObjectKey(node, 'fruit');
+
+    // Assert
+    expect(!!refs).to.be.equal(true);
+    expect(Array.isArray(refs)).to.be.equal(true);
+    expect(refs.length).to.be.equal(1);
+    const singleRef = refs[0];
+    expect(typeof singleRef).to.be.equal('object');
+    expect(singleRef.id).to.be.equal(777);
+    expect(singleRef.attributeName).to.be.equal('bar');
+    expect(singleRef.keyToFindAttributeValue).to.be.equal('tastey');
+  });
+
+  it('should get all the descendents attribute values with an attribute.', () => {
+    // Arrange
+    const node = {
+      id: 12,
+      children: [
+        {
+          id: 123,
+          foo: 'bar',
+          children: [
+            {
+              id: 777,
+              bar: {
+                id: 234,
+                fruit: 'tastey'
+              }
+            }
+          ]
+        }
+      ]
+    };
+
+    // Act
+    const refs = graphTraversal.findAllAttributeValuesFromDescendentsWithAttribute(node, 'id');
+
+    // Assert
+    expect(Array.isArray(refs)).to.be.equal(true);
+    refs.sort();
+    expect(JSON.stringify(refs)).to.be.equal('[12,123,234,777]');
   });
 });
