@@ -1,5 +1,4 @@
 // @flow
-
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import SvgUtil from './SvgUtil';
@@ -21,7 +20,8 @@ import dnTransferTargetFieldModelFactory from '../../../../../app/js/domain/comp
 // import actionCreatePseudoModalFromScratch from 'app/js/actions/index';
 // import PseudoModalTypes from 'app/js/component/modals/PseudoModalTypes';
 // import viewModelFactory, { ViewModelType } from 'app/js/reducers/viewModelFactory';
-import refUtils from '../../../../../app/js/util/refUtils';
+// import refUtils from '../../../util/RelationshipUtils';
+import RelationshipUtils from '../../../util/RelationshipUtils';
 
 const caseWidth = 20;
 const caseHeight = 15;
@@ -70,7 +70,7 @@ class DnTransferCase extends Component<Props> {
     return stateNew;
   };
 
-  static loadValues(state, dnTransferCaseModel, descendentModel) {
+  static loadValues(state: Object, dnTransferCaseModel: Object, descendentModel: Object) {
     const foundNexusNode = stateUtils.findAncestorByTypeLabelCollection(state.model, descendentModel, ComponentTypesCollections.DataNarrativeNexusNodes);
 
     let dnTransferCaseModelModified;
@@ -99,12 +99,11 @@ class DnTransferCase extends Component<Props> {
     return dnTransferCaseModelModified;
   }
 
-  static createPseudoModal(ownProps) {
+  static createPseudoModal(ownProps: Object) {
     return (dispatch, getState) => {
       c.l('createPseudoModal');
 
-      c.l(refUtils.foo2('foo'));
-
+      c.l(RelationshipUtils.foo3(123));
 
       // Creating/Moving Data from Page to DnTransferCase
       // 1. On buttonSubmit creation, in attribute 'dataSource' BrowserModel provide ref:
@@ -346,3 +345,4 @@ DnTransferCase = connect(
 
 
 export default DnTransferCase;
+

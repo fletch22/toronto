@@ -1,4 +1,4 @@
-// flow
+// @flow
 // import modelFactory from 'app/js/domain/component/ModelFactory';
 // import graphTraversal from 'common/state/graphTraversal';
 // import stateTraversal from 'common/state/stateTraversal';
@@ -6,7 +6,7 @@
 // const CENTRALIZED_REFS = 'centralizedRefs';
 class RelationshipUtils {
 
-  foo(bar: String) {
+  foo(bar: string) {
     return bar;
   }
 
@@ -14,23 +14,27 @@ class RelationshipUtils {
     return bar;
   }
 
-  bar() {
-    this.foo(134);
+  static foo3(bar: number) {
+    return bar;
   }
 
-  createNewRef(state, sourceId, sourceAttributeName, targetId) {
-    const centralizedRefs = state.centralizedRefs;
+  bar() {
+    this.foo('bar');
+  }
 
-    const refCandidate = this.createInstance(state, sourceId, sourceAttributeName, targetId);
+  createNewRef(state: Object, sourceId: string, sourceAttributeName: string, targetId: string) {
+    // const centralizedRefs = state.centralizedRefs;
+
+    // const refCandidate = this.createInstance(state, sourceId, sourceAttributeName, targetId);
 
     // Create Cent Ref
-    if (this.doesExist(centralizedRefs, refCandidate)) {
-      throw new Error(`Could not create ref '${JSON.stringify(refCandidate)}' because it already exists.`);
-    }
+    // if (this.doesExist(centralizedRefs, refCandidate)) {
+    //   throw new Error(`Could not create ref '${JSON.stringify(refCandidate)}' because it already exists.`);
+    // }
     // Add to centralizedRefs
-    centralizedRefs.push(refCandidate);
+    // centralizedRefs.push(refCandidate);
 
-    return refCandidate;
+    // return refCandidate;
   }
 
   // getCentralizedRelationships(state) {
@@ -135,5 +139,5 @@ class RelationshipUtils {
   // }
 }
 
-export default new RelationshipUtils();
+export default RelationshipUtils;
 
