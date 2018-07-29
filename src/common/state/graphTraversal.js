@@ -1,9 +1,9 @@
-// flow
+// @flow
 import _ from 'lodash';
 
 class GraphTraversal {
 
-  findParent(node, id) {
+  findParent(node: Object, id: string): ?Object {
     let parent;
     const child = this.find(node, id);
     if (child) {
@@ -12,13 +12,13 @@ class GraphTraversal {
     return parent;
   }
 
-  findGrandParent(node, id) {
+  findGrandParent(node: Object, id: string) {
     const parent = this.findParent(node, id);
-    return this.findParent(node, parent.parentId);
+    return (parent) ? this.findParent(node, parent.parentId) : undefined;
   }
 
   // Called with every property and it's value
-  process(key, value, propertyValue, propertyName) {
+  process(key: string, value: any, propertyValue: string, propertyName: string) {
     let found = false;
     if (key === propertyName
       && value === propertyValue) {
@@ -27,8 +27,8 @@ class GraphTraversal {
     return found;
   }
 
-  traverseIt(o, propertyValue, propertyName) {
-    let foundObject = undefined;
+  traverseIt(o: Object, propertyValue: string, propertyName: string): ?Object {
+    let foundObject = null;
     for (const i in o) {
       // const found = func.apply(this, [i, o[i], id]);
       const found = this.process(i, o[i], propertyValue, propertyName);
@@ -48,7 +48,7 @@ class GraphTraversal {
     return foundObject;
   }
 
-  traverseAndCollect(o, propertyName) {
+  traverseAndCollect(o: Object, propertyName: string) {
     let foundObjects = [];
 
     if (o.hasOwnProperty(propertyName)) {
@@ -75,21 +75,21 @@ class GraphTraversal {
     return foundObjects;
   }
 
-  findByPropNameAndValue(o, propertyName, value) {
+  findByPropNameAndValue(o: Object, propertyName: string, value: string): Array<Object> {
     const collection = this.traverseAndCollect(o, propertyName);
     return collection.filter((item) => item[propertyName] === value);
   }
 
-  find(node, propertyValue) {
+  find(node: Object, propertyValue: string) {
     return this.traverseIt(node, propertyValue, 'id');
   }
 
-  collectPropValuesByPropName(node, propertyName) {
+  collectPropValuesByPropName(node: Object, propertyName: string): Array<Object> {
     const collectedMatches = this.traverseAndCollect(node, propertyName);
     return collectedMatches.map((item) => item[propertyName]);
   }
 
-  findAncestorByTypeLabel(rootishNode, node, typeLabel) {
+  findAncestorByTypeLabel(rootishNode: Object, node: Object, typeLabel: string) {
     const result = this.findAncestorByTypeLabelWithNull(rootishNode, node, typeLabel);
 
     if (!result) {
@@ -98,13 +98,13 @@ class GraphTraversal {
     return result;
   }
 
-  findAncestorByTypeLabelWithNull(rootishNode, node, typeLabel) {
+  findAncestorByTypeLabelWithNull(rootishNode: Object, node: Object, typeLabel: string) {
     if (node.hasOwnProperty('typeLabel') && node.typeLabel === typeLabel) {
       return node;
     } else {
       if (node.hasOwnProperty('parentId')) {
         const parentNode = this.find(rootishNode, node.parentId);
-        if (parentNode !== rootishNode) {
+        if (parentNode && parentNode !== rootishNode) {
           return this.findAncestorByTypeLabelWithNull(rootishNode, parentNode, typeLabel);
         }
       }
@@ -112,16 +112,14 @@ class GraphTraversal {
     }
   }
 
-  getChildsIndex(array, id) {
+  getChildsIndex(array: Array<Object>, id: string) {
     if (!Array.isArray(array)) {
       throw new Error('Encountered error while trying to get child\'s index. Passed object is not array.');
     }
-    return _.findIndex(array, (child) => {
-      return child.id === id;
-    });
+    return _.findIndex(array, (child) => child.id === id);
   }
 
-  findAllAttributeValuesFromDescendentsWithAttribute(node, attributeName) {
+  findAllAttributeValuesFromDescendentsWithAttribute(node: Object, attributeName: string) {
     let accumulator = [];
 
     for (const key of Object.keys(node)) {
@@ -145,7 +143,7 @@ class GraphTraversal {
     return accumulator;
   }
 
-  findDescendentsWithAttributeObjectKey(node, keyToFind) {
+  findDescendentsWithAttributeObjectKey(node: Object, keyToFind: string) {
     let accumulator = [];
 
     for (const key of Object.keys(node)) {

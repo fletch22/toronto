@@ -20,8 +20,8 @@ import dnTransferTargetFieldModelFactory from '../../../../../app/js/domain/comp
 // import actionCreatePseudoModalFromScratch from 'app/js/actions/index';
 // import PseudoModalTypes from 'app/js/component/modals/PseudoModalTypes';
 // import viewModelFactory, { ViewModelType } from 'app/js/reducers/viewModelFactory';
-// import refUtils from '../../../util/RelationshipUtils';
-import RelationshipUtils from '../../../util/RelationshipUtils';
+// import refUtils from '../../../util/relationshipUtils';
+import relationshipUtils from '../../../util/relationshipUtils';
 
 const caseWidth = 20;
 const caseHeight = 15;
@@ -101,10 +101,6 @@ class DnTransferCase extends Component<Props> {
 
   static createPseudoModal(ownProps: Object) {
     return (dispatch, getState) => {
-      c.l('createPseudoModal');
-
-      c.l(RelationshipUtils.foo3(123));
-
       // Creating/Moving Data from Page to DnTransferCase
       // 1. On buttonSubmit creation, in attribute 'dataSource' BrowserModel provide ref:
       // Status: Done
@@ -135,8 +131,15 @@ class DnTransferCase extends Component<Props> {
       const state = getState();
 
       let dnTransferCaseModel = graphTraversal.find(state.model, ownProps.data.viewModel.id);
+      if (!dnTransferCaseModel) {
+        throw new Error('Could not find dnTransferCaseModel.');
+      }
+
       const dnConnector = stateUtils.findAncestorByTypeLabelCollection(state.model, dnTransferCaseModel, [ComponentTypes.DnConnector]); // [ComponentTypesCollections.DnConnector]
       const dnConnectorInNexus = graphTraversal.find(state.model, dnConnector.connectorInNexusId);
+      if (!dnConnectorInNexus) {
+        throw new Error(`Could not find dnConnectorInNexus ${dnConnector.connectorInNexusId}.`);
+      }
 
       // c.lo(dnConnectorInNexus, 'dnConnectorInNexus: ');
 
@@ -156,17 +159,26 @@ class DnTransferCase extends Component<Props> {
       // c.lo(foundSourceNexusNode.sourceFieldIds, 'foundSourceNexusNode.sourceFieldIds: ');
 
       dnTransferCaseModel = dnTransferCaseUtility.ensureRefFieldAdded(state, fieldsForm, dnTransferCaseModel, ComponentTypes.DnTransferSourceField);
+      if (!dnTransferCaseModel) {
+        throw new Error('Could not find dnTransferCaseModel.');
+      }
 
       const refPresent = (child, arr) => {
         return !!arr.find((item) => item.$ref === child.$ref && item.typeLabel === ComponentTypes.DnTransferTargetField);
       };
 
+      if (!dnTransferCaseModel) {
+        throw new Error('Could not find dnTransferCaseModel.');
+      }
+      const children = dnTransferCaseModel.children;
+      const idDnTransferCase = dnTransferCaseModel.id;
+
       const newTargetChildren = dnTransferCaseModel.children
         .filter((child) => child.typeLabel === ComponentTypes.DnTransferSourceField)
-        .filter((child) => !refPresent(child, dnTransferCaseModel.children))
+        .filter((child) => !refPresent(child, children))
         .map((child) => {
           const ref = stateTraversal.createReference(child.id);
-          return dnTransferTargetFieldModelFactory.createInstance(state, dnTransferCaseModel.id, ref);
+          return dnTransferTargetFieldModelFactory.createInstance(state, idDnTransferCase, ref);
         });
 
       // c.lo(newTargetChildren, 'newTargetChildren: ');
@@ -193,6 +205,8 @@ class DnTransferCase extends Component<Props> {
     const stateNew = actionStatePackage.stateNew;
 
     const dnTransferCaseView = graphTraversal.find(stateNew, args.id);
+    if (!dnTransferCaseView) throw new Error('Could not find transfer case.');
+
     dnTransferCaseView.renderTransferCase = true;
 
     return stateNew;
@@ -205,6 +219,8 @@ class DnTransferCase extends Component<Props> {
     const stateNew = actionStatePackage.stateNew;
 
     const dnTransferCaseView = graphTraversal.find(stateNew, args.id);
+    if (!dnTransferCaseView) throw new Error('Could not find transfer case.');
+
     dnTransferCaseView.isPopupVisible = false;
 
     return stateNew;

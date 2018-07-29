@@ -55,7 +55,7 @@ class StateTranformer {
     const webPages = graphTraversal.findByPropNameAndValue(websites[0], 'typeLabel', ComponentTypes.WebPage);
 
     // Find all websites in all apps.
-    const ddls = graphTraversal.findByPropNameAndValue(webPages, 'typeLabel', ComponentTypes.DropDownListbox);
+    const ddls = graphTraversal.findByPropNameAndValue(webPages[0], 'typeLabel', ComponentTypes.DropDownListbox);
 
     // Find all pages in all apps
     const getCollectionEndpoints = [];
@@ -69,11 +69,22 @@ class StateTranformer {
   }
 
   getDdlCollectionEndpoints(ddl: Object, stateModel: Object): DdlCollectionEndpoints {
+    const errorNotFound = new Error(`Encountered error while trying to find element related to ddl ${JSON.stringify(ddl)}`);
+
+    const dataStore = graphTraversal.find(stateModel, ddl.dataStoreId);
+    if (!dataStore) throw errorNotFound;
+    const dataModel = graphTraversal.find(stateModel, ddl.dataModelId);
+    if (!dataModel) throw errorNotFound;
+    const dataValue = graphTraversal.find(stateModel, ddl.dataValueId);
+    if (!dataValue) throw errorNotFound;
+    const dataText = graphTraversal.find(stateModel, ddl.dataTextId);
+    if (!dataText) throw errorNotFound;
+
     return {
-      dataStoreLabel: graphTraversal.find(stateModel, ddl.dataStoreId).label,
-      collectionName: graphTraversal.find(stateModel, ddl.dataModelId).label,
-      dataValueField: graphTraversal.find(stateModel, ddl.dataValueId).label,
-      dataTextField: graphTraversal.find(stateModel, ddl.dataTextId).label,
+      dataStoreLabel: dataStore.label,
+      collectionName: dataModel.label,
+      dataValueField: dataValue.label,
+      dataTextField: dataText.label,
       collectionCallName: ddl.collectionCallName
     };
   }
