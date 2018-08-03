@@ -9,7 +9,7 @@ describe('validationUtils', () => {
 
   beforeEach(() => {
     // runs before each test in this block
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(() => {

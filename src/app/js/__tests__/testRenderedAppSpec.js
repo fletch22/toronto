@@ -6,7 +6,7 @@ describe('The test rendered app', () => {
   let sandbox = null;
 
   beforeEach(() => {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(() => {

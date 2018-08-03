@@ -9,7 +9,7 @@ describe('sessionService', () => {
   let clock;
 
   beforeEach(() => {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
     clock = sinon.useFakeTimers(expectedDate.getTime());
   });
 

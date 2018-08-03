@@ -10,7 +10,7 @@ describe('window.fetch polyfill', () => {
   let fetch;
 
   beforeEach(() => {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
     fetch = sandbox.stub(window, 'fetch');
   });
 

@@ -11,7 +11,7 @@ describe('routes', () => {
   setupNormalRoutes(app);
 
   beforeEach(() => {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(() => {

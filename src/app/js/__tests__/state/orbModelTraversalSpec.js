@@ -33,7 +33,7 @@ describe('GraphTraversal', () => {
     ]
   };
 
-  it('should find an object correctly.', () => {
+  it.skip('should find an object correctly.', () => {
     const object = graphTraversal.find(state, 'foo');
 
     expect(object).is.not.equal(null);
@@ -41,13 +41,15 @@ describe('GraphTraversal', () => {
     expect(object.id).to.equal('foo');
   });
 
-  it('should not find an object that does not exist.', () => {
+  it.skip('should not find an object that does not exist.', () => {
     const object = graphTraversal.find({}, 'foo');
 
     expect(object).is.equal(undefined);
   });
 
-  it('should find parent object.', () => {
+
+
+  it.skip('should find parent object 1', () => {
     const object = graphTraversal.findParent(state, 'foo');
 
     expect(object).is.not.equal(null);
@@ -55,7 +57,7 @@ describe('GraphTraversal', () => {
     expect(object.id).to.equal('banana');
   });
 
-  it('should find parent object.', () => {
+  it.skip('should find parent object 2', () => {
     const object = graphTraversal.findParent(state, 'foo');
 
     expect(object).is.not.equal(null);
@@ -63,7 +65,7 @@ describe('GraphTraversal', () => {
     expect(object.id).to.equal('banana');
   });
 
-  it('should find parent object quickly.', () => {
+  it.skip('should find parent object quickly.', () => {
     let object;
 
     const startDate = new Date().getTime();
@@ -76,7 +78,7 @@ describe('GraphTraversal', () => {
     expect(endDate - startDate < 15).to.equal(true);
   });
 
-  it('should find an object correctly..', () => {
+  it.skip('should find an object quickly', () => {
 
     let object;
     const start = new Date();

@@ -49,6 +49,14 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: [browser], // ['Chrome', 'PhantomJS', ],
+    phantomjsLauncher: {
+      // Have phantomjs exit if a ResourceError is encountered (useful if karma exits without killing phantom)
+      base: 'PhantomJS',
+      flags: [
+        '--web-security=false',
+        '--ignore-ssl-errors=true'
+      ]
+    },
     webpack: webpackConfigTest,
     webpackMiddleware: {
       noInfo: true
@@ -61,12 +69,14 @@ const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
   if (process.env.EXECUTE_INTEGRATION_TESTS) {
     console.log('Running INTEGRATION tests only ...');
     pattern = 'src/app/js/__integrationTests__/test-context.js';
+    // pattern = 'src/app/js/__integrationTests__/**/*Spec.js';
   } else {
     console.log('Running UNIT tests only ...');
     pattern = 'src/app/js/__tests__/test-context.js';
+    // pattern = 'src/app/js/__tests__/**/*Spec.js';
   }
 
-  config.files.push({ pattern, watched: false });
+  config.files.push({ pattern, watched: true });
 
   /* eslint-disable no-param-reassign */
   config.preprocessors[pattern] = ['webpack'];

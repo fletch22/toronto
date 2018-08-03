@@ -7,12 +7,10 @@ describe('Current state retriever', () => {
   let sandbox = null;
 
   beforeEach(() => {
-    // runs before each test in this block
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(() => {
-    // runs after each test in this block
     sandbox.restore();
   });
 

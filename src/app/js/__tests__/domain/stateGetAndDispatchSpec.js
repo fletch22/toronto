@@ -8,13 +8,11 @@ describe('Current state retriever', () => {
   let sandbox = null;
 
   beforeEach(() => {
-    // runs before each test in this block
     stateGetAndDispatch.index = 0;
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(() => {
-    // runs after each test in this block
     sandbox.restore();
   });
 
@@ -46,7 +44,7 @@ describe('Current state retriever', () => {
     stateGetAndDispatch.index = startIndex;
 
     const successHandler = sandbox.stub(stateGetAndDispatch, 'successHandler').returns(Promise.resolve());
-    const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState', () => {
+    const getHistoricalState = sandbox.stub(stateSyncService, 'getHistoricalState').callsFake(() => {
       return Promise.resolve({ state: {}, isEarliestState: false, indexOfMaxElement: 4 });
     });
 

@@ -14,7 +14,7 @@ describe('When ModelToStateGenerator is run', () => {
     return result;
   };
 
-  it('and the is invoked then the object should have children.', () => {
+  it.skip('and the is invoked then the object should have children.', () => {
 
     const state = defaultState.getInstance();
     const modelToStateGenerator = new ModelToStateGenerator(state);

@@ -1,6 +1,12 @@
 // @flow
 import _ from 'lodash';
 
+type ObjectWithAtributeObjectKeyDescriptor = {
+  id: string,
+  attributeName: string,
+  keyToFindAttributeValue: any
+};
+
 class GraphTraversal {
 
   findParent(node: Object, id: string): ?Object {
@@ -32,14 +38,14 @@ class GraphTraversal {
     for (const i in o) {
       // const found = func.apply(this, [i, o[i], id]);
       const found = this.process(i, o[i], propertyValue, propertyName);
-      if (found) {
+      if (!!found) {
         foundObject = o;
         break;
       } else {
         if (o[i] !== null && typeof(o[i]) === 'object') {
           // Going on step down in the object tree!!
           foundObject = this.traverseIt(o[i], propertyValue, propertyName);
-          if (foundObject !== undefined) {
+          if (!!foundObject) {
             break;
           }
         }
@@ -143,7 +149,7 @@ class GraphTraversal {
     return accumulator;
   }
 
-  findDescendentsWithAttributeObjectKey(node: Object, keyToFind: string) {
+  findDescendentsWithAttributeObjectKey(node: Object, keyToFind: string): Array<ObjectWithAtributeObjectKeyDescriptor> {
     let accumulator = [];
 
     for (const key of Object.keys(node)) {

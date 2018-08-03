@@ -7,7 +7,7 @@ describe('SerializerService', () => {
   let sandbox = null;
 
   beforeEach(() => {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(() => {
