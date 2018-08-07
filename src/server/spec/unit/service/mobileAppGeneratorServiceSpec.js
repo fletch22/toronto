@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import mobileAppGeneratorService, { templateRoot, templateFilePath } from '../../../service/mobileAppGeneratorService';
 import path from 'path';
 
-describe.skip('mobileAppGeneratorService', () => {
+describe('mobileAppGeneratorService', () => {
   it('should generate a template correctly.', () => {
     // Arrange
     // Act

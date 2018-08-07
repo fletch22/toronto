@@ -43,7 +43,7 @@ describe('graphTraversal', () => {
     expect(matches.includes(existingSelects[1]));
   });
 
-  it.skip('should find the ancestor correctly.', () => {
+  it('should find the ancestor correctly.', () => {
     // Arrange
     const descendentNode = graphTraversal.find(model, 456);
 

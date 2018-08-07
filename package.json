@@ -5,7 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "build": "npx babel src/ -d lib/",
-    "babel": "./node_modules/.bin/babel-node --presets es2015",
+    "babel": "./node_modules/.bin/babel-node --presets es2015 ",
     "test": "npm run babel -- ./node_modules/karma/bin/karma start karma.conf.babel.js",
     "test:int": "set EXECUTE_INTEGRATION_TESTS=true && npm run test",
     "start": "ss.cmd",

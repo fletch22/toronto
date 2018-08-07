@@ -1,8 +1,7 @@
 // @flow
-import modelFactory from 'app/js/domain/component/ModelFactory';
+import ModelFactory from 'app/js/domain/component/ModelFactory';
 import graphTraversal from 'common/state/graphTraversal';
 import stateTraversal from 'common/state/stateTraversal';
-
 
 export type Relationship = {
   id: string,
@@ -17,6 +16,7 @@ export type DescendentRelationship = {
 }
 
 const CENTRALIZED_REFS = 'centralizedRelationships';
+
 class RelationshipUtils {
 
   createNewRef(state: Object, sourceId: any, sourceAttributeName: string, targetId: any) {
@@ -64,7 +64,7 @@ class RelationshipUtils {
   // }
 
   createInstance(state: Object, sourceId: string, sourceAttributeName: string, targetId: string): Relationship {
-    const id = modelFactory.getNextId(state);
+    const id = new ModelFactory().getNextId(state);
 
     return {
       id: id,

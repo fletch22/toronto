@@ -11,6 +11,7 @@
 .*/node_modules/npmconf/test/fixtures/package.json
 .*/node_modules/node-uuid/lib/sha1-browser.js
 .*/node_modules/module-deps/test/invalid_pkg/package.json
+.*/node_modules/jsonlint/.*
 
 
 
@@ -21,7 +22,6 @@
 [lints]
 
 [options]
-;module.name_mapper='^app\(\/?.*\)$' -> '<PROJECT_ROOT>/src/app/\1'
 module.name_mapper='^\(\/?.*\)$' -> '<PROJECT_ROOT>/src/\1'
 
 [strict]

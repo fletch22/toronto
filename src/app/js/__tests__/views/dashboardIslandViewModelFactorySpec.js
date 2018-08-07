@@ -29,7 +29,7 @@ describe('DashboardIslandViewModelFactory', () => {
     expect(instance).to.not.equal(undefined);
   });
 
-  it.skip('bare update works correctly', () => {
+  it('bare update works correctly', () => {
     const appContainer = graphTraversal.find(state, APP_CONT_ID);
 
     const viewIsland = dashboardIslandViewModelFactory.createInstance(appContainer);
@@ -39,7 +39,7 @@ describe('DashboardIslandViewModelFactory', () => {
     dashboardIslandViewModelFactory.syncModelToViewModel(state, viewIsland);
   });
 
-  it.skip('adding app update works correctly', () => {
+  it('adding app update works correctly', () => {
 
     const appContainer = graphTraversal.find(state, APP_CONT_ID);
 
@@ -91,7 +91,7 @@ describe('DashboardIslandViewModelFactory', () => {
     expect(appContViewModel.viewModel.children.length).to.equal(2);
   });
 
-  it.skip('findParentChildViewModel should succeed', () => {
+  it('findParentChildViewModel should succeed', () => {
     const appContainer = graphTraversal.find(state, APP_CONT_ID);
     appContainer.children.push({ id: '123A', parentId: APP_CONT_ID, typeLabel: ComponentTypes.App, label: 'AAA', children: [] });
     appContainer.children.push({ id: '123B', parentId: APP_CONT_ID, typeLabel: ComponentTypes.App, label: 'BBB', children: [] });

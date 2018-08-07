@@ -2,8 +2,7 @@ import _ from 'lodash';
 import f22Uuid from '../../../../common/util/f22Uuid';
 import stateTraversal from '../../../../common/state/stateTraversal';
 
-class ModelViewFactory {
-
+class ModelFactory {
   validateNotBlank(value, propertyName) {
     if (!!value === false
       || _.trim(value) === '') {
@@ -24,5 +23,5 @@ class ModelViewFactory {
   }
 }
 
-export default ModelViewFactory;
+export default ModelFactory;
 

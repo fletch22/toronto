@@ -2,7 +2,7 @@ const webpackConfig = require('./webpack.config.js');
 /* eslint-disable no-var */
 var pattern;
 
-const browser = process.env.EXECUTE_INTEGRATION_TESTS ? 'Chrome' : 'PhantomJS';
+const browser = 'Chrome';
 
 const TorontoKarmaConfig = function TorontoKarmaConfig(config) {
   const webpackConfigTest = webpackConfig;

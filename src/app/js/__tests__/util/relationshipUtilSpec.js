@@ -4,7 +4,7 @@
 import { expect } from 'chai';
 import relationshipUtils from 'app/js/util/relationshipUtils';
 import type { DescendentRelationship } from 'app/js/util/relationshipUtils';
-
+import * as sinon from 'sinon';
 
 describe('refUtil', () => {
   let sandbox;
@@ -14,35 +14,35 @@ describe('refUtil', () => {
   });
 
   afterEach(() => {
-    // sandbox.restore();
+    sandbox.restore();
   });
 
-  it.skip('should get descendents with external source Ids', () => {
+  it('should get descendents with external source Ids', () => {
     // Arrange
-    // const grandChild1 = {
-    //   id: 234
-    // };
-    //
-    // const child1 = {
-    //   id: 123,
-    //   children: [grandChild1]
-    // };
-    //
-    // const child2 = {
-    //   id: 345,
-    //   source: {},
-    //   children: []
-    // };
-    //
-    // const state = {
-    //   centralizedRelationships: [],
-    //   model: {
-    //     children: [child1, child2]
-    //   }
-    // };
+    const grandChild1 = {
+      id: 234
+    };
 
-    // relationshipUtils.createNewRef(state, child2.id, 'source', grandChild1.id);
+    const child1 = {
+      id: 123,
+      children: [grandChild1]
+    };
 
+    const child2 = {
+      id: 345,
+      source: {},
+      children: []
+    };
+
+    const state = {
+      centralizedRelationships: [],
+      model: {
+        children: [child1, child2]
+      }
+    };
+
+    relationshipUtils.createNewRef(state, child2.id, 'source', grandChild1.id);
+    //
     // Act
     // relationshipUtils.getDescendentsWithExternalSourceIds(state, child1.id);
 

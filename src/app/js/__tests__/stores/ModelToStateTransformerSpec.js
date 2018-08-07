@@ -21,7 +21,7 @@ describe('Phase State', () => {
 
     });
 
-    it.skip('should transform correctly', () => {
+    it('should transform correctly', () => {
 
       const storeState = new ModelToStateTransformer().transform(AppModel);
 
