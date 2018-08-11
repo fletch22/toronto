@@ -22,8 +22,6 @@ describe('DashboardIslandViewModelFactory', () => {
   it('createInstance should return the right object successfully', () => {
     const appContainer = graphTraversal.find(state, APP_CONT_ID);
 
-    console.log(JSON.stringify(state.model.appContainer));
-
     const instance = dashboardIslandViewModelFactory.createInstance(appContainer);
 
     expect(instance).to.not.equal(undefined);

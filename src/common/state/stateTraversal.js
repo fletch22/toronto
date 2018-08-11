@@ -113,6 +113,14 @@ class StateTraversal {
   getRefIdsFromNode(node) {
     return graphTraversal.collectPropValuesByPropName(node, this.REF_ID_ATTRIBUTE);
   }
+
+  isReference(value) {
+    return (typeof value === 'object' && this.REF_ID_ATTRIBUTE in value && Object.keys(value).length === 1);
+  }
+
+  extractRelationshipIdFromReference(value) {
+    return value[this.REF_ID_ATTRIBUTE];
+  }
 }
 
 export default new StateTraversal();
