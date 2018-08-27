@@ -34,10 +34,16 @@ class DnConnector extends React.Component {
 
     const inNexusDomNode = document.getElementById(this.props.connectorInNexusId);
 
+    const result = {
+      connector: null,
+      lineInfo: null
+    };
+
     if (inNexusDomNode) {
       const lineInfo = this.getLine(inNexusDomNode);
 
-      return (
+      result.lineInfo = lineInfo;
+      result.connector = (
         <g>
           <line id={this.props.id}
             x1={lineInfo.originOffsetCoord.x}
@@ -56,7 +62,7 @@ class DnConnector extends React.Component {
       );
     }
 
-    return null;
+    return result;
   }
 
   getLine(inNexusDomNode) {
@@ -96,15 +102,9 @@ class DnConnector extends React.Component {
   }
 
   render() {
-    const connector = this.getConnectorForReact();
-
-    // {
-    //   this.props.children.map((child) => (
-    //     <DnComponentDealer data={child} dataNarrativeView={this.props.dataNarrativeView} />
-    //   ))
-    // }
-
-    // <DnTransferCase data={this.props.data} />
+    const result = this.getConnectorForReact();
+    const connector = result.connector;
+    const coordinates = result.lineInfo;
 
     return (
       <g ref="rootGroup">
@@ -112,9 +112,18 @@ class DnConnector extends React.Component {
           connector
         }
         {
-           this.props.children.map((child) => (
-             <DnComponentDealer key={child.id} data={child} dataNarrativeView={this.props.dataNarrativeView} />
-           ))
+           this.props.children.map((child) => {
+             if (!!coordinates) {
+               child.coordinates = {
+                 tail: coordinates.originOffsetCoord,
+                 head: coordinates.destinationOffsetCoord
+               };
+             }
+
+             return (
+               <DnComponentDealer key={child.id} data={child} dataNarrativeView={this.props.dataNarrativeView} />
+             );
+           })
         }
       </g>
     );

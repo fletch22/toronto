@@ -104,9 +104,9 @@ describe('refUtil', () => {
     expect(state.centralizedRelationships.length).to.equal(1);
     const relFromState = state.centralizedRelationships[0];
 
-    expect(child2.id).to.equal(relFromState.sourceId);
+    expect(child2.id).to.equal(relFromState.arrowId);
     expect(grandChild1.id).to.equal(relFromState.targetId);
-    expect(sourceAttribute).to.equal(relFromState.sourceAttributeName);
+    expect(sourceAttribute).to.equal(relFromState.arrowAttributeName);
   });
 
   it('should get descendants that are targets successfully.', () => {
@@ -201,7 +201,7 @@ describe('refUtil', () => {
 
     // Assert
     expect(ref.id).to.equal(refActual.id);
-    expect(ref.sourceAttributeName).to.equal(refActual.sourceAttributeName);
+    expect(ref.arrowAttributeName).to.equal(refActual.arrowAttributeName);
     expect(ref.targetId).to.equal(refActual.targetId);
   });
 

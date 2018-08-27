@@ -39,7 +39,7 @@ class RelationshipUtils {
       let result = false;
       if (item.sourceId === sourceId
         && item.targetId === targetId
-        && item.sourceAttributeName === sourceAttributeName) {
+        && item.arrowAttributeName === sourceAttributeName) {
         result = true;
       }
       return result;

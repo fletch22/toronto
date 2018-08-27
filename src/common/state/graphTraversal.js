@@ -1,7 +1,7 @@
 // @flow
 import _ from 'lodash';
 
-type ObjectWithAtributeObjectKeyDescriptor = {
+export type ObjectWithAttributeObjectKeyDescriptor = {
   id: string,
   attributeName: string,
   keyToFindAttributeValue: any
@@ -149,26 +149,31 @@ class GraphTraversal {
     return accumulator;
   }
 
-  findDescendentsWithAttributeObjectKey(node: Object, keyToFind: string): Array<ObjectWithAtributeObjectKeyDescriptor> {
+  findDescendantsWithAttributeObjectKey(node: Object, keyToFind: string): Array<ObjectWithAttributeObjectKeyDescriptor> {
     let accumulator = [];
 
     for (const key of Object.keys(node)) {
       const attributeValue = node[key];
-      if (Array.isArray(attributeValue)) {
-        for (const attrItem of attributeValue) {
-          if (typeof attrItem === 'object') {
-            const result = this.findDescendentsWithAttributeObjectKey(attrItem, keyToFind);
-            accumulator = accumulator.concat(result);
+
+      if (!!attributeValue) {
+        if (Array.isArray(attributeValue)) {
+          for (const attrItem of attributeValue) {
+            if (typeof attrItem === 'object') {
+              const result = this.findDescendantsWithAttributeObjectKey(attrItem, keyToFind);
+              accumulator = accumulator.concat(result);
+            }
           }
-        }
-      } else if (typeof attributeValue === 'object') {
-        if (Object.keys(attributeValue).includes(keyToFind)) {
-          const result = {
-            id: node.id,
-            attributeName: key,
-            keyToFindAttributeValue: _.cloneDeep(attributeValue[keyToFind])
-          };
-          accumulator.push(result);
+        } else if (typeof attributeValue === 'object') {
+          if (Object.keys(attributeValue).includes(keyToFind)) {
+            const result = {
+              id: node.id,
+              attributeName: key,
+              keyToFindAttributeValue: _.cloneDeep(attributeValue[keyToFind])
+            };
+            accumulator.push(result);
+          }
+          const result = this.findDescendantsWithAttributeObjectKey(attributeValue, keyToFind);
+          accumulator = accumulator.concat(result);
         }
       }
     }

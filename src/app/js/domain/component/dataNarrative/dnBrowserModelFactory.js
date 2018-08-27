@@ -2,20 +2,22 @@ import ModelFactory from '../ModelFactory';
 import ComponentTypes from '../../../../../common/domain/component/ComponentTypes';
 import svgModelFactoryHelper from '../svgModelFactoryHelper';
 import dnConnectorOutNexusModelFactory from './dnConnectorOutNexusModelFactory';
-import stateTraversal from 'common/state/stateTraversal';
+import referenceUtils from 'app/js/util/referenceUtils';
 
 class DnBrowserModelFactory extends ModelFactory {
-  createInstance(state, parentId, webPageModelId) {
+  createInstance(state, parentId, webPageModel) {
     const id = this.getNextId(state);
-    const ref = stateTraversal.createReference(webPageModelId);
 
-    return svgModelFactoryHelper.mergeSvgAttributes({
+    const browserModelRaw = {
       id,
       parentId,
-      dataSource: ref,
       typeLabel: ComponentTypes.DnBrowser,
       children: [this.createConnectorOut(state, id, 100, 39)]
-    });
+    };
+
+    referenceUtils.createReference(state, browserModelRaw, 'dataSource', webPageModel.id, `depends on ${webPageModel.typeLabel} '${webPageModel.id}'`);
+
+    return svgModelFactoryHelper.mergeSvgAttributes(browserModelRaw);
   }
 
   createConnectorOut(state, parentId, offsetX, offsetY) {

@@ -88,7 +88,7 @@ describe('graphTraversal', () => {
     };
 
     // Act
-    const refs = graphTraversal.findDescendentsWithAttributeObjectKey(node, 'fruit');
+    const refs = graphTraversal.findDescendantsWithAttributeObjectKey(node, 'fruit');
 
     // Assert
     expect(!!refs).to.be.equal(true);

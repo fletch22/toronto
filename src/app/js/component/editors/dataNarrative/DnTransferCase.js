@@ -1,27 +1,30 @@
 // @flow
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import SvgUtil from './SvgUtil';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
 import ReactDOM from 'react-dom';
 // import _ from 'lodash';
 import dnConnectorUtils from './dnConnector/dnConnectorUtils';
-import { actionDoNothing } from '../../../actions/index';
+import {actionDoNothing} from '../../../actions/index';
 import ActionInvoker from '../../../actions/ActionInvoker';
 import graphTraversal from '../../../../../common/state/graphTraversal';
 import stateUtils from '../../../util/stateUtil';
 import stateTraversal from '../../../../../common/state/stateTraversal';
-import { ComponentTypesCollections, default as ComponentTypes } from '../../../../../common/domain/component/ComponentTypes';
+import {
+  ComponentTypesCollections,
+  default as ComponentTypes
+} from '../../../../../common/domain/component/ComponentTypes';
 import dnTransferCaseUtility from './dnEditorTransferCase/dnTransferCaseUtility';
 // import dnTransferFieldMapperModelFactory from 'app/js/domain/component/dataNarrative/dnTransferFieldMapperModelFactory';
 // import dnTransferSourceFieldModelFactory from 'app/js/domain/component/dataNarrative/dnTransferSourceFieldModelFactory';
-import dnTransferTargetFieldModelFactory from '../../../../../app/js/domain/component/dataNarrative/dnTransferTargetFieldModelFactory';
+import dnTransferTargetFieldModelFactory
+  from '../../../../../app/js/domain/component/dataNarrative/dnTransferTargetFieldModelFactory';
 // import actionCreatePseudoModalFromScratch from 'app/js/actions/index';
 // import PseudoModalTypes from 'app/js/component/modals/PseudoModalTypes';
 // import viewModelFactory, { ViewModelType } from 'app/js/reducers/viewModelFactory';
 // import refUtils from '../../../util/relationshipUtils';
-import relationshipUtils from '../../../util/relationshipUtils';
 
 const caseWidth = 20;
 const caseHeight = 15;
@@ -69,6 +72,33 @@ class DnTransferCase extends Component<Props> {
 
     return stateNew;
   };
+  static renderTransferCase = (actionStatePackage, args) => {
+    const stateNew = actionStatePackage.stateNew;
+
+    c.lo(args, 'args: ');
+
+    const dnTransferCaseView = graphTraversal.find(stateNew, args.id);
+    if (!dnTransferCaseView) throw new Error('Could not find transfer case.');
+
+    dnTransferCaseView.renderTransferCase = true;
+
+    dnTransferCaseView.transform = args.transform;
+
+    return stateNew;
+  };
+  static onClickCloseTransferCase = (actionStatePackage, args) => {
+
+    c.l('Got onClickCloseTransferCase...');
+
+    const stateNew = actionStatePackage.stateNew;
+
+    const dnTransferCaseView = graphTraversal.find(stateNew, args.id);
+    if (!dnTransferCaseView) throw new Error('Could not find transfer case.');
+
+    dnTransferCaseView.isPopupVisible = false;
+
+    return stateNew;
+  };
 
   static loadValues(state: Object, dnTransferCaseModel: Object, descendentModel: Object) {
     const foundNexusNode = stateUtils.findAncestorByTypeLabelCollection(state.model, descendentModel, ComponentTypesCollections.DataNarrativeNexusNodes);
@@ -85,7 +115,7 @@ class DnTransferCase extends Component<Props> {
         // c.lo(foundNexusNode, 'foundNexusNode: ');
 
         // Find incoming connection
-        // const dnConnectorIn = 
+        // const dnConnectorIn =
         // Find related connector
         // Fill in missing fields.
         // dnTransferCaseModelModified = dnTransferCaseUtility.ensureRefFieldAdded(state, fieldsForm, dnTransferCaseModel, ComponentTypes.DnTransferSourceField);
@@ -201,31 +231,6 @@ class DnTransferCase extends Component<Props> {
     };
   }
 
-  static renderTransferCase = (actionStatePackage, args) => {
-    const stateNew = actionStatePackage.stateNew;
-
-    const dnTransferCaseView = graphTraversal.find(stateNew, args.id);
-    if (!dnTransferCaseView) throw new Error('Could not find transfer case.');
-
-    dnTransferCaseView.renderTransferCase = true;
-
-    return stateNew;
-  };
-
-  static onClickCloseTransferCase = (actionStatePackage, args) => {
-
-    c.l('Got onClickCloseTransferCase...');
-
-    const stateNew = actionStatePackage.stateNew;
-
-    const dnTransferCaseView = graphTraversal.find(stateNew, args.id);
-    if (!dnTransferCaseView) throw new Error('Could not find transfer case.');
-
-    dnTransferCaseView.isPopupVisible = false;
-
-    return stateNew;
-  };
-
   componentDidMount() {
     const domNode = ReactDOM.findDOMNode(this.refs.rootGroup);
     const g = d3.select(domNode);
@@ -252,18 +257,37 @@ class DnTransferCase extends Component<Props> {
       const parentDom = document.getElementById(this.props.parentId);
 
       if (parentDom) {
-        this.props.isRenderTransferCase();
+        const coords = this.getTransformation();
+        const transform = `translate(${coords.x}, ${coords.y})`;
+        // const transform = `translate(${200}, ${200})`;
+
+        c.l('Calling isReTC');
+
+        this.props.isRenderTransferCase(transform);
       } else {
-        setTimeout(drawTransferCaseWhenReady, 10);
+        setTimeout(drawTransferCaseWhenReady, 100);
       }
     };
 
     drawTransferCaseWhenReady();
   }
 
+  // componentDidUpdate(prevProps) {
+  //   const coords = this.getTransformation();
+  //   const transform = `translate(${coords.x}, ${coords.y})`;
+  //
+  //   c.l(`${transform} : ${prevProps.transform}`);
+  //
+  //   if (prevProps.transform !== transform) {
+  //     this.props.isRenderTransferCase(transform);
+  //   }
+  // }
+
   getTransformation() {
-    const parentDom = document.getElementById(this.props.id);
-    const domNode = ReactDOM.findDOMNode(this.refs.rootGroup);
+    const parentDom = document.getElementById(this.props.parentId);
+    const domNode = ReactDOM.findDOMNode(this.refs.transfer);
+
+    c.lo(this.props.parentId, 'pid: ');
 
     let x = 0;
     let y = 0;
@@ -281,17 +305,17 @@ class DnTransferCase extends Component<Props> {
       y -= caseHeight / 2;
     }
 
-    return { x, y };
+    return {x, y};
   }
 
   getTransferCase() {
-    let transform = null;
     let style = null;
-    const coords = this.getTransformation();
-    transform = `translate(${coords.x}, ${coords.y})`;
+    // const coords = this.getTransformation();
+    // transform = `translate(${coords.x}, ${coords.y})`;
 
     return (
-      <rect ref="transfer" rx="6" width={caseWidth} height={caseHeight} fill={dnConnectorUtils.mainBodyColor} transform={transform} style={style} />
+      <rect ref="transfer" rx="6" width={caseWidth} height={caseHeight} fill={dnConnectorUtils.mainBodyColor}
+            transform={this.props.transform} style={style}/>
     );
   }
 
@@ -318,13 +342,29 @@ DnTransferCase.propTypes = {
   isPopupVisible: PropTypes.bool,
   onClosePopup: PropTypes.func,
   isRenderTransferCase: PropTypes.func,
-  onClickCloseTransferCase: PropTypes.func
+  onClickCloseTransferCase: PropTypes.func,
+  transform: PropTypes.string,
+  coordinates: PropTypes.object
 };
+
+const getMidwayCoordinates = (tailCoords, headCoords) => ({
+  x: (tailCoords.x + ((headCoords.x - tailCoords.x) / 2)) - 8,
+  y: (tailCoords.y + ((headCoords.y - tailCoords.y) / 2)) - 8
+});
 
 const mapStateToProps = (state, ownProps) => {
   const data = ownProps.data;
   const viewModel = { ...data.viewModel };
   const children = [].concat(viewModel.children) || [];
+
+  let coordMidway = {
+    x: 0,
+    y: 0
+  };
+
+  if (!!data.coordinates) {
+    coordMidway = getMidwayCoordinates(data.coordinates.tail, data.coordinates.head);
+  }
 
   return {
     ...ownProps,
@@ -332,7 +372,8 @@ const mapStateToProps = (state, ownProps) => {
     parentId: data.parentId,
     viewModel,
     isPopupVisible: data.isPopupVisible,
-    children
+    children,
+    transform: `translate(${coordMidway.x}, ${coordMidway.y})`
   };
 };
 
@@ -346,10 +387,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(DnTransferCase.createPseudoModal(ownProps));
     },
     onClickCloseTransferCase: () => {
-      ActionInvoker.invoke(dispatch, DnTransferCase.onClickCloseTransferCase, { id: ownProps.data.id });
+      ActionInvoker.invoke(dispatch, DnTransferCase.onClickCloseTransferCase, {id: ownProps.data.id});
     },
-    isRenderTransferCase: () => {
-      ActionInvoker.invoke(dispatch, DnTransferCase.renderTransferCase, { id: ownProps.data.id });
+    isRenderTransferCase: (transform) => {
+      c.l(`v: ${transform}`);
+      ActionInvoker.invoke(dispatch, DnTransferCase.renderTransferCase, {id: ownProps.data.id, transform});
     }
   };
 };
