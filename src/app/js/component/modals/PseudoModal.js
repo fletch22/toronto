@@ -53,7 +53,7 @@ class PseudoModal extends React.Component {
 
     return (
       <div>
-        <div className="flex-normal dashboard-canvas" style={{ zIndex: this.props.zIndex }}>
+        <div className="pseudo-modal flex-normal dashboard-canvas" style={{ zIndex: this.props.zIndex }}>
           <div className={`pseudo-modal-content ${this.props.className}`} style={{ height: `${height}px` }}>
             <div className="flex-pseudo-modal" style={{ flexGrow: 1 }}>
               <div className="" style={{ flexGrow: 1 }}>

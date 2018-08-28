@@ -62,7 +62,8 @@ class BorderScrivener extends React.Component {
         left: `${rect.left}px`,
         width: `${rect.width + 2}px`,
         height: `${borderThickness}px`,
-        border: '3px solid black'
+        border: '3px solid black',
+        zIndex: this.props.zIndex
       };
 
       const topRight = rect.left + rect.width - borderThickness - 1;
@@ -71,7 +72,8 @@ class BorderScrivener extends React.Component {
         left: `${topRight}px`,
         width: `${borderThickness}px`,
         height: `${rect.height + borderThickness + 3}px`,
-        border: '3px solid blue'
+        border: '3px solid blue',
+        zIndex: this.props.zIndex
       };
 
       const bottomStyle = {
@@ -79,7 +81,8 @@ class BorderScrivener extends React.Component {
         left: `${rect.left - borderThickness - 3}px`,
         width: `${rect.width + 2}px`,
         height: `${borderThickness}px`,
-        border: '3px solid orange'
+        border: '3px solid orange',
+        zIndex: this.props.zIndex
       };
 
       const leftStyle = {
@@ -87,7 +90,8 @@ class BorderScrivener extends React.Component {
         left: `${rect.left - borderThickness - 3}px`,
         width: `${borderThickness}px`,
         height: `${rect.height + borderThickness + 3}px`,
-        border: '3px solid green'
+        border: '3px solid green',
+        zIndex: this.props.zIndex
       };
 
       borders = (<div>
@@ -116,6 +120,7 @@ BorderScrivener.propTypes = {
   left: PropTypes.number,
   height: PropTypes.number,
   width: PropTypes.number,
+  zIndex: PropTypes.number,
   onChange: PropTypes.func,
   selectedElementId: PropTypes.string,
   selectedElementIndex: PropTypes.number

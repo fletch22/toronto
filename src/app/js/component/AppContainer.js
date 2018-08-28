@@ -1,10 +1,9 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
 import AppContainerToolbar from '../component/dashboard/appContainer/AppContainerToolbar';
 import Island from '../component/dashboard/Island';
 import PseudoModalWrangler from '../component/modals/PseudoModalWrangler';
 import ViewTypes from '../views/ViewTypes';
-import _ from 'lodash';
 import BorderScrivener from './BorderScrivener';
 import DropMarker from '../component/bodyChildren/DropMarker';
 
@@ -12,15 +11,15 @@ class AppContainer extends React.Component {
   render() {
     const islands = this.props.islands.map((island) => {
       if (island.viewModel
-      && island.viewModel.children
-      && Array.isArray(island.viewModel.children)
-      && island.viewModel.children[0]
-      && island.viewModel.children[0].viewModel
-      && island.viewModel.children[0].viewModel.children) {
+        && island.viewModel.children
+        && Array.isArray(island.viewModel.children)
+        && island.viewModel.children[0]
+        && island.viewModel.children[0].viewModel
+        && island.viewModel.children[0].viewModel.children) {
         const children = island.viewModel.children[0].viewModel.children;
         return children.map((child) =>
           <div className="container-fluid app-container">
-            <Island key={child.id} child={child} model="" />
+            <Island key={child.id} child={child} model=""/>
           </div>
         );
       }
@@ -28,20 +27,21 @@ class AppContainer extends React.Component {
 
     return (
       <div>
-        <AppContainerToolbar />
+        <AppContainerToolbar/>
         {
           islands
         }
-        <PseudoModalWrangler />
+        <PseudoModalWrangler/>
         <BorderScrivener top={this.props.borderScrivener.top}
-          left={this.props.borderScrivener.left}
-          height={this.props.borderScrivener.height}
-          width={this.props.borderScrivener.width}
-          selectedElementId={this.props.borderScrivener.selectedElementId}
-          selectedElementIndex={this.props.borderScrivener.selectedElementIndex}
-          lastUpdateRequest={this.props.borderScrivener.lastUpdateRequest}
+               left={this.props.borderScrivener.left}
+               height={this.props.borderScrivener.height}
+               width={this.props.borderScrivener.width}
+               zIndex={this.props.borderScrivener.zIndex}
+               selectedElementId={this.props.borderScrivener.selectedElementId}
+               selectedElementIndex={this.props.borderScrivener.selectedElementIndex}
+               lastUpdateRequest={this.props.borderScrivener.lastUpdateRequest}
         />
-        <DropMarker dragNDrop={this.props.dragNDrop} />
+        <DropMarker dragNDrop={this.props.dragNDrop}/>
       </div>
     );
   }

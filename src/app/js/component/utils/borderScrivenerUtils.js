@@ -6,6 +6,17 @@ class BorderScrivenerUtils {
     this.getBoundingClientRect = this.getBoundingClientRect.bind(this);
   }
 
+  getAncestorUntilZIndexFound(element) {
+    let zIndex = 999;
+    if (element.tagName !== 'BODY') {
+      zIndex = parseInt(element.style.zIndex, 10);
+      if (isNaN(zIndex)) {
+        return this.getAncestorUntilZIndexFound(element.parentNode);
+      }
+    }
+    return zIndex;
+  }
+
   getBoundingClientRect(selectedElementId) {
     let result = null;
 
@@ -19,7 +30,8 @@ class BorderScrivenerUtils {
         left: parseInt(rectRaw.left, 10) + scrollLeft,
         top: parseInt(rectRaw.top, 10) + scrollTop,
         width: parseInt(rectRaw.width, 10),
-        height: parseInt(rectRaw.height, 10)
+        height: parseInt(rectRaw.height, 10),
+        zIndex: parseInt(this.getAncestorUntilZIndexFound(element), 10)
       };
     }
 
