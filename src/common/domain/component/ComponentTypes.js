@@ -31,4 +31,8 @@ export const ComponentTypesCollections = {
   DataNarrativeNexusNodes: [ComponentTypes.DnBrowser, ComponentTypes.DnWebServer, ComponentTypes.DnDataStore]
 };
 
+export const WebPageDataFields = [
+  ComponentTypes.DropDownListbox
+];
+
 export default ComponentTypes;

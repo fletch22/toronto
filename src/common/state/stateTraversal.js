@@ -2,6 +2,7 @@ import graphTraversal from './graphTraversal';
 import _ from 'lodash';
 import ViewTypes from '../../app/js/views/ViewTypes';
 import ComponentTypes from '../domain/component/ComponentTypes';
+import referenceUtils from "../../app/js/util/referenceUtils";
 
 class StateTraversal {
   constructor() {
@@ -57,7 +58,7 @@ class StateTraversal {
     }
   }
 
-  findDescendentViewWithModelId(viewNode, modelId) {
+  findDescendantViewWithModelId(viewNode, modelId) {
     const viewModel = viewNode.viewModel;
     if (viewModel.hasOwnProperty('typeLabel') && viewModel.id === modelId) {
       return viewNode;
@@ -66,7 +67,7 @@ class StateTraversal {
     let resultViewNode = null;
     if (viewModel.children) {
       for (const childView of viewModel.children) {
-        const childViewModel = this.findDescendentViewWithModelId(childView, modelId);
+        const childViewModel = this.findDescendantViewWithModelId(childView, modelId);
         if (!!childViewModel) {
           resultViewNode = childViewModel;
           break;
@@ -85,41 +86,27 @@ class StateTraversal {
     return result;
   }
 
-  getWebPageFormFieldsAsRefs(modelNode, node) {
-    const webPageModel = graphTraversal.findAncestorByTypeLabel(modelNode, node, ComponentTypes.WebPage);
-    return this.getAllFieldsFromModelAsRefs(webPageModel);
-  }
+  // getWebPageFormFieldsAsRefs(modelNode, node) {
+  //   const webPageModel = graphTraversal.findAncestorByTypeLabel(modelNode, node, ComponentTypes.WebPage);
+  //   return this.getAllFieldsFromModelAsRefs(webPageModel);
+  // }
 
-  getAllFieldsFromModelAsRefs(model) {
-    const fieldArray = this.findAllWithTypeLabels(model, [ComponentTypes.DropDownListbox]);
-    return fieldArray.map((field) => this.createModelReferenceFromField(field));
-  }
+  // getAllFieldsFromModelAsRefs(model) {
+  //   const fieldArray = this.findAllWithTypeLabels(model, [ComponentTypes.DropDownListbox]);
+  //   return fieldArray.map((field) => this.createModelReferenceFromField(field));
+  // }
 
-  syncWebPageFormFields(rootishNode, id) {
-    const node = graphTraversal.find(rootishNode, id);
-    return this.getWebPageFormFieldsAsRefs(rootishNode, node);
-  }
-
-  createModelReferenceFromField(field) {
-    return this.createReference(field.id);
-  }
-
-  createReference(id) {
-    const result = {};
-    result[this.REF_ID_ATTRIBUTE] = id;
-    return result;
-  }
+  // syncWebPageFormFields(rootishNode, id) {
+  //   const node = graphTraversal.find(rootishNode, id);
+  //   return this.getWebPageFormFieldsAsRefs(rootishNode, node);
+  // }
+  //
+  // createModelReferenceFromField(state, field) {
+  //   return referenceUtils.createReference(state, field.id, );
+  // }
 
   getRefIdsFromNode(node) {
     return graphTraversal.collectPropValuesByPropName(node, this.REF_ID_ATTRIBUTE);
-  }
-
-  isReference(value) {
-    return (typeof value === 'object' && this.REF_ID_ATTRIBUTE in value && Object.keys(value).length === 1);
-  }
-
-  extractRelationshipIdFromReference(value) {
-    return value[this.REF_ID_ATTRIBUTE];
   }
 }
 

@@ -32,6 +32,8 @@ class DnConnectorInNexus extends React.Component {
   }
 
   render() {
+    // c.lo(this.props.viewModel, `DataSource: `);
+
     return (
       <g ref="container" onMouseOver={this.onMouseOver}>
         <circle id={this.props.id} className="dnConnectorInNexus" ref="connector" cx={this.props.viewModel.viewCoordinates.x} cy={this.props.viewModel.viewCoordinates.y} r="5" fill="green"

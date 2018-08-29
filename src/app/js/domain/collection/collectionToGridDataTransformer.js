@@ -16,22 +16,12 @@ class CollectionToGridDataTransformer {
     const userData = dataModel.userData;
     const dataFields = dataModel.children.filter((child) => child.typeLabel === ComponentTypes.DataField);
 
-    // c.lo(dataFields, 'dataFields: ');
-    // c.lo(userData, 'userData: ');
-
     return {
       collectionId: dataModel.id,
       columns: this.getColumns(dataFields),
       rows: this.getRows(dataModel.id, userData, dataFields)
     };
   }
-
-  // getColumns(richOrbResult) {
-  //   const columns = richOrbResult.fields.map((field) => (gridHelper.constructColumn(field, field, true)));
-  //   const idColumn = gridHelper.constructKeyColumn(gridHelper.CONSTANTS.IDENTITY_KEY_NAME, gridHelper.CONSTANTS.ID_DISPLAY_NAME);
-  //   gridHelper.addColumn(columns, idColumn);
-  //   return columns;
-  // }
 
   getColumns(dataFields) {
     const columns = dataFields.map((field) => {
@@ -42,24 +32,6 @@ class CollectionToGridDataTransformer {
     gridHelper.addColumn(columns, idColumn);
     return columns;
   }
-
-  // getRows(richOrbResult) {
-  //   const allRows = [];
-  //   const orbList = richOrbResult.orbList;
-  //   if (orbList !== null) {
-  //     orbList.forEach((orb) => {
-  //       let row = {};
-  //       /* eslint-disable guard-for-in */
-  //       for (const property in orb.userDefinedProperties) {
-  //         const value = orb.userDefinedProperties[property];
-  //         row = gridHelper.addPropAndValueToRow(row, gridHelper.constructColumnName(property), value);
-  //       }
-  //       gridHelper.addPropAndValueToRow(row, gridHelper.CONSTANTS.IDENTITY_KEY_NAME, orb.orbInternalId);
-  //       allRows.push(row);
-  //     });
-  //   }
-  //   return allRows;
-  // }
 
   getRows(collectionId, rowsRaw, dataFields) {
     const allRows = [];

@@ -106,6 +106,8 @@ class DnConnector extends React.Component {
     const connector = result.connector;
     const coordinates = result.lineInfo;
 
+    // c.lo(this.props.viewModel, `viewModel: `);
+
     return (
       <g ref="rootGroup">
         {
@@ -150,7 +152,7 @@ const findViewIdFromModelId = (state, viewId, modelId) => {
   let id;
   if (node) {
     const dataNarrative = stateTraversal.findAncestorViewWithModelTypeLabel(state, node, ComponentTypes.DataNarrative);
-    const view = stateTraversal.findDescendentViewWithModelId(dataNarrative, modelId);
+    const view = stateTraversal.findDescendantViewWithModelId(dataNarrative, modelId);
     id = view.id;
   }
 

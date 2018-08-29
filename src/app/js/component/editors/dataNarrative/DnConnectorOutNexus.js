@@ -222,7 +222,7 @@ const onMouseUpConnector = (actionStatePackage, args) => {
     const inView = graphTraversal.find(stateNew, view.draggingConnector.closestConnectorId);
     const closestConnectorModelId = inView.viewModel.id;
 
-    const model = dnConnectorModelFactory.createInstance(stateNew, props.viewModel.id, closestConnectorModelId);
+    const model = dnConnectorModelFactory.createInstance(stateNew, props.viewModel.id, closestConnectorModelId, props.viewModel.parentId);
     parentModel.children.push(model);
 
     const viewModel = viewModelFactory.generateViewModel(props.id, model);

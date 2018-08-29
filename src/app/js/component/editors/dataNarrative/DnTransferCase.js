@@ -21,6 +21,8 @@ import dnTransferCaseUtility from './dnEditorTransferCase/dnTransferCaseUtility'
 // import dnTransferSourceFieldModelFactory from 'app/js/domain/component/dataNarrative/dnTransferSourceFieldModelFactory';
 import dnTransferTargetFieldModelFactory
   from '../../../../../app/js/domain/component/dataNarrative/dnTransferTargetFieldModelFactory';
+import referenceUtils from '../../../util/referenceUtils';
+import dnDataSourceResolver from 'app/js/component/editors/dataNarrative/dnConnector/dnDataSourceResolver';
 // import actionCreatePseudoModalFromScratch from 'app/js/actions/index';
 // import PseudoModalTypes from 'app/js/component/modals/PseudoModalTypes';
 // import viewModelFactory, { ViewModelType } from 'app/js/reducers/viewModelFactory';
@@ -132,17 +134,6 @@ class DnTransferCase extends Component<Props> {
   static createPseudoModal(ownProps: Object) {
     return (dispatch, getState) => {
       // Creating/Moving Data from Page to DnTransferCase
-      // 1. On buttonSubmit creation, in attribute 'dataSource' BrowserModel provide ref:
-      // Status: Done
-      //
-      // 2. On TransferCase creation, copy refs of refs in BM to TransferCase
-      // Status:
-      //
-      // 3. On buttonSubmit creation, copy refs into DataSource Model
-      // Status:
-      //
-      // 4. On TransferCAse creation copy refs in DataSource to TransferCase
-      // Status:
 
       // Navigating from destination to source
       //  1. Find the child In-Connector
@@ -160,72 +151,33 @@ class DnTransferCase extends Component<Props> {
 
       const state = getState();
 
-      let dnTransferCaseModel = graphTraversal.find(state.model, ownProps.data.viewModel.id);
-      if (!dnTransferCaseModel) {
-        throw new Error('Could not find dnTransferCaseModel.');
-      }
+      // c.l(`ownProps.data.viewModel.dataSource: ${JSON.stringify(ownProps.data.viewModel.dataSource)}`);
 
-      const dnConnector = stateUtils.findAncestorByTypeLabelCollection(state.model, dnTransferCaseModel, [ComponentTypes.DnConnector]); // [ComponentTypesCollections.DnConnector]
-      const dnConnectorInNexus = graphTraversal.find(state.model, dnConnector.connectorInNexusId);
-      if (!dnConnectorInNexus) {
-        throw new Error(`Could not find dnConnectorInNexus ${dnConnector.connectorInNexusId}.`);
-      }
+      const dnDataSourceContainerId = referenceUtils.resolveReference(ownProps.data.viewModel.dataSource);
+      const dnDataSourceContainer = graphTraversal.find(state.model, dnDataSourceContainerId);
 
-      // c.lo(dnConnectorInNexus, 'dnConnectorInNexus: ');
+      // c.lo(dnDataSourceContainer, 'dnDataSourceContainer: ');
 
-      // const dnGrandParent = graphTraversal.find(state.model, dnConnectorInNexus.parentId);
-      // c.lo(dnGrandParent, 'dnGrandParent: ');
-      // const dnGreatGrandParent = graphTraversal.find(state.model, dnGrandParent.parentId);
-      // c.lo(dnGreatGrandParent, 'dnGreatGrandParent: ');
+      const dnDataSourceId = referenceUtils.resolveReference(dnDataSourceContainer.dataSource);
+      const dnDataSource = graphTraversal.find(state.model, dnDataSourceId);
 
-      const foundSourceNexusNode = stateUtils.findAncestorByTypeLabelCollection(state.model, dnTransferCaseModel, ComponentTypesCollections.DataNarrativeNexusNodes);
-      // const foundTargetNexusNode = stateUtils.findAncestorByTypeLabelCollection(state.model, dnConnectorInNexus, ComponentTypesCollections.DataNarrativeNexusNodes);
+      // c.lo(dnDataSource, 'dnDataSource: ');
 
-      // c.l(`tnn: ${JSON.stringify(foundTargetNexusNode.dataSource)}`);
+      const dataFields = dnDataSourceResolver.getDataReferences(dnDataSource);
+      c.lo(dataFields, 'dataFields: ');
 
-      const webPageModel = graphTraversal.find(state.model, foundSourceNexusNode.dataSource.$ref);
-      const fieldsForm = stateTraversal.getAllFieldsFromModelAsRefs(webPageModel);
-
-      // c.lo(foundSourceNexusNode.sourceFieldIds, 'foundSourceNexusNode.sourceFieldIds: ');
-
-      dnTransferCaseModel = dnTransferCaseUtility.ensureRefFieldAdded(state, fieldsForm, dnTransferCaseModel, ComponentTypes.DnTransferSourceField);
-      if (!dnTransferCaseModel) {
-        throw new Error('Could not find dnTransferCaseModel.');
-      }
-
-      const refPresent = (child, arr) => {
-        return !!arr.find((item) => item.$ref === child.$ref && item.typeLabel === ComponentTypes.DnTransferTargetField);
-      };
-
-      if (!dnTransferCaseModel) {
-        throw new Error('Could not find dnTransferCaseModel.');
-      }
-      const children = dnTransferCaseModel.children;
-      const idDnTransferCase = dnTransferCaseModel.id;
-
-      const newTargetChildren = dnTransferCaseModel.children
-        .filter((child) => child.typeLabel === ComponentTypes.DnTransferSourceField)
-        .filter((child) => !refPresent(child, children))
-        .map((child) => {
-          const ref = stateTraversal.createReference(child.id);
-          return dnTransferTargetFieldModelFactory.createInstance(state, idDnTransferCase, ref);
-        });
-
-      // c.lo(newTargetChildren, 'newTargetChildren: ');
-      dnTransferCaseModel.children = dnTransferCaseModel.children.concat(newTargetChildren);
-
-      // c.lo(dnTransferCaseModel, 'dnTransferCaseModel: ');
-
-      DnTransferCase.loadValues(state, dnTransferCaseModel, dnConnectorInNexus);
-
-      //
-      // if (foundTargetNexusNode.sourceFieldIds) {
-      //   DnTransferCase.ensureRefFieldAdded(state, foundTargetNexusNode.sourceFieldIds, dnTransferCaseModel, ComponentTypes.DnTransferTargetField);
+      // let dnTransferCaseModel = graphTraversal.find(state.model, ownProps.data.viewModel.id);
+      // if (!dnTransferCaseModel) {
+      //   throw new Error('Could not find dnTransferCaseModel.');
       // }
-      //
-      // const viewModel = viewModelFactory.generateViewModelFromViewModelType(ownProps.data.parentId, ViewModelType.DnTransferCaseEditor, dnTransferCaseModel);
-      //
-      // c.lo(viewModel, 'vm: ');
+
+      // const newTargetChildren = dnTransferCaseModel.children
+      //   .filter((child) => child.typeLabel === ComponentTypes.DnTransferSourceField)
+      //   .filter((child) => !refPresent(child, children))
+      //   .map((child) => {
+      //     const ref = stateTraversal.createReference(child.id);
+      //     return dnTransferTargetFieldModelFactory.createInstance(state, idDnTransferCase, ref);
+      //   });
 
       // dispatch(actionCreatePseudoModalFromScratch(PseudoModalTypes.DataNarrativeTransferCaseEditor, viewModel));
     };
@@ -252,36 +204,7 @@ class DnTransferCase extends Component<Props> {
       d3.event.preventDefault();
       d3.event.stopPropagation();
     });
-
-    const drawTransferCaseWhenReady = () => {
-      const parentDom = document.getElementById(this.props.parentId);
-
-      if (parentDom) {
-        const coords = this.getTransformation();
-        const transform = `translate(${coords.x}, ${coords.y})`;
-        // const transform = `translate(${200}, ${200})`;
-
-        c.l('Calling isReTC');
-
-        this.props.isRenderTransferCase(transform);
-      } else {
-        setTimeout(drawTransferCaseWhenReady, 100);
-      }
-    };
-
-    drawTransferCaseWhenReady();
   }
-
-  // componentDidUpdate(prevProps) {
-  //   const coords = this.getTransformation();
-  //   const transform = `translate(${coords.x}, ${coords.y})`;
-  //
-  //   c.l(`${transform} : ${prevProps.transform}`);
-  //
-  //   if (prevProps.transform !== transform) {
-  //     this.props.isRenderTransferCase(transform);
-  //   }
-  // }
 
   getTransformation() {
     const parentDom = document.getElementById(this.props.parentId);
@@ -310,12 +233,8 @@ class DnTransferCase extends Component<Props> {
 
   getTransferCase() {
     let style = null;
-    // const coords = this.getTransformation();
-    // transform = `translate(${coords.x}, ${coords.y})`;
-
     return (
-      <rect ref="transfer" rx="6" width={caseWidth} height={caseHeight} fill={dnConnectorUtils.mainBodyColor}
-            transform={this.props.transform} style={style}/>
+      <rect ref="transfer" rx="6" width={caseWidth} height={caseHeight} fill={dnConnectorUtils.mainBodyColor} transform={this.props.transform} style={style} />
     );
   }
 
@@ -390,7 +309,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       ActionInvoker.invoke(dispatch, DnTransferCase.onClickCloseTransferCase, {id: ownProps.data.id});
     },
     isRenderTransferCase: (transform) => {
-      c.l(`v: ${transform}`);
       ActionInvoker.invoke(dispatch, DnTransferCase.renderTransferCase, {id: ownProps.data.id, transform});
     }
   };
